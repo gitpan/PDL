@@ -1,4 +1,4 @@
 package PDL::Version;
 
-$VERSION="1.9903";
+$VERSION="1.9904";
 1;

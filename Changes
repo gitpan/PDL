@@ -1,5 +1,18 @@
 (!!! = possible source of incompatibilities)
 
+1.9904 (2.0 try 2)
+Tjl:
+ - (Andreas Heitmann): rename rs in the rest of places
+ - (Robin): openglq.pd: make COLORSAD not to warn for nonconstant init
+Karl: 
+ - histogram fix (which earlier fell through Tjl's fingers)
+ - new ExtUtils::F77
+ - "aargh" patch
+Robin:
+ - Demos/TriD2.pm: fix state at end
+ - fix stupid Makefile.PL blooper by Tjl
+ - patch Perldl.pm to do 'help $a'
+
 1.9903 (2.0 try 1)
 Tjl:
  - PDL::Lib::FFT -> PDL::FFT (Robert Schwebel)

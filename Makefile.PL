@@ -99,10 +99,12 @@ doctest ::
 	@echo "Building PDL documentation database"
 	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
 		Doc/scantree.pl $(INST_LIB) $(INST_LIB)/PDL/pdldoc.db 
+	@$(PERL)  -I$(INST_ARCHLIB) -I$(INST_LIB) \
+		Doc/mkhtmldoc.pl $(INST_LIB)/PDL $(INST_LIB)/PDL/HTMLDocs
 	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
-	@$(PERL) Doc/scantree.pl 
-	@$(PERL) Doc/mkhtmldoc.pl
+		Doc/scantree.pl $(INST_LIB) $(INST_LIB)/PDL/pdldoc.db 
 
+doc_install ::
 	-@$(CHMOD) 755  $(INSTALLSITELIB)/PDL/pdldoc.db 
 	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
 	   Doc/scantree.pl $(INSTALLSITELIB) $(INSTALLSITELIB)/PDL/pdldoc.db 
@@ -112,10 +114,8 @@ doctest ::
 pure_perl_install ::
 	@echo "Installing PDL documentation database"
 	-@$(CHMOD) 755  $(INSTALLPRIVLIB)/PDL/pdldoc.db 
-	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
-	   Doc/scantree.pl $(INSTALLPRIVLIB) $(INSTALLPRIVLIB)/PDL/pdldoc.db 
-	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
-	   Doc/mkhtmldoc.pl $(INSTALLPRIVLIB)/PDL $(INSTALLPRIVLIB)/PDL/HtmlDocs
+	@$(PERL) Doc/scantree.pl
+	@$(PERL) Doc/mkhtmldoc.pl
 
 		
 '

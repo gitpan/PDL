@@ -103,6 +103,12 @@ actnw q|
 	}
 |;
 
+actnw q|
+      # Finally, leave 3d in a sane state
+      keeptwiddling3d(); # Don't wait for user while drawing
+        release3d();
+|;
+
 }
 
 1;

@@ -30,7 +30,7 @@ BEGIN {
    eval "use ExtUtils::F77";  # Might want "use ExtUtils::F77 qw(generic f2c)"
    print "(ExtUtils Version $ExtUtils::F77::VERSION)\n";
    if ($@ ne "") {
-      $msg = "\n    ExtUtils::F77 module not found. Will not build PDL::Slatec    \n" ;
+      $msg = "\n".$@."\n    ExtUtils::F77 module not found. Will not build PDL::Slatec    \n" ;
       goto skip;
    }
    if ($ExtUtils::F77::VERSION < 1.03 ) {

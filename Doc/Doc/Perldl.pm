@@ -241,6 +241,7 @@ sub help {
       require PDL::Dbg;
       my $topic = shift;
       if (PDL::Core::blessed($topic) && $topic->can('px')) {
+	  local $PDL::verbose = 1;
 	  $topic->px('This variable is');
       } else {
 	  $topic = 'PDL::Doc::Perldl' if $topic =~ /^\s*help\s*$/i;

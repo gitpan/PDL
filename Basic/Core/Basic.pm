@@ -236,7 +236,7 @@ sub PDL::hist {
     $max = $pdl->max() unless defined $max;
     my $ntype = $pdl->get_datatype;
     if (!defined $step) {
-	my $defbins = 100 < $pdl->nelem ? 99 : $pdl->nelem;
+	my $defbins = 100 < $pdl->nelem ? 100 : $pdl->nelem;
 	$step = ($max-$min)/$defbins;
 	$step = int($step) > 0 ? int($step) : 1 if $ntype < $PDL_F;
     }

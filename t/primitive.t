@@ -41,7 +41,7 @@ print "B: $b\n";
 $c = ($b->xvals) + 10;
 # print "C: $c\n";
 
-print "BW: ", $b->where, "\n";
+# print "BW: ", $b->where, "\n";
 
 ok(4,approx($b->where($b>4), PDL->pdl(5,6)));
 ok(5,approx($b->which, PDL->pdl(0,1,2,7,8,10,11)));

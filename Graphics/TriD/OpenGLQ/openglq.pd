@@ -74,7 +74,9 @@ sub COLOR{ "
 	" };
 sub ADCOLOR{ "
 			{
-			GLfloat ad[4] = {".TRI('$colors',$_[0]).",1.0};
+			GLfloat ad[4];
+			".(join '',map {"ad[$_] = \$colors$_[0](tri => $_);"} 0..2).
+			"ad[4] = 1.0;
 			glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,
 				ad);
 			}
