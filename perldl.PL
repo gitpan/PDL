@@ -1,12 +1,56 @@
-#!/usr/local/bin/perl
+use Config;
+use File::Basename qw(&basename &dirname);
 
-# Simple shell for PDL 
+# List explicitly here the variables you want Configure to
+# generate.  Metaconfig only looks for shell variables, so you
+# have to mention them as if they were shell variables, not
+# %Config entries.  Thus you write
+#  $startperl
+# to ensure Configure will look for $Config{startperl}.
+
+# This forces PL files to create target in same directory as PL file.
+# This is so that make depend always knows where to find PL derivatives.
+chdir(dirname($0));
+($file = basename($0)) =~ s/\.PL$//;
+$file =~ s/\.pl$//
+        if ($^O eq 'VMS' or $^O eq 'os2');  # "case-forgiving"
+
+open OUT,">$file" or die "Can't create $file: $!";
+
+print "Extracting $file (with variable substitutions)\n";
+
+# In this section, perl variables will be expanded during extraction.
+# You can use $Config{...} to use Configure variables.
+
+print OUT <<"!GROK!THIS!";
+$Config{'startperl'}
+    eval 'exec perl -S \$0 "\$@"'
+        if 0;
+!GROK!THIS!
+
+# In the following, perl variables are not expanded during extraction.
+
+print OUT <<'!NO!SUBS!';
+
+##########################################################################
+# Here starts the actual script
+
+=head1 NAME
+
+=head2 perldl - Simple shell for PDL
+
+=head1 DESCRIPTION
+
+perldl provides a simple shell for interactive use of PDL.
+perl/PDL commands can simply be typed in - and edited if
+you have appropriate version of the ReadLines and ReadKeys
+modules installed.
+
+=cut
 
 unshift @INC, "./blib"; 
 print <<'EOD';
-
-perlDL shell v1.00 by Karl Glazebrook [kgb@aaoepp.aao.gov.au] 1 Oct 1996
-
+perlDL shell v1.03
 EOD
 
 $PERLDL_ESCAPE = '#'; # Default shell escape
@@ -84,6 +128,7 @@ sub {
    $_;
 }
 EOD
+	    %@ = (); # Workaround to prevent spurious loss of $@
             PDL::Core::myeval( $code ); # Do command with $@ keeping
         }else{
             eval $_;
@@ -105,9 +150,9 @@ EOD
 }
 
 
-# Short hand for print
+# Short hand for some stuff
 
-sub p {
-    print(@_);
-}
+sub p { print(@_); }
+sub x { exit(); }
 
+!NO!SUBS!
