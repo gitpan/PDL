@@ -3,16 +3,18 @@
 # requires the PGPLOT module be previously installed.
 # PGPLOT functions are also made available to the caller.
 
+use PGPLOT; # For the caller
+
 package PDL::Graphics::PG;
 
 @EXPORT_OK = qw( dev hold release rel env bin cont errb line points
                  imag image ctab hi2d poly vect
 );
 
+use PGPLOT;               # For me
 use PDL::Core;    # Grab the Core names
 use SelfLoader; use Carp;
 
-use vars qw($AXISCOLOUR $SYMBOL $ERRTERM $HARD_LW $HARD_CH $HARD_FONT);
 @ISA = qw( PDL::Exporter SelfLoader ); 
 
 # Global variables for customisation, defaults are:
@@ -23,8 +25,6 @@ $ERRTERM    = 1;   # Size of error bar terminators
 $HARD_LW    = 4;   # Line width for hardcopy devices
 $HARD_CH    = 1.4; # Character height for hardcopy devices
 $HARD_FONT  = 2;   # Font for hardcopy devices
-
-
 
 # Standard colour tables (args to ctab())
 
@@ -37,33 +37,11 @@ $CTAB{Igray}   = $CTAB{Igrey}; # Alias
 $DEV  = $ENV{"PGPLOT_DEV"} if defined $ENV{"PGPLOT_DEV"};
 $DEV  = "?" if $DEV eq ""; # Safe default
 
-
-BEGIN { $pgplot_loaded = 0 }
-
 END { # Destructor to close plot when perl exits
-     if ($pgplot_loaded) {
-        my ($state,$len);
-        pgqinf('STATE',$state,$len);
-        pgend() if $state eq "OPEN";
-     }
+     my ($state,$len);
+     pgqinf('STATE',$state,$len);
+     pgend() if $state eq "OPEN";
 }
-
-# Load PGPLOT only on demand
-
-local $^W=0;  # Do it this way to suppress spurious warnings
-eval << 'EOD';
-sub AUTOLOAD {
-   eval << 'EOC' unless $pgplot_loaded;
-   use PGPLOT; $pgplot_loaded=1;   # For me
-   my $i=0; my $pkg;
-   do { $pkg = (caller($i++))[0]; } until $pkg ne "PDL::Graphics::PG";
-   eval "{ package $pkg; use PGPLOT; }";  # For caller
-   print "Loaded PGPLOT\n" if $PDL::verbose;
-EOC
-   $SelfLoader::AUTOLOAD = $AUTOLOAD;
-   goto &SelfLoader::AUTOLOAD;
-}
-EOD
 
 1;# Exit with OK status
 
@@ -79,15 +57,15 @@ sub checkarg {  # Check/alter arguments utility
     $type = $PDL_F unless defined $type;
     $arg = topdl($arg); # Make into a pdl
     $arg = convert($arg,$type) if $$arg{Datatype} != $type;
-    croak "Data is >".$dims."D" if $#{$$arg{Dims}} > $dims-1;
+    croak "Data is not ${dims}D" if $#{$$arg{Dims}} != $dims-1;
     $_[0] = $arg; # Alter
 1;}
 
 sub pgdefaults{    # Set up defaults
-    local($hcopy, $len);
+    my ($hcopy,$len);
     pgask(0);
     pgqinf("HARDCOPY",$hcopy,$len);  
-    if ($hcopy eq "YES") {  
+    if ($hcopy eq "YES") {   # hardcopy defaults
        pgslw($HARD_LW); pgsch($HARD_CH);     
        pgscf($HARD_FONT); 
     }
@@ -95,8 +73,8 @@ sub pgdefaults{    # Set up defaults
 }
 
 sub initdev{  # Ensure a device is open
-     local ($state,$len); 
-     pgqinf('STATE',$state,$len); 
+     my ($state,$len);
+     pgqinf('STATE',$state,$len);
      dev() if ($state eq "CLOSED");
 1;}
 
@@ -125,11 +103,11 @@ sub CtoF77coords{  # convert a transform array from zero-offset to unit-offset i
 # Open/reopen the graphics device
 
 sub dev {
-    local ($dev,$nx,$ny) = @_;
-    $dev = $DEV if !defined $dev || $dev eq "";
+    my ($dev,$nx,$ny) = @_;
+    $dev = $DEV if $dev eq "";
     $nx = 1 unless defined $nx;
     $ny = 1 unless defined $ny;
-    local ($state,$len);
+    my ($state,$len);
     pgqinf('STATE',$state,$len);
     pgend() if ($state eq "OPEN");
     pgbegin(0,$dev,$nx,$ny);
@@ -432,6 +410,4 @@ sub vect {
                       $$tr{Data}, $misval);
 1;}
 
-
 1;# Exit with OK status
-

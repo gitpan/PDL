@@ -32,50 +32,60 @@ print <<'EOD';
 
 /* Swap pdls */
 
-void pdl_swap(pdl** a, pdl** b) {
-   pdl* tmp;
+void pdl_swap(pdl* a, pdl* b) {
+   pdl tmp;
    tmp = *b; *b=*a; *a=tmp;
 }
 
 /* Change the type of all the data in a pdl struct, either changing the
    original perl structure or making a temporary copy  */
 
-void pdl_converttype( pdl** aa, int targtype, Logical changePerl ) {
-    pdl* a=*aa;  /* Point to cache */
+void pdl_converttype( pdl* a, int targtype, Logical changePerl ) {
     int intype;
     void* b;     /* Scratch data ptr */
+    SV**  foo;
     SV*   bar;
     HV*   hash;
     int   nbytes;
-    int   len;
-    int   diffsize;
 
     intype = a->datatype;
 
     if (intype == targtype) 
        return;
 
-    diffsize = pdl_howbig(targtype) != pdl_howbig(a->datatype);
-
-    nbytes = a->nvals * pdl_howbig(targtype); /* Size of converted data */
-
     if (changePerl) {   /* Grow data */
 
-      if (diffsize) {
-         b = a->data;                      /* pointer to old data */
-         a->data     = pdl_malloc(nbytes); /* Space for changed data */
-      }
-      else{
-         b = a->data; /* In place */
-      }
+      hash = (HV*) SvRV( (SV*) a->sv );  /* Orig hash ref */
+
+      /* Find old data */
+
+      foo = hv_fetch( hash, "Data", strlen("Data"), 0);
+      if (foo == NULL)
+         croak("Error accessing 'Data' component");
+
+      bar = sv_2mortal( newRV(*foo) );         /* new tmp ref to old Data */
+      b   = (void*) SvPV( (SV*)SvRV(bar), na); /* void ptr to bytes */
+
+      /* Store new data string of new size in hash */
+
+      bar = newSVpv("",0);    nbytes = a->nvals * pdl_howbig(targtype);
+      SvGROW ( bar, nbytes ); SvCUR_set( bar, nbytes );
+      foo = hv_store( hash, "Data", strlen("Data"), bar, 0);
+      if (foo == NULL)
+         croak("Store of new 'Data' failed");
+
+      a->data = SvPV( bar, na );
+      a->datatype = targtype;
+
+      /* Store new datatype */
+
+      foo = hv_store(hash, "Datatype", strlen("Datatype"), newSViv(targtype), 0 );
+      if (foo == NULL)
+         croak("Store of new 'Datatype' failed");
 
     }else{
-
-       b = a->data;          /* Ptr to old data */
-       a = pdl_tmp();        /* Brand new scratch pdl */
-       pdl_clone(*aa,  a);   /* Copy old pdl entries */
-       a->data     = pdl_malloc(nbytes); /* Space for changed data */
-       *aa = a;              /* Change passed value to new address */
+       b = a->data; /* Ptr to old copy */
+       a->data = pdl_malloc( a->nvals * pdl_howbig(targtype) ); /* Scratch */
     }
 
     /* Do the conversion */
@@ -115,43 +125,18 @@ print <<'EOD';
       croak("Don't know how to convert datatype %d to %d", intype, targtype);
     }
 
-    if (changePerl) {   /* Tidy up */
-
-      hash = (HV*) SvRV( (SV*) a->sv );  /* Orig hash ref */
-
-      /* Store new data */
-
-      if (diffsize) {
-         bar = pdl_getKey(hash, "Data");
-         sv_setpvn( bar, (char*) a->data, nbytes );
-         a->data = (void*) SvPV(bar, len);
-      }
-
-      /* Store new datatype */
-
-      bar = pdl_getKey(hash, "Datatype");
-      sv_setiv(bar, (IV) targtype);
-
-    }
-
     a->datatype = targtype;
 }
-
 
 /* Ensure 'a' and 'b' are the same data types of high enough precision,
    using a reasonable set of rules. 
 */
 
-void pdl_coercetypes( pdl** aa, pdl** bb, Logical changePerl ) {
+void pdl_coercetypes( pdl *a, pdl *b, Logical changePerl ) {
 
-     pdl* a = *aa;  /* Double ptr passed as value of ptr may be changed to */
-     pdl* b = *bb;  /* point at a temporary copy of the cached pdl */
      Logical oneisscalar;
      pdl *scalar,*vector;
      int targtype;
-
-     if (a->datatype == b->datatype) /* Nothing to be done */
-        return;
 
      /* Detect the vector & scalar case */
 
@@ -199,26 +184,76 @@ void pdl_coercetypes( pdl** aa, pdl** bb, Logical changePerl ) {
 
      /* Do the conversion */
 
-     pdl_converttype(aa, targtype, changePerl);  
-     pdl_converttype(bb, targtype, changePerl);
+     pdl_converttype(a, targtype, changePerl);  
+     pdl_converttype(b, targtype, changePerl);
+}
+
+
+/*  Utility to change the size of the data compt of a pdl */
+
+void pdl_grow (pdl* a, int newsize) {
+
+   SV** foo;
+   HV* hash;
+   int nbytes;
+   int ncurr;
+
+   nbytes = newsize * pdl_howbig(a->datatype);
+   ncurr  = SvCUR( (SV*)a->sv );
+   if (ncurr == nbytes) 
+      return;    /* Nothing to be done */
+
+   hash = (HV*) SvRV( (SV*) a->sv ); 
+
+   if (ncurr>nbytes) { /* Nuke back to zero */
+      foo = hv_store(hash, "Data", strlen("Data"), newSVpv("",0), 0 );
+      if (foo == NULL)
+         croak("Error deleting old 'Data' component");
+   }
+      
+   foo = hv_fetch( hash, "Data", strlen("Data"), 0);
+   if (foo == NULL)
+      croak("Error accessing 'Data' component");
+
+   SvGROW ( *foo, nbytes );   SvCUR_set( *foo, nbytes );
+
+   a->data = SvPV( *foo, na ); a->nvals = newsize;
+}
+
+/*  Utility to change the value of the data type field of a pdl  */
+
+void pdl_retype (pdl* a, int newtype) {
+
+   SV** foo;
+   HV* hash; 
+
+   if (a->datatype == newtype) 
+      return;  /* Nothing to be done */
+
+   hash = (HV*) SvRV( (SV*) a->sv ); 
+   foo = hv_store(hash, "Datatype", strlen("Datatype"), newSViv(newtype), 0 );
+   if (foo == NULL)
+      croak("Store of new 'Datatype' failed");
+   a->datatype = newtype;
+
 }
 
 /* Given PDL return an allocated **ptr to 2D data thus allowing a[j][i] syntax */
 
-void ** pdl_twod( pdl* x ) {
+void ** pdl_twod( pdl x ) {
 
    int i,nx,ny,size;
    long *p;
    char *xx;
 
-   if (x->ndims>2)
+   if (x.ndims>2)
       croak("Data must be 1 or 2-dimensional for this routine");
 
-   xx = (char*) x->data;
+   xx = (char*) x.data;
 
-   nx = *(x->dims); ny = x->ndims==2 ? *(x->dims+1) : 1; 
+   nx = *(x.dims); ny = x.ndims==2 ? *(x.dims+1) : 1; 
 
-   size=pdl_howbig(x->datatype);
+   size=pdl_howbig(x.datatype);
 
    p = (long*) pdl_malloc( ny*sizeof(long) ); /* 1D array of ptrs p[i] */
    for (i=0;i<ny;i++)

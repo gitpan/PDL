@@ -4,7 +4,9 @@
 
 unshift @INC, "./blib"; 
 print <<'EOD';
-perlDL shell v1.03
+
+perlDL shell v1.00 by Karl Glazebrook [kgb@aaoepp.aao.gov.au] 1 Oct 1996
+
 EOD
 
 $PERLDL_ESCAPE = '#'; # Default shell escape
@@ -82,7 +84,6 @@ sub {
    $_;
 }
 EOD
-	    %@ = (); # Workaround to prevent spurious loss of $@
             PDL::Core::myeval( $code ); # Do command with $@ keeping
         }else{
             eval $_;
@@ -110,5 +111,3 @@ sub p {
     print(@_);
 }
 
-sub q { exit(); }
-sub x { exit(); }
