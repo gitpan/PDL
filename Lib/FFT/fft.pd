@@ -406,10 +406,13 @@ some temporary space and redundant transforms.
  
 This file copyright (C) R.J.R. Williams 1997 (rjrw@ast.leeds.ac.uk), Karl
 Glazebrook (kgb@aaoepp.aao.gov.au), Tuomas J. Lukka,
-(lukka@husc.harvard.edu). Reproducing  documentation from the pdl distribution
-in any way that does not include a statement telling who the original authors
-are is forbidden.  Reproducing and/or distributing the documentation  in
-any  form that  alters the text is forbidden.
+(lukka@husc.harvard.edu). 
+All rights reserved. There is no warranty. You are allowed
+to redistribute this software / documentation under certain
+conditions. For details, see the file COPYING in the PDL 
+distribution. If this file is separated from the PDL distribution, 
+the copyright notice should be included in the file.
+
 
 =cut
 

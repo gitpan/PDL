@@ -246,6 +246,8 @@ Use:
 			# as well as an X display properly set up. 
 	demo 3d2	# 3d demo, second part. This is very memory-heavy, make
 			# your window fairly small.
+	demo 3dgal      # the 3D gallery: generate interesting images with
+	                # *very* concise PDL scripts
 EOD
 	} elsif(/^pdl$/) {
 		require PDL::Demos::General;
@@ -256,6 +258,9 @@ EOD
 	} elsif(/^3d2$/) {
 		require PDL::Demos::TriD2;
 		PDL::Demos::TriD2::run();
+	} elsif(/^3dgal$/) {
+		require PDL::Demos::TriDGallery;
+		PDL::Demos::TriDGallery::run();
 	} else {
 		print "No such demo!\n";
 	}	

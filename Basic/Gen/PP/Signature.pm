@@ -34,10 +34,13 @@ sub new {
 =head1 AUTHOR
 
 Copyright (C) Tuomas J. Lukka 1997 (lukka@husc.harvard.edu) and by Christian
-Soeller (csoelle@sghms.ac.uk). Reproducing  documentation from the pdl
-distribution in any way that does not include a statement telling who the
-original authors are is forbidden.  Reproducing and/or distributing the
-documentation  in any  form that  alters the text is forbidden.
+Soeller (csoelle@sghms.ac.uk). 
+All rights reserved. There is no warranty. You are allowed
+to redistribute this software / documentation under certain
+conditions. For details, see the file COPYING in the PDL 
+distribution. If this file is separated from the PDL distribution, 
+the copyright notice should be included in the file.
+
 
 =cut
 

@@ -697,7 +697,10 @@ discussions on the pdl-porters mailing list.
 =head1 AUTHOR
 
 Copyright 1997 Christian Soeller <csoelle@sghms.ac.uk> and Karl Glazebrook
-<kgb@aaoepp.aao.gov.au> Reproducing  documentation from the pdl distribution in
-any way that does not include a statement telling who the original authors are
-is forbidden.  Reproducing and/or distributing the documentation  in any  form
-that  alters the text is forbidden.
+<kgb@aaoepp.aao.gov.au> 
+All rights reserved. There is no warranty. You are allowed
+to redistribute this software / documentation under certain
+conditions. For details, see the file COPYING in the PDL 
+distribution. If this file is separated from the PDL distribution, 
+the copyright notice should be included in the file.
+

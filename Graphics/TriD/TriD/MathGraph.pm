@@ -19,11 +19,13 @@ the nodes so that the graph is visualizable in a clear way.
 =head1 AUTHOR
 
 Copyright (C) 1997 Tuomas J. Lukka (lukka@husc.harvard.edu). 
-Reproducing 
-documentation from the pdl distribution in any way that does not include a
-statement telling who the original authors are is forbidden.  Reproducing and/or
-distributing the documentation  in any  form that  alters the text is
-forbidden.
+
+All rights reserved. There is no warranty. You are allowed
+to redistribute this software / documentation under certain
+conditions. For details, see the file COPYING in the PDL 
+distribution. If this file is separated from the PDL distribution, 
+the copyright notice should be included in the file.
+
 
 =cut
 

@@ -8,6 +8,7 @@ $PDL::Verbose = 0;
 $Verbose |= $PDL::Verbose;
 
 print "1..26\n";
+$ntests = 26;
 
 # Configuration
 # Get ExtUtils::F77 if run in either PDL/t/ or PDL/
@@ -20,7 +21,31 @@ BEGIN{
 		print "I'm not in PDL now, right? Still trying\n";
 	}
 }
+
+BEGIN {
+	eval " use ExtUtils::F77; ";
+	$loaded = ($@ ? 0 : 1);
+}
+
+if(!$loaded) {
+	print STDERR "Can't find ExtUtils::F77 installed - skipping tests\n";
+	for(1..26) {print "ok $_\n";}
+	exit 0;
+}
+
+
 use ExtUtils::F77;
+
+print STDERR "Testing F77 compiler: (garbage may result)\n--------";
+$compiler_available = ExtUtils::F77->testcompiler;
+print STDERR "--------\n";
+
+if(!$compiler_available) {
+	print STDERR "Can't use the F77 compiler - skipping tests\n";
+	for(1..26) {print "ok $_\n";}
+	exit 0;
+}
+
 if ($ExtUtils::F77::VERSION > 1.03) {
     $F77 = ExtUtils::F77::compiler();
     $F77flags = ExtUtils::F77::cflags();

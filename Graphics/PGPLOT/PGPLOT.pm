@@ -26,7 +26,7 @@ Current display commands:
    points       -  Plot vector as points
    errb         -  Plot error bars
    cont         -  Display image as contour map
-   bin          -  Plot vector as histogram ( e.g. bin(hist($data)) )
+   bin          -  Plot vector as histogram ( e.g. C<bin(hist($data))> )
    hi2d         -  Plot image as 2d histogram (not very good IMHO...)
    poly         -  Draw a polygon
    vect         -  Display 2 images as a vector field
@@ -134,7 +134,7 @@ zero-offset.
 
 =for ref
 
-Plot vector as histogram ( e.g. bin(hist($data)) )
+Plot vector as histogram ( e.g. C<bin(hist($data))> )
 
 =for usage
 
@@ -182,10 +182,13 @@ zero-offset.
 
 Karl Glazebrook [kgb@aaoepp.aao.gov.au], docs mangled by Tuomas J. Lukka
 (lukka@fas.harvard.edu) and Christian Soeller (csoelle@sghms.ac.uk).
-Reproducing  documentation from the pdl distribution in any way that does not
-include a statement telling who the original authors are is forbidden. 
-Reproducing and/or distributing the documentation  in any  form that  alters
-the text is forbidden.
+
+All rights reserved. There is no warranty. You are allowed
+to redistribute this software / documentation under certain
+conditions. For details, see the file COPYING in the PDL 
+distribution. If this file is separated from the PDL distribution, 
+the copyright notice should be included in the file.
+
 
 =cut
 

@@ -51,7 +51,9 @@ BEGIN {
       open(OUT,">Makefile");
       print OUT "fred:\n";
       print OUT "\t\@echo \n";
-      print OUT "\t\@echo $msg\n";
+	  my $emsg = substr($msg, 1);	# Get rid of leading \n
+	  $emsg =~ s/\n+$//;			# Remove final \n(s)
+      print OUT "\t\@echo $emsg\n";
       print OUT "\t\@echo \n";
       print OUT "\nall: fred\n";
       print OUT "\ntest: fred\n";
@@ -83,7 +85,8 @@ PDL::Core::Dev->import();
 
 $hash{OBJECT} .= join '', map {" slatec/$_.o "} @slatecfiles;
 $hash{LIBS}[0] .= ExtUtils::F77->runtime ;
-$hash{clean}{FILES} .= " f77_underscore";
+$hash{clean}{FILES} .= " f77_underscore SlatecProtos.h" .
+  join '', map {" slatec/$_.o "} @slatecfiles;
 
 # Handle multiple compilers
 

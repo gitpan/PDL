@@ -11,6 +11,7 @@ WriteMakefile(
                     'Screen.pm'    => '$(INST_LIBDIR)/Demos/Screen.pm',
                     'TriD1.pm'    => '$(INST_LIBDIR)/Demos/TriD1.pm',
                     'TriD2.pm'    => '$(INST_LIBDIR)/Demos/TriD2.pm',
+                    'TriDGallery.pm'    => '$(INST_LIBDIR)/Demos/TriDGallery.pm',
 		   }
 );
 

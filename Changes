@@ -1,3 +1,32 @@
+1.9901
+Christian:
+  - new faq
+  - few changes to the demos (especially replaced
+    'output ' with 'print' in the printouts; beginners might be confused
+    by the 'output' abstraction)
+  - new demo '3dgal' for the TriD Gallery 
+  - install PDL::Graphics::VRML::Protos in the correct place
+  - fixed picrgb test to generate a warning when broken
+    tiff converters are encountered (patched source now included)
+        those who reported errors with this test please check again
+        after patch has been included
+  - make slatec clean rule more complete
+Raphael:
+ - fix Slatec Makefile.PL to work with more stringent makes
+ - provide 'rint'
+Tjl:
+ - change Copyright + files' copyrights
+ - new 3dgal stuff
+ - undo Slatec return -> exit: if slatec is not built, Lib/Makefile
+   didn't get built
+Robin:
+ - fix typo in Makefile.PL
+ - add C<> in PG.pm
+Jarle:
+ - better barf message for pdl((pdl 0), (pdl 1))
+Gerald:
+ - typo in PP.pod
+
 1.9900
  - make perldl-documentation startup not depend on verbose
  - '??' = apropos

@@ -32,7 +32,7 @@ $g->bind_default($name);
 $g->scalethings();
 $win = PDL::Graphics::TriD::get_current_window();
 
-require('VRML/Protos.pm');
+require PDL::Graphics::VRML::Protos;
 PDL::Graphics::VRML::Protos->import();
 
 $win->{VRMLTop}->register_proto(PDL::Graphics::VRML::Protos::PDLBlockText10());

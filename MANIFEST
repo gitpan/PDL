@@ -58,6 +58,7 @@ Basic/Math/ndtr.c
 Basic/Math/ndtri.c
 Basic/Math/polevl.c
 Basic/Math/protos.h
+Basic/Math/rint.c
 Basic/Math/simq.c
 Basic/Math/yn.c
 Basic/Ops/Makefile.PL
@@ -103,6 +104,7 @@ Demos/TriD/tvrml.p
 Demos/TriD/tvrml2.p
 Demos/TriD1.pm
 Demos/TriD2.pm
+Demos/TriDGallery.pm
 Doc/Doc.pm
 Doc/Doc/Config.pm.PL
 Doc/Doc/Perldl.pm
@@ -176,8 +178,8 @@ Graphics/TriD/TriD/TextObjects.pm
 Graphics/TriD/TriD/Tk.pm
 Graphics/TriD/TriD/VRML.pm
 Graphics/TriD/VRML/Makefile.PL
-Graphics/TriD/VRML/Protos.pm
 Graphics/TriD/VRML/VRML.pm
+Graphics/TriD/VRML/VRML/Protos.pm
 INSTALL
 IO/Browser/Makefile.PL
 IO/Browser/browse.c
@@ -192,6 +194,9 @@ IO/Misc/Makefile.PL
 IO/Misc/misc.pd
 IO/Pnm/Makefile.PL
 IO/Pnm/Pic.pm
+IO/Pnm/converters/README
+IO/Pnm/converters/pnmtotiff.c
+IO/Pnm/converters/tifftopnm.c
 IO/Pnm/pnm.pd
 Lib/CallExt/CallExt.pm
 Lib/CallExt/CallExt.xs

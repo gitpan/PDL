@@ -24,13 +24,17 @@ comment q|
 	 - IO::FlexRaw (flexible raw input/output)
  	[*]: this module has its separate demos in a subdirectory.
 
-	Note that the script must start with
+	Note that your own scripts must start with
 
 		use PDL; 
 
-	to work.  Also, the command "output" is aliased to
-	either "print" or whatever command is appropriate in the 
-	environment you are running this demo in.
+	to work properly, so that you can simply say
+
+                perl script.pl
+
+        or you can just try some of the commands illustrated
+        in the demos by just retyping them at the perldl
+        command prompt.
 |;
 
 act q|
@@ -65,17 +69,18 @@ act q|
 
 act q|
 	# Arithmetic operations work:
-	$x = xvals(20) / 10;
+	$x = xvals(10) / 5;
+        output $x,"\n";
 	output ((sin $x),"\n");
 |;
 
 act q|
 	# You can also take slices:
 	output $b;
-	output $b->slice(":,2:3");
+	output $b->slice(":,2:3");  # rows 2 and 3
 |;
 act q|
-	output $b->slice("2:3,:");
+	output $b->slice("2:3,:");  # or columns 2 and 3
 |;
 
 act q|
@@ -102,7 +107,8 @@ act q|
 |;
 
 act q|
-	# Another example:
+	# Another example (we only modify elements 0,2 and 4 of
+        # each row):
 	$t = $b->slice("0:4:2"); $t += 50;
 	output $b;
 |;
@@ -131,13 +137,31 @@ act q|
 	# Here are some more advanced tricks for selecting
 	# parts of 1-D vectors:
 	$a = (xvals 12)/3;
-	$i = where(sin($a) > 0.5);   # Indices of those sines > 0.5
+	$i = which(sin($a) > 0.5);   # Indices of those sines > 0.5
 	output $a,"\n";
 	output $i,"\n";
 	output $a->index($i),"\n";
+             # and we can have the effect of the last command in one
+             # go using 'where' instead of 'which' and 'index' as in
+        output $a->where(sin($a) > 0.5),"\n";
+             # and finally take the sin of these elements
+             # (to show that these are indeed the correct ones)
 	output sin($a->index($i)),"\n";
+|;
+
+comment q|
+	We hope you enjoyed these demos illustrating some
+	of the basic capabilities of PDL.
+
+	We encourage you to play with these commands in
+        the perldl shell and use its online help support
+	to find out more about these and other commands and
+	features of PDL.
+
+        Just type 'help' to get started.
 
 |;
+
 
 }
 

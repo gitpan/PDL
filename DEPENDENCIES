@@ -1,4 +1,3 @@
-DEPENDENCIES follows:
 
 PDL Module Dependencies
 
@@ -66,10 +65,14 @@ PDL::IO::Pic
                                         ok without converters
 
 PDL::Lib::Slatec
-                Slatec fortran lib is included but currently
-                requires f2c to build. 
+                Slatec fortran lib is included but requires a
+		fortran compiler and the perl module ExtUtils::F77
+		(version >= 1.03) to be installed.
 
                                         Will not be built unless
-                                        f2c is installed on your
-                                        system.
+                                        ExtUtils::F77 (version >= 1.03)
+					is installed and Extutils::F77
+					supports your platform.
 
+PDL::IO::Browser
+		Requires a 'curses'-compatible library

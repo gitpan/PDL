@@ -1705,6 +1705,10 @@ sub rpack {
        }
        $level--;
 
+    }elsif (ref($a) eq "PDL") {
+
+	barf 'Cannot make a new piddle from two or more piddles, try "cat"';
+
     }elsif (ref(\$a) eq "SCALAR") { # Note $PDL_D assumed
 
       $ret = pack($ptype,$_);
@@ -1864,11 +1868,13 @@ sub str2D{
 
 Copyright (C) Karl Glazebrook (kgb@aaoepp.aao.gov.au),
 Tuomas J. Lukka, (lukka@husc.harvard.edu) and Christian
-Soeller (csoelle@sghms.ac.uk) 1997. Reproducing 
-documentation from the pdl distribution in any way that does not
-include a statement telling who the original authors are is
-forbidden.  Reproducing and/or distributing the documentation 
-in any  form that  alters the text is forbidden.
+Soeller (csoelle@sghms.ac.uk) 1997. 
+All rights reserved. There is no warranty. You are allowed
+to redistribute this software / documentation under certain
+conditions. For details, see the file COPYING in the PDL 
+distribution. If this file is separated from the PDL distribution, 
+the copyright notice should be included in the file.
+
 
 =cut
 

@@ -24,14 +24,14 @@ comment q|
 	Press 'q' in the graphics window for the next screen.
 	Rotate the image by pressing mouse button one and 
 	dragging in the graphics window.
-
-	Note that the script must start with
+	Zoom in/out by pressing MB3 and drag up/down.
+	Note that a standalone TriD script must start with
 
 		use PDL;
 		use PDL::Graphics::TriD;
 		use PDL::Graphics::TriD::Image;
 
-	to work.
+	to work properly.
 |;
 
 actnw q|

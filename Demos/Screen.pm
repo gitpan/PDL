@@ -30,8 +30,10 @@ sub comment($) {
 
 sub act($) {
 	home();
+	my $script = $_[0];
+	$script =~ s/^(\s*)output/$1print/mg;
 	print "---- Code:";
-	print $_[0];
+	print $script;
 	print "---- Output:\n";
 	my $pack = (caller)[0];
 #	eval "package $pack; use PDL; $_[0]";
@@ -43,8 +45,10 @@ sub act($) {
 
 sub actnw($) {
 	home();
+	my $script = $_[0];
+	$script =~ s/^(\s*)output/$1print/mg;
 	print "---- Code:";
-	print $_[0];
+	print $script;
 	print "---- Output:\n";
 	my $pack = (caller)[0];
 #	eval "package $pack; use PDL; $_[0]";

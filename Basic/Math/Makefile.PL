@@ -13,12 +13,12 @@ PDL::Core::Dev->import();
 %FileToUse = qw( acosh acosh asinh asinh atanh atanh 
              	 erf ndtr erfc ndtr j0 j0 j1 j1 jn jn
 	     	 y0 j0 y1 j1 yn yn ndtri ndtri
-		 blas blas eigens eigens simq simq
+		 blas blas eigens eigens simq simq rint rint
 	       );
 %included = ();	   
 
 # test for library features
-my (@ufuncs2) = qw(acosh asinh atanh erf erfc);
+my (@ufuncs2) = qw(acosh asinh atanh erf erfc rint);
 my (@besufuncs) = qw(j0 j1 y0 y1);
 my (@besbifuncs) = qw(jn yn);
 

@@ -437,7 +437,8 @@ sub new {my($type) = @_;
 		"x" => $x);
 
 	glClearColor(0,0,0,1);
-	my $lb = PDL::Graphics::OpenGL::glpRasterFont("5x8",0,256);
+	my $lb = PDL::Graphics::OpenGL::glpRasterFont(
+		($ENV{PDL_3D_FONT} or "5x8"),0,256);
 	$PDL::Graphics::TriD::GL::fontbase = $lb;
 #	glDisable(&GL_DITHER);
 	glShadeModel (&GL_FLAT);
