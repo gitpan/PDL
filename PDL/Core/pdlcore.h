@@ -2,8 +2,8 @@
 #include "EXTERN.h"   /* std perl include */
 #include "perl.h"     /* std perl include */
 
-#define TMP  0        /* Flags */
-#define PERM 1
+#define PDL_TMP  0        /* Flags */
+#define PDL_PERM 1
 
 #define BIGGESTOF(a,b) ( a->nvals>b->nvals ? a->nvals : b->nvals )
 
@@ -24,19 +24,23 @@ void*   pdl_malloc ( int nbytes );           /* malloc memory - auto free()*/
 
 /* pdlapi.c */
 
-#define pdl_new() pdl_create(PERM)
-#define pdl_tmp() pdl_create(TMP)
+#define pdl_new() pdl_create(PDL_PERM)
+#define pdl_tmp() pdl_create(PDL_TMP)
 pdl* pdl_create(int type);
 void pdl_destroy(pdl *it);
 void pdl_clone( pdl* in, pdl* out );
 void pdl_setdims(pdl* it, int* dims, int ndims, int* incs);
 void pdl_setthreaddims(pdl* it, int* threaddims, int nthreaddims, int* threadincs);
+void pdl_reallocdims ( pdl *it,int ndims );  /* reallocate dims and incs */
+void pdl_resize_defaultincs ( pdl *it );     /* Make incs out of dims */
+void pdl_unpackarray ( HV* hash, char *key, int *dims, int ndims );
 
 /* pdlhash.c */
 
 pdl*    pdl_getcache( HV* hash );       /* Retrieve address of $$x{PDL} */
 pdl*    pdl_fillcache( HV* hash);       /* Fill/create $$x{PDL} cache */
 SV*     pdl_getKey( HV* hash, char* key );  /* Get $$x{Key} SV* with deref */
+void pdl_flushcache( pdl *thepdl );	     /* flush cache */
 
 /* pdlbasicops.c */
 
@@ -100,6 +104,9 @@ struct Core {
     void   (*unpackdims)  ( SV* sv, int *dims,    /* Unpack */
                             int ndims );
     void   (*grow)        ( pdl* a, int newsize); /* Change pdl 'Data' size */
+    void (*flushcache)( pdl *thepdl );	     /* flush cache */
+    void (*reallocdims) ( pdl *it,int ndims );  /* reallocate dims and incs */
+    void (*resize_defaultincs) ( pdl *it );     /* Make incs out of dims */
 };
 
 typedef struct Core Core;

@@ -110,3 +110,5 @@ sub p {
     print(@_);
 }
 
+sub q { exit(); }
+sub x { exit(); }

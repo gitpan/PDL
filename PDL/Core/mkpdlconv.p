@@ -203,48 +203,6 @@ void pdl_coercetypes( pdl** aa, pdl** bb, Logical changePerl ) {
      pdl_converttype(bb, targtype, changePerl);
 }
 
-
-/*  Utility to change the size of the data compt of a pdl */
-
-void pdl_grow (pdl* a, int newsize) {
-
-   SV* foo;
-   HV* hash;
-   int nbytes;
-   int ncurr;
-   int len;
-
-   nbytes = newsize * pdl_howbig(a->datatype);
-   ncurr  = SvCUR( (SV*)a->sv );
-   if (ncurr == nbytes) 
-      return;    /* Nothing to be done */
-
-   hash = (HV*) SvRV( (SV*) a->sv ); 
-   foo = pdl_getKey(hash, "Data");
-
-   if (ncurr>nbytes)  /* Nuke back to zero */
-      sv_setpvn(foo,"",0);
-      
-   SvGROW ( foo, nbytes );   SvCUR_set( foo, nbytes );
-   a->data = SvPV( foo, len ); a->nvals = newsize;
-}
-
-/*  Utility to change the value of the data type field of a pdl  */
-
-void pdl_retype (pdl* a, int newtype) {
-
-   SV* foo;
-   HV* hash; 
-
-   if (a->datatype == newtype) 
-      return;  /* Nothing to be done */
-
-   hash = (HV*) SvRV( (SV*) a->sv ); 
-   foo = pdl_getKey(hash, "Datatype");
-   sv_setiv(foo, (IV) newtype);
-   a->datatype = newtype;
-}
-
 /* Given PDL return an allocated **ptr to 2D data thus allowing a[j][i] syntax */
 
 void ** pdl_twod( pdl* x ) {

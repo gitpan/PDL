@@ -117,6 +117,7 @@ sub null {  # Special token for PDL::PP
    my $new = bless {}, $class;
    $$new{Data}="";
    $$new{Dims}=[0];
+   $$new{Datatype}=1;
    return $new;
 }
   

@@ -21,6 +21,50 @@ pdl* pdl_getcache( HV* hash ) {
    return ( address==0? (pdl*) NULL : (pdl*) address );
 }
 
+
+/*  Utility to change the size of the data compt of a pdl */
+
+void pdl_grow (pdl* a, int newsize) {
+
+   SV* foo;
+   HV* hash;
+   int nbytes;
+   int ncurr;
+   int len;
+
+   nbytes = newsize * pdl_howbig(a->datatype);
+   ncurr  = SvCUR( (SV*)a->sv );
+   if (ncurr == nbytes) 
+      return;    /* Nothing to be done */
+
+   hash = (HV*) SvRV( (SV*) a->sv ); 
+   foo = pdl_getKey(hash, "Data");
+
+   if (ncurr>nbytes)  /* Nuke back to zero */
+      sv_setpvn(foo,"",0);
+      
+   SvGROW ( foo, nbytes );   SvCUR_set( foo, nbytes );
+   a->data = SvPV( foo, len ); a->nvals = newsize;
+}
+
+/*  Utility to change the value of the data type field of a pdl  */
+
+void pdl_retype (pdl* a, int newtype) {
+
+   SV* foo;
+   HV* hash; 
+
+   if (a->datatype == newtype) 
+      return;  /* Nothing to be done */
+
+   hash = (HV*) SvRV( (SV*) a->sv ); 
+   foo = pdl_getKey(hash, "Datatype");
+   sv_setiv(foo, (IV) newtype);
+   a->datatype = newtype;
+}
+
+
+
 /* Fills the cache associated with a PDL sv with new values from
    the PDL perl data strcuture */
 
@@ -65,7 +109,7 @@ pdl* pdl_fillcache( HV* hash ) {
       pdl_setdims(thepdl, dims, ndims, NULL);
    } else {
       incs = pdl_packdims( *foo, &nincs ); /* Pack */
-      if(nincs != thepdl->ndims) 
+      if(nincs != ndims) 
          croak("NDIMS AND NINCS UNEQUAL!\n");
 
       pdl_setdims(thepdl, dims, ndims, incs);
@@ -82,23 +126,38 @@ pdl* pdl_fillcache( HV* hash ) {
 
    foo = hv_fetch ( hash, "ThreadDims", strlen("ThreadDims"), 0);
    if(foo == NULL)
-   	thepdl->nthreaddims = 0;
+   	{thepdl->nthreaddims = 0; ndims = 0;}
    else
         dims = pdl_packdims(*foo, &ndims);
    
-
-   if(thepdl->nthreaddims) {
+   if(ndims) {
       foo = hv_fetch ( hash, "ThreadIncs", strlen("ThreadIncs"), 0);
       if(foo == NULL)
          die("Threaddims but not ThreadIncs given!\n");
 	
       incs = pdl_packdims (*foo, &nincs );
-      if(nincs != thepdl->nthreaddims)  
+      if(nincs != ndims)  
          die("NThreaddims != NThreadIncs!\n");
 
       pdl_setthreaddims( thepdl, dims, ndims, incs);
     }
    return thepdl;
+}
+
+void pdl_flushcache( pdl *thepdl ) {
+	SV *foo = (SV *)(thepdl->sv);
+	HV *hash = (HV*) SvRV(foo); 
+
+/* Data, nvals always ok (?) */
+
+	SV *bar = pdl_getKey(hash,"Datatype");
+	sv_setiv(bar, (IV) thepdl->datatype);
+
+	pdl_unpackarray(hash,"Dims",thepdl->dims,thepdl->ndims);
+	pdl_unpackarray(hash,"Incs",thepdl->incs,thepdl->ndims);
+	pdl_unpackarray(hash,"ThreadDims",thepdl->threaddims,thepdl->nthreaddims);
+	pdl_unpackarray(hash,"ThreadIncs",thepdl->threadincs,thepdl->nthreaddims);
+
 }
 
 /* 
@@ -126,4 +185,23 @@ SV* pdl_getKey( HV* hash, char* key ) {
    }
    return bar;
 }
+
+
+/* unpack dims array into Hash */
+
+void pdl_unpackarray ( HV* hash, char *key, int *dims, int ndims ) {
+
+   AV*  array;
+   SV** foo;
+   int i;
+
+   array = newAV();
+   hv_store(hash, key, strlen(key), newRV( (SV*) array), 0 );
+  
+   if (ndims==0 )
+      return;
+
+   for(i=0; i<ndims; i++)
+         av_store( array, i, newSViv( (IV)dims[i] ) );
+} 
 
