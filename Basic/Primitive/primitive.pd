@@ -1,0 +1,317 @@
+# REPLACE FOLLOWING BY
+#
+# use PDL::PP qw/PDL::Experiment PDL::Experiment Experiment/;
+# 
+# when using not in this package.
+
+sub defpdl {
+	pp_def(
+		$_[0],
+		Pars => $_[1],
+		OtherPars => $_[2],
+		Code => $_[3]
+	);
+}
+
+=head1 NAME
+
+PDL::Primitive - primitive operations for pdl
+
+=head1 DESCRIPTION
+
+This module provides some primitive and useful functions defined 
+using PDL::PP and able to use the new indexing tricks.
+
+See L<PDL::Indexing> for how to use indices creatively.
+
+For explanation of the prototype format, see L<XXX>.
+
+=head1 FUNCTIONS
+
+=over 8
+
+=item sumover(a(n),[o]b()), prodover(a(n),[o]b())
+
+	b() = sum_i a(i)
+	b() = prod_i a(i)
+
+These functions take a sum and a product, respectively, over
+the first dimension of the argument piddle.
+
+=cut
+
+defpdl(
+	'sumover',
+	'a(n); [o]b();',
+	'',
+	'double tmp = 0;
+	 loop(n) %{ tmp += $a(); %}
+	 $b() = tmp;'
+);
+
+
+defpdl(
+	'prodover',
+	'a(n); [o]b();',
+	'',
+	'double tmp = 1;
+	 loop(n) %{ tmp *= $a(); %}
+	 $b() = tmp;'
+);
+
+=item axisvalues([o]a(n)), axisvals(a,nth), xvals(a), yvals(a), zvals(a)
+
+Calling the function C<axisvals(a(n))> returns a copy of
+the matrix a filled with values
+of the specified coordinate: a(0) = 0, a(1) = 1 etc. 
+C<xvals($a)>, C<yvals($a)>, C<zvals($a)>, are equivalent to axisvals($a,0),
+axisvals($a,1) and axisvals($a,2), respectively.
+
+C<axisvalues> is the internal primitive that implements axisvals and
+alters its argument.
+
+=cut
+
+defpdl(
+	'axisvalues',
+	'[o,nc]a(n)',
+	'',
+	'loop(n) %{ $a() = n; %}'
+);
+
+
+=item inner(a(n),b(n),[o]c()), outer(a(n),b(m),c(n,m))
+
+These functions implement the inner and outer product over one
+dimensions, respectively. Naturally, it is possible to achieve
+the effects of outer product simply by threading over the '*' operator
+but this function is provided for convenience.
+
+=cut
+
+defpdl(
+	'inner',
+	'a(n); b(n); [o]c(); ', '',
+	'double tmp = 0;
+	 loop(n) %{ tmp += $a() * $b(); %}
+	 $c() = tmp;'
+);
+
+defpdl(
+	'outer',
+	'a(n); b(m); [o]c(n,m); ', '',
+	'loop(n,m) %{ $c() = $a() * $b(); %}'
+);
+
+=item innerwt(a(n),b(n),c(n),[o]d())
+
+This function calculates the the weighted (i.e. triple) inner product:
+
+	d = sum_i a(i) b(i) c(i)
+
+=cut
+
+defpdl(
+	'innerwt',
+	'a(n); b(n); c(n); [o]d(); ', '',
+	'double tmp = 0;
+	 loop(n) %{ tmp += $a() * $b() * $c(); %}
+	 $d() = tmp;'
+);
+
+=item inner2(a(n),b(n,m),c(m),[o]e())
+
+This function calculates the inner product a*b*c. Note that you should
+probably not thread over a and c since that would be very wasteful.
+Instead, you should use a temporary for b*c.
+
+=cut
+
+defpdl(
+	'inner2',
+	'a(n); b(n,m); c(m); [o]d();',
+	'',
+	'double tmp=0;
+	 loop(n,m) %{
+		tmp += $a() * $b() * $c();
+	 %}
+	 $d() = tmp;
+	 '
+);
+
+
+=item inner2t(a(j,n), b(n,m), c(m,k), [t]tmp(n,k), [o]d(j,k))
+
+This routine calculates the triple matrix product a*b*c efficiently
+by using the temporary tmp. This operation only scales as N**3
+whereas threading using inner2 would scale as N**4.
+
+The reason for having this routine is that you do not need to
+have the same thread-dimensions for C<tmp> as for the other arguments,
+which in case of large numbers of matrices makes this much more
+memory-efficient.
+
+It is hoped that things like this could be taken care of as a kind of
+closures at some point.
+
+=cut
+
+defpdl(
+	'inner2t',
+	'a(j,n); b(n,m); c(m,k); [t]tmp(n,k); [o]d(j,k));',
+	'',
+	'
+	 loop(n,k) %{ double tmp0 = 0;
+	 	loop(m) %{ tmp0 += $b() * $c(); %}
+		$tmp() = tmp0;
+	 %}
+	 loop(j,k) %{ double tmp1 = 0;
+	 	loop(n) %{ tmp1 += $a() * $tmp(); %}
+		$d() = tmp1;
+	%}'
+);
+
+=item index(a(n), int ind(), [o]c())
+
+This function provides rudimentary index indirection.
+
+	c = a(ind());
+
+It would be useful to have a more complete function for this
+at some point, or at least a perl wrapper, that allows
+
+	$c = $a->islice("1:2",$ind1,"3:4",$ind2");
+
+with many dimensions.  Also, this function should be made
+two-way and moved to PDL::Slices (see L<PDL::Slices>).
+
+=cut
+
+defpdl(
+	'index',
+	'a(n); int ind(); [o]c();', '',
+	'int foo = $ind(); if(foo<0 || foo>=$COMP(__n_size)) 
+		{croak("PDL::index: invalid index");}
+	 $c() = $a(n => foo);
+	'
+);
+
+=item minimum(a(n),[o]c()), maximum(a(n),[o]c())
+
+Self-explanatory. Note that the long forms of the functions
+again work on the first dimension and if you want the maximum
+of a whole piddle $a, use max($a).
+
+=item minimum_ind(a(n),int [o]c()), maximum_ind(a(n),int [o]c())
+
+These functions work like the previous except that they
+return the index of the maximum element
+
+=item minimum_n_ind(a(n),int [o]c(m)), maximum_n_ind(a(n),int [o]c(m))
+
+These functions work like the previous except that they
+return the indices of the I<m> maximum elements.
+
+=cut
+
+for $which (['minimum','<'],
+    ['maximum','>']) {
+defpdl(
+	$which->[0],
+	'a(n); [o]c();','',
+	'double cur;
+	 loop(n) %{
+	 	if(!n || $a() '.$which->[1].' cur) {cur = $a();}
+	 %}
+	 $c() = cur;
+	'
+);
+defpdl(
+	$which->[0]."_ind",
+	'a(n); int[o]c();','',
+	'double cur; int curind;
+	 loop(n) %{
+	 	if(!n || $a() '.$which->[1].' cur) {cur = $a(); curind = n;}
+	 %}
+	 $c() = curind;
+	'
+);
+defpdl(
+	$which->[0]."_n_ind",
+	'a(n); int[o]c(m);','',
+	'double cur; int curind;
+	 if($PRIV(__m_size) > $PRIV(__n_size)) $CROAK("n_ind: m_size > n_size");
+	 loop(m) %{
+		 loop(n) %{
+		 	int nm; int flag=0;
+		 	for(nm=0; nm<m; nm++) {
+				if($c(m=>nm) == n) {flag=1; break;}
+			}
+			if(!flag && (n<=m || $a() '.$which->[1].' cur)) 
+				{cur = $a(); curind = n;}
+		 %}
+		 $c() = curind;
+	 %}
+	'
+);
+}
+
+=item wtstat(a(n), wt(n), avg(), [o]b(), degree)
+
+This calculates a weighted statistic over the vector a. 
+The formula is  
+
+	b() = sum_i wt * (a ** degree - avg) / sum_i wt
+
+=cut
+
+defpdl(
+	'wtstat',
+	'a(n); wt(n); avg(); [o]b();',
+	'int deg',
+	'double wtsum = 0;
+	 double statsum=0;
+	 loop(n) %{ 
+		 register double tmp; register int i;
+		 wtsum += $wt();
+		tmp=1; for(i=0; i<$COMP(deg); i++) tmp*=$a();
+	 	statsum += $wt() * tmp - $avg(); %}
+	 $b() = statsum / wtsum;
+	'
+);
+
+=item random(a())
+
+fills in the piddle with random numbers between 0 and 1.
+
+=cut
+
+defpdl(
+	'random',
+	'a()',
+	'',
+	'$a() = ((double)rand()) / RAND_MAX;'
+);
+
+=item assgn(a(),b())
+
+Plain numerical assignment. This is used to implement the ".=" operator.
+
+=cut
+
+defpdl(
+	'assgn',
+	'a(); [o]b();',
+	'',
+	'$b() = $a();'
+);
+
+
+pp_done();
+
+=back
+
+=head1 AUTHOR
+
+Copyright (C) Tuomas J. Lukka 1997. Commercial reproduction of this
+documentation in a different format is forbidden.

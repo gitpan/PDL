@@ -1,0 +1,244 @@
+=head1 NAME
+
+PDL::PCARout - Principal Component Analysis routines for PDL
+
+=head1 WARNING
+
+This is alpha-state code.
+
+=head1 DESCRIPTION
+
+These routines implement some routines for PDL::PCA and
+PDL::ICA.
+
+=cut
+
+
+pp_addhdr("#include <math.h>\nextern double pow(double,double); 
+ extern double sqrt(double);\n");
+
+sub defpdl {
+	pp_def(
+		$_[0],
+		Types => [F,D],
+		Pars => $_[1],
+		OtherPars => $_[2],
+		Code => $_[3]
+	);
+}
+
+# Oja's learning rule. I'm not sure whether the normalization
+# step is really meant to be without the sqrt().
+
+# Note: you can thread over both eta and data in which case
+# you can have e.g. a diminishing learning rate.
+
+=item pca_oja([o,nc]w(ndims), eta(), data(ndims))
+
+This is the basic no-frills on-line adaptive Oja algorithm.
+One neuron, which adapts to find the largest variance component
+of the data.
+
+The PerlDL dimensions primitives make life easy:
+you can teach with either invariant or changing I<eta> parameter.
+To change the eta parameter, just include in it a dimension
+corresponding to the n of points dimensions of the data.
+
+Note that this function modifies the I<w> parameter.
+
+=cut
+
+defpdl('pca_oja',
+  	'[o,nc]w(ndims); eta(); data(ndims);',
+	'',
+	'double sum=0;
+	 double y = 0;
+	 loop(ndims) %{
+	 	y += $data() * $w();
+	 %}
+	 loop(ndims) %{
+		register double tmp = $eta() * y * $data();
+		tmp = ($w() += tmp);
+	 	sum += tmp * tmp;
+	 %}
+	 sum = sqrt(sum);
+	 loop(ndims) %{
+	 	$w() /= sum;
+	 %}
+	 '
+);
+
+=item pca_ojakarhunen, pca_sanger
+
+Untested!
+
+=cut
+
+# Oja and Karhunen learning rule as well as Sanger's rule.
+# This should be optimized.
+for(['pca_ojakarhunen','
+		loop(nvals) %{ $wtmp() -= $ytmpx() * $w(); %}
+		loop(nvals1,nvals2) %{ 
+		    if(nvals1<=nvals2) continue;
+		    $wtmp(nvals=>nvals1) -= 
+		       2 * $ytmpx(nvals0=>nvals1,nvals1=>nvals2) 
+		         * $w(nvals=>nvals2); 
+		%}'],
+    ['pca_sanger','
+		loop(nvals1,nvals2) %{ 
+		    if(nvals1<nvals2) continue;
+		    $wtmp(nvals=>nvals1) -= 
+		       2 * $ytmpx(nvals0=>nvals1,nvals1=>nvals2) 
+		         * $w(nvals=>nvals2); 
+		%}'],
+) {
+defpdl($_->[0], 
+	'w(ndims,nvals); wtmp(ndims,nvals); ytmp(nvals); ytmpx(nvals,nvals);
+		eta(); data(ndims);',
+	'','
+	 loop(ndims,nvals) %{ $wtmp() = 0; %}
+	 loop(nvals) %{
+		double sum=0;
+	 	loop(ndims) %{ sum += $data() * $w(); %}
+		loop(ndims) %{ $wtmp() += sum * $data(); %}
+		$ytmp() = sum;
+	 %}
+	 loop(nvals1,nvals2) %{
+	 	$ytmpx(nvals0=>nvals1,nvals1=>nvals2) = 
+			$ytmp(nvals=>nvals1) * $ytmp(nvals => nvals2);
+	 %}
+	 loop(ndims) %{
+	 	'.$_->[1].'
+	 %}
+	 '
+);
+}
+
+=item ica_mod_bell_sejnowski
+
+=cut
+
+if(0) {
+defpdl(ica_mod_bell_sejnowski,
+	'b(ndims,nvals); btmp(ndims,nvals); ytmp(nvals); gtmp(nvals);
+		eta();
+		data(ndims);
+	',
+	'loop(ndims,nvals) %{ $wtmp() = 0; %}
+	loop(nvals) %{
+		double sum=0;
+		loop(ndims) %{ sum += $data() * $b(); %}
+		$ytmp() = sum;
+		$gtmp() = (exp(sum) - exp(-sum)) / (exp(sum)+exp(-sum));
+	%}
+	loop(nvals1
+	'
+);
+}
+
+
+# Parametrization of unit determinant matrices by LU-decompositions.
+#defpdl("lu_param",
+#	Pars => "a(n,n); [o]b(n,n);",
+#	Code => '
+#		int i;
+#		loop(n1,n2) %{
+#			if(n1==n2) {
+#				double sum=0;
+#				for(i=0; i<n1; i++) {
+#					sum += $a(n0=>
+#				}
+#			}
+#		%}
+#
+
+pp_def("transdiacumusum",
+	Types => [F,D],
+	Pars => "data(n,ndata); trans(n,m); cum(m,ncum);",
+	Code => '
+		loop(m,ncum) %{ $cum() = 0; %}
+		loop(ndata,m) %{
+			double val=0; double mcum;
+			loop(n) %{
+				val += $data() * $trans();
+			%}
+			mcum = val;
+			loop(ncum) %{
+				mcum *= val;
+				$cum() = mcum;
+			%}
+		%}
+	'
+);
+
+pp_def("vec2asym",
+	Types => [F,D],
+	Pars => "v(k); [o]m(n,n);",
+	Code => '
+		int a,b; int wk;
+		if($PRIV(__k_size) < $PRIV(__n_size)*($PRIV(__n_size)-1)/2) {
+			$CROAK("Vec2asym: too few pars");
+		}
+		wk=0;
+		for(a = 0; a<$PRIV(__n_size); a++) {
+			$m(n0=>a, n1=>a) = 0;
+			for(b = 0; b < a; b++) {
+				$m(n0=>a, n1=>b) = $v(k=>wk);
+				$m(n0=>b, n1=>a) = -$v(k=>wk);
+				wk ++;
+			}
+		}
+	'
+);
+
+pp_def("vec2lu",
+	Types => [F,D],
+	Pars => "v(k); [o]l(n,n); [o]u(n,n);",
+	Code => '
+		int ind=0;
+		if($PRIV(__k_size) != $PRIV(__n_size) * ($PRIV(__n_size)-1)) {
+			$CROAK("Invalid sizes to vec2lu");
+		}
+		loop(n1,n2) %{
+			if(n1 > n2)
+				$l(n0=>n1,n1=>n2) = 0;
+			else if(n1==n2)
+				$l(n0=>n1,n1=>n2) = 1;
+			else {
+				$l(n0=>n1,n1=>n2) = $v(k=>ind);
+				ind++;
+			}
+		%}
+		loop(n1,n2) %{
+			if(n1 < n2)
+				$u(n0=>n1,n1=>n2) = 0;
+			else if(n1==n2)
+				$u(n0=>n1,n1=>n2) = 1;
+			else {
+				$u(n0=>n1,n1=>n2) = $v(k=>ind);
+				ind++;
+			}
+		%}
+				
+	'
+);
+
+=head1 REFERENCES 
+
+Source for algorithms: 
+Deco & Obradovic: An Information-Theoretic Approach to Neural
+Computing, Springer 1996.
+
+=head1 BUGS
+
+None known
+
+=head1 AUTHOR
+
+Copyright (C) 1997 Tuomas J. Lukka. Redistribution in printed
+form forbidden.
+
+=cut
+
+
+pp_done;

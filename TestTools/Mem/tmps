@@ -1,0 +1,7 @@
+BEGIN{print `pwd`;};$|=1; use blib '../..'; use PDL; 
+	kill INT,$$ if $ENV{UNDER_DEBUGGER};
+	PDL::Core::set_debugging(1);
+	  for($i = 0; $i < 1; $i++) { 	my $a = zeroes(100,100);
+	my $b = $a + 1;
+ } print "FINISHED\n";
+	

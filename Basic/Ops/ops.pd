@@ -1,0 +1,89 @@
+# REPLACE FOLLOWING BY USE
+# when using not in this package.
+#
+# Parts from old mkpdlbasicops.p, rest Copyright (C) Tuomas J. Lukka 1996, 1997
+
+# Phase 1: generate lists of 
+#	[operator_name, how_to_apply]
+
+@biops1  = map {[$_,"\$c() = \$a() $_ \$b()"]} qw( + * - / );
+@biops2  = map {[$_,"\$c() = \$a() $_ \$b()"]} qw( > < <= >= == != );
+@biops3  = map {[$_,"\$c() = \$a() $_ \$b()"]}qw( << >> | & ^ );
+
+@ufuncs1 = map {[$_,"\$b() = ($_(\$a()))"]} qw( sqrt sin cos abs );
+@ufuncs2 = map {[$_,"\$b() = ($_(\$a()))"]} qw( log exp ! ~ NOTHING );
+@bifuncs = map {[$_,"\$c() = ($_(\$a(),\$b()))"]} 
+	qw( pow atan2 MODULO SPACESHIP );
+
+sub nofloat { # Decide which ops can't be done on floats/doubles
+    	my $op = shift; $op = $op->[0];
+	my (@bitops) = qw( << >> | & ^ ~ );
+    	for (@bitops) { return 1 if $_ eq $op }
+	return 0;
+}
+        
+pp_addhdr('
+#include <math.h>
+
+#define MODULO(X,N)     ( (X) - (N)*((int)((X)/(N))) )
+#define SPACESHIP(A,B)  ( (2*((A)>(B))-1) * ((A)!=(B))  )
+#define abs(A)          ( (A)>0 ? (A) : -(A) )
+#define NOTHING
+');
+
+# First, map all the types 
+
+$arg3str = 'a(); b(); [o]c();';
+$arg2str = 'a(); [o]b();';
+
+my $ind = 0;
+for $optype ([biop1,\@biops1,$arg3str], 
+     [biop2,\@biops2,$arg3str],
+     [biop3,\@biops3,$arg3str],
+     [bifunc1,\@bifuncs,$arg3str],
+     [ufunc1,\@ufuncs1,$arg2str],
+     [ufunc2,\@ufuncs2,$arg2str]) { $ind ++; 
+pp_def("my_$optype->[0]",
+	Pars => $optype->[2],
+	OtherPars => "char* op",
+Code => "if(0) {".
+	  (join '',map {qq^	
+     } else if(!strcmp(\$COMP(op),"$_->[0]")) { ^
+# If a no-float operator, say it.
+	        .(nofloat($_) ? qq^ 
+		  types(FD) %{ 
+		    croak("Operator $_ not defined for floats or dbls\\n"); 
+		  %}
+		  types(BSUL) %{ ^
+		  :''). 
+# Do the actual threadloop.
+		qq^
+		threadloop %{
+			$_->[1];
+		%}
+		^
+# Close the type loop.
+		.(nofloat($_) ? ' %} ':'') 
+# End the enclosing "if".
+		} @{$optype->[1]}).
+	q|}; /* printf("OMYBIOP, '%s'\n",op); */ |,
+);
+}
+
+pp_done();
+
+
+=head1 NAME
+
+PDL::Ops - pdl operators
+
+=head1 DESCRIPTION
+
+PDL::Ops is the package that actually implements the PDL operators.
+You probably don't need to know about this and the interface may well
+change so the documentation ends here.
+
+=head1 AUTHOR
+
+Tuomas J. Lukka (lukka@fas.harvard.edu)
+

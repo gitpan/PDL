@@ -5,9 +5,11 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
  'NAME' => 'PDL',
- 'VERSION_FROM'     => 'PDL/Core/Core.pm',  
+ 'VERSION_FROM' => 'Basic/Core/Version.pm',
  'EXE_FILES' => ['perldl'],
+ 'OPTIMIZE' => '-g',              # At the moment, probably better.
+				  # If you want speed, remove this
  'linkext'  => {LINKTYPE => ''},  # No linking required in this directory
-  'dist'      => { COMPRESS=>"gzip", SUFFIX=>"gz" }
+ 'clean' => {'FILES' => 'perldl'}
 );
 

@@ -1,0 +1,20 @@
+
+	PDL Changes between 1.0 and 2.0
+
+This file is an attempt to list the major user-visible changes
+between PDL versions 1.0 and 2.0.
+
+ - Piddles are not hashes any more: 
+
+ 	$a = zeroes 10,10;
+	$$a{FOO} = "bar"
+
+   doesn't work. They are currently scalar references (to opaque
+   C structures in finer terms) because of speed as well as
+   syntactic issues. If you want to have a hash, use
+
+   	$a->hdr
+
+   which returns a reference to an anonymous hash. (XXX)
+
+ - 

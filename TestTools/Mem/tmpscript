@@ -1,0 +1,6 @@
+BEGIN{print `pwd`;};$|=1; use blib '../..'; use PDL; 
+	  for($i = 0; $i < 101; $i++) { 	my $a = zeroes(50,50);
+	my $b = $a + 1;
+	my $c = $b->at(5,5);
+ } print "FINISHED\n";
+	
