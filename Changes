@@ -1,4 +1,47 @@
 (!!! = possible source of incompatibilities)
+1.99989
+Tuomas Lukka:
+	- Added Fractal Mountain range to Tri-d demos
+        - Corrected error in impatient.pod. ('top right'
+           to 'top left' in 'Sections' section.)
+
+Tim Jenness
+	- Updated dependency file to reflect the addition
+          of PDL::IO::NDF to the distribution.
+
+Anton Berezin
+	- Modified Basic/Math/Makefile.PL to fix potential
+          conflicts with temp files in the /tmp directory
+
+John Cerney:
+	- Added reorderDims method to slices.pd
+	- Modified subclass2/3.t tests to be more representative
+          of how a functional object would be subclassed. 
+	- Added '-I/usr/X11R6/include' to the default OPENGL_INC in 
+	  perldl.conf
+
+Robin Williams
+	- Cosmetic patch to TriDGallery
+	- Addition of intover (integral) to Primitive.pm
+        - Changes to Basic/Math files so that nan and
+          infinity handling are now in a consistent interface.
+
+Pete Ratzlaff
+	- Fixes typo in Gaussian.pm
+
+Karl Glazebrook
+	- Patch to IO/Misc/misc.pd to fix a minor bug
+	- Patch to IO/Misc/misc.pd to be more memory efficient.
+	- Update to Simplex.pm docs to be more clear to mere
+          mortals. Addition of tsimp2.pl example.
+
+Joshua Pritikin
+	- Patch to pdlmagic.h to fix problems compliling with
+	  SunPro 4.2 C++.
+
+Christian Soeller:
+	- Added a quick/simple ascii file reader (rasc) to
+	  IO/Misc.pd
 1.99988
 Christian Soeller:
 	- patch to make the picrgb/picnorgb tests fail more gracefully
