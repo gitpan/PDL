@@ -296,6 +296,7 @@ void pdl_destroy(pdl *it) {
     pdl__destroy_childtranses(it,1);
 
     if(it->trans) {
+      PDLDEBUG_f(printf("Destr_trans. %d %d\n",it->trans, it->trans->flags);)
         /* Ensure only if there are other children! */
 	/* XXX Bad: tmp! */
       if (it->trans->flags & PDL_ITRANS_NONMUTUAL)
@@ -1135,33 +1136,51 @@ void pdl_destroytransform(pdl_trans *trans,int ensure)
 	int j;
 	pdl *foo;
 
-	PDLDEBUG_f(printf("entering pdl_destroytransform\n"));
+	PDLDEBUG_f(printf("entering pdl_destroytransform %d %d\n",trans,ensure));
 
 	PDL_TR_CHKMAGIC(trans);
+	if(!trans->vtable) {
+		die("ZERO VTABLE DESTTRAN %d %d\n",trans,ensure);
+	}
 	if(ensure) {
+		PDLDEBUG_f(printf("pdl_destroytransform: ensure\n"));
 		pdl__ensure_trans(trans,0);
 	}
 	for(j=0; j<trans->vtable->nparents; j++) {
 		foo = trans->pdls[j];
 		if(!foo) continue;
 		PDL_CHKMAGIC(foo);
+		PDLDEBUG_f(printf("pdl_removectransform: %d %d\n",
+			trans->pdls[j], j));
 		pdl__removechildtrans(trans->pdls[j],trans,j,1);
 		if(!(foo->state & PDL_DESTROYING) && !foo->sv) pdl_destroy(foo);
 	}
 	for(; j<trans->vtable->npdls; j++) {
 		foo = trans->pdls[j];
 		PDL_CHKMAGIC(foo);
+		PDLDEBUG_f(printf("pdl_removeptransform: %d %d\n", trans->pdls[j], j));
 		pdl__removeparenttrans(trans->pdls[j],trans,j);
-		if(foo->vafftrans)
+		if(foo->vafftrans) {
+			PDLDEBUG_f(printf("pdl_removevafft: %d\n", foo));
 			pdl_vafftrans_remove(foo);
+		}
 		if(!(foo->state & PDL_DESTROYING) && !foo->sv) pdl_destroy(foo);
 	}
+	PDL_TR_CHKMAGIC(trans);
+	if(trans->vtable->freetrans) {
+		PDLDEBUG_f(printf("call freetrans\n"));
+		trans->vtable->freetrans(trans); /* Free malloced objects */
+	}
 	PDL_TR_CLRMAGIC(trans);
-#ifndef DONT_REALLY_FREE
-	/* XXX MEMLEAK EVEN WITH FREE! */
-	free(trans); 
-#endif
-	PDLDEBUG_f(printf("leaving pdl_destroytransform\n"));
+	trans->vtable = 0; /* Make sure no-one uses this */
+	if(trans->freeproc) {
+		PDLDEBUG_f(printf("call freeproc\n"));
+		trans->freeproc(trans);
+	} else {
+		PDLDEBUG_f(printf("call free\n"));
+		free(trans);
+	}
+	PDLDEBUG_f(printf("leaving pdl_destroytransform %d\n", trans));
 
 }
 
@@ -1182,13 +1201,15 @@ void pdl_destroytransform_nonmutual(pdl_trans *trans,int ensure)
 			trans->pdls[i]->trans = 0;
 	}
 	PDL_TR_CHKMAGIC(trans);
-	PDL_TR_CLRMAGIC(trans);
 	if(trans->vtable->freetrans) {
 		trans->vtable->freetrans(trans);
 	}
+	PDL_TR_CLRMAGIC(trans);
 	trans->vtable = 0; /* Make sure no-one uses this */
 	if(trans->freeproc) {
 		trans->freeproc(trans);
+	} else {
+		free(trans);
 	}
 	PDLDEBUG_f(printf("leaving pdl_destroytransform_nonmutual\n"));
 }

@@ -391,10 +391,10 @@ $PDL::PP::deftbl =
 
 
 # Threads
- [[Priv,PrivIsInc],	[ParNames,ParObjs,DimObjs],	"make_incsizes"],
- [[PrivCopyCode],	[ParNames,ParObjs,DimObjs,CopyName,PrivIsInc],	
+ [[Priv,PrivIsInc],	[ParNames,ParObjs,DimObjs,HaveThreading],"make_incsizes"],
+ [[PrivCopyCode],	[ParNames,ParObjs,DimObjs,CopyName,HaveThreading],	
  	"make_incsize_copy"],
- [[PrivFreeCode],	[ParNames,ParObjs,DimObjs,PrivIsInc],	
+ [[PrivFreeCode],	[ParNames,ParObjs,DimObjs,HaveThreading],	
  	"make_incsize_free"], # Frees thread.
  [[RedoDimsCode],       [],      sub {"/* none */"}],
 
@@ -456,6 +456,7 @@ $PDL::PP::deftbl =
  [[NewXSCoerceMust],	[],	sub {""}],
  [[NewXSCoerceMustSub1], [NewXSCoerceMust],	sub{subst_makecomp(FOO,@_)}],
  [[NewXSCoerceMustSubs], [NewXSCoerceMustSub1,NewXSSymTab,Name],	"dosubst"],
+ [[NewXSClearThread], [HaveThreading], sub {$_[0] ? "__privtrans->__thread.inds = 0;" : ""}],
 
  [[NewXSCode,BootSetNewXS,NewXSInPrelude
   ],		[_GlobalNew,_NewXSCHdrs,NewXSHdr,NewXSLocals,NewXSStructInit0,
@@ -463,6 +464,7 @@ $PDL::PP::deftbl =
 			 NewXSStructInit1,
 			 NewXSStructInit2, 
 			 NewXSCoerceMustSubs,_IsReversibleCode,DefaultFlowCode,
+			 NewXSClearThread,
 			 NewXSSetTrans,
 			 ],	"mkxscat"],
  [[StructDecl],		[ParNames,ParObjs, CompiledRepr,
@@ -675,15 +677,17 @@ sub find_datatype {
 }
 
 sub make_incsizes {
-	my($parnames,$parobjs,$dimobjs) = @_;
-	"pdl_thread __thread; ".
+	my($parnames,$parobjs,$dimobjs,$havethreading) = @_;
+	($havethreading?"pdl_thread __thread; ":"").
 	 (join '',map {$parobjs->{$_}->get_incdecls} @$parnames).
 	 (join '',map {$_->get_decldim} values %$dimobjs);
 }
 
 sub make_incsize_copy {
-	my($parnames,$parobjs,$dimobjs,$copyname) = @_;
-	"PDL->thread_copy(&(\$PRIV(__thread)),&($copyname->__thread));".
+	my($parnames,$parobjs,$dimobjs,$copyname,$havethreading) = @_;
+	($havethreading?
+	"PDL->thread_copy(&(\$PRIV(__thread)),&($copyname->__thread));"
+	 : "").
 	 (join '',map {$parobjs->{$_}->get_incdecl_copy(sub{"\$PRIV($_[0])"},
 	 						sub{"$copyname->$_[0]"})} @$parnames).
 	 (join '',map {$_->get_copydim(sub{"\$PRIV($_[0])"},
@@ -692,8 +696,10 @@ sub make_incsize_copy {
 }
 
 sub make_incsize_free {
-	my($parnames,$parobjs,$dimobjs) = @_;
+	my($parnames,$parobjs,$dimobjs,$havethreading) = @_;
+	$havethreading ? 
 	'PDL->freethreadloop(&($PRIV(__thread)));'
+	: ''
 }
 
 sub make_parnames {
@@ -747,7 +753,7 @@ sub def_vtable {
 	my $npdls = scalar @$pnames;
 	"static char ${vname}_flags[] = 
 	 	{ ".
-	 	(join",",map {$pobjs->{$pnames->[$_]}->{FlagPaccess} ?
+	 	(join",",map {$pobjs->{$pnames->[$_]}->{FlagPhys} ?
 				0 : $aff} 0..$npdls-1).
 			"};
 	 pdl_transvtable $vname = {

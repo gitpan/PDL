@@ -22,7 +22,7 @@ PDL::CallExt - call functions in external shared libraries
  use PDL::CallExt;
  callext('file.so', 'foofunc', $x, $y); # pass piddles to foofunc()
  
- % perl -MPDL::CallExt -e callext_cc file.c -o file.so
+ % perl -MPDL::CallExt -e callext_cc file.c 
 
 =head1 DESCRIPTION
 
@@ -182,7 +182,7 @@ sub callext_cc {
 	my $ld_obj = $output;
 	($ld_obj = $cc_obj) =~ s/\.o$/.$Config{dlext}/ unless defined $output;
 	my $cc_cmd = join(' ', map { $Config{$_} } qw(cc ccflags cccdlflags)) .
-		" -I$Config{installsitelib}/PDL $ccflags -c $src -o $cc_obj";
+		" -I$Config{installsitelib}/PDL/Core $ccflags -c $src -o $cc_obj";
 	my $ld_cmd = 'LD_RUN_PATH="" '.
 		join(' ', map { $Config{$_} } qw(ld lddlflags)) .
 		" $ldflags -o $ld_obj $cc_obj";

@@ -13,11 +13,13 @@ SuperHyperCritical:
 # * A test and a fix for $P() in vaffine.
 
 # * foo(zeroes(float,3))) and foo is defined only for byte doesn't work.
-??
+??? Doesn't it?o
 
-# Where(all zero) produces WEIRD stuff.
+* Dependencies on pdl.h everywhere
 
 Reorganize Demos/TriD.
+
+* Transcendential functions should always return at least floats
 
 Missing Features:
 -----------------

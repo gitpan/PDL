@@ -41,7 +41,7 @@ package PDL::IO::Pic;
 %EXPORT_TAGS = (Func => [@EXPORT_OK]);
 use PDL::Core;
 use PDL::Types;
-use PDL::Lib::ImageRGB;
+use PDL::ImageRGB;
 use PDL::IO::Pnm;
 use File::Basename;
 use SelfLoader;

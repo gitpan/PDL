@@ -28,12 +28,16 @@ print "Extracting $file (with variable substitutions)\n";
 
 print OUT <<"!GROK!THIS!";
 
+/*
+ * THIS FILE IS GENERATED FROM pdl.h.PL! Do NOT edit!
+ */
+
 #ifndef __PDL_H
 #define __PDL_H
 
-#define DEBUGGING 1
+#define PDL_DEBUGGING 1
 
-#ifdef DEBUGGING
+#ifdef PDL_DEBUGGING
 extern int pdl_debugging;
 #define PDLDEBUG_f(a)		if(pdl_debugging) a
 #else
@@ -194,7 +198,7 @@ typedef struct pdl_transvtable {
 #define PDL_TR_MAGICNO 0x91827364
 #define PDL_TR_SETMAGIC(it) it->magicno = PDL_TR_MAGICNO
 #define PDL_TR_CLRMAGIC(it) it->magicno = 0x99876134
-#ifdef DEBUGGING
+#ifdef PDL_DEBUGGING
 #define PDL_TR_CHKMAGIC(it) if(it->magicno != PDL_TR_MAGICNO) croak("INVALID TRANS MAGIC NO %d %d\n",it,it->magicno); else 0
 #else 
 #define PDL_TR_CHKMAGIC(it)
@@ -254,7 +258,7 @@ struct pdl_magic;
 
 struct pdl {
 #define PDL_MAGICNO 0x24645399
-#ifdef DEBUGGING
+#ifdef PDL_DEBUGGING
 #define PDL_CHKMAGIC(it) if(it->magicno != PDL_MAGICNO) croak("INVALID MAGIC NO %d %d\n",it,it->magicno); else 0
 #else 
 #define PDL_CHKMAGIC(it)

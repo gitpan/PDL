@@ -74,7 +74,7 @@ sub new {
 		confess("Invalid flag $_ given for $string\n");
 	}
 	if($this->{FlagPhys}) {
-		warn("Warning: physical flag not implemented yet");
+		# warn("Warning: physical flag not implemented yet");
 	}
 	if ($this->{FlagTyped} && $this->{Type} =~ s/[+]$// ) {
 	  $this->{FlagTplus} = 1;
@@ -191,6 +191,7 @@ sub get_nnflag { my($this) = @_;
 }
 
 
+# XXX There might be weird backprop-of-changed stuff for [phys].
 sub get_xsnormdimchecks { my($this) = @_;
 	my $pdl = $this->get_nname;
 	my $str = ""; my $ninds = 0+scalar(@{$this->{IndObjs}});
@@ -217,6 +218,9 @@ sub get_xsnormdimchecks { my($this) = @_;
 		  }
 		";
 		$no++;
+	}
+	if($this->{FlagPhys}) {
+		$str .= "PDL->make_physical(($pdl));";
 	}
 	$str .= "} else {";
 # We are creating this pdl.
@@ -275,7 +279,9 @@ sub get_incsets {
 		"if($str->dims[$_] <= 1)
 		  \$PRIV(".($this->get_incname($_)).") = 0; else
 		 \$PRIV(".($this->get_incname($_)).
-			") = PDL_REPRINC($str,$_);";
+			") = ".($this->{FlagPhys}?
+				   "$str->dimincs[$_];" :
+				   "PDL_REPRINC($str,$_);");
 	} (0..$#{$this->{IndObjs}}) )
 }
  
@@ -288,7 +294,8 @@ sub do_access {
 	 {/^\s*(\w+)\s*=>\s*(\w*)\s*$/ or confess "Invalid subst $_\n"; ($1,$2)} 
 	 	split ',',$inds;
 # Generate the text
-	my $text = "(${pdl}_datap)"."[";
+	my $text;
+	$text = "(${pdl}_datap)"."[";
 	$text .= join '+','0',map {
 		$this->do_indterm($pdl,$_,\%subst,$context);
 	} (0..$#{$this->{IndObjs}});

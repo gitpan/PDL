@@ -37,8 +37,10 @@ EOD
 @biops2  = map {[$_,"\$c() = \$a() $_ \$b()"]} qw( > < <= >= == != );
 @biops3  = map {[$_,"\$c() = (PDL_Long) \$a() $_ (PDL_Long) \$b()"]}qw( << >> | & ^ );
 
-@ufuncs1 = map {[$_,"\$b() = ($_(\$a()))"]} qw( sqrt sin cos abs );
-@ufuncs2 = map {[$_,"\$b() = ($_((PDL_Long)\$a()))"]} qw( log exp ! ~ NOTHING );
+@ufuncs1 = map {[$_,"\$b() = ($_(\$a()))"]} qw( sqrt abs );
+@ufuncs1f = map {[$_,"\$b() = ($_(\$a()))"]} qw( sin cos );
+@ufuncs2 = map {[$_,"\$b() = ($_((PDL_Long)\$a()))"]} qw( ! ~ NOTHING );
+@ufuncs2f = map {[$_,"\$b() = ($_((PDL_Long)\$a()))"]} qw( log exp );
 @bifuncs = map {[$_,"\$c() = ($_(\$a(),\$b()))"]} 
 	qw( pow atan2 MODULO SPACESHIP );
 
@@ -87,13 +89,17 @@ $arg3str = 'a(); b(); [o]c();';
 $arg2str = 'a(); [o]b();';
 
 my $ind = 0;
-for $optype ([biop1,\@biops1,$arg3str], 
-     [biop2,\@biops2,$arg3str],
-     [biop3,\@biops3,$arg3str],
-     [bifunc1,\@bifuncs,$arg3str],
-     [ufunc1,\@ufuncs1,$arg2str],
-     [ufunc2,\@ufuncs2,$arg2str]) { $ind ++; 
+for $optype ([biop1,\@biops1,$arg3str,undef], 
+     [biop2,\@biops2,$arg3str,undef],
+     [biop3,\@biops3,$arg3str,undef],
+     [bifunc1,\@bifuncs,$arg3str,undef],
+     [ufunc1,\@ufuncs1,$arg2str,undef],
+     [ufunc1f,\@ufuncs1f,$arg2str,[F,D]],
+     [ufunc2,\@ufuncs2,$arg2str,undef],
+     [ufunc2f,\@ufuncs2f,$arg2str,[F,D]],
+     ) { $ind ++; 
 pp_def("my_$optype->[0]",
+	($optype->[3] ? (GenericTypes => $optype->[3]) : ()),
 	Pars => $optype->[2],
 	OtherPars => "char* op",
 Code => "if(0) {".

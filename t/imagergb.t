@@ -22,7 +22,7 @@ sub p {
 }
 
 use PDL::LiteF;
-use PDL::Lib::ImageRGB;
+use PDL::ImageRGB;
 use PDL::Dbg;
 
 $PDL::verbose = 0;

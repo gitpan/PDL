@@ -24,7 +24,7 @@ sub rpic_unlink {
 
 use PDL::LiteF;
 use PDL::IO::Pic;
-use PDL::Lib::ImageRGB;
+use PDL::ImageRGB;
 use PDL::Dbg;
 
 $PDL::verbose = 0;

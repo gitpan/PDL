@@ -58,6 +58,11 @@ void pdl_thread_copy(pdl_thread *from,pdl_thread *to) {
 }
 
 void pdl_freethreadloop(pdl_thread *thread) {
+	PDLDEBUG_f(printf("Freethreadloop(%d, %d %d %d %d %d %d)\n",
+		thread,
+		thread->inds, thread->dims, thread->offs, thread->incs,
+		thread->flags, thread->pdls);)
+	if(!thread->inds) {return;}
 	free(thread->inds);
 	free(thread->dims);
 	free(thread->offs);
@@ -69,6 +74,7 @@ void pdl_freethreadloop(pdl_thread *thread) {
 }
 
 void pdl_clearthreadstruct(pdl_thread *it) {
+	PDLDEBUG_f(printf("Clearthreadloop(%d)\n", it);)
 	it->einfo = 0;it->inds = 0;it->dims = 0;
 	it->ndims = it->nimpl = it->npdls = 0; it->offs = 0;
 	it->pdls = 0;it->incs = 0; it->realdims=0; it->flags=0;
@@ -98,6 +104,7 @@ void pdl_initthreadstruct(int nobl,
 	int *nthreadids;
 	int nthr = 0; int nthrd;
 
+	PDLDEBUG_f(printf("Initthreadloop(%d)\n", thread);)
 	thread->gflags = 0;
 
 	thread->npdls = npdls;

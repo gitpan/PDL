@@ -53,12 +53,13 @@ actnw q|
 
 use PDL; use PDL::Graphics::TriD;
 $s=150;$a=zeroes $s,$s;$r=$a->xlinvals(-1.5,0.5);$i=$a->ylinvals(-1,1);
-$t=$r;$u=$i;for(0..20){$q=$r**2-$i**2+$t;$h=2*$r*$i+$u;($r,$i)=map{$_->
+$t=$r;$u=$i;for(0..12){$q=$r**2-$i**2+$t;$h=2*$r*$i+$u;($r,$i)=map{$_->
 clip(-5,5)}($q,$h);}imagrgb[($r**2+$i**2)>2.0];
 
 # [press 'q' in the graphics window when done]
 |;
 
+if(0) {
 actnw q|
 # Greyscale Mandelbrot [Tjl]
 
@@ -82,7 +83,7 @@ $a=zeroes 300,300;$r=$a->xlinvals(-1.5,
 
 # [press 'q' in the graphics window when done]
 |;
-
+}
 
 
 actnw q|
@@ -110,6 +111,15 @@ use PDL; use PDL::Graphics::TriD;
 $s=40;$a=zeroes 2*$s,$s/2;$t=$a->xlinvals(0,6.284);$u=$a->ylinvals(0,
 6.284); $o=5;$i=1;$v=$o-$o/2*sin(3*$t)+$i*sin$u;
 imag3d([$v*sin$t,$v*cos$t,$i*cos($u)+$o*sin(3*$t)]);
+|;
+
+actnw q|
+# Game of life [Robin Williams (edited by Tjl)]
+use PDL; use PDL::Image2D; use PDL::Graphics::TriD;nokeeptwiddling3d;
+$d=(random(zeroes(40,40))>0.85);$k=pdl[[1,1,1],[1,0,1],[1,1,1]];
+($t=$d->slice("18:21,20:22")).=1; do{ imagrgb [$d]; $s=conv2d($d,$k);
+$d&=($s<3.5);$d&=($s>1.5);$d|=(abs($s-3)<1e-3);} while (!twiddle3d);
+
 |;
 
 comment q|

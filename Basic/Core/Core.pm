@@ -249,8 +249,10 @@ BEGIN {
 @PDL::biops2  = qw( > < <= >= == != );
 @PDL::biops3  = qw( << >> | & ^ );
 
-@PDL::ufuncs1 = qw( sqrt sin cos abs );
-@PDL::ufuncs2 = qw( log exp ! ~ NOTHING );
+@PDL::ufuncs1 = qw( sqrt abs );
+@PDL::ufuncs1f = qw( sin cos );
+@PDL::ufuncs2 = qw( ! ~ NOTHING );
+@PDL::ufuncs2f = qw( log exp );
 @PDL::bifuncs = ("pow",["pow","**"],"atan2",["MODULO","%"],["SPACESHIP","<=>"]);
 };
 
@@ -275,7 +277,13 @@ BEGIN {
      		       PDL::Ops::my_ufunc1($_[0],$foo,$op); $foo;})} @PDL::ufuncs1),
      (map {my $op = $_;
      	    ($op => sub {my $foo = PDL::Core::new_or_inplace($_[0]);
+     		       PDL::Ops::my_ufunc1f($_[0],$foo,$op); $foo;})} @PDL::ufuncs1f),
+     (map {my $op = $_;
+     	    ($op => sub {my $foo = PDL::Core::new_or_inplace($_[0]);
      		       PDL::Ops::my_ufunc2($_[0],$foo,$op); $foo;})} @PDL::ufuncs2),
+     (map {my $op = $_;
+     	    ($op => sub {my $foo = PDL::Core::new_or_inplace($_[0]);
+     		       PDL::Ops::my_ufunc2f($_[0],$foo,$op); $foo;})} @PDL::ufuncs2f),
 
      (map {my $op = (ref $_ ? $_->[0] : $_); 
      	   my $opname = (ref $_ ? $_->[1] : $_);
@@ -1158,6 +1166,9 @@ The data elements are preserved, obviously they will wrap
 differently and get truncated if the new array is shorter.
 If the new array is longer it will be zero-padded.   
 
+Note: an explicit copy is forced - this is the only way
+(for now) of stopping a crash if $x is a slice.
+
 =for example
 
   perldl> $x = sequence(10)
@@ -1176,14 +1187,15 @@ If the new array is longer it will be zero-padded.
 
 *reshape = \&PDL::reshape;
 sub PDL::reshape{
-  my $pdl = shift;
+  my $pdl = pdl($_[0]);
   my $nelem = $pdl->nelem;
-  $pdl->setdims([@_]);
+  $pdl->setdims([@_[1..$#_]]);
   $pdl->upd_data;
   if ($pdl->nelem > $nelem) {
      my $tmp=$pdl->clump(-1)->slice("$nelem:-1");
      $tmp .= 0;
   }
+  $_[0] = $pdl;
   return $pdl;
 }
                       
@@ -1751,7 +1763,7 @@ sub strND {
     my($self,$format,$level)=@_;
 #    $self->make_physical();
     my @dims = $self->dims;
-#    print "STRND, $#dims\n";
+    # print "STRND, $#dims\n";
     
     if ($#dims==1) { # Return 2D string
        return str2D($self,$format,$level);
@@ -1808,6 +1820,7 @@ sub str2D{
     my $x = listref_c($self);
     my ($i, $f, $t, $len, $ret);
 
+    my $findmax = 1;
     if (!defined $format || $format eq "") { # Format not given? - 
                                              # find max length of default
        $len=0;
@@ -1820,21 +1833,24 @@ sub str2D{
 	  } elsif ($self->get_datatype() == $PDL_D) {
 	    $format = $PDL::doubleformat 
 	  } else {
-	     goto output; # Stick with default
+	     # Stick with default
+	     $findmax = 0;
 	  }
        }
        else {
-          goto output; # Default ok
+          # Default ok
+	  $findmax = 0;
        }
     } 
 
-    # Find max length of strings in final format
-    $len=0;
-    for (@$x) { 
-       $i = length(sprintf $format,$_); $len = $i>$len ? $i : $len;
+    if($findmax) {
+	    # Find max length of strings in final format
+	    $len=0;
+	    for (@$x) { 
+	       $i = length(sprintf $format,$_); $len = $i>$len ? $i : $len;
+	    }
     }
        
-    output:     # Generate output
 
     $ret = "\n" . " "x$level . "[\n";
     { my $level = $level+1;

@@ -94,16 +94,27 @@ pp_addhdr('
 ');
 
 # Standard `-lm' 
-my (@ufuncs1) = qw(acos asin atan cosh sinh tan tanh ceil floor rint);
-my (@bifuncs1) = qw(pow);
+my (@ufuncs1) = qw(acos asin atan cosh sinh tan tanh); # F,D only
+my (@ufuncs1g) = qw(ceil floor rint); # Any type
+my (@bifuncs1) = qw(pow); # Any type
 
 # Extended `-lm'
-my (@ufuncs2) = qw(acosh asinh atanh erf erfc);
-my (@besufuncs) = qw(j0 j1 y0 y1);
-my (@besbifuncs) = qw(jn yn);
+my (@ufuncs2) = qw(acosh asinh atanh erf erfc);  # F,D only
+my (@besufuncs) = qw(j0 j1 y0 y1); # "
+my (@besbifuncs) = qw(jn yn); # "
 # Need igamma, ibeta, and a fall-back implementation of the above
 
 foreach $func (@ufuncs1) {
+pp_def($func,
+	GenericTypes => [F,D],
+	Pars => 'a(); [o]b();',
+	Doc => $doco{$func},
+	Code => '
+		$b() = '.$func.'($a());
+');
+}
+
+foreach $func (@ufuncs1g) {
 pp_def($func,
 	Pars => 'a(); [o]b();',
 	Doc => $doco{$func},
@@ -111,6 +122,7 @@ pp_def($func,
 		$b() = '.$func.'($a());
 ');
 }
+
 foreach $func (@bifuncs1) {
 pp_def($func,
 	Pars => 'a(); b(); [o]c();',
@@ -123,6 +135,7 @@ pp_def($func,
 # Functions provided by extended -lm
 foreach $func (@ufuncs2) {
 pp_def($func,
+	GenericTypes => [F,D],
 	Pars => 'a(); [o]b();',
 	Doc => $doco{$func},
 	Code => '
@@ -131,6 +144,7 @@ pp_def($func,
 }
 foreach $func (@besufuncs) {
 pp_def("bess$func",
+	GenericTypes => [F,D],
 	Pars => 'a(); [o]b();',
 	Doc => $doco{"bess$func"},
 	Code => '
@@ -139,6 +153,7 @@ pp_def("bess$func",
 }
 foreach $func (@besbifuncs) {
 pp_def("bess$func",
+	GenericTypes => [F,D],
 	Pars => 'a(); int n(); [o]b();',
 	Doc => $doco{"bess$func"},
 	Code => '
@@ -156,6 +171,7 @@ pp_def("lgamma",
 
 # Extra functions from cephes
 pp_def("erfi",
+	GenericTypes => [F,D],
 	Pars => 'a(); [o]b()',
 	Doc => $doco{"erfi"},
 	Code => '

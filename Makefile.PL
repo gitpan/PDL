@@ -68,7 +68,8 @@ WriteMakefile(
 				  # If you want speed, remove this
  'linkext'  => {LINKTYPE => ''},  # No linking required in this directory
  'dist'     => { COMPRESS => 'gzip', SUFFIX => 'gz'},
- 'clean' => {'FILES' => 'perldl pdldoc.db tbyte.tif tmp0 tmp0.hdr tushort.tif MANIFEST.bak tmp1* tmpraw* t/tmpraw* t/tmp1*'}
+ 'clean' => {'FILES' => 'perldl pdldoc.db tbyte.tif tmp0 tmp0.hdr tushort.tif MANIFEST.bak tmp1* tmpraw* t/tmpraw* t/tmp1*'},
+ 'realclean' => {'FILES' => 'Basic/Core/Config.pm'},
 );
 
 print STDERR "Writing Basic/Core/Config.pm\n";
@@ -96,22 +97,28 @@ print OUT ");\n1;";
 sub MY::postamble {
 ' 
 doctest :: 
+	@echo "doctest"
 	@echo "Building PDL documentation database"
 	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
-		Doc/scantree.pl $(INST_LIB) $(INST_LIB)/PDL/pdldoc.db 
+		Doc/scantree.pl 
 	@$(PERL)  -I$(INST_ARCHLIB) -I$(INST_LIB) \
-		Doc/mkhtmldoc.pl $(INST_LIB)/PDL $(INST_LIB)/PDL/HTMLDocs
+		Doc/mkhtmldoc.pl 
 	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
-		Doc/scantree.pl $(INST_LIB) $(INST_LIB)/PDL/pdldoc.db 
+		Doc/scantree.pl 
 
 doc_install ::
-	-@$(CHMOD) 755  $(INSTALLSITELIB)/PDL/pdldoc.db 
-	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
-	   Doc/scantree.pl $(INSTALLSITELIB) $(INSTALLSITELIB)/PDL/pdldoc.db 
-	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
-	   Doc/mkhtmldoc.pl $(INSTALLSITELIB)/PDL $(INSTALLSITELIB)/PDL/HtmlDocs
+	@echo "doc_install"
+	@echo "Building PDL documentation database"
+	-@$(CHMOD) 755  $(INSTALLARCHLIB)/PDL/pdldoc.db 
+	@$(PERL) Doc/scantree.pl $(INSTALLARCHLIB) \
+		$(INSTALLARCHLIB)/PDL/pdldoc.db 
+	@$(PERL) Doc/scantree.pl $(INSTALLSITELIB) \
+		$(INSTALLARCHLIB)/PDL/pdldoc.db 
+	@$(PERL) Doc/mkhtmldoc.pl $(INSTALLARCHLIB) $(INSTALLARCHLIB)/PDL/HtmlDocs
+	@$(PERL) Doc/mkhtmldoc.pl $(INSTALLSITELIB) $(INSTALLARCHLIB)/PDL/HtmlDocs
 
 pure_perl_install ::
+	@echo "pure_perl_install"
 	@echo "Installing PDL documentation database"
 	-@$(CHMOD) 755  $(INSTALLPRIVLIB)/PDL/pdldoc.db 
 	@$(PERL) Doc/scantree.pl

@@ -11,7 +11,7 @@ pp_addpm({At=>Top},<<'EOD');
 
 =head1 NAME
 
-PDL::Lib::ImageRGB -- some utility functions for RGB image data handling
+PDL::ImageRGB -- some utility functions for RGB image data handling
 
 =head1 DESCRIPTION
 
@@ -52,7 +52,7 @@ use Carp;
 use strict 'vars';
 
 
-$PDL::Lib::ImageRGB::EPS = 1e-7;     # there is probably a more portable way
+$PDL::ImageRGB::EPS = 1e-7;     # there is probably a more portable way
 
 =head1 FUNCTIONS
 

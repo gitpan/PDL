@@ -7,7 +7,7 @@
 use ExtUtils::MakeMaker;
 PDL::Core::Dev->import();
 
-@pack = (["imagergb.pd",ImageRGB,PDL::Lib::ImageRGB]);
+@pack = (["imagergb.pd",ImageRGB,PDL::ImageRGB]);
 
 %hash = pdlpp_stdargs_int(@::pack);
 $hash{'OBJECT'} .= ' ppm_quant$(OBJ_EXT)';

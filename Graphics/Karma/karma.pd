@@ -8,6 +8,9 @@ PDL::Graphics::Karma - interface to Karma visualisation applications
 
 Can send PDL 2D/3D data to kview, xray, kslice_3d, etc...
 
+Data is transferred using shared memory when available on the OS
+so ought to be very fast.
+
 You can say
 
   perldl> kim $a, {APP=>'xray'}
@@ -42,6 +45,9 @@ http://www.atnf.csiro.au/karma/ftp.html.
 
 EOD
 
+$KarmaMacros2D = 'UB2,S2,US2,I2,F2,D2'; # Corresponding names in iarray macros
+$KarmaMacros3D = 'UB3,S3,US3,I3,F3,D3'; # Corresponding names in iarray macros
+
 pp_addhdr(<<'ENDOFHDR');
 #include <karma_iarray.h>
 #include <karma_dsxfr.h>
@@ -51,6 +57,10 @@ pp_addhdr(<<'ENDOFHDR');
 #include <karma_r.h>
 #include <karma_m.h>
 #include <karma_st.h>
+#include <karma_overlay.h>
+
+/* Mapping between Karma and PDL datatypes (note also need to watch
+   the Karma 2D and 3D iarray macros a couple of lines above) */
 
 #define K_PDL_Byte	K_UBYTE
 #define K_PDL_Short	K_SHORT
@@ -58,6 +68,7 @@ pp_addhdr(<<'ENDOFHDR');
 #define K_PDL_Long	K_INT
 #define K_PDL_Float	K_FLOAT
 #define K_PDL_Double	K_DOUBLE
+
 
 /* Missing Karma macros */
 
@@ -105,11 +116,12 @@ int ensure_connection(char *karma_app)
   /*  Attempt connection to module  */
     
   if ( !conn_attempt_connection ("localhost",
-                                   r_get_def_port (karma_app, NULL),
+                                   r_get_def_port (karma_app, r_getenv("DISPLAY")),
                                    "multi_array") )
       return 0;
   return 1;
 }
+
 
 static void add_cmap (multi_array **multi_desc, packet_desc* pack_desc,
 	char *packet)
@@ -311,26 +323,25 @@ kconnect(app)
 pp_def('ksend2D',
 	Pars => 'im(m,n); byte lut(o,p)', Doc=>undef,
 	OtherPars => 'int haslut; char* karma_app; SV *bb',
-	Code => 'multi_array *multi_desc;
-		 $GENERIC() *ptr;
-		 int ms, ns, os, ps;
+	Code => 'int ms, ns, os, ps;
 		 char *tpack;
     		 packet_desc *tpack_desc;
     		 unsigned short *cmap;
 		 double fc[2], lc[2];
 		 uaddr lengths[2];
 		 unsigned int dtype;
-		 static char *elem_names[1] = { "intensity" };
+		 static char *elem_names = { "intensity" };
 		 int bblen;
 		 double *dbb = packdouble($COMP(bb),&bblen);
+		 iarray iary;
+		 int i,j;
 
 		 if (bblen != 4)
 		    barf("need 4 coodinates for 2D boundary box");
 		 fc[0] = dbb[2]; lc[0] = dbb[3];
 		 fc[1] = dbb[0]; lc[1] = dbb[1];
-		 lengths[0] = $SIZE(n);
-		 lengths[1] = $SIZE(m);
 		 ms = $SIZE(m); ns = $SIZE(n); os = $SIZE(o); ps = $SIZE(p);
+		 lengths[0] = ns; lengths[1] = ms;
 		 printf("Sending to %s...\n",$COMP(karma_app));
 		 if (!ensure_connection($COMP(karma_app)))
                       barf("Error connecting to %s via karma communications",
@@ -338,14 +349,13 @@ pp_def('ksend2D',
 		 
 		 dtype = $TBSULFD(K_PDL_Byte,K_PDL_Short,K_PDL_Ushort,
 				K_PDL_Long,K_PDL_Float,K_PDL_Double);
-    		 if ( ( ptr = ($GENERIC()*) ds_easy_alloc_n_element_array
-	   		(&multi_desc, 2, lengths,
-	    		(CONST double *) fc, (CONST double *) lc,
-	    		(CONST char **) NULL, 1, &dtype,
-	    		(CONST char **) elem_names) ) == NULL )
+    		 if ( (iary = iarray_create_shm(dtype, 2, (CONST char **) NULL,
+			  lengths, (CONST char *) elem_names, TRUE)) == NULL )
     		 {
-			barf("couldn\'t allocate mem for multi array");
+			barf("couldn\'t allocate mem for iarray");
 		 }
+		 iarray_set_world_coords(iary, 0, fc[0], lc[0]);
+		 iarray_set_world_coords(iary, 1, fc[1], lc[1]);
 		 if ($COMP(haslut)) {
 		        if (os != 3)
 		           barf("first dim must be 3 for rgb");
@@ -353,15 +363,16 @@ pp_def('ksend2D',
 			     (multi_array **) NULL,
 					   &tpack_desc, &tpack) ) == NULL )
 			   barf("couldn\'t allocate mem for cmap");
-		        add_cmap(&multi_desc, tpack_desc, tpack);
+		        add_cmap(&(iary->multi_desc), tpack_desc, tpack);
 		 }
 		 threadloop %{
 			unsigned short *cm = cmap;
-			loop(n) %{
-			  loop(m) %{
-				*ptr++ = $im();
-			  %}
-			%}
+			for(j=0; j<ns; j++) {
+			  for(i=0; i<ms; i++) {
+				$TBSULFD('.$KarmaMacros2D.')(iary, j,i) 
+				   = $im(m=>i, n=>j); 
+			  }
+			}
 			if ($COMP(haslut)) {
 			  loop(p) %{
 			    loop(o) %{
@@ -370,11 +381,11 @@ pp_def('ksend2D',
 			  %}
 			}
 			/*  Send  a  to module  */
-			dsxfr_put_multi("connections",multi_desc);
+			iarray_write(iary, "connections");
 		 %}
 
                  conn_close(conn_get_client_connection("multi_array",0));
-		 ds_dealloc_multi(multi_desc);'
+		 iarray_dealloc(iary);'
 );
 
 # Note reason for seperate 3D function is kview gives error:
@@ -385,18 +396,18 @@ pp_def('ksend2D',
 pp_def('ksend3D',
 	Pars => 'im(m,n,z); byte lut(o,p)', Doc=>undef,
 	OtherPars => 'int haslut; char* karma_app; SV* bb',
-	Code => 'multi_array *multi_desc;
-		 $GENERIC() *ptr;
-		 int ms, ns, os, ps, zs;
+	Code => 'int ms, ns, os, ps, zs;
 		 char *tpack;
     		 packet_desc *tpack_desc;
     		 unsigned short *cmap;
 		 double fc[3], lc[3];
 		 uaddr lengths[3];
 		 unsigned int dtype;
-		 static char *elem_names[1] = { "intensity" };
+		 static char *elem_names = { "intensity" };
 		 int bblen;
 		 double *dbb = packdouble($COMP(bb),&bblen);
+		 iarray iary;
+		 int i,j,k;
 
 		 if (bblen != 6)
 		    barf("need 6 coodinates for 3D boundary box");
@@ -415,14 +426,14 @@ pp_def('ksend3D',
 		 
 		 dtype = $TBSULFD(K_PDL_Byte,K_PDL_Short,K_PDL_Ushort,
 				K_PDL_Long,K_PDL_Float,K_PDL_Double);
-    		 if ( ( ptr = ($GENERIC()*) ds_easy_alloc_n_element_array
-	   		(&multi_desc, 3, lengths,
-	    		(CONST double *) fc, (CONST double *) lc,
-	    		(CONST char **) NULL, 1, &dtype,
-	    		(CONST char **) elem_names) ) == NULL )
+    		 if ( (iary = iarray_create_shm(dtype, 3, (CONST char **) NULL,
+			  lengths, (CONST char *) elem_names, TRUE)) == NULL )
     		 {
 			barf("couldn\'t allocate mem for multi array");
 		 }
+		 iarray_set_world_coords(iary, 0, fc[0], lc[0]);
+		 iarray_set_world_coords(iary, 1, fc[1], lc[1]);
+		 iarray_set_world_coords(iary, 2, fc[2], lc[2]);
 		 if ($COMP(haslut)) {
 		        if (os != 3)
 		           barf("first dim must be 3 for rgb");
@@ -430,17 +441,18 @@ pp_def('ksend3D',
 			     (multi_array **) NULL,
 					   &tpack_desc, &tpack) ) == NULL )
 			   barf("couldn\'t allocate mem for cmap");
-		        add_cmap(&multi_desc, tpack_desc, tpack);
+		        add_cmap(&(iary->multi_desc), tpack_desc, tpack);
 		 }
 		 threadloop %{
 			unsigned short *cm = cmap;
-			loop(z) %{
-			 loop(n) %{
-			  loop(m) %{
-				*ptr++ = $im();
-			  %}
-			 %}
-			%}
+			for(k=0; k<zs; k++) {
+			   for(j=0; j<ns; j++) {
+			     for(i=0; i<ms; i++) {
+				   $TBSULFD('.$KarmaMacros3D.')(iary, k,j,i) 
+				      = $im(m=>i, n=>j, z=>k); 
+			     }
+			   }
+			}
 			if ($COMP(haslut)) {
 			  loop(p) %{
 			    loop(o) %{
@@ -449,11 +461,11 @@ pp_def('ksend3D',
 			  %}
 			}
 			/*  Send  a  to module  */
-			dsxfr_put_multi("connections",multi_desc);
+			iarray_write(iary, "connections");
 		 %}
 
                  conn_close(conn_get_client_connection("multi_array",0));
-		 ds_dealloc_multi(multi_desc);'
+		 iarray_dealloc(iary);'
 
 );
 
@@ -503,6 +515,7 @@ pp_def( 'kimagergb_private',
 		ds_dealloc_multi(multi_desc);
                 conn_close(conn_get_client_connection("multi_array",0));@
 );
+
 
 pp_addpm({At=>Bot},<<'EOD');
 

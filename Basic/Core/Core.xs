@@ -386,10 +386,10 @@ list_c(x)
 				{stop = 0; break;}
 	}
 
-void
+SV *
 listref_c(x)
 	pdl *x
-	PPCODE:
+	CODE:
 	PDL_Long *inds,*incs,offs;
 	void *data;
 	int ind;
@@ -416,8 +416,9 @@ listref_c(x)
 			else 
 				{stop = 0; break;}
 	}
-	EXTEND(sp,1);
-	PUSHs(sv_2mortal(newRV_noinc((SV *)av)));
+	RETVAL = newRV_noinc((SV *)av);
+	OUTPUT:
+	RETVAL
 
 void
 set_c(x,position,value)

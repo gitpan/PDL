@@ -1,5 +1,27 @@
 (!!! = possible source of incompatibilities)
 
+1.9905 (2.0 try 3)
+Someone (lost the mail):
+ - realclean Basic/Core/Config.pm
+Achim:
+ - don't install pod2usage, pod2select in script dir
+ - Lib/ImageRGB -> ImageRGB (!!!)
+ - DEBUGGING => PDL_DEBUGGING
+ - install patches for 5.005
+Tjl:
+ - remove gotos from str2D to not tickle bug in 5.004_64, 
+   which I couldn't reproduce at smaller scale :(
+ - at Karl's prompting, removed the other mandelbrots for now :(
+ - Fix memory leak (reported by Kaj Wiik)
+ - change sin, cos, asin, acos, log, exp and the like to be [F,D]
+   GenericTypes only.
+Robin:
+ - TriDGallery: game of life! (edited by Tjl)
+Karl: 
+ - new karma.pd
+ - reshape patch
+ - callext patch
+
 1.9904 (2.0 try 2)
 Tjl:
  - (Andreas Heitmann): rename rs in the rest of places

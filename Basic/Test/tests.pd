@@ -40,8 +40,9 @@ void ppcp(PDL_Byte *dst, PDL_Byte *src, int len)
 ');
 
 # test the $P vaffine behaviour
+# when 'phys' flag is in.
 pp_deft('foop',
-	Pars => 'a(n); [o]b(n)',
+	Pars => 'byte [phys]a(n); byte [o,phys]b(n)',
 	GenericTypes => [B],
 	Code => 'ppcp($P(b),$P(a),$SIZE(n));',
 );
