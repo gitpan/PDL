@@ -30,31 +30,31 @@ int pdl_howbig (int datatype) {
    converted
 */
 
-pdl SvPDLV ( SV* sv ) {
+pdl* SvPDLV ( SV* sv ) {
 
-   HV*  hash;
-   SV** foo;
-   SV * bar;
-   pdl  ret;
-   STRLEN len;
-
-   ret.sv = (void*) sv;
+   pdl* ret;
+   int fake[1];
+   HV* hash;
 
    if ( !SvROK(sv) ) {   /* Coerce scalar */
+
+       ret = pdl_tmp();  /* Scratch pdl */
+
+       ret->sv = (void*) sv;
        if ( ((SvIOK(sv) && !SvNOK(sv))) || !SvNIOK(sv) ) { /* Int */
-          ret.datatype = PDL_L;
-          ret.data     = pdl_malloc(pdl_howbig(ret.datatype));
-          *((int*)ret.data) = (int) SvIV(sv);
+          ret->datatype = PDL_L;
+          ret->data     = pdl_malloc(pdl_howbig(ret->datatype));
+          *((int*)ret->data) = (int) SvIV(sv);
        }
        else {
-          ret.datatype = PDL_D;
-          ret.data     = pdl_malloc(pdl_howbig(ret.datatype));
-          *((double*)ret.data) = SvNV(sv);
+          ret->datatype = PDL_D;
+          ret->data     = pdl_malloc(pdl_howbig(ret->datatype));
+          *((double*)ret->data) = SvNV(sv);
        }
-       ret.dims  = (int*) pdl_malloc(sizeof(int));
-       *(ret.dims) = 1; 
-       ret.ndims = 1;
-       ret.nvals = 1;
+       *fake = 1;  /* Number of dims of scalar */
+       pdl_setdims(ret, fake, 1, NULL);
+       ret->nthreaddims=0;
+       ret->nvals = 1;
        return ret;
    }
        
@@ -63,94 +63,27 @@ pdl SvPDLV ( SV* sv ) {
 
    hash = (HV*) SvRV(sv); 
 
-   /* Transfer data items to return value */
+   /* Check for existence of PDL cache - i.e. $$x{PDL} exists and !=0  */
 
-   foo = hv_fetch( hash, "Data", strlen("Data"), 0);
+   ret = pdl_getcache( hash );
 
-   if (foo == NULL)
-      croak("Error accessing Object 'Data' component");
+   if (ret != NULL ) { /* Does exist so return cached value */
 
-   /* Now, if Data is a reference, we need to dereference it */
-
-   bar = *foo;
-
-   while(SvROK(bar)) {
-   	bar = SvRV(bar);
+      ret->sv = (void*) sv; /* This value can never be cached! */
+      return ret ; 
    }
+   
+   ret = pdl_fillcache( hash ); /* Cache value and return */ 
 
-   ret.data = SvPV( bar, len ) ;
-
-   foo = hv_fetch( hash, "Datatype", strlen("Datatype"), 0);
-   if (foo == NULL)
-      croak("Error accessing Object 'Datatype' component");
-
-   ret.datatype = (int) SvNV( *foo ) ;
-
-   ret.nvals = len / pdl_howbig(ret.datatype); 
-
-   /* Copy dimensions info */
-
-   foo = hv_fetch( hash, "Dims", strlen("Dims"), 0);
-   if (foo == NULL)
-      croak("Error accessing Object 'Dims' component");
-
-   ret.dims  = pdl_packdims( *foo, &(ret.ndims) ); /* Pack into PDL */
-   if (ret.ndims > 0 && ret.dims == NULL)
-      croak("Error reading 'Dims' component");
-
-   /* Fetch offset and increments, *if available* */
-
-   foo = hv_fetch ( hash, "Incs", strlen("Incs"), 0);
-   if(foo == NULL) {
-   	int inc=1; int i;
-   	ret.incs = pdl_malloc(sizeof(int) * ret.ndims);
-	for(i=0; i<ret.ndims; i++) {
-		ret.incs[i] = inc; inc *= ret.dims[i];
-	}
-   } else {
-   	int foon;
-   	ret.incs = pdl_packdims( *foo, &(foon) ); /* Pack */
-	if(foon != ret.ndims) {
-		croak("NDIMS AND NINCS UNEQUAL!\n");
-	}
-   }
-
-   foo = hv_fetch (hash, "Offs", strlen("Offs"), 0);
-   if(foo == NULL) {
-   	ret.offs = 0;
-   } else {
-   	ret.offs = SvIV( *foo );
-   }
-
-   /* Fetch ThreadDims and ThreadIncs *if available* */
-
-   foo = hv_fetch ( hash, "ThreadDims", strlen("ThreadDims"), 0);
-   if(foo == NULL) {
-   	ret.nthreaddims = 0;
-   } else {
-   	ret.threaddims = pdl_packdims( *foo, &(ret.nthreaddims) );
-   }
-   if(ret.nthreaddims) {
-  	int tmp;
-	foo = hv_fetch ( hash, "ThreadIncs", strlen("ThreadDims"), 0);
-	if(foo == NULL) {
-		die("Threaddims but not ThreadIncs given!\n");
-	}
-	ret.threadincs = pdl_packdims (*foo, &(tmp) );
-	if(tmp != ret.nthreaddims) { 
-		die("NThreaddims != NThreadIncs!\n");
-	}
-   }
-              
+   ret->sv = (void*) sv; /* This value can never be cached! */
+  
    return ret;
-
 }
-
 
 /* Make a new pdl object as a copy of an old one and return - implement by    
    callback to perl method "copy" or "new" (for scalar upgrade) */
 
-SV* pdl_copy( pdl a, char* option ) {
+SV* pdl_copy( pdl* a, char* option ) {
 
    SV* retval;
    char meth[20];
@@ -163,14 +96,14 @@ SV* pdl_copy( pdl a, char* option ) {
 
    /* Push arguments */
 
-   if (sv_isobject((SV*)a.sv)) {
-       XPUSHs((SV*)a.sv); 
+   if (sv_isobject((SV*)a->sv)) {
+       XPUSHs((SV*)a->sv); 
        strcpy(meth,"copy");    
        XPUSHs(sv_2mortal(newSVpv(option, 0))) ;    
    }
    else{
        XPUSHs(perl_get_sv("PDL::name",FALSE)); /* Default object */
-       XPUSHs((SV*)a.sv);   /* Value */
+       XPUSHs((SV*)a->sv);   /* Value */
        strcpy(meth,"new");    
    }
 
@@ -262,7 +195,6 @@ void* pdl_malloc ( int nbytes ) {
    
    return (void *) SvPV(work, na);
 }
-
 
 
 

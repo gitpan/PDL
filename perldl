@@ -4,9 +4,7 @@
 
 unshift @INC, "./blib"; 
 print <<'EOD';
-
-perlDL shell v1.02 by Karl Glazebrook [kgb@aaoepp.aao.gov.au] 11 Nov 1996
-
+perlDL shell v1.03
 EOD
 
 $PERLDL_ESCAPE = '#'; # Default shell escape

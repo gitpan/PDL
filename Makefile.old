@@ -1,7 +1,7 @@
 # This Makefile is for the PDL extension to perl.
 #
 # It was generated automatically by MakeMaker version
-# 5.36 (Revision: 1.206) from the contents of
+# 5.38 (Revision: 1.207) from the contents of
 # Makefile.PL. Don't edit this file, edit Makefile.PL instead.
 #
 #	ANY CHANGES MADE HERE WILL BE LOST!
@@ -17,7 +17,7 @@
 
 # --- MakeMaker const_config section:
 
-# These definitions are from config.sh (via /usr/lib/perl5/i586-linux/5.00301/Config.pm)
+# These definitions are from config.sh (via /usr/lib/perl5/i586-linux/5.003/Config.pm)
 
 # They may have been overridden via Makefile.PL or on the command line
 AR = ar
@@ -29,9 +29,8 @@ DLSRC = dl_dlopen.xs
 LD = cc
 LDDLFLAGS = -shared -L/usr/local/lib
 LDFLAGS =  -L/usr/local/lib
-LIBC = /lib/libc.so.5.2.18
+LIBC = /lib/libc.so
 LIB_EXT = .a
-MAB = 
 OBJ_EXT = .o
 RANLIB = :
 SO = so
@@ -53,20 +52,20 @@ INST_SCRIPT = ./blib/script
 PREFIX = /usr
 INSTALLDIRS = site
 INSTALLPRIVLIB = $(PREFIX)/lib/perl5
-INSTALLARCHLIB = $(PREFIX)/lib/perl5/i586-linux/5.00301
+INSTALLARCHLIB = $(PREFIX)/lib/perl5/i586-linux/5.003
 INSTALLSITELIB = $(PREFIX)/lib/perl5/site_perl
 INSTALLSITEARCH = $(PREFIX)/lib/perl5/site_perl/i586-linux
 INSTALLBIN = $(PREFIX)/bin
 INSTALLSCRIPT = $(PREFIX)/bin
 PERL_LIB = /usr/lib/perl5
-PERL_ARCHLIB = /usr/lib/perl5/i586-linux/5.00301
+PERL_ARCHLIB = /usr/lib/perl5/i586-linux/5.003
 SITELIBEXP = /usr/lib/perl5/site_perl
 SITEARCHEXP = /usr/lib/perl5/site_perl/i586-linux
 LIBPERL_A = libperl.a
 FIRST_MAKEFILE = Makefile
 MAKE_APERL_FILE = Makefile.aperl
 PERLMAINCC = $(CC)
-PERL_INC = /usr/lib/perl5/i586-linux/5.00301/CORE
+PERL_INC = /usr/lib/perl5/i586-linux/5.003/CORE
 PERL = /usr/local/bin/perl
 FULLPERL = /usr/local/bin/perl
 
@@ -76,7 +75,7 @@ XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 
 MAKEMAKER = /usr/lib/perl5/ExtUtils/MakeMaker.pm
-MM_VERSION = 5.36
+MM_VERSION = 5.38
 
 # FULLEXT = Pathname for extension directory (eg Foo/Bar/Oracle).
 # BASEEXT = Basename part of FULLEXT. May be just equal FULLEXT. (eg Oracle)
@@ -92,8 +91,10 @@ LINKTYPE = dynamic
 
 # Handy lists of source code files:
 XS_FILES= 
-C_FILES = testcallext.c
-O_FILES = testcallext.o
+C_FILES = speedtest.c \
+	testcallext.c
+O_FILES = speedtest.o \
+	testcallext.o
 H_FILES = 
 MAN1PODS = 
 MAN3PODS = PDL.pod
@@ -101,8 +102,8 @@ INST_MAN1DIR = ./blib/man1
 INSTALLMAN1DIR = $(PREFIX)/man/man1
 MAN1EXT = 1
 INST_MAN3DIR = ./blib/man3
-INSTALLMAN3DIR = $(PREFIX)/man/man3
-MAN3EXT = 3pm
+INSTALLMAN3DIR = $(PREFIX)/lib/perl5/man/man3
+MAN3EXT = 3
 
 # work around a famous dec-osf make(1) feature(?):
 makemakerdflt: all
@@ -196,7 +197,8 @@ VERBINST=1
 MOD_INSTALL = $(PERL) -I$(INST_LIB) -I$(PERL_LIB) -MExtUtils::Install \
 -e 'install({@ARGV},"$(VERBINST)",0,"$(UNINST)");'
 
-DOC_INSTALL = $(PERL) -e '$$\="\n\n";print "=head3 ", scalar(localtime), ": C<", shift, ">";' \
+DOC_INSTALL = $(PERL) -e '$$\="\n\n";' \
+-e 'print "=head2 ", scalar(localtime), ": C<", shift, ">", " L<", shift, ">";' \
 -e 'print "=over 4";' \
 -e 'while (defined($$key = shift) and defined($$val = shift)){print "=item *";print "C<$$key: $$val>";}' \
 -e 'print "=back";'
@@ -267,7 +269,7 @@ PASTHRU = LIBPERL_A="$(LIBPERL_A)"\
 # --- MakeMaker c_o section:
 
 .c$(OBJ_EXT):
-	$(CCCMD) $(MAB) $(CCCDLFLAGS) -I$(PERL_INC) $(DEFINE) $*.c
+	$(CCCMD) $(CCCDLFLAGS) -I$(PERL_INC) $(DEFINE) $*.c
 
 .C$(OBJ_EXT):
 	$(CCCMD) $(CCCDLFLAGS) -I$(PERL_INC) $(DEFINE) $*.C
@@ -292,7 +294,7 @@ PASTHRU = LIBPERL_A="$(LIBPERL_A)"\
 
 .xs$(OBJ_EXT):
 	$(PERL) -I$(PERL_ARCHLIB) -I$(PERL_LIB) $(XSUBPP) $(XSPROTOARG) $(XSUBPPARGS) $*.xs >xstmp.c && mv xstmp.c $*.c
-	$(CCCMD) $(MAB) $(CCCDLFLAGS) -I$(PERL_INC) $(DEFINE) $*.c
+	$(CCCMD) $(CCCDLFLAGS) -I$(PERL_INC) $(DEFINE) $*.c
 
 
 # --- MakeMaker top_targets section:
@@ -321,21 +323,21 @@ config :: Version_check
 	@$(NOOP)
 
 
-$(INST_AUTODIR)/.exists :: /usr/lib/perl5/i586-linux/5.00301/CORE/perl.h
+$(INST_AUTODIR)/.exists :: /usr/lib/perl5/i586-linux/5.003/CORE/perl.h
 	@$(MKPATH) $(INST_AUTODIR)
-	@$(EQUALIZE_TIMESTAMP) /usr/lib/perl5/i586-linux/5.00301/CORE/perl.h $(INST_AUTODIR)/.exists
+	@$(EQUALIZE_TIMESTAMP) /usr/lib/perl5/i586-linux/5.003/CORE/perl.h $(INST_AUTODIR)/.exists
 
 	-@$(CHMOD) 755 $(INST_AUTODIR)
 
-$(INST_LIBDIR)/.exists :: /usr/lib/perl5/i586-linux/5.00301/CORE/perl.h
+$(INST_LIBDIR)/.exists :: /usr/lib/perl5/i586-linux/5.003/CORE/perl.h
 	@$(MKPATH) $(INST_LIBDIR)
-	@$(EQUALIZE_TIMESTAMP) /usr/lib/perl5/i586-linux/5.00301/CORE/perl.h $(INST_LIBDIR)/.exists
+	@$(EQUALIZE_TIMESTAMP) /usr/lib/perl5/i586-linux/5.003/CORE/perl.h $(INST_LIBDIR)/.exists
 
 	-@$(CHMOD) 755 $(INST_LIBDIR)
 
-$(INST_ARCHAUTODIR)/.exists :: /usr/lib/perl5/i586-linux/5.00301/CORE/perl.h
+$(INST_ARCHAUTODIR)/.exists :: /usr/lib/perl5/i586-linux/5.003/CORE/perl.h
 	@$(MKPATH) $(INST_ARCHAUTODIR)
-	@$(EQUALIZE_TIMESTAMP) /usr/lib/perl5/i586-linux/5.00301/CORE/perl.h $(INST_ARCHAUTODIR)/.exists
+	@$(EQUALIZE_TIMESTAMP) /usr/lib/perl5/i586-linux/5.003/CORE/perl.h $(INST_ARCHAUTODIR)/.exists
 
 	-@$(CHMOD) 755 $(INST_ARCHAUTODIR)
 
@@ -343,9 +345,9 @@ config :: $(INST_MAN3DIR)/.exists
 	@$(NOOP)
 
 
-$(INST_MAN3DIR)/.exists :: /usr/lib/perl5/i586-linux/5.00301/CORE/perl.h
+$(INST_MAN3DIR)/.exists :: /usr/lib/perl5/i586-linux/5.003/CORE/perl.h
 	@$(MKPATH) $(INST_MAN3DIR)
-	@$(EQUALIZE_TIMESTAMP) /usr/lib/perl5/i586-linux/5.00301/CORE/perl.h $(INST_MAN3DIR)/.exists
+	@$(EQUALIZE_TIMESTAMP) /usr/lib/perl5/i586-linux/5.003/CORE/perl.h $(INST_MAN3DIR)/.exists
 
 	-@$(CHMOD) 755 $(INST_MAN3DIR)
 
@@ -406,7 +408,7 @@ OTHERLDFLAGS =
 INST_DYNAMIC_DEP = 
 
 $(INST_DYNAMIC): $(OBJECT) $(MYEXTLIB) $(BOOTSTRAP) $(INST_ARCHAUTODIR)/.exists $(EXPORT_LIST) $(PERL_ARCHIVE) $(INST_DYNAMIC_DEP)
-	LD_RUN_PATH="$(LD_RUN_PATH)" $(LD) -o $@ $(LDDLFLAGS) $(LDFROM) $(OTHERLDFLAGS) $(MAB) $(MYEXTLIB) $(PERL_ARCHIVE) $(LDLOADLIBS) $(EXPORT_LIST)
+	LD_RUN_PATH="$(LD_RUN_PATH)" $(LD) -o $@ $(LDDLFLAGS) $(LDFROM) $(OTHERLDFLAGS) $(MYEXTLIB) $(PERL_ARCHIVE) $(LDLOADLIBS) $(EXPORT_LIST)
 	$(CHMOD) 755 $@
 
 
@@ -446,9 +448,9 @@ manifypods : PDL.pod
 
 # --- MakeMaker installbin section:
 
-$(INST_SCRIPT)/.exists :: /usr/lib/perl5/i586-linux/5.00301/CORE/perl.h
+$(INST_SCRIPT)/.exists :: /usr/lib/perl5/i586-linux/5.003/CORE/perl.h
 	@$(MKPATH) $(INST_SCRIPT)
-	@$(EQUALIZE_TIMESTAMP) /usr/lib/perl5/i586-linux/5.00301/CORE/perl.h $(INST_SCRIPT)/.exists
+	@$(EQUALIZE_TIMESTAMP) /usr/lib/perl5/i586-linux/5.003/CORE/perl.h $(INST_SCRIPT)/.exists
 
 	-@$(CHMOD) 755 $(INST_SCRIPT)
 
@@ -629,7 +631,7 @@ pure_site_install ::
 
 doc_perl_install ::
 	@$(DOC_INSTALL) \
-		"$(NAME)" \
+		"Module" "$(NAME)" \
 		"installed into" "$(INSTALLPRIVLIB)" \
 		LINKTYPE "$(LINKTYPE)" \
 		VERSION "$(VERSION)" \
@@ -638,7 +640,7 @@ doc_perl_install ::
 
 doc_site_install ::
 	@$(DOC_INSTALL) \
-		"Module $(NAME)" \
+		"Module" "$(NAME)" \
 		"installed into" "$(INSTALLSITELIB)" \
 		LINKTYPE "$(LINKTYPE)" \
 		VERSION "$(VERSION)" \

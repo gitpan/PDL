@@ -516,8 +516,7 @@ sub str2D{
     my @x = unpack($pack[$$self{Datatype}], $$self{Data} );
     my ($i, $f, $t, $len, $ret);
 
-    if (!defined $format || $format eq "") { # Format not given? - 
-                                             # find max length of default
+    if ($format eq "") { # Format not given? - find max length of default
        $len=0;
        for (@x) {$i = length($_); $len = $i>$len ? $i : $len };
        $format = "%".$len."s"; 
