@@ -1,4 +1,19 @@
 (!!! = possible source of incompatibilities)
+2.005
+CS	- version to 2.005
+	- finally try to fix 5.6.0 problem correctly
+Doug Burke (4/4/00)
+        - Changed to Basic/Makefile.PL to install man pages for PDL,
+          PDL::Lite, PDL::LiteF, and PDL::Options.
+        - Changed Makefile.PL to allow installation of documentation if
+          INSTALLDIRS=perl (rather than site) is used
+CS	- applied Karl's 5.6 patch to pdlcore.c
+	- typo in Doug's error message fixed
+Doug Hunt (3/23/00)
+        - Improved error messages in PDL::Graphics::PGPLOT for the case when the
+          correct version of PGPLOT (v2.16 or later) is not installed.
+
+
 2.004
 John Cerney (3/16/00)
 	- Added -lm to the Lib/Image2D/Makefile.PL suggested by Doug Burke
