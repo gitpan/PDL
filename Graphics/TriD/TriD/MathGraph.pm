@@ -18,12 +18,12 @@ the nodes so that the graph is visualizable in a clear way.
 
 =head1 AUTHOR
 
-Copyright (C) 1997 Tuomas J. Lukka (lukka@husc.harvard.edu). 
+Copyright (C) 1997 Tuomas J. Lukka (lukka@husc.harvard.edu).
 
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 
@@ -75,7 +75,7 @@ sub new {
 }
 
 sub set_links {
-	my($this,$from,$to,$strength) = @_; 
+	my($this,$from,$to,$strength) = @_;
 	my $cd = $this->{NNodes};
 	$this->{DistMult} = PDL->zeroes($cd,$cd);
 	$distmult = PDL->zeroes($cd,$cd);
@@ -102,14 +102,14 @@ sub step {
 	my $dists = sqrt(($vecs**2)->sumover)+0.0001;
 						print "D: $dists\n" if $verbose;
 	(my $t1 = $dists->diagonal(0,1)) .= 1000000;
-	my $d2 = $dists ** -0.5; # inverse 
+	my $d2 = $dists ** -0.5; # inverse
 	my $m = $d2**4 - 2*($this->{DistMult})*($dists+5*$dists**2) + 0.00001
 		- 0.000001 * $dists;
 						print "DN: $m\n" if $verbose;
 						print "V: $vecs\n" if $verbose;
 	my $tst = 1;
 	$this->{Velo} -= $tst * 0.04 * (inner($m->dummy(1), $vecs->mv(1,0)));
-	$this->{Velo} *= 
+	$this->{Velo} *=
 	  ((0.96*50/(50+sqrt(($this->{Velo}**2)->sumover->dummy(0)))))**$tst;
 	$c += $tst * 0.05 * $this->{Velo};
 	(my $tmp = $c->xchg(0,1)->index($this->{FInd}->dummy(0)))
@@ -134,7 +134,7 @@ sub new {
 }
 
 sub set_links {
-	my($this,$from,$to,$strength) = @_; 
+	my($this,$from,$to,$strength) = @_;
 	$this->{From} = $from;
 	$this->{To} = $to;
 	$this->{Strength} = $strength;
@@ -168,7 +168,7 @@ sub step {
 
 	$tst = 0.10;
 	$this->{Velo} += $tst * 0.02 * ($velr + $vela);
-	$this->{Velo} *= 
+	$this->{Velo} *=
 	  ((0.92*50/(50+sqrt(($this->{Velo}**2)->sumover->dummy(0)))))**$tst;
 	$c += $tst * 0.05 * $this->{Velo};
 	(my $tmp = $c->xchg(0,1)->index($this->{FInd}->dummy(0)))

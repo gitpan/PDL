@@ -18,8 +18,8 @@
 
  All rights reserved. There is no warranty. You are allowed
  to redistribute this software / documentation under certain
- conditions. For details, see the file COPYING in the PDL 
- distribution. If this file is separated from the PDL distribution, 
+ conditions. For details, see the file COPYING in the PDL
+ distribution. If this file is separated from the PDL distribution,
  the copyright notice should be included in the file.
 
  */

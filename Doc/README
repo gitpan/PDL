@@ -68,7 +68,7 @@ build process. An updating policy should be developed.
 4) The PP changes to support the new doc style are poorly documented,
 for the moment refer to the examples supplied in the patches to
 PDL-1.94_05. Briefly, the 'Doc' key has been introduced and PP will
-generate the 
+generate the
 
   =head2 funcname
 
@@ -93,14 +93,14 @@ of cached AnyDBM inplementation.
 7) and probably lots of other things...
 
   Christian Soeller <csoelle@sghms.ac.uk>
-  
+
 
 Changes for intergration in to PDL distribution
 
 - changed scantree.pl to take args for directory, database.
 - moved local.perldlrc into PDL::Doc::Perldl module
 - Made "borrowed" Pod:: stuff into PDL::Pod:: for now.
-  
+
   Karl Glazebrook <kgb@aaoepp.aao.gov.au>
-  
-  
+
+

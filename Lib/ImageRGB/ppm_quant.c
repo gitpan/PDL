@@ -66,7 +66,7 @@ typedef struct { pixval r, g, b; } pixel;
 
 /* Luminance macro. */
 
-/* 
+/*
  * #define PPM_LUMIN(p) \
  *   ( 0.299 * PPM_GETR(p) + 0.587 * PPM_GETG(p) + 0.114 * PPM_GETB(p) )
  */
@@ -129,7 +129,7 @@ static void        ppm_freechist    PARM((chist_vec));
 static void        ppm_freechash    PARM((chash_table));
 
 int ppm_quant(byte *rin, byte *gin, byte *bin, int cols, int rows,
-		     byte *pic8, byte *imap, byte *omap, 
+		     byte *pic8, byte *imap, byte *omap,
 		     int len, int newcolors, int mode);
 
 static int DEBUG=0;
@@ -172,7 +172,7 @@ int ppm_quant(byte *rin, byte *gin, byte *bin, int cols, int rows, byte *pic8, b
 
   if (DEBUG) fprintf(stderr,"%s: remapping to ppm-style internal fmt\n", fn);
   WaitCursor();
-  
+
   pixels = (pixel **) malloc(rows * sizeof(pixel *));
   if (!pixels) FatalError("couldn't allocate 'pixels' array");
   for (row=0; row<rows; row++) {
@@ -209,7 +209,7 @@ int ppm_quant(byte *rin, byte *gin, byte *bin, int cols, int rows, byte *pic8, b
   if (DEBUG) fprintf(stderr,"%s: done format remapping\n", fn);
 
 
-    
+
 
   /*
    *  attempt to make a histogram of the colors, unclustered.
@@ -224,7 +224,7 @@ int ppm_quant(byte *rin, byte *gin, byte *bin, int cols, int rows, byte *pic8, b
 
     chv = ppm_computechist(pixels, cols, rows, MAXCOLORS, &colors);
     if (chv != (chist_vec) 0) break;
-    
+
     if (DEBUG) fprintf(stderr, "%s: too many colors!\n", fn);
     newmaxval = maxval / 2;
     if (DEBUG) fprintf(stderr, "%s: rescaling colors (maxval=%d) %s\n",
@@ -355,7 +355,7 @@ static chist_vec mediancut( chv, colors, sum, maxval, newcolors )
   int boxes;
 
   bv = (box_vector) malloc(sizeof(struct box) * newcolors);
-  colormap = (chist_vec) 
+  colormap = (chist_vec)
              malloc(sizeof(struct chist_item) * newcolors );
 
   if (!bv || !colormap) FatalError("unable to malloc in mediancut()");
@@ -443,7 +443,7 @@ static chist_vec mediancut( chv, colors, sum, maxval, newcolors )
       else if (gl >= bl)
 	qsort((char*) &(chv[indx]), (size_t) clrs, sizeof(struct chist_item),
 	      greencompare );
-      else 
+      else
 	qsort((char*) &(chv[indx]), (size_t) clrs, sizeof(struct chist_item),
 	      bluecompare );
     }
@@ -470,7 +470,7 @@ static chist_vec mediancut( chv, colors, sum, maxval, newcolors )
     ++boxes;
     qsort((char*) bv, (size_t) boxes, sizeof(struct box), sumcompare);
   }  /* while (boxes ... */
-  
+
   /*
    ** Ok, we've got enough boxes.  Now choose a representative color for
    ** each box.  There are a number of possible ways to make this choice.
@@ -481,7 +481,7 @@ static chist_vec mediancut( chv, colors, sum, maxval, newcolors )
    ** method is used by switching the commenting on the REP_ defines at
    ** the beginning of this source file.
    */
-  
+
   for (bi=0; bi<boxes; bi++) {
     /* REP_AVERAGE_PIXELS version */
     register int indx = bv[bi].index;
@@ -511,7 +511,7 @@ static chist_vec mediancut( chv, colors, sum, maxval, newcolors )
 static int redcompare(p1, p2)
      const void *p1, *p2;
 {
-  return (int) PPM_GETR( ((chist_vec)p1)->color ) - 
+  return (int) PPM_GETR( ((chist_vec)p1)->color ) -
          (int) PPM_GETR( ((chist_vec)p2)->color );
 }
 
@@ -519,7 +519,7 @@ static int redcompare(p1, p2)
 static int greencompare(p1, p2)
      const void *p1, *p2;
 {
-  return (int) PPM_GETG( ((chist_vec)p1)->color ) - 
+  return (int) PPM_GETG( ((chist_vec)p1)->color ) -
          (int) PPM_GETG( ((chist_vec)p2)->color );
 }
 
@@ -527,7 +527,7 @@ static int greencompare(p1, p2)
 static int bluecompare(p1, p2)
      const void *p1, *p2;
 {
-  return (int) PPM_GETB( ((chist_vec)p1)->color ) - 
+  return (int) PPM_GETB( ((chist_vec)p1)->color ) -
          (int) PPM_GETB( ((chist_vec)p2)->color );
 }
 
@@ -541,7 +541,7 @@ static int sumcompare(p1, p2)
 
 
 /****************************************************************************/
-static chist_vec 
+static chist_vec
   ppm_computechist(pixels, cols, rows, maxcolors, colorsP)
      pixel** pixels;
      int cols, rows, maxcolors;
@@ -560,7 +560,7 @@ static chist_vec
 
 
 /****************************************************************************/
-static chash_table ppm_computechash(pixels, cols, rows, 
+static chash_table ppm_computechash(pixels, cols, rows,
 					    maxcolors, colorsP )
      pixel** pixels;
      int cols, rows, maxcolors;
@@ -581,14 +581,14 @@ static chash_table ppm_computechash(pixels, cols, rows,
 
       for (chl = cht[hash]; chl != (chist_list) 0; chl = chl->next)
 	if (PPM_EQUAL(chl->ch.color, *pP)) break;
-      
+
       if (chl != (chist_list) 0) ++(chl->ch.value);
       else {
 	if ((*colorsP)++ > maxcolors) {
 	  ppm_freechash(cht);
 	  return (chash_table) 0;
 	}
-	
+
 	chl = (chist_list) malloc(sizeof(struct chist_list_item));
 	if (!chl) FatalError("ran out of memory computing hash table");
 
@@ -598,7 +598,7 @@ static chash_table ppm_computechash(pixels, cols, rows,
 	cht[hash] = chl;
       }
     }
-  
+
   return cht;
 }
 

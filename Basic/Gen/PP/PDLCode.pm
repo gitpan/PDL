@@ -117,7 +117,7 @@ sub new { my($type,$code,$parnames,$parobjs,$indobjs,$generictypes,
 	$this->{Code};
 }
 
-# This sub determines the index name for this index. 
+# This sub determines the index name for this index.
 # For example, a(x,y) and x0 becomes [x,x0]
 sub make_loopind { my($this,$ind) = @_;
 	my $orig = $ind;
@@ -133,13 +133,13 @@ sub make_loopind { my($this,$ind) = @_;
 #####################################################################
 #
 # Encapsulate the parsing code objects
-# 
-# All objects have two methods: 
+#
+# All objects have two methods:
 # 	new - constructor
 #	get_str - get the string to be put into the xsub.
 
 ###########################
-# 
+#
 # Encapsulate a block
 
 package PDL::PP::Block;
@@ -150,14 +150,14 @@ sub myoffs { return 0; }
 sub myprelude {}
 sub myitem {return "";}
 sub mypostlude {}
-sub get_str {my ($this,$parent,$context) = @_; 
+sub get_str {my ($this,$parent,$context) = @_;
    my $str = $this->myprelude($parent,$context);
    my $it; my $nth=0;
    MYLOOP: while(1) {
     $it = $this->myitem($parent,$nth);
     if($nth && !$it) {last MYLOOP}
     $str .= $it;
-    $str .= (join '',map {ref $_ ? $_->get_str($parent,$context) : $_} 
+    $str .= (join '',map {ref $_ ? $_->get_str($parent,$context) : $_}
 	@{$this}[$this->myoffs()..$#{$this}]);
     $nth ++;
    }
@@ -166,7 +166,7 @@ sub get_str {my ($this,$parent,$context) = @_;
 }
 
 ###########################
-# 
+#
 # Encapsulate a loop
 
 package PDL::PP::Loop;
@@ -177,7 +177,7 @@ sub new { my($type,$args,$sizeprivs,$parent) = @_;
 	for(@{$this->[0]}) {
 		print "SIZP $sizeprivs, $_\n" if $::PP_VERBOSE;
 		my $i = $parent->make_loopind($_);
-		$sizeprivs->{$i->[0]} = 
+		$sizeprivs->{$i->[0]} =
 		  "register int __$i->[0]_size = \$PRIV(__$i->[0]_size);\n";
 		print "SP :",(join ',',%$sizeprivs),"\n" if $::PP_VERBOSE;
 	}
@@ -190,7 +190,7 @@ sub myprelude { my($this,$parent,$context) = @_;
 	push @$context, map {
 		$i = $parent->make_loopind($_);
 # Used to be $PRIV(.._size) but now we have it in a register.
-		$text .= "{/* Open $_ */ register int $_; 
+		$text .= "{/* Open $_ */ register int $_;
 			for($_=0; $_<(__$i->[0]_size); $_++) {";
 		$i;
 	} @{$this->[0]};
@@ -202,13 +202,13 @@ sub mypostlude { my($this,$parent,$context) = @_;
 }
 
 ###########################
-# 
+#
 # Encapsulate a generic type loop
 
 package PDL::PP::GenericLoop;
 @PDL::PP::GenericLoop::ISA = "PDL::PP::Block";
 
-# Types: BSULFD, 
+# Types: BSULFD,
 sub new { my($type,$types,$name,$varnames,$whattype) = @_;
 	bless [(PDL::PP::get_generictyperecs($types)),$name,$varnames,
 		$whattype],$type;
@@ -250,9 +250,9 @@ sub mypostlude { my($this,$parent,$context) = @_;
 
 
 ###########################
-# 
-# Encapsulate a threadloop. 
-# There are several different 
+#
+# Encapsulate a threadloop.
+# There are several different
 
 package PDL::PP::ThreadLoop;
 sub new {
@@ -271,7 +271,7 @@ sub myprelude {my($this,$parent,$context) = @_;
 '	/* THREADLOOPBEGIN */
  if(PDL->startthreadloop(&($PRIV(__thread)),$PRIV(vtable)->readdata,
  	__privtrans))) return;
-   do { 
+   do {
  '.(join '',map {"${_}_datap += \$PRIV(__thread).offs[".(0+$no++)."];\n"}
  		@$ord).'
 ';
@@ -305,7 +305,7 @@ sub myprelude {my($this,$parent,$context) = @_;
 '	/* THREADLOOPBEGIN */
  if(PDL->startthreadloop(&($PRIV(__thread)),$PRIV(vtable)->readdata,
  	__tr)) return;
-   do { register int __tind1=0,__tind2=0;  
+   do { register int __tind1=0,__tind2=0;
         register int __tnpdls = $PRIV(__thread).npdls;
 	register int __tdims1 = $PRIV(__thread.dims[1]);
 	register int __tdims0 = $PRIV(__thread.dims[0]);
@@ -349,14 +349,14 @@ sub mypostlude {my($this,$parent,$context) = @_;
 
 
 ###########################
-# 
+#
 # Encapsulate a types() switch
 
 package PDL::PP::Types;
 use Carp;
 @PDL::PP::Types::ISA = "PDL::PP::Block";
 
-sub new { my($type,$ts) = @_; 
+sub new { my($type,$ts) = @_;
 	$ts =~ /[BSULFD]+/ or confess "Invalid type access with '$ts'!";
 	bless [$ts],$type; }
 sub myoffs { return 1; }
@@ -370,7 +370,7 @@ sub mypostlude {my($this,$parent,$context) = @_;
 
 
 ###########################
-# 
+#
 # Encapsulate an access
 
 package PDL::PP::Access;
@@ -380,12 +380,13 @@ sub new { my($type,$str,$parent) = @_;
 	$str =~ /^\$([a-zA-Z_]+)\s*\(([^)]*)\)/ or
 		confess ("Access wrong: '$str'\n");
 	my($pdl,$inds) = ($1,$2);
-	if($pdl =~ /^T/) {new PDL::PP::MacroAccess($pdl,$inds);} 
+	if($pdl =~ /^T/) {new PDL::PP::MacroAccess($pdl,$inds);}
 	elsif($pdl =~ /^P$/) {new PDL::PP::PointerAccess($pdl,$inds);}
 	elsif($pdl =~ /^PP$/) {new PDL::PP::PhysPointerAccess($pdl,$inds);}
         elsif($pdl =~ /^SIZE$/) {new PDL::PP::SizeAccess($pdl,$inds);}
         elsif($pdl =~ /^RESIZE$/) {new PDL::PP::ReSizeAccess($pdl,$inds);}
         elsif($pdl =~ /^GENERIC$/) {new PDL::PP::GentypeAccess($pdl,$inds);}
+	elsif($pdl =~ /^PDL$/) {new PDL::PP::PdlAccess($pdl,$inds);}
 	elsif(!defined $parent->{ParObjs}{$pdl}) {new PDL::PP::OtherAccess($pdl,$inds);}
 	else {
 		bless [$pdl,$inds],$type;
@@ -408,7 +409,7 @@ sub get_str {my($this) = @_;return "\$$this->[0]($this->[1])"}
 
 
 ###########################
-# 
+#
 # Encapsulate a Pointeraccess
 
 package PDL::PP::PointerAccess;
@@ -419,13 +420,14 @@ sub new { my($type,$pdl,$inds) = @_; bless [$inds],$type; }
 sub get_str {my($this,$parent,$context) = @_;
 	croak ("can't access undefined pdl ".$this->[0])
 	  unless defined($parent->{ParObjs}{$this->[0]});
-	$parent->{ParObjs}{$this->[0]}->{FlagPaccess} = 1;
+#	$parent->{ParObjs}{$this->[0]}->{FlagPaccess} = 1;
+	$parent->{ParObjs}{$this->[0]}->{FlagPhys} = 1;
 	$parent->{ParObjs}{$this->[0]}->do_pointeraccess();
 }
 
 
 ###########################
-# 
+#
 # Encapsulate a PhysPointeraccess
 
 package PDL::PP::PhysPointerAccess;
@@ -439,7 +441,22 @@ sub get_str {my($this,$parent,$context) = @_;
 }
 
 ###########################
-# 
+#
+# Encapsulate a PDLaccess
+
+package PDL::PP::PdlAccess;
+use Carp;
+
+sub new { my($type,$pdl,$inds) = @_; bless [$inds],$type; }
+
+sub get_str {my($this,$parent,$context) = @_;
+	croak ("can't access undefined pdl ".$this->[0])
+	  unless defined($parent->{ParObjs}{$this->[0]});
+	$parent->{ParObjs}{$this->[0]}->do_pdlaccess();
+}
+
+###########################
+#
 # Encapsulate a macroaccess
 
 package PDL::PP::MacroAccess;
@@ -468,7 +485,7 @@ sub get_str {my($this,$parent,$context) = @_;
 
 
 ###########################
-# 
+#
 # Encapsulate a SizeAccess
 
 package PDL::PP::SizeAccess;
@@ -483,7 +500,7 @@ sub get_str {my($this,$parent,$context) = @_;
 }
 
 ###########################
-# 
+#
 # Encapsulate a ReSizeAccess
 
 package PDL::PP::ReSizeAccess;
@@ -492,7 +509,7 @@ use Carp;
 sub new { my($type,$pdl,$inds) = @_; bless [$inds],$type; }
 
 sub get_str {my($this,$parent,$context) = @_;
-	$this->[0] =~ /^([^,]+),([^,]+)$/ or 
+	$this->[0] =~ /^([^,]+),([^,]+)$/ or
 		croak "Can't interpret resize str $this->[0]";
 	croak "can't RESIZE undefined dimension $1"
 	  unless defined($parent->{IndObjs}{$1});
@@ -519,7 +536,7 @@ sub get_str {my($this,$parent,$context) = @_;
 
 
 ###########################
-# 
+#
 # Encapsulate a GentypeAccess
 
 package PDL::PP::GentypeAccess;
@@ -557,7 +574,7 @@ sub print_xscoerce { my($this) = @_;
 	$this->printxs("\tif(0) {}\n");
 	for(@{$this->get_generictypes()}) {
 		$this->printxs("\telse if(__priv->datatype <= $_->[2]) __priv->datatype = $_->[2];\n");
-	} 
+	}
 	$this->{Types} =~ /F/ and (
 		$this->printxs("\telse if(__priv->datatype == PDL_D) {__priv->datatype = PDL_F; /* Cast double to float */}\n"));
 	$this->printxs("\telse {croak(\"Too high type %d given!\\n\",__priv->datatype);}");
@@ -574,8 +591,8 @@ no strict 'vars';
 sub PDL::PP::get_generictyperecs { my($types) = @_;
 	my $foo;
 	return [map {$foo = $_;
-		( grep {/$foo->[0]/} (@$types) ) ? 
-		  ["PDL_".($_->[0]eq"U"?"US":$_->[0]),$_->[1],$_->[2],$_->[0]] 
+		( grep {/$foo->[0]/} (@$types) ) ?
+		  ["PDL_".($_->[0]eq"U"?"US":$_->[0]),$_->[1],$_->[2],$_->[0]]
 		  : ()
 	}
 	       (["B","PDL_Byte",$PDL_B],

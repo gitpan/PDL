@@ -51,7 +51,7 @@ $a->set(2,7);
 
 ok($ind++, ((join ',',@cl) eq "12,14,10"));
 
-PDL::dowhenidle(); 
+PDL::dowhenidle();
 
 ok($ind++, ((join ',',@cl) eq "12,14,16"));
 

@@ -4,8 +4,8 @@ PDL::Philosophy -- what's behind PDL?
 
 =head1 DESCRIPTION
 
-This is an attempt to summarize some of the common spirit between 
-pdl developers in order to answer the question "Why PDL"? If 
+This is an attempt to summarize some of the common spirit between
+pdl developers in order to answer the question "Why PDL"? If
 you are a PDL developer and I haven't caught your favorite ideas
 about PDL, please let me know!
 
@@ -25,7 +25,7 @@ The second idea is a pet peeve of many: many languages like matlab
 are pretty well suited for their specific tasks but for
 a different application, you need to change to an entirely
 different tool and regear yourself mentally. Not to speak about
-doing an application that does two things at once... 
+doing an application that does two things at once...
 Because we use Perl, we have the power and ease of perl syntax,
 regular expressions, hash tables etc at our fingertips at all times.
 By extending an existing language, we start from a much healthier
@@ -53,7 +53,7 @@ be possible to compile PDL::PP subs to C and obtain the top vectorized
 speeds on supercomputers. Also, we want to be able to calculate
 things at near top speed from inside perl, by using dataflow to avoid
 memory allocation and deallocation (the overhead should ultimately be only
-a little over one indirect function call plus couple of ifs per 
+a little over one indirect function call plus couple of ifs per
 function in the pipe).
 
 We want handy syntax. Want to do something and cannot do it easily?

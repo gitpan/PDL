@@ -7,9 +7,10 @@
 use PDL;
 #use PDL::Lite; # Alternative to above for hard-core freaks
 
-# Make PDL functions not waffle (and pacify -w)
+# PDL waffle options (and pacify -w)
 BEGIN{
-   $PDL::verbose = $PDL::verbose = 0; 
+   $PDL::debug = $PDL::debug = 0;
+   $PDL::verbose = $PDL::verbose = 1;
 }
 
 use PDL::Doc::Perldl; # online docs module

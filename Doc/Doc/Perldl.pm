@@ -39,13 +39,13 @@ sub FindStdFile {
   for $d (@INC) {
       $f = $d."/PDL/pdldoc.db";
       if (-f $f) {
-         print "Found docs database $f\n"; # if $PDL::verbose;
-	 print "Type 'help' for online help\n"; # if $PDL::verbose;
+         print "Found docs database $f\n"; # if $PDL::debug;
+	 print "Type 'help' for online help\n"; # if $PDL::debug;
          return $f;
       }
   }
   warn "Unable to find PDL/pdldoc.db in ".join(":",@INC)."\n";
-}    
+}
 
 sub printmatch {
   my @match = @_;
@@ -64,12 +64,12 @@ Regex search PDL documentation database
 
 =for usage
 
- apropos 'text'  
+ apropos 'text'
 
 =for example
 
-  
- perldl> apropos 'pic' 
+
+ perldl> apropos 'pic'
  rpic            Read images in many formats with automatic format detection.
  rpiccan         Test which image formats can be read/written
  wmpeg           Write an image sequence ((x,y,n) piddle) as an MPEG animation.
@@ -102,9 +102,9 @@ sub finddoc  {
 	die 'Usage: doc $topic' unless $#_>-1;
 	die "no online doc database" unless defined $PDL::onlinedoc;
 	my $topic = shift;
-	
+
 	# See if it matches a PDL function name
-	
+
 	my @match = $PDL::onlinedoc->search("m/^(PDL::)?$topic\$/",['Name']);
 	if (@match) {
 	   my $Ref = $match[0]->[1]->{Ref};
@@ -116,7 +116,7 @@ sub finddoc  {
 	   print $out "=head1 Module\n\n",$match[0]->[1]->{Module}, "\n\n";
 	   $PDL::onlinedoc->funcdocs($match[0]->[0],$out);
 	}
-	else { 
+	else {
 	  die "Unable to find PDL docs on $topic\n";
 	}
 }
@@ -129,13 +129,13 @@ Prints usage information for a PDL function
 
 =for usage
 
- Usage: usage 'func'  
+ Usage: usage 'func'
 
 =for example
 
-   perldl> usage 'inner'  
+   perldl> usage 'inner'
 
-   inner           inner prodcuct over one dimension 
+   inner           inner prodcuct over one dimension
                    (Module PDL::Primitive)
 
    Signature: inner(a(n); b(n); [o]c(); )
@@ -176,15 +176,15 @@ prints signature of PDL function
 
 =for usage
 
- sig 'func'  
- 
+ sig 'func'
+
 The signature is the normal dimensionality of the
 functions arguments. Calling with different dimensions
 causes 'threading' - see C<PDL::PP> for more details.
 
 =for example
 
-  perldl> sig 'outer'  
+  perldl> sig 'outer'
     Signature: outer(a(n); b(m); [o]c(n,m); )
 
 
@@ -226,7 +226,7 @@ print documentation about a PDL function or module or show a PDL manual
 
 =for usage
 
- Usage: help 'func'   
+ Usage: help 'func'
 
 =for example
 
@@ -241,15 +241,15 @@ sub help {
       require PDL::Dbg;
       my $topic = shift;
       if (PDL::Core::blessed($topic) && $topic->can('px')) {
-	  local $PDL::verbose = 1;
+	  local $PDL::debug = 1;
 	  $topic->px('This variable is');
       } else {
 	  $topic = 'PDL::Doc::Perldl' if $topic =~ /^\s*help\s*$/i;
 	  if ($topic =~ /^\s*perldl\s*$/i) {
-	      system("pod2text $0 | $PDL::Doc::pager\n");	
+	      system("pod2text $0 | $PDL::Doc::pager\n");
 	  } elsif ($topic =~ /^\s*vars\s*$/i) {
 	      PDL->px((caller)[0]);
-	  } else { 
+	  } else {
 	      finddoc($topic);
 	  }
       }
@@ -262,15 +262,15 @@ The following four commands support online help in the perldl shell:
   help 'thing'    -- print the docs on 'thing' (can be function/module/manual)
   help $a         -- print information about $a (if it's a piddle)
   help vars       -- print information about all current piddles
-  apropos 'word'  -- search for keywords/function names in the list of 
+  apropos 'word'  -- search for keywords/function names in the list of
                      documented PDL functions
   ?		  -- alias for 'help'
   ??		  -- alias for 'apropos'
   usage           -- print usage information for a given PDL function
   sig             -- print signature of PDL function
-  
+
   Quick start:
-  
+
   apropos 'manual:' -- Find all the manual documents
   apropos 'module:' -- Quick summary of all PDL modules
   help 'help'       -- details about PDL help system

@@ -41,7 +41,7 @@ print OUT <<"!GROK!THIS!";
 extern int pdl_debugging;
 #define PDLDEBUG_f(a)		if(pdl_debugging) a
 #else
-#define PDLDEBUG_f(a)		
+#define PDLDEBUG_f(a)
 #endif
 
 typedef struct pdl pdl;
@@ -52,13 +52,13 @@ $PDL_DATATYPES
 
 print OUT <<'!NO!SUBS!';
 
-/* 
+/*
    Define the pdl C data structure which maps onto the original PDL
-   perl data structure. 
+   perl data structure.
 
    Note: in above pdl.sv is defined as a void pointer to avoid
    having to include perl.h in C code which just needs the pdl
-   data.       
+   data.
 */
 
 #define PDL_NDIMS 6  /* Number of dims[] to preallocate */
@@ -67,13 +67,13 @@ print OUT <<'!NO!SUBS!';
 #define PDL_NTHREADIDS 4 /* Number of different threadids/pdl to preallocate */
 
 /* Constants for pdl.state - not all combinations make sense */
-	/* data allocated for this pdl.  this implies that the data 
+	/* data allocated for this pdl.  this implies that the data
 	   is up to date if !PDL_PARENTCHANGED */
-#define		PDL_ALLOCATED		0x0001 
-	/* Parent's data has been altered at some point without changing 
+#define		PDL_ALLOCATED		0x0001
+	/* Parent's data has been altered at some point without changing
 	   this pdl. */
 #define		PDL_PARENTDATACHANGED	0x0002
-	/* Parent's dims or incs or whatever has been altered at some 
+	/* Parent's dims or incs or whatever has been altered at some
 	   point without changing this pdl. */
 #define		PDL_PARENTDIMSCHANGED	0x0004
 	/* The physical data representation of the parent has changed,
@@ -107,7 +107,7 @@ print OUT <<'!NO!SUBS!';
 #define 	PDL_INPLACE		0x1000
 
 	/* Destroying this now */
-#define		PDL_DESTROYING		0x2000 
+#define		PDL_DESTROYING		0x2000
 
 /* You mustn't alter the data pointer nor free this
  * piddle nor use datasv (which is nothing).
@@ -116,11 +116,11 @@ print OUT <<'!NO!SUBS!';
 #define		PDL_DONTTOUCHDATA	0x4000
 
 /**************************************************
- * 
- * Transformation structure 
+ *
+ * Transformation structure
  */
 
-/*  Only slice and retype to be supported in the near future. 
+/*  Only slice and retype to be supported in the near future.
     when FUNCTION is supported, it must be considered how that is going
     to be implemented in terms of COW etc.
  */
@@ -138,10 +138,10 @@ typedef struct pdl_trans pdl_trans;
 typedef struct pdl_transvtable {
 	pdl_transtype transtype;
 	int flags;
-	int nparents; 
+	int nparents;
 	int npdls;
 	char *per_pdl_flags;
-	void (*redodims)(pdl_trans *tr);  /* Only dims and internal trans 
+	void (*redodims)(pdl_trans *tr);  /* Only dims and internal trans
 		(makes phys) */
 	void (*readdata)(pdl_trans *tr);  /* Only data, to "data" ptr  */
 	void (*writebackdata)(pdl_trans *tr); /* "data" ptr to parent or granny */
@@ -150,7 +150,7 @@ typedef struct pdl_transvtable {
 	void (*dump)(pdl_trans *tr); /* Dump this transformation */
 				/* Find a virtual parent and make ready
 					  for readdata etc. */
-	void (*findvparent)(pdl_trans *tr); 
+	void (*findvparent)(pdl_trans *tr);
 	pdl_trans *(*copy)(pdl_trans *tr); /* Full copy */
 	void (*can_do)(pdl_trans *tr);
   /* XXX Here should be a "writebackdims" for changed dimensions */
@@ -200,7 +200,7 @@ typedef struct pdl_transvtable {
 #define PDL_TR_CLRMAGIC(it) it->magicno = 0x99876134
 #ifdef PDL_DEBUGGING
 #define PDL_TR_CHKMAGIC(it) if(it->magicno != PDL_TR_MAGICNO) croak("INVALID TRANS MAGIC NO %d %d\n",it,it->magicno); else 0
-#else 
+#else
 #define PDL_TR_CHKMAGIC(it)
 #endif
 
@@ -224,7 +224,7 @@ typedef struct pdl_vaffine {
 	pdl *from;
 } pdl_vaffine;
 
-#define PDL_VAFFOK(pdl) (pdl->state & PDL_OPT_VAFFTRANSOK) 
+#define PDL_VAFFOK(pdl) (pdl->state & PDL_OPT_VAFFTRANSOK)
 #define PDL_REPRINC(pdl,which) (PDL_VAFFOK(pdl) ? \
 		pdl->vafftrans->incs[which] : pdl->dimincs[which])
 
@@ -260,14 +260,14 @@ struct pdl {
 #define PDL_MAGICNO 0x24645399
 #ifdef PDL_DEBUGGING
 #define PDL_CHKMAGIC(it) if(it->magicno != PDL_MAGICNO) croak("INVALID MAGIC NO %d %d\n",it,it->magicno); else 0
-#else 
+#else
 #define PDL_CHKMAGIC(it)
 #endif
    unsigned long magicno; /* Always stores PDL_MAGICNO as a sanity check */
      /* This is first so most pointer accesses to wrong type are caught */
    int state;        /* What's in this pdl */
 
-   pdl_trans *trans; /* Opaque pointer to internals of transformation from 
+   pdl_trans *trans; /* Opaque pointer to internals of transformation from
    			parent */
 
 
@@ -346,6 +346,6 @@ struct pdl {
     (pdl_vafftrans_alloc(it),1) )
 
 /* __PDL_H */
-#endif 
+#endif
 
 !NO!SUBS!

@@ -1,14 +1,14 @@
 
 /*
-   Note: libiis.h in PDL distribution has iis_display 
-   redefined 
+   Note: libiis.h in PDL distribution has iis_display
+   redefined
 */
 
 /*
 
   libiis.h - IIS constants for IIS C library v1.0
 
-  Loosely based on code from various sources 
+  Loosely based on code from various sources
 
   Karl Glazebrook, Anglo-Australian Observatory 30/May/1996
 

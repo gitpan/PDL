@@ -78,13 +78,13 @@ main( argc, argv )
 	{
 	if ( pm_keymatch( argv[argn], "-none", 2 ) )
 	    compression = COMPRESSION_NONE;
-	else if ( pm_keymatch( argv[argn], "-packbits", 3 ) ) 
+	else if ( pm_keymatch( argv[argn], "-packbits", 3 ) )
 	    compression = COMPRESSION_PACKBITS;
-	else if ( pm_keymatch( argv[argn], "-lzw", 3 ) ) 
+	else if ( pm_keymatch( argv[argn], "-lzw", 3 ) )
 	    compression = COMPRESSION_LZW;
-	else if ( pm_keymatch( argv[argn], "-g3", 3 ) ) 
+	else if ( pm_keymatch( argv[argn], "-g3", 3 ) )
 	    compression = COMPRESSION_CCITTFAX3;
-	else if ( pm_keymatch( argv[argn], "-g4", 3 ) ) 
+	else if ( pm_keymatch( argv[argn], "-g4", 3 ) )
 	    compression = COMPRESSION_CCITTFAX4;
 	else if ( pm_keymatch( argv[argn], "-msb2lsb", 3 ) )
 	    fillorder = FILLORDER_MSB2LSB;

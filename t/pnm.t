@@ -27,8 +27,8 @@ use PDL::LiteF;
 use PDL::IO::Pnm;
 use PDL::Dbg;
 
-$PDL::verbose = $PDL::verbose = 0;
-$PDL::verbose = 1 if defined($ARGV[0]) && $ARGV[0] =~ /-v/;
+$PDL::debug = $PDL::debug = 0;
+$PDL::debug = 1 if defined($ARGV[0]) && $ARGV[0] =~ /-v/;
 
 #              [FORMAT, extension, ushort-divisor,
 #               only RGB/no RGB/any (1/-1/0), mxdiff]
@@ -47,7 +47,7 @@ $im3 = byte [[0,0,255,255,12,13],[1,4,5,6,11,124],
 	     [100,0,0,0,10,10],[2,1,0,1,0,14],[2,1,0,1,0,14],
 	     [2,1,0,1,0,14]];
 
-if ($PDL::verbose) {
+if ($PDL::debug) {
   print $im1;
   $im1->px;
   print $im2;
@@ -63,7 +63,7 @@ $n = 1;
 for $raw (0,1) {
   foreach $form (@formats) {
     print " ** testing $form->[0] format **\n";
-    
+
     wpnm ($im1,"tushort.$form->[1]",'PGM',$raw)
       unless $form->[0] eq 'TIFF';
     wpnm ($im2,"tbyte.$form->[1]",'PGM',$raw);
@@ -83,7 +83,7 @@ for $raw (0,1) {
     $comp = $comp->ushort*65535 if $form->[0] eq 'SGI'; # yet another format quirk
     ok($n++,approx($comp,$in3));
 
-    if ($PDL::verbose) {
+    if ($PDL::debug) {
       print $in1->px unless $form->[0] eq 'TIFF';
       print $in2->px;
       print $in3->px;

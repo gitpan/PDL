@@ -10,17 +10,13 @@ This module provides the functions used by PDL to
 overload the basic mathematical operators (C<+ - / *>
 etc.) and functions (C<sin sqrt> etc.)
 
-You probably don't need to know about this 
+You probably don't need to know about this
 and the interface may well
 change so the documentation ends here.
 
 =head1 SYNOPSIS
 
- use PDL::Ops;
- 
- (Not PDL usually loads this as 'use PDL::Ops', i.e.
- functions are not normally imported.)
-
+none
 
 =cut
 
@@ -30,7 +26,7 @@ EOD
 #
 # Parts from old mkpdlbasicops.p, rest Copyright (C) Tuomas J. Lukka 1996, 1997
 
-# Phase 1: generate lists of 
+# Phase 1: generate lists of
 #	[operator_name, how_to_apply]
 
 @biops1  = map {[$_,"\$c() = \$a() $_ \$b()"]} qw( + * - / );
@@ -41,7 +37,7 @@ EOD
 @ufuncs1f = map {[$_,"\$b() = ($_(\$a()))"]} qw( sin cos );
 @ufuncs2 = map {[$_,"\$b() = ($_((PDL_Long)\$a()))"]} qw( ! ~ NOTHING );
 @ufuncs2f = map {[$_,"\$b() = ($_((PDL_Long)\$a()))"]} qw( log exp );
-@bifuncs = map {[$_,"\$c() = ($_(\$a(),\$b()))"]} 
+@bifuncs = map {[$_,"\$c() = ($_(\$a(),\$b()))"]}
 	qw( pow atan2 MODULO SPACESHIP );
 
 sub nofloat { # Decide which ops can't be done on floats/doubles
@@ -50,7 +46,7 @@ sub nofloat { # Decide which ops can't be done on floats/doubles
     	for (@bitops) { return 1 if $_ eq $op }
 	return 0;
 }
-   
+
 sub remove_float_casts { # Remove casts in certain cases
   my $op=shift;
   my $code = $op->[1];
@@ -63,7 +59,7 @@ sub remove_all_casts { # Remove casts in all cases
   my $code = $op->[1];
   $code =~ s/\(PDL_Long\)//g;
   return $code;
-}     
+}
 
 # Fudge ABS function for unsigned types to get
 # rid of the stupid compiler warning
@@ -83,13 +79,13 @@ pp_addhdr('
 #define NOTHING
 ');
 
-# First, map all the types 
+# First, map all the types
 
 $arg3str = 'a(); b(); [o]c();';
 $arg2str = 'a(); [o]b();';
 
 my $ind = 0;
-for $optype ([biop1,\@biops1,$arg3str,undef], 
+for $optype ([biop1,\@biops1,$arg3str,undef],
      [biop2,\@biops2,$arg3str,undef],
      [biop3,\@biops3,$arg3str,undef],
      [bifunc1,\@bifuncs,$arg3str,undef],
@@ -97,20 +93,20 @@ for $optype ([biop1,\@biops1,$arg3str,undef],
      [ufunc1f,\@ufuncs1f,$arg2str,[F,D]],
      [ufunc2,\@ufuncs2,$arg2str,undef],
      [ufunc2f,\@ufuncs2f,$arg2str,[F,D]],
-     ) { $ind ++; 
+     ) { $ind ++;
 pp_def("my_$optype->[0]",
 	($optype->[3] ? (GenericTypes => $optype->[3]) : ()),
 	Pars => $optype->[2],
 	OtherPars => "char* pdl_op",
 Code => "if(0) {".
-	  (join '',map {qq^	
-     } else if(!strcmp(\$COMP(pdl_op),"$_->[0]")) { 
-		  types(FD) %{ 
+	  (join '',map {qq^
+     } else if(!strcmp(\$COMP(pdl_op),"$_->[0]")) {
+		  types(FD) %{
 		      threadloop %{
 			  ^.remove_float_casts($_).qq^;
                       %}
 		  %}
-		  types(BSUL) %{ 
+		  types(BSUL) %{
 		      threadloop %{
 			  ^.absfudge(remove_all_casts($_)).qq^;
                       %}

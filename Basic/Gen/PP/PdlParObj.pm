@@ -66,7 +66,7 @@ sub new {
 		/^io$/ and $this->{FlagW}=1 or
 		/^nc$/ and $this->{FlagNCreat}=1 or
 		/^o$/ and $this->{FlagOut}=1 and $this->{FlagCreat}=1 and $this->{FlagW}=1 or
-		/^oca$/ and $this->{FlagOut}=1 and $this->{FlagCreat}=1 and $this->{FlagW}=1 
+		/^oca$/ and $this->{FlagOut}=1 and $this->{FlagCreat}=1 and $this->{FlagW}=1
 			and $this->{FlagCreateAlways}=1 or
 		/^t$/ and $this->{FlagTemp}=1 and $this->{FlagCreat}=1 and $this->{FlagW}=1 or
 		/^phys$/ and $this->{FlagPhys} = 1 or
@@ -95,7 +95,7 @@ sub name {return (shift)->{Name}}
 
 sub add_inds {
 	my($this,$dimsobj) = @_;
-	$this->{IndObjs} = [map {$dimsobj->get_indobj_make($_)} 
+	$this->{IndObjs} = [map {$dimsobj->get_indobj_make($_)}
 		@{$this->{RawInds}}];
 	my %indcount;
 	$this->{IndCounts} = [
@@ -229,7 +229,7 @@ sub get_xsnormdimchecks { my($this) = @_;
 	} else {
 		$str .= "int dims[".($ninds+1)."]; /* Use ninds+1 to avoid smart (stupid) compilers */";
 		$str .= join "",
-		   (map {"dims[$_] = ".$this->{IndObjs}[$_]->get_size().";"} 
+		   (map {"dims[$_] = ".$this->{IndObjs}[$_]->get_size().";"}
 		      0..$#{$this->{IndObjs}});
 		my $istemp = $this->{FlagTemp} ? 1 : 0;
 		$str .="\n PDL->thread_create_parameter(&\$PRIV(__thread),$this->{Number},dims,$istemp);\n"
@@ -261,7 +261,7 @@ sub get_incregisters {
 	(join '',map {
 		"register PDL_Long ".($this->get_incname($_))." = \$PRIV(".
 			($this->get_incname($_)).");\n";
-	} (0..$#{$this->{IndObjs}}) ) 
+	} (0..$#{$this->{IndObjs}}) )
 }
 
 sub get_incdecl_copy {
@@ -269,12 +269,12 @@ sub get_incdecl_copy {
 	join '',map {
 		my $iname = $this->get_incname($_);
 		&$fromsub($iname)."=".&$tosub($iname).";";
-	} (0..$#{$this->{IndObjs}}) 
+	} (0..$#{$this->{IndObjs}})
 }
 
 sub get_incsets {
 	my($this,$str) = @_;
-	my $no=0; 
+	my $no=0;
 	(join '',map {
 		"if($str->dims[$_] <= 1)
 		  \$PRIV(".($this->get_incname($_)).") = 0; else
@@ -284,14 +284,14 @@ sub get_incsets {
 				   "PDL_REPRINC($str,$_);");
 	} (0..$#{$this->{IndObjs}}) )
 }
- 
+
 # Print an access part.
 sub do_access {
 	my($this,$inds,$context) = @_;
 	my $pdl = $this->{Name};
 # Parse substitutions into hash
-	my %subst = map 
-	 {/^\s*(\w+)\s*=>\s*(\w*)\s*$/ or confess "Invalid subst $_\n"; ($1,$2)} 
+	my %subst = map
+	 {/^\s*(\w+)\s*=>\s*(\w*)\s*$/ or confess "Invalid subst $_\n"; ($1,$2)}
 	 	split ',',$inds;
 # Generate the text
 	my $text;
@@ -327,6 +327,12 @@ sub do_resize {
 	return (join '',map {"$pdl->dims[$_] = $size;\n"} @c).
 		"PDL->resize_defaultincs($pdl);PDL->allocdata($pdl);".
 		$this->get_xsdatapdecl(undef,1);
+}
+
+sub do_pdlaccess {
+	my($this) = @_;
+	return '$PRIV(pdls['.$this->{Number}.'])';
+
 }
 
 sub do_pointeraccess {

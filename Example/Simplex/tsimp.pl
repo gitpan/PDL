@@ -20,7 +20,7 @@ sub logs1 {
 }
 simplex(ones(1)*10,0.3,0.01,15,\&func1,\&logs1);
 
-# Try a simple ellipsoid: 
+# Try a simple ellipsoid:
 
 my $mult = pdl 4,1;
 
@@ -41,7 +41,7 @@ sub logs {
 	line($_[0]->slice("(0),0:2:2"),$_[0]->slice("(1),0:2:2"));
 }
 
-simplex(pdl(-10,-10), 0.5, 0.01, 30, 
+simplex(pdl(-10,-10), 0.5, 0.01, 30,
 	\&func,
 	\&logs
 );

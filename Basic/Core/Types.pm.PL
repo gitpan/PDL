@@ -56,16 +56,16 @@ package PDL::Types;
 require Exporter;
 
 @EXPORT = qw( $PDL_B $PDL_S $PDL_US $PDL_L $PDL_F $PDL_D @pack %typehash );
-@ISA    = qw( Exporter ); 
+@ISA    = qw( Exporter );
 
 
-# Data types/sizes (bytes) [must be in order of complexity] 
+# Data types/sizes (bytes) [must be in order of complexity]
 
 # Enum
-( $PDL_B, $PDL_S, $PDL_US, $PDL_L, $PDL_F, $PDL_D ) = (0..5); 
+( $PDL_B, $PDL_S, $PDL_US, $PDL_L, $PDL_F, $PDL_D ) = (0..5);
 
 # Corresponding pack types
-@PDL::Types::pack=("C*", "s*", "S*", "l*", "f*", "d*"); 
+@PDL::Types::pack=("C*", "s*", "S*", "l*", "f*", "d*");
 @PDL::Types::names= qw/PDL_B PDL_S PDL_US PDL_L PDL_F PDL_D/;
 
 

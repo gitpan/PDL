@@ -15,7 +15,7 @@ Netpbm is available at
 ftp://wuarchive.wustl.edu/graphics/graphics/packages/NetPBM/
 Pbmplus (on which netpbm is based) might work as well, I haven't tried it.
 If you want to read/write JPEG images you additionally need the two
-converters cjpeg/djpeg which come with the libjpeg distribution (the 
+converters cjpeg/djpeg which come with the libjpeg distribution (the
 "official" archive site for this software is ftp://ftp.uu.net/graphics/jpeg).
 
 Image I/O for all formats is established by reading and writing only
@@ -40,6 +40,7 @@ package PDL::IO::Pic;
 
 %EXPORT_TAGS = (Func => [@EXPORT_OK]);
 use PDL::Core;
+use PDL::Exporter;
 use PDL::Types;
 use PDL::ImageRGB;
 use PDL::IO::Pnm;
@@ -49,7 +50,7 @@ use SelfLoader;
 use strict;
 use vars qw( $Dflags @ISA %converter );
 
-@ISA    = qw( Exporter ); 
+@ISA    = qw( PDL::Exporter );
 
 
 =head2 Configuration
@@ -70,7 +71,7 @@ the filter when trying to open the pipe.
 # conventions:
 #    NONE             we need no converter (directly supported format)
 #    NA               feature not available
-#    'whatevertopnm'  name of the executable 
+#    'whatevertopnm'  name of the executable
 # The 'FLAGS' key must be used if the converter needs other flags than
 # the default flags ($Dflags)
 
@@ -82,22 +83,24 @@ sub init_converter_table {
   # default flag to be used with any converter unless overridden with FLAGS
   $Dflags = '-quiet';
   %converter = ();
-  for ('TIFF','SGI','RAST','PCX') 
+  for ('TIFF','SGI','RAST','PCX')
     { my $conv = lc; $converter{$_} = {put => "pnmto$conv",
 				       get => "$conv".'topnm'} }
   for (['PNM','NONE','NONE'],
        ['JPEG','cjpeg','djpeg'],
-       ['PS','pnmtops','NA'],
+       ['PS','pnmtops',
+              'gs -sDEVICE=ppmraw -sOutputFile=- -q -dNOPAUSE -dBATCH'],
+
        ['GIF','ppmtogif','giftopnm'],
        ['IFF','ppmtoilbm','ilbmtoppm']) {
     $converter{$_->[0]} = {put => $_->[1],
-			   get => $_->[2]} 
+			   get => $_->[2]}
   }
   # these converters do not understand pbmplus flags:
   $converter{'JPEG'}->{FLAGS} = '';
   $converter{'GIF'}->{Prefilt} = 'ppmquant 256 |';
-  
-  
+
+
   my $key;
   for $key (keys %converter) {
     $converter{$key}->{Rok} = inpath($converter{$key}->{get});
@@ -107,10 +110,10 @@ sub init_converter_table {
       $converter{$key}->{Wok} = inpath($filt) if $converter{$key}->{Wok};
     }
   }
-  
+
   $PDL::IO::Pic::biggrays = &hasbiggrays();
-  print "using big grays\n" if $PDL::verbose && $PDL::IO::Pic::biggrays;
-  
+  print "using big grays\n" if $PDL::debug && $PDL::IO::Pic::biggrays;
+
   for (keys %converter) {
     $converter{$_}->{ushortok} = $PDL::IO::Pic::biggrays ?
       (m/GIF/ ? 0 : 1) : (m/GIF|RAST|IFF/ ? 0 : 1);
@@ -119,7 +122,9 @@ sub init_converter_table {
 
 sub inpath {
   my ($prog) = @_;
-  for(split ":",$ENV{PATH}){return 1 if -x "$_/$prog" || $prog =~ /^NONE$/}
+  my $pathsep = $^O =~ /win32/i ? ';' : ':';
+  my $exe = $^O =~ /win32/i ? '.exe' : '';
+  for(split $pathsep,$ENV{PATH}){return 1 if -x "$_/$prog$exe" || $prog =~ /^NONE$/}
   return 0;
 }
 
@@ -131,7 +136,7 @@ sub hasbiggrays {
   unless ($checked) {warn "PDL::IO::Pic - couldn't find any pbm converter"; return 1};
   *SAVEERR = *SAVEERR;  # stupid fix to shut up -w (AKA pain-in-the-...-flag)
   open(SAVEERR, ">&STDERR");
-  my $tmp = new_tmpfile IO::File or barf "couldn't open tmpfile"; 
+  my $tmp = new_tmpfile IO::File or barf "couldn't open tmpfile";
   my $pos = $tmp->getpos;
   my $txt;
   { local *IN;
@@ -234,13 +239,13 @@ sub PDL::rpic {
 
     if (defined($$hints{'FORMAT'})) {
 	$type = $$hints{'FORMAT'};
-        barf "unsupported (input) image format" 
+        barf "unsupported (input) image format"
 	    unless (exists($converter{$type}) &&
 		    $converter{$type}->{get} !~ /NA/);
       }
     else {
 	$type = chkform($file);
-	barf "can't figure out file type, specify explicitly" 
+	barf "can't figure out file type, specify explicitly"
 	    if $type =~ /UNKNOWN/; }
 
     my $flags = $converter{$type}->{FLAGS};
@@ -248,8 +253,8 @@ sub PDL::rpic {
     my $cmd = "$converter{$type}->{get} $flags $file |";
     $cmd = $file if $converter{$type}->{get} =~ /^NONE/;
 
-    print("conversion by '$cmd'\n") if $PDL::verbose > 10;
-    
+    print("conversion by '$cmd'\n") if $PDL::debug > 10;
+
     return rpnm($pdl,$cmd);
 }
 
@@ -261,7 +266,7 @@ Write images in many formats with automatic format selection.
 
 =for usage
 
-   Usage: wpic($pdl,$filename[,{ options... }]) 
+   Usage: wpic($pdl,$filename[,{ options... }])
 
 =for example
 
@@ -304,14 +309,14 @@ A detailed explanation of these options follows.
 directly specify the converter,
 you had better know what you are doing, e.g.
 
-  CONVERTER  => 'ppmtogif',     
+  CONVERTER  => 'ppmtogif',
 
 =item FLAGS
 
 flags to use with the converter;
 ignored if !defined($$hints{CONVERTER}), e.g. with the gif format
 
-  FLAGS      => '-interlaced -transparent 0',  
+  FLAGS      => '-interlaced -transparent 0',
 
 =item IFORM
 
@@ -322,7 +327,7 @@ to enforce those modes, eg IFORMAT=>'PGMRAW' or
   IFORM    => 'PGM',
 
 =item XTRAFLAGS
-                         
+
 additional flags to use with an automatically chosen
 converter, this example works when you write SGI
 files (but will give an error otherwise)
@@ -336,23 +341,23 @@ figure out the desired format from the file name extension. Supported
 types are currently TIFF,GIF,SGI,PNM,JPEG,PS,RAST(Sun Raster),IFF,PCX,
 e.g.
 
-   FORMAT     => 'PCX',          
+   FORMAT     => 'PCX',
 
 =item COLOR
 
-you want black and white (value B<bw>), other possible value is 
+you want black and white (value B<bw>), other possible value is
 B<bwdither> which will write a dithered black&white
 image from the input data, data conversion will be done appropriately,
 e.g.
 
-   COLOR      => 'bw',           
+   COLOR      => 'bw',
 
 =item LUT
 
 This is a palette image and the value of this key should be a
 pdl containg an RGB lookup table (3,x), e.g.
 
-   LUT        => $lut,     
+   LUT        => $lut,
 
 =back
 
@@ -387,11 +392,11 @@ sub PDL::wpic {
 
     my ($pdl,$file,$hints) = @_;
     my ($type, $cmd, $form,$iform,$iraw);
-    
+
     # figure out the right converter
     my ($conv, $flags, $format) = getconv($pdl,$file,$hints);
     print "Using the command $conv with the flags $flags\n"
-	if $PDL::verbose>10;
+	if $PDL::debug>10;
 
     if (defined($$hints{IFORM})) {
 	$iform = $$hints{IFORM}; }
@@ -402,14 +407,14 @@ sub PDL::wpic {
 	$iform = 'PNM' if $conv =~ /^\s*(pnm)|(NONE)/; }
     # get final values for $iform and $pdl (check conversions, consistency,etc)
     ($pdl,$iform) = chkpdl($pdl,$iform,$hints,$format);
-    print "using intermediate format $iform\n" if $PDL::verbose>10;
+    print "using intermediate format $iform\n" if $PDL::debug>10;
 
     $cmd = "|"  . "$conv $flags >$file";
     $cmd = ">" . $file if $conv =~ /^NONE/;
-    print "built the command $cmd to write image\n" if $PDL::verbose>10;
+    print "built the command $cmd to write image\n" if $PDL::debug>10;
 
     $iraw = 1 if (defined($$hints{IFORM}) && $$hints{IFORM} =~ /RAW/);
-    $iraw = 0 if (defined($$hints{IFORM}) && 
+    $iraw = 0 if (defined($$hints{IFORM}) &&
 			$$hints{IFORM} =~ /ASCII/);
 
     wpnm($pdl, $cmd, $iform , $iraw);
@@ -425,14 +430,14 @@ Write an image sequence ((x,y,n) piddle) as an MPEG animation.
 
    $anim->wmpeg("GreatAnimation.mpg");
 
-Writes a stack of rgb images as an mpeg movie. Exspects a 4-D pdl of type byte
+Writes a stack of rgb images as an mpeg movie. Expects a 4-D pdl of type byte
 as input. First dim has to be 3 since it is interpreted as interlaced RGB.
 Some of the input data restrictions will have to be relaxed in the future but
-routine serves as a proof of principle at the moment. It uses the program 
+routine serves as a proof of principle at the moment. It uses the program
 mpeg_encode from the Berkeley multimedia package (see also text at the top of
 this package). Mpeg parameters written by this routines haven't been tweaked
 in any way yet (in other words, lots of room for improvement). For an example
-how to use the routine see approriate test that comes with this package.
+how to use the routine see appropriate test that comes with this package.
 Currently, wmpeg doesn't allow modification of the parameters written through
 its calling interface. This will change in the future as needed.
 
@@ -441,8 +446,8 @@ supplies methods for manipulating the image stack (insert, cut,
 append commands) and a final movie->make() call would invoke mpeg_encode on the
 picture stack (which will only be held on disk). This should get around the
 problem of having to hold a huge amount of data in memory to be passed into
-wmpeg (when you are, e.g. writing a large animation from PDL3D rendered 
-fly-throughs). Having said that, the actual storage requirements might not be 
+wmpeg (when you are, e.g. writing a large animation from PDL3D rendered
+fly-throughs). Having said that, the actual storage requirements might not be
 so big in the future any more if you could pass 'virtual' transform pdls into
 wmpeg  that will only be actually calculated when accessed by the wpic
 routines, you know what I mean...
@@ -454,13 +459,13 @@ routines, you know what I mean...
 
 sub PDL::wmpeg {
     barf 'Usage: wmpeg($pdl,$filename) ' .
-	'or $pdl->wmpeg($filename)' if $#_<1;
-    
+	'or $pdl->wmpeg($filename)' if $#_ != 1;
+
     my ($pdl,$file) = @_;
     my @Dims = $pdl->dims;
     # too strict in general but alright for the moment
     # especially restriction to byte will have to be relaxed
-    barf "input must be byte (3,x,y,z)" if (@Dims != 4) || ($Dims[0] != 3) 
+    barf "input must be byte (3,x,y,z)" if (@Dims != 4) || ($Dims[0] != 3)
 	|| ($pdl->get_datatype != $PDL_B);
     my $nims = $Dims[3];
     my $tmp = gettmpdir();
@@ -468,15 +473,17 @@ sub PDL::wmpeg {
     barf "directory $tmpdir already exists, clear up first" if -d $tmpdir;
     mkdir $tmpdir,0700;
     # check the pdl for correct dimensionality
-    
+
     # write all the images as ppms and write the appropriate parameter file
     my ($i,$fname);
-    for ($i=0; $i<$nims; $i++) {
-	$fname = sprintf("$tmpdir/frame.%3.3d.ppm",$i);
-	print "writing to file $fname\n" if $PDL::verbose;
-	wpic($pdl->slice(":,:,:,($i)"),$fname);
-    }
-    my $range = sprintf "[%3.3d-%3.3d]",0,$nims-1;
+    # add blank cells to each image to fit with 16N x 16N mpeg standard
+    # $frame is full frame, insert each image in as $inset
+    my (@MDims) = (3,map(16*int(($_+15)/16),@Dims[1..2]));
+    my ($frame) = zeroes(@MDims);
+    my ($inset) = $frame->slice(join(',',
+                              map(int(($MDims[$_]-$Dims[$_])/2).':'.
+                                  int(($MDims[$_]+$Dims[$_])/2-1),0..2)));
+    my $range = sprintf "[%d-%d]",0,$nims-1;
     # write the parameter file
     open PAR,">$tmpdir/mpeg.params" or barf "can't open mpeg parameter file";
     print PAR <<"EOT";
@@ -486,7 +493,7 @@ GOP_SIZE	16
 SLICES_PER_FRAME	5
 BASE_FILE_FORMAT	PPM
 INPUT_CONVERT *
-INPUT_DIR	$tmpdir
+INPUT_DIR	stdin
 INPUT
 frame.*.ppm $range
 END_INPUT
@@ -501,9 +508,19 @@ REFERENCE_FRAME	ORIGINAL
 FORCE_ENCODE_LAST_FRAME
 EOT
     close PAR;
-    system("mpeg_encode","$tmpdir/mpeg.params") and 
+    open MPEG, "| mpeg_encode $tmpdir/mpeg.params" or
           barf "spawning mpeg_encode failed: $?";
+    binmode MPEG;
+    my (@slices) = $pdl->dog;
+    for ($i=0; $i<$nims; $i++) {
+      print STDERR "Writing frame $i\n";
+      $inset .= $slices[$i];
+      print MPEG "P6\n$MDims[1] $MDims[2]\n255\n";
+      pnmout($frame->slice(':,:,-1:0')->clump(2),
+             1, 0, 'PDL::IO::Pic::MPEG');
+    }
     # clean up
+    close MPEG;
     unlink <$tmpdir/*>;
     rmdir $tmpdir or barf "couldn't delete temporary dir $tmpdir";
 }
@@ -518,7 +535,7 @@ __DATA__
 
 sub piccan {
   my $class = shift;
-  my $rw = (shift =~ /r/i) ? 'Rok' : 'Wok'; 
+  my $rw = (shift =~ /r/i) ? 'Rok' : 'Wok';
   if ($#_ > -1) {
     my $format = shift;
     barf 'unknown format' unless defined($converter{$format});
@@ -573,7 +590,7 @@ sub chkext {
 sub chkform {
     my $file = shift;
     my ($format, $magic, $len, $ext) = ("","",0,"");
-    
+
     open(IMG, $file) or barf "Can't open image file";
     # should first check if file is long enough
     $len = read(IMG, $magic,12);
@@ -611,7 +628,7 @@ sub getconv {
     if (defined($$hints{'FORMAT'})) {
 	$type = $$hints{'FORMAT'};
         barf "unsupported (output) image format"
-	    unless (exists($converter{$type}) 
+	    unless (exists($converter{$type})
 	      && $converter{$type}->{put} !~ /NA/);
       }
     else {
@@ -646,7 +663,7 @@ sub getconv {
 sub chkpdl {
     my ($pdl, $iform, $hints, $format) = @_;
 
-    if ($pdl->get_datatype >= $PDL_L || 
+    if ($pdl->get_datatype >= $PDL_L ||
 	$pdl->get_datatype == $PDL_S ||
 	(!$converter{$format}->{ushortok} && $pdl->get_datatype == $PDL_US)) {
 	print "scaling data to type byte...\n";
@@ -656,14 +673,14 @@ sub chkpdl {
     my ($isrgb,$form) = (0,"");
     my @Dims = $pdl->dims;
     $isrgb = 1 if ($#Dims >= 2) && ($Dims[0] == 3);
-    barf "exspecting 2D or 3D-RGB-interlaced data as input" 
+    barf "exspecting 2D or 3D-RGB-interlaced data as input"
 	unless ($isrgb || ($#Dims == 1));
 
     $$hints{'COLOR'} = "" unless defined($$hints{'COLOR'});
     if ($iform =~ /P[NP]M/) {  # figure out the format from the data
 	$form = 'PPM' if $isrgb;
 	$form = 'PGM' if ($#Dims == 1) || ($$hints{'COLOR'} =~ /bwdither/i);
-	$form = 'PBM' if ($$hints{'COLOR'} =~ /bw/i); 
+	$form = 'PBM' if ($$hints{'COLOR'} =~ /bw/i);
         $iform = $form; }
     # this is the place for data conversions
     if ($isrgb && ($iform =~ 'P[B,G]M')) {
@@ -672,11 +689,11 @@ sub chkpdl {
     }
     if (defined $$hints{LUT}) {  # make LUT images into RGB
 	barf "luts only with non RGB data" if $isrgb;
-	print "starting palette->RGB conversion...\n" if $PDL::verbose;
+	print "starting palette->RGB conversion...\n" if $PDL::debug;
 	$pdl = interlrgb($pdl,$$hints{LUT});
 	$iform = 'PPM';  # and tell everyone we are now RGB
-	print "finished conversion\n" if $PDL::verbose;
-	}    
+	print "finished conversion\n" if $PDL::debug;
+	}
     return ($pdl, $iform);
 }
 
@@ -701,11 +718,11 @@ the author.
 
 =head1 AUTHOR
 
-Copyright (C) 1996,1997 Christian Soeller <csoelle@sghms.ac.uk> 
+Copyright (C) 1996,1997 Christian Soeller <csoelle@sghms.ac.uk>
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 

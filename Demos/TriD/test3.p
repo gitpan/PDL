@@ -108,7 +108,7 @@ $foo = ((xvals $f) - 2) ** 2 + ((yvals $f) -2) ** 2;
 print $foo;
 
 print "TOIMAG\n";
-		
+
 PDL::Graphics::TriD::imag3d([$foo]);	# Use default values to make a 3D plot.
 		# Stops here for rotating until user presses 'q'.
 snap "pic5";

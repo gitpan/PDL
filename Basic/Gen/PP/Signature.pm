@@ -1,10 +1,10 @@
 =head1 NAME
 
-PDL::PP::Signature - Internal module to handle signatures 
+PDL::PP::Signature - Internal module to handle signatures
 
 =head1 DESCRIPTION
 
-Internal module to handle signatures 
+Internal module to handle signatures
 
 =head1 SYNOPSIS
 
@@ -34,11 +34,11 @@ sub new {
 =head1 AUTHOR
 
 Copyright (C) Tuomas J. Lukka 1997 (lukka@husc.harvard.edu) and by Christian
-Soeller (csoelle@sghms.ac.uk). 
+Soeller (csoelle@sghms.ac.uk).
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 
@@ -77,7 +77,7 @@ sub parse {
 
 sub realdims {
   my $this = shift;
-  my @rds = map { scalar @{$this->{Objects}->{$_}->{RawInds}}} 
+  my @rds = map { scalar @{$this->{Objects}->{$_}->{RawInds}}}
          @{$this->{Names}};
 #  print "Realdims are ".join(',',@rds)."\n";
   return \@rds;

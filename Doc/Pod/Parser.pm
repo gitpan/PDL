@@ -55,7 +55,7 @@ only the desired set of sections and their corresponding subsections.  A
 section specification is a string containing one or more Perl-style
 regular expressions separated by forward slashes ("/").  If you need to
 use a forward slash literally within a section title you can escape it
-with a backslash ("\/"). 
+with a backslash ("\/").
 
 The formal syntax of a section specification is:
 
@@ -109,7 +109,7 @@ Match all top level sections but none of their subsections:
 
 C</!.+>
 
-=back 
+=back
 
 =cut
 
@@ -564,7 +564,7 @@ sub pragma {
     #     }
     #     else {
     #         $self->{PRAGMAS}->{INDENT} = $value;
-    #     } 
+    #     }
     # }
     # else {
     #     $rc = 0;
@@ -658,7 +658,7 @@ the interior sequence.
 
 Subclass implementationss of this method may wish to examine the
 the array referenced by C<$self-E<gt>{SEQUENCES}> which is a
-stack of all the interior sequences that are currently being 
+stack of all the interior sequences that are currently being
 processed (they may be nested). The current interior sequence
 (the one given by C<$seq_cmdE<lt>$seq_argE<gt>>) should always
 be at the top of this stack.
@@ -944,7 +944,7 @@ sub parse_from_file {
         $self->{INFILE} = $in_fh_name = $infile;
         $in_fh_name =~ s/\W/_/g;
         no strict "refs";
-        open($in_fh_name, "<$infile") || 
+        open($in_fh_name, "<$infile") ||
              croak "Can't open $infile for reading: $!\n";
         $in_fh = \*$in_fh_name;
     }
@@ -965,7 +965,7 @@ sub parse_from_file {
         $self->{OUTFILE} = $out_fh_name = $outfile;
         $out_fh_name =~ s/\W/_/g;
         no strict "refs";
-        open($out_fh_name, ">$outfile") || 
+        open($out_fh_name, ">$outfile") ||
              croak "Can't open $outfile for writing: $!\n";
         $out_fh = \*$out_fh_name;
     }

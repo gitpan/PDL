@@ -161,7 +161,7 @@ sub transform {
 	my($this,$point,$data,$inds) = @_;
 	my $i = 0;
 	for(@$inds) {
-		(my $tmp = $point->slice("($i)")) += 
+		(my $tmp = $point->slice("($i)")) +=
 		  ($data->slice("($_)") - $this->{Scale}[$i][0]) /
 		  ($this->{Scale}[$i][1] - $this->{Scale}[$i][0]) ;
 		$i++;

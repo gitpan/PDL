@@ -20,7 +20,7 @@ something, please contact the author first and we'll work out
 how to make it functional again.
 
 Two-directional dataflow (which implements ->slice() etc.)
-is fully functional, however. Just about any function which 
+is fully functional, however. Just about any function which
 returns some subset of the values in some piddle will make a binding
 so that
 
@@ -161,12 +161,12 @@ when its actual *value* is forcibly changed (not just the reference:
 	$d = $d + 1
 
 would produce a completely different result ($c and $d would not be bound
-any more whereas 
-	
+any more whereas
+
 	$d .= $d + 1
 
 would yield the same as $d++), a "family" consisting of all other piddles
-joined to the mutated piddle by a two-way transformation is created 
+joined to the mutated piddle by a two-way transformation is created
 and all those are copied.
 
 All slices or transformations that simply select a subset of the original
@@ -175,7 +175,7 @@ operators are.
 
 =head1 Sources
 
-What you were told in the previous section is not quite true: 
+What you were told in the previous section is not quite true:
 the behaviour described is not *always* what you want. Sometimes you
 would probably like to have a data "source":
 
@@ -189,7 +189,7 @@ its children to change with it, you can declare it into a data source
 
 	$a->datasource(1);
 
-After this, $a++ or $a .= something will not create a new family 
+After this, $a++ or $a .= something will not create a new family
 but will alter $a and cut its relation with its previous parents.
 All its children will follow its current value.
 

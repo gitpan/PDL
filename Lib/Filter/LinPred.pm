@@ -31,7 +31,7 @@ How many points each lag should be
 =item LagsBehind
 
 If, for some strange reason, you wish to predict not the next but
-the one after that (i.e. usually f(t) is predicted from f(t-1) and f(t-2) 
+the one after that (i.e. usually f(t) is predicted from f(t-1) and f(t-2)
 etc., but with LagsBehind => 2, f(t) is predicted from f(t-2) and f(t-3)).
 
 =item Data
@@ -59,11 +59,11 @@ The rest of the documentation is under lazy evaluation.
 
 =head1 AUTHOR
 
-Copyright (C) Tuomas J. Lukka 1997. 
+Copyright (C) Tuomas J. Lukka 1997.
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 
@@ -115,8 +115,8 @@ sub _mk_mat {
 	PDL::Graphics::PG::imag ($sal->copy);
 
 # First, the 2 diagonal slices
-	($tmp = $autocov->slice("$nl:-1,$nl:-1")->px) .= 
-	($tmp2 = $autocov->slice("0:".($nl-1).",0:".($nl-1))->px) .= 
+	($tmp = $autocov->slice("$nl:-1,$nl:-1")->px) .=
+	($tmp2 = $autocov->slice("0:".($nl-1).",0:".($nl-1))->px) .=
 		$sal->slice(($this->{NLags}+2*$this->{LagsBehind}-1).":".
 			    (-1-($this->{NLags}+2*$this->{LagsBehind}+1)))->px;
 
@@ -161,9 +161,9 @@ sub predict ($$) {
 
 	my $pred = $pred1 + $pred2;
 
-	return wantarray ?  
+	return wantarray ?
 	   ($pred,$ldata->slice(":,(".($nl+$this->{LagsBehind}).")"),
-	    $pred1, $pred2) : 
+	    $pred1, $pred2) :
 		$pred ;
 }
 
@@ -198,7 +198,7 @@ sub _mk_mat {
 
 	my $sal = $this->{SymAutoCor}->lags(0,1,$this->{NLags})->px;
 
-	my $autocov = 
+	my $autocov =
 		$sal->slice(($this->{LagsBehind}-1).":".(-1-($this->{LagsBehind}+1)))
 		 ->copy()->px;
 	$this->{AutoCov} = $autocov;
@@ -214,7 +214,7 @@ sub _mk_mat {
 
 	$this->{AutoSliceUsed} = $auc->slice("$n:-1");
 	inner($autocinv->xchg(0,1),$this->{AutoSliceUsed},(my $tdw=PDL->null));
-		
+
 	$this->{AutoCov} = $autocov;
 	$this->{AutoCovInv} = $autocinv;
 	$this->{Weights} = $tdw;
@@ -238,7 +238,7 @@ sub new ($$) {
 		my $atmp;
 		my $n = $this->{NTotLags};
 		my $da = avg($data);
-# Compute autocovariance		
+# Compute autocovariance
 		my $ldata = $data->lags(0,$this->{LagInterval},$n);
 # XXX This takes too much space.. define a special function.
 		inner($ldata->slice(":,0"),$ldata, ($atmp=PDL->null));
@@ -257,12 +257,12 @@ sub new ($$) {
 	}
 	$this->{AutoCor} = $auc;
 	my $n = $this->{NTotLags};
-	$this->{SymAutoCor} = 
+	$this->{SymAutoCor} =
 		(PDL->zeroes($n * 2 - 1)->float);
 	my $tmp;
-	($tmp = $this->{SymAutoCor}->slice("0:".($n-2)))  .= 
+	($tmp = $this->{SymAutoCor}->slice("0:".($n-2)))  .=
 		$auc->slice("-1:1");
-	($tmp = $this->{SymAutoCor}->slice(($n-1).":-1")) .= 
+	($tmp = $this->{SymAutoCor}->slice(($n-1).":-1")) .=
 		$auc->slice("0:-1");
 	$this->_mk_mat();
 	$this;
@@ -275,7 +275,7 @@ sub predict ($$) {
 	inner($ldata->xchg(0,1)->slice("$this->{LagsBehind}:-1"),
 	      $this->{Weights},
 	  (my $pred=PDL->null));
-	return wantarray ?  ($pred,$ldata->slice(":,(0)")) : 
+	return wantarray ?  ($pred,$ldata->slice(":,(0)")) :
 		$pred ;
 }
 

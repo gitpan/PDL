@@ -9,7 +9,7 @@ WriteMakefile(NAME => "PDL::PP",
 
 sub MY::postamble {
 'PP/Dump.pm: PP/dump.pp
-	\$(PERL) PP/dump.pp > PP/Dump.pm.tmp
-	mv PP/Dump.pm.tmp PP/Dump.pm
-'
+	$(PERL) PP/dump.pp > PP/Dump.pm.tmp
+'.($^O =~ /win32/i ? '	move PP\Dump.pm.tmp PP\Dump.pm' :
+'	mv PP/Dump.pm.tmp PP/Dump.pm')."\n";
 }

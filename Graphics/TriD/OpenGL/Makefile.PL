@@ -1,15 +1,8 @@
 BEGIN {
+  PDL::Core::Dev->import();
   $skip = 0;
   if ($^O =~ /win32/i) {
-    warn "Win32 systems not yet supported. Will not build PDL::Graphics::OpenGL";
-    open(OUT,">Makefile");
-    print OUT "fred:\n";
-    print OUT "\t\@echo \n";
-    print OUT "\t\@echo $msg\n";
-    print OUT "\t\@echo \n";
-    print OUT "\nall: fred\n";
-    print OUT "\ntest: fred\n";
-    close(OUT);
+    write_dummy_make(unsupported('PDL::Graphics::OpenGL','win32'));
     $skip=1;
   }
 }
@@ -22,7 +15,7 @@ BEGIN {
 goto SKIP if $skip;
 use ExtUtils::MakeMaker;
 
-# Add several possible places for -L. 
+# Add several possible places for -L.
 
 WriteMakefile(
 	NAME => 'PDL::Graphics::OpenGL',

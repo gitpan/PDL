@@ -80,13 +80,13 @@ sub contourpolygonize {
 # Now, we have a situation with a cube that has inside a I point
 # and as corners O points. This does not guarantee that we have all
 # the surface but it's enough for now.
-        
+
 }
 
 #############
 
 #sub trianglepolygonize {
-#	
+#
 #	find_3nn(
 #}
 
@@ -128,7 +128,7 @@ sub polygonize {
 # Cube coordinates.
 sub marchcubes {
 	my($init) = @_;
-	
+
 }
 
 1;

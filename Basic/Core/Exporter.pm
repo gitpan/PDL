@@ -31,7 +31,7 @@ sub import {
    my $callpkg = caller($Exporter::ExportLevel);
    #print "DBG: pkg=$pkg callpkg = $callpkg\n";
    push @_, ':Func' unless @_;
-   @_=() if scalar(@_)==1 and $_[0] eq ''; 
+   @_=() if scalar(@_)==1 and $_[0] eq '';
    Exporter::export($pkg, $callpkg, @_);
 }
 
@@ -39,11 +39,11 @@ sub import {
 
 =head1 AUTHOR
 
-Copyright (C) Karl Glazebrook (kgb@aaoepp.aao.gov.au).   
+Copyright (C) Karl Glazebrook (kgb@aaoepp.aao.gov.au).
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 

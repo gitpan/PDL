@@ -18,11 +18,11 @@ sub run {
 
 
 comment q|
-	Welcome to a short tour of the capabilities of 
-	PDL::Graphics::TriD. 
+	Welcome to a short tour of the capabilities of
+	PDL::Graphics::TriD.
 
 	Press 'q' in the graphics window for the next screen.
-	Rotate the image by pressing mouse button one and 
+	Rotate the image by pressing mouse button one and
 	dragging in the graphics window.
 	Zoom in/out by pressing MB3 and drag up/down.
 	Note that a standalone TriD script must start with
@@ -84,12 +84,12 @@ actnw q|
 
 actnw q|
 	hold3d();	# Leave the previous object in..
-	imag3d_ns [$x,$y,$z+1], [$r,$g,$b];  
+	imag3d_ns [$x,$y,$z+1], [$r,$g,$b];
 			# ...and draw a colored surface on top of it...
 |;
 
 actnw q|
-	lattice3d [$x,$y,$z-1], [$r,$g,$b];  
+	lattice3d [$x,$y,$z-1], [$r,$g,$b];
 			# ...and draw a colored lattice under it...
 |;
 
@@ -107,7 +107,7 @@ actnw q|
 	# The reason for the [] around $x,$y,$z:
 	# 1. You can give all the coordinates and colors in one piddle.
 	$c = (zeroes 3,$size+1) / $size;
-	$coords = 
+	$coords =
 		sin((3+3*xvals $c)*yvals $c);
 	$colors = $coords;
 	line3d $coords, $colors;        # Draw a curved line, colored

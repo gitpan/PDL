@@ -22,7 +22,7 @@ These programs should be familiar to astronomer's - they are used by
 the common IRAF system. The programs and their HTML documentation
 can be obtained from the following URLs:
 
-SAOimage: http://tdc-www.harvard.edu/software/saoimage.html 
+SAOimage: http://tdc-www.harvard.edu/software/saoimage.html
 Ximtool:  http://iraf.noao.edu/iraf/web/projects/x11iraf/x11iraf.html
 
 Non-astronomer's may find they quite nifty for displaying 2D data.
@@ -81,7 +81,7 @@ pp_addpm(<<'ENDOFPM');
 
 use PDL::Core '';
 use PDL::Basic '';
-use Carp;  
+use Carp;
 
 $iisframe    = 1;                # Starting defaults
 $stdimage    = "imt1024";
@@ -90,7 +90,7 @@ $HOME        = $ENV{'HOME'};     # Used a lot so shorten
 
 ################ Public routines #################
 
-# Display 
+# Display
 
 =head2 iis
 
@@ -108,7 +108,7 @@ Displays an image on a IIS device (e.g. SAOimage/Ximtool)
 
 Displays image on a IIS device. If min() or max() are omitted they
 are autoscaled. A good demonstration of PDL threading can be had
-by giving iis() a data *cube* - iis() will be repeatedly called 
+by giving iis() a data *cube* - iis() will be repeatedly called
 for each plane of the cube resulting in a poor man's movie!
 
 =cut
@@ -135,7 +135,7 @@ Return cursor position from an IIS device (e.g. SAOimage/Ximtool)
  ($x,$y) = iiscur($ch)
 
 This function puts up an interactive cursor on the IIS device and returns
-the ($x,$y) position and the character typed ($ch) 
+the ($x,$y) position and the character typed ($ch)
 by the user.
 
 =cut
@@ -165,7 +165,7 @@ Draws circles on the IIS device with specied points and colours. Because
 this module uses PDL::PP threading you can supply lists of points via
 1D arrays, etc.
 
-An amusing PDL idiom is: 
+An amusing PDL idiom is:
 
  perldl> iiscirc iiscur
 
@@ -206,12 +206,12 @@ sub iiscirc {
 
 Starts the SAOimage external program
 
-=for usage 
+=for usage
 
  saoimage[(command line options)]
 
 Starts up the SAOimage external program. Default FIFO devices are chosen
-so as to be compatible with other IIS module functions. If no suitable 
+so as to be compatible with other IIS module functions. If no suitable
 FIFOs are found it will offer to create them.
 
 e.g.:
@@ -238,13 +238,13 @@ sub saoimage {  # Start SAOimage
 
 Starts the Ximtool external program
 
-=for usage 
+=for usage
 
   ximtool[(command line options)]
 
 
 Starts up the Ximtool external program. Default FIFO devices are chosen
-so as to be compatible with other IIS module functions. If no suitable 
+so as to be compatible with other IIS module functions. If no suitable
 FIFOs are found it will offer to create them.
 
 e.g.
@@ -275,7 +275,7 @@ sub fbconfig {
     my $name = shift;
     parseimtoolrc() unless $parsed++;
     findfifo() unless $foundfifo++;
-    barf 'No frame buffer configuration "'.$name.'" found'."\n" 
+    barf 'No frame buffer configuration "'.$name.'" found'."\n"
        unless defined $imtoolrc{$name};
     ($fbconfig, $fb_x, $fb_y ) = @{ $imtoolrc{$name} };
     print "Using $stdimage - fbconfig=$fbconfig (${fb_x}x$fb_y)\n" if $PDL::verbose;;
@@ -284,14 +284,14 @@ sub fbconfig {
 
 # Try and find user/system imtoolrc definitions
 
-sub parseimtoolrc {    
+sub parseimtoolrc {
    # assoc array holds imtool configuations - init with some standard
    # ones in case imtoolrc goes missing
 
-   %imtoolrc = ( 
-     'imt512'  => [1,512,512],   'imt800'  => [2,800,800], 
-     'imt1024' => [3,1024,1024], 'imt1600' => [4,1600,1600], 
-     'imt2048' => [5,2048,2048], 'imt4096' => [6,4096,4096], 
+   %imtoolrc = (
+     'imt512'  => [1,512,512],   'imt800'  => [2,800,800],
+     'imt1024' => [3,1024,1024], 'imt1600' => [4,1600,1600],
+     'imt2048' => [5,2048,2048], 'imt4096' => [6,4096,4096],
    );
 
    # Look for imtoolrc file
@@ -308,7 +308,7 @@ sub parseimtoolrc {
    # store in assoc array
 
    open(IMTOOLRC, $imtoolrc) || die "File $imtoolrc not found";
-    while(<IMTOOLRC>) { 
+    while(<IMTOOLRC>) {
        if  ( /^\s*(\d+)\s+\d+\s+(\d+)\s+(\d+)\s+\#\s*(\S+)\s/ ) {
           foreach $name (split(/\|/,$4)) {
              $imtoolrc{$name} = [$1,$2,$3];
@@ -335,7 +335,7 @@ sub findfifo {
    }
    if ($fifi eq "" && $fifo eq "") { # Still not found use this default
        warn "WARNING: cannot locate FIFO pipes in /dev/, $HOME/dev, ".
-           "$HOME/iraf/dev or environment variable \$IMTDEV\n"; 
+           "$HOME/iraf/dev or environment variable \$IMTDEV\n";
        $fifi = "$HOME/dev/imt1i"; $fifo = "$HOME/dev/imt1o";
    }
    print "Using FIFO devices in:  $fifi\n".
@@ -352,7 +352,7 @@ sub findfifo {
 
             # Note system return value is backwards - hence 'and'
 
-            if ( system('mknod', $pipe, 'p') and system('mkfifo',$pipe) ) { 
+            if ( system('mknod', $pipe, 'p') and system('mkfifo',$pipe) ) {
                 die "Failed to create named pipe $pipe\n";
             }
             $ENV{PATH} = $path;
@@ -393,7 +393,7 @@ _iiscur_int()
 
     iis_open(SvPV(perl_get_sv("fifi",FALSE),na),SvPV(perl_get_sv("fifo",FALSE),na),
        (int)SvIV( perl_get_sv("fbconfig", FALSE) ),
-       (int)SvIV( perl_get_sv("fb_x", FALSE) ), 
+       (int)SvIV( perl_get_sv("fb_x", FALSE) ),
        (int)SvIV( perl_get_sv("fb_y", FALSE) ) );
     iis_cur(&x,&y,&ch);
     iis_close();
@@ -418,7 +418,7 @@ pp_def('iis',
 
 
    int   frame = (int)SvIV( perl_get_sv("iisframe", FALSE) );
-          
+
    unsigned short hdr[8];
    unsigned char *data;
    int j,nlines, x,y, offx, offy, nx, ny, nx2, ny2, baseX, baseY, m1, n1;
@@ -433,9 +433,9 @@ pp_def('iis',
    if (frame<1 || frame>4)
        barf("$iisframe must be in range 1--4");
 
-    iis_open(SvPV(perl_get_sv("fifi",FALSE),na),SvPV(perl_get_sv("fifo",FALSE),na), 
+    iis_open(SvPV(perl_get_sv("fifi",FALSE),na),SvPV(perl_get_sv("fifo",FALSE),na),
        (int)SvIV( perl_get_sv("fbconfig", FALSE) ),
-       (int)SvIV( perl_get_sv("fb_x", FALSE) ), 
+       (int)SvIV( perl_get_sv("fb_x", FALSE) ),
        (int)SvIV( perl_get_sv("fb_y", FALSE) ) );
 
    /* Convenience variables */
@@ -449,20 +449,20 @@ pp_def('iis',
 
    /* Work out how many lines to transfer at a go */
 
-   ntrans = BUFFSZ/frameX; 
-   if (ntrans<1) 
+   ntrans = BUFFSZ/frameX;
+   if (ntrans<1)
       ntrans = 1;
 
    /* Allocate buffer for data transfers */
 
-   data = (unsigned char*) calloc(ntrans*frameX, sizeof(unsigned char)); 
+   data = (unsigned char*) calloc(ntrans*frameX, sizeof(unsigned char));
    if (data==NULL)
       iis_error("iis_display: out of memory for buffer","");
 
    threadloop %{
 
       /* Send WCS info */
-   
+
       hdr[TRANSFER_ID] = IWRITE | PACKED;
       hdr[THING_COUNT] = -SZ_WCSTEXT;
       hdr[SUB_UNIT]   = WCS;
@@ -472,14 +472,14 @@ pp_def('iis',
       hdr[Z_REGISTER] = chan;
       hdr[T_REGISTER] = fbconfig-1; /* fbconfig number  */
       iis_checksum(hdr);
-      iis_write((char*)hdr, 8*sizeof(short)); 
-   
+      iis_write((char*)hdr, 8*sizeof(short));
+
       offx = 0; offy = 0;    /* Centre image in frame if small */
       if (nx<frameX)
          offx = (frameX-nx)/2;
       if (ny<frameY)
          offy = (frameY-ny)/2;
-   
+
       nx2 = nx; ny2 = ny;  baseX=0; baseY=0; /* Truncate image if too big */
       if (nx>frameX) {
          nx2=frameX; baseX = (nx-frameX)/2;
@@ -487,18 +487,18 @@ pp_def('iis',
       if (ny>frameY) {
          ny2=frameY; baseY = (ny-frameY)/2;
       }
-   
+
       /* Note my WCS is zero offset! */
-   
+
       xx=1; yx=0; xy=0; yy=-1; xo=baseX-offx; yo=baseY+frameY-offy-1; w_type=1;
-   
-      sprintf (wcsbuf, "%s\n%f %f %f %f %f %f %f %f %d","perlDL rules!", 
+
+      sprintf (wcsbuf, "%s\n%f %f %f %f %f %f %f %f %d","perlDL rules!",
                xx, yx, xy, yy, xo, yo, fmin, fmax, w_type);
-      iis_write((char*)wcsbuf, SZ_WCSTEXT*sizeof(char)); 
-      
+      iis_write((char*)wcsbuf, SZ_WCSTEXT*sizeof(char));
+
       /* Reset the frame buffer */
-   
-      hdr[TRANSFER_ID] = fbconfig-1; /* fbconfig number  */ 
+
+      hdr[TRANSFER_ID] = fbconfig-1; /* fbconfig number  */
       hdr[THING_COUNT] = 0;
       hdr[SUB_UNIT]   = FEEDBACK;
       hdr[CHECK_SUM]  = 0;
@@ -508,17 +508,17 @@ pp_def('iis',
       hdr[T_REGISTER] = 0;
       iis_checksum(hdr);
       iis_write((char*)hdr, 8*sizeof(short));
-   
+
 #define Generic $TBSULFD(PDL_Byte,PDL_Short,PDL_Ushort,PDL_Long,PDL_Float,PDL_Double)
-   
+
        {   Generic val,sval;
-           
+
            for (y = 0; y < ny2; y+=ntrans) {
-        
+
               nlines = ntrans;  /* Number of lines to transfer */
               if (y+ntrans>ny2)
                  nlines = ny2 - y;
-        
+
               /* create header */
               hdr[TRANSFER_ID] = IWRITE | PACKED | BLOCKXFER;
               hdr[THING_COUNT] = -nlines*frameX;
@@ -530,7 +530,7 @@ pp_def('iis',
               hdr[T_REGISTER] = ALLBITPL;
               iis_checksum(hdr);
               iis_write((char*)hdr, 8*sizeof(short));
-        
+
               for (j=0; j<nlines; j++) {
                   n1 = baseY+y+nlines-j-1;
                   for (x = 0; x < nx2; x++) {
@@ -546,10 +546,10 @@ pp_def('iis',
               }
               iis_write((char*)data, nlines*frameX*sizeof(char) );
            }
-   
+
       }
 #undef Generic
-   
+
    %}
 
    free(data);
@@ -559,7 +559,7 @@ pp_def('iis',
 
 pp_def('iiscirc',
         Pars => 'x(); y(); r(); colour();',
-        PMCode=>'', 
+        PMCode=>'',
 	Doc=>undef,
         Code => '
 
@@ -572,7 +572,7 @@ pp_def('iiscirc',
 
    iis_open(SvPV(perl_get_sv("fifi",FALSE),na),SvPV(perl_get_sv("fifo",FALSE),na),
         (int)SvIV( perl_get_sv("fbconfig", FALSE) ),
-        (int)SvIV( perl_get_sv("fb_x", FALSE) ), 
+        (int)SvIV( perl_get_sv("fb_x", FALSE) ),
         (int)SvIV( perl_get_sv("fb_y", FALSE) ) );
 
    threadloop %{
@@ -592,11 +592,11 @@ None known
 
 =head1 AUTHOR
 
-Copyright (C) Karl Glazebrook 1997.  
+Copyright (C) Karl Glazebrook 1997.
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 

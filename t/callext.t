@@ -39,26 +39,26 @@ print "Try = $try\n";
 print "Correct = $correct\n";
 ok( 1, approx($try, $correct) );
 
-# Return log $x to base $y using callext() routine - 
+# Return log $x to base $y using callext() routine -
 # perl wrapper makes this nice and easy to use.
 
 sub loglog {
 
    die 'Usage: loglog($x,$y)' if scalar(@_)!=2;
 
-   # Tips: 
+   # Tips:
    #
    # (i)  topdl() forces arguments to be pdl vars even
    #      if ordinary numbers are passed
    #
    # (ii) float() forces the pdl vars to be float precision
    #      thus matching the C routine.
- 
+
    my $x = float(topdl(shift));
    my $y = float(topdl(shift));
 
    my $ret = $x->copy; # Make copy of $x to return
-   
+
    print "X = $x\n";
    print "Y = $y\n";
 

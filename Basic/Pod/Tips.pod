@@ -15,7 +15,7 @@ Perl Data Language v2.0.
 
 =head2 Indexing idioms
 
-The following code normalizes a bunch of vectors in $a. 
+The following code normalizes a bunch of vectors in $a.
 This works regardless of the dimensionality of $a.
 
 	$a /= $a->sumover->dummy(0);
@@ -31,10 +31,10 @@ somewhere. This spews out a huge amount of debug info for PDL
 into STDOUT. It is planned to eventually make this redirectable
 and the messages selectable more accurately.
 
-Many of the messages come from C<Basic/Core/pdlapi.c> and you 
+Many of the messages come from C<Basic/Core/pdlapi.c> and you
 can look at the source to see what is going on.
 
-If you have any extra time to work on these mechanisms, 
+If you have any extra time to work on these mechanisms,
 infrom the pdl-porters mailing list.
 
 =head2 Memory savings
@@ -49,7 +49,7 @@ indices of a large piddle, like
 		func($b,$a);
 	}
 
-If you are not writing to $b, it saves a lot of memory to change this 
+If you are not writing to $b, it saves a lot of memory to change this
 to
 
 		$b = $b->index($inds)->sever;
@@ -114,6 +114,6 @@ which might make a difference on machines with a small number of registers).
 
 =head1 AUTHOR
 
-Copyright (C) Tuomas J. Lukka 1997. All rights reserved. 
+Copyright (C) Tuomas J. Lukka 1997. All rights reserved.
 Duplication in the same form and printing a copy for yourself allowed.
 

@@ -16,7 +16,7 @@ beginners and allows rapid prototyping. However until recently it did not
 support data structures which allowed it to do fast number crunching.
 
 However with the development of Perl v5, Perl acquired 'Objects'. To put
-it simply users can define their own special data types, and write 
+it simply users can define their own special data types, and write
 custom routines to manipulate them either in low level languages (C and
 Fortran) or in Perl itself.
 
@@ -32,7 +32,7 @@ PDL variables (or 'piddles' as they have come to be known)
 support a wide range of fundamental data types - arrays can be bytes,
 short integers (signed or unsigned), long integers, floats or
 double precision floats. And because of the Object-Oriented nature
-of PDL new customised datatypes can be derived from them.  
+of PDL new customised datatypes can be derived from them.
 
 As well as the PDL modules, that can be used by normal perl programs, PerlDL
 comes with a command line perl shell, called 'perldl', which supports command
@@ -49,7 +49,7 @@ and associative arrays/hashes of scalars, e.g. C<%x>.
 
 perl v5 introduces to perl data structures and objects. A simple
 scalar variable C<$x> now be a user-defined data type or full blown
-object (it actually holds a reference (a smart "pointer") to this 
+object (it actually holds a reference (a smart "pointer") to this
 but that is not relevant for ordinary use of perlDL)
 
 The fundamental idea behind perlDL is to allow $x to hold a whole 1D
@@ -87,7 +87,7 @@ double precision floats.
 
 PerlDL is loaded into your perl script using this command:
 
-   use PDL;  # in perl scripts: use the standard perlDL modules 
+   use PDL;  # in perl scripts: use the standard perlDL modules
 
 There are also a lot of extension modules, e.g. PDL::Graphics::TriD. Most
 of these (but not all as sometimes it is not appropriate) follow
@@ -116,12 +116,12 @@ Here are some ways of creating a PDL variable:
    $b = pdl [[1,2,3],[4,5,6]];   # 2D 3x2 array
    $b = pdl 42                   # 0-dimensional scalar
    $c = pdl $a;                  # Make a new copy
-   
+
    $d = byte [1..10];            # See "Type conversion"
    $e = zeroes(3,2,4);           # 3x2x4 zero-filled array
-   
-   $c = rfits $file;             # Read FITS file 
-   
+
+   $c = rfits $file;             # Read FITS file
+
    @x = ( pdl(42), zeroes(3,2,4), rfits($file) ); # Is a LIST of PDL variables!
 
 The C<pdl()> function is used to initialise a PDL variable from a scalar,
@@ -136,27 +136,27 @@ to PDL variables on-the-fly.
 =head2 Arithmetic
 
  $a = $b + 2; $a++; $a = $b / $c; # Etc.
- 
+
  $c=sqrt($a); $d = log10($b+100); # Etc
- 
- $e = $a>42; # Vector condtional 
- 
+
+ $e = $a>42; # Vector condtional
+
  $e = 42*($a>42) + $a*($a<=42); # Cap top
- 
+
  $a = $a / ( max($a) - min($a) );
 
  $f = index($a, where($a > 10)); # where returns set of indices for 1D pdl.
- 
+
  print $a; # $a in string context prints it in a N-dimensional format
 
 (and other perl operators/functions)
 
 There are also predefined functions, which you will find on other manpages.
-The most important are L<PDL::Primitive> and <PDL::Slices>.
+The most important are L<PDL::Primitive> and L<PDL::Slices>.
 
 =head2 Matrix functions
 
-C<'x'> is hijacked as the matrix multiplication operator. e.g. 
+C<'x'> is hijacked as the matrix multiplication operator. e.g.
 C<$c = $a x $b>;
 
 perlDL is row-major not column major so this is actually
@@ -184,23 +184,23 @@ the unary operator C<'~'> for convenience.
 
 =head2 How to write a simple function
 
-   sub dotproduct { 
+   sub dotproduct {
        my ($a,$b) = @_;
        return sum($a*$b) ;
    }
    1;
 
-If put in file dotproduct.pdl would be autoloaded if you 
+If put in file dotproduct.pdl would be autoloaded if you
 are using PDL::AutoLoader (see below).
- 
-Of course, this function is already available as the C<inner> 
+
+Of course, this function is already available as the C<inner>
 function, see L<PDL::Primitive>.
 
 =head2 Type Conversion
 
 Default for pdl() is double. Conversions are:
 
-   $a = float($b); 
+   $a = float($b);
    $c = long($d);   # "long" is generally a 4 byte int
    $d = byte($a);
 
@@ -218,8 +218,8 @@ etc.
 
 Automatically expands array in N-dimensional format:
 
-   print $a;  
-    
+   print $a;
+
    $b = "Answer is = $a ";
 
 
@@ -228,7 +228,7 @@ Automatically expands array in N-dimensional format:
 perlDL betrays its perl/C heritage in that arrays are zero-offset.
 Thus a 100x100 image has indices C<0..99,0..99>.
 
-Furthermore [Which modules!?!], 
+Furthermore [Which modules!?!],
  the convention is that the center of the pixel (0,0)
 IS at coordinate (0.0,0.0). Thus the above image ranges from
 C<-0.5..99.5, -0.5..99.5> in real space. All perlDL graphics functions
@@ -242,18 +242,18 @@ top right when using "C<print $a>" etc.
    $b = $a->slice("$x1:$x2,$y1:$y1,$z1:$z2"); # Take subsection
 
    # Set part of $bigimage to values from $smallimage
-   ($tmp = $bigimage->slice("$xa:$xb,$ya:$yb")) .= $smallimage;   
+   ($tmp = $bigimage->slice("$xa:$xb,$ya:$yb")) .= $smallimage;
 
    $newimage = ins($bigimage,$smallimage,$x,$y,$z...) # Insert at x,y,z
-   
+
    $c  = nelem ($a); # Number of pixels
-   
+
    $val = at($object, $x,$y,$z...)    # Pixel value at position
    $val = $object->at($x,$y,$z...)    # equivalent
-   set($myimage, $x, $y, ... $value)  # Set value in image 
-   
+   set($myimage, $x, $y, ... $value)  # Set value in image
+
    $b = xvals($a); # Fill array with X-coord values (also yvals(), zvals(),
-                   # axisvals($x,$axis) and rvals() for radial distance 
+                   # axisvals($x,$axis) and rvals() for radial distance
                    # from centre).
 
 =head2 Input/Output
@@ -264,7 +264,7 @@ the individual manpages for details.
 
 =over 8
 
-=item PDL::IO::Misc 
+=item PDL::IO::Misc
 
 Ascii, FITS and FIGARO/NDF IO routines.
 
@@ -276,7 +276,7 @@ well as get more speed.
 
 =item PDL::IO::FlexRaw
 
-General raw data formats. 
+General raw data formats.
 
 =item PDL::IO::Browser
 
@@ -312,7 +312,7 @@ PGPLOT provdes a simple library for line graphics and image display.
 
 There is an easy interface to this in the internal module
 PDL::Graphics::PGPLOT. (This calls routines in the separately available
-PGPLOT top-level module.) 
+PGPLOT top-level module.)
 
 =item PDL::Graphics::IIS
 
@@ -385,7 +385,7 @@ Miscellaneous shell features:
 The shell aliases C<p> to be a convenient short form of C<print>, e.g.
 
    perldl> p ones 5,3
-    
+
    [
     [1 1 1 1 1]
     [1 1 1 1 1]
@@ -414,11 +414,11 @@ $PERLDL_ESCAPE. This could, for example, be set in C<~/.perldlrc>.
 
 =head2 Overload operators
 
-The following builtin perl operators and functions have been overloaded 
+The following builtin perl operators and functions have been overloaded
 to work on PDL variables:
 
    + - * / > < >= <= << >> & | ^ == != <=> ** % ! ~
-   sin log abs atan2 sqrt cos exp 
+   sin log abs atan2 sqrt cos exp
 
 [All the unary functions (sin etc.) may be used with inplace() - see
 "Memory" below.]
@@ -450,7 +450,7 @@ built-in one. This is because perl's one is optimised for speed rather
 than consumption of virtual memory - this can result in a factor of
 two improvement in the amount of memory storage you can use.
 The Perl malloc in 5.004 and later does have a number of compile-time
-options you can use to tune the behaviour. 
+options you can use to tune the behaviour.
 
 =over
 
@@ -462,7 +462,7 @@ If $a is a big image (e.g. occupying 10MB) then the command
 
 eats up another 10MB of memory. This is because
 the expression "$a+1" creates a temporary copy of $a to hold the
-result, then $a is assigned a reference to that. 
+result, then $a is assigned a reference to that.
 After this, the original $a is destroyed so there is no I<permanent>
 memory waste. But on a small machine, the growth in the memory footprint
 can be considerable.
@@ -497,7 +497,7 @@ or, alternatively, perhaps better style:
 =item Functions
 
 Most functions, e.g. log(), return a result which is a transformation
-of their argument. This makes for good programming practice. However many 
+of their argument. This makes for good programming practice. However many
 operations can be done "in-place" and this may be required when large
 arrays are in use and memory is at a premium. For these circumstances
 the operator inplace() is provided which prevents the extra copy and
@@ -508,12 +508,12 @@ allows the argument to be modified. e.g.:
 
 =back
 
-WARNINGS: 
+WARNINGS:
 
 =over
 
 =item 1.
-The usual caveats about duplicate references apply. 
+The usual caveats about duplicate references apply.
 
 =item 2.
 Obviously when used with some functions which can not be applied
@@ -527,9 +527,9 @@ Type conversions [e.g. float()] may cause hidden copying.
 
 =head2 Ensuring piddleness
 
-If you have written a simple function and 
+If you have written a simple function and
 you don't want it to blow up in your face if you pass it a simple
-number rather than a PDL variable. Simply call the function 
+number rather than a PDL variable. Simply call the function
 topdl() first to make it safe. e.g.:
 
    sub myfiddle { my $pdl = topdl(shift); $pdl->fiddle_foo(...); ... }

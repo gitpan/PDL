@@ -103,3 +103,4 @@ so_locations
 ^tushort\.tif$
 ^perl$
 ^Basic/Core/Config\.pm
+^LOG$

@@ -181,7 +181,7 @@ if(0) {my($a,$a2,$b,$c,$d,$e,$f,$g,@ps);
 # does a lot.
 
 $a = pdl [2,3,4],[5,6,7];
-$a->doflow; 
+$a->doflow;
 
 $b = $a + 1;
 
@@ -213,7 +213,7 @@ END
 $d = $b->slice('1:2,:');
 $e = $d->slice('1,:');
 
-# NOW 
+# NOW
 
 #print "DDUMP1\n";
 # $d->jdump();
@@ -241,7 +241,7 @@ $a->set(2,0,10);
 # print "PRINTS\n"; $b->jdump;
 # $c->jdump;
 
-#map {if($_) {# $_->jdump; 
+#map {if($_) {# $_->jdump;
 #	print $_} else {print "FOO\n";}} @ps;
 
 undef @ps;
@@ -430,7 +430,7 @@ END
          $a .= 2;
          ok($ind++,($c->at() == 2));
        }
-       
+
 }
 
 exit 0;

@@ -1,17 +1,17 @@
 
-# 
+#
 # Should be called like
-# 
+#
 #    perl mkhtmldoc.pl [FULLPATH_TO_SOURCE] [FULLPATH_TO_HTMLDIR]
-# 
+#
 # for example
-# 
+#
 #    perl mkhtmldoc.pl `pwd`/blib/lib `pwd`/html
-# 
+#
 # To get correct interlinking of pages (L<> directives) I had
 # to patch Pod/Html.pm from the perl 5.004_4 distrib. This patch
 # is included. There are now only a few duff links left.
-# 
+#
 #   Christian
 #
 # (mod. by Tjl)
@@ -33,7 +33,7 @@ sub mkdir_p ($$$) {
    use PDL::Pod::Html;
    use Cwd;
 
-   $back = getcwd; 
+   $back = getcwd;
 
    $startdir = shift @ARGV; #$ARGV[0];
 
@@ -49,7 +49,7 @@ sub mkdir_p ($$$) {
 
    $htmldir = shift @ARGV; #$ARGV[1];
    unless (defined $htmldir) {
-	$htmldir = "$startdir/HtmlDocs";
+	$htmldir = "$startdir/HtmlDocs/PDL";
    }
 
    mkdir_p $htmldir, 0777, $htmldir;
@@ -66,22 +66,24 @@ sub mkdir_p ($$$) {
 		       my $outdir = $File::Find::dir;
 		       my $re = "\Q$startdir\E";  # ach: '+' in $outdir here!
 		       $outdir =~ s/$re/$htmldir/;
-		       mkdir_p $outdir, 0777, $outdir; 
+		       mkdir_p $outdir, 0777, $outdir;
 		       my $file = $File::Find::name;
 		       my $outfile = "$outdir/".basename($file);
 		       $outfile =~ s/[.](pm|pod)$//;
 		       $outfile .= ".html";
 		       printf STDERR "%-30s\n", $_ ."... > $outfile";
 		       chdir $htmldir; # reuse our pod caches
+		       $startdir =~ /^(.+?)\/PDL$/;  # get Directory just above PDL for podroot arg
+		       my $topPerlDir = $1;
 		       pod2html(
-			  "--podpath=.",
-			  "--podroot=$startdir",
-			  "--htmlroot=$htmldir",
+			  "--podpath=PDL",
+			  "--podroot=$topPerlDir",
+			  "--htmlroot=../",
 			  "--libpods=perlfaq",
 			  "--recurse",
 			  "--infile=$file",
 			  "--outfile=$outfile",
-			  "--verbose");		    
+			  "--verbose");
 		   }
 		 };
    File::Find::find($sub,$startdir);

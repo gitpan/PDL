@@ -8,10 +8,10 @@
 
 /* Uncomment the following if you have core dumps or strange
  * behaviour - it may reveal the cause by croaking because of
- * bad magic number. 
+ * bad magic number.
  */
 
-/* #define DONT_REALLY_FREE  
+/* #define DONT_REALLY_FREE
  */
 
 /* This define causes the affine transformations not to be
@@ -28,10 +28,10 @@ extern Core PDL;
 void pdl__ensure_trans(pdl_trans *trans,int what) ;
 
 static int has_children(pdl *it) {
-	PDL_DECL_CHILDLOOP(it) 
-	PDL_START_CHILDLOOP(it) 
+	PDL_DECL_CHILDLOOP(it)
+	PDL_START_CHILDLOOP(it)
 		return 1;
-	PDL_END_CHILDLOOP(it) 
+	PDL_END_CHILDLOOP(it)
 	return 0;
 }
 
@@ -89,22 +89,31 @@ void pdl_allocdata(pdl *it) {
 	it->state |= PDL_ALLOCATED;
 }
 
+/* Wrapper to pdl_create so that the pdl_new and pdl_tmp functions
+   can be stored in the Core struct and exported to external
+   PDL XS modules */
+pdl* pdl_external_new() {
+  return  pdl_new();
+}
+pdl* pdl_external_tmp() {
+  return pdl_tmp();
+}
 /* Return a new pdl - type is PDL_PERM or PDL_TMP - the latter is auto-freed
- * when current perl context is left 
+ * when current perl context is left
  *
  * pdl_new() and pdl_tmp() are macroes defined in pdlcore.h
  * which just call this routine.
  */
 
 
-pdl* pdl_create(int type) {  
+pdl* pdl_create(int type) {
      int i;
      pdl* it;
 
      if(type == PDL_TMP) {croak("PDL internal error. FIX!\n");}
 
      it = (pdl*) malloc(sizeof(pdl));
-     if (it==NULL) 
+     if (it==NULL)
         croak("Out of Memory\n");
 
      it->magicno = PDL_MAGICNO;
@@ -123,7 +132,7 @@ pdl* pdl_create(int type) {
      it->nthreadids = 0;
      it->threadids = it->def_threadids;
      it->threadids[0] = 0;
-     
+
      for(i=0; i<PDL_NCHILDREN; i++) {it->children.trans[i]=NULL;}
      it->children.next = NULL;
 
@@ -186,8 +195,9 @@ void pdl__free(pdl *it) {
     	SvREFCNT_dec(it->hdrsv);
 	it->hdrsv = 0;
     }
-    free(it); 
+    free(it);
 #endif
+    PDLDEBUG_f(printf("ENDFREE %d\n",it));
 }
 
 void pdl__destroy_childtranses(pdl *it,int ensure) {
@@ -198,7 +208,7 @@ void pdl__destroy_childtranses(pdl *it,int ensure) {
 }
 
 /* Must think about.
-  A piddle may be 
+  A piddle may be
    - a parent of something - just ensure & destroy
    - a child of something - just ensure & destroy
    - parent of two pdls which both propagate backwards - mustn't destroy.
@@ -213,14 +223,14 @@ void pdl__destroy_childtranses(pdl *it,int ensure) {
   whether the other is also destroyed and if it is, destroy the family.
 
   Also, when a piddle is destroyed, it must tell its children and/or
-  parent so that 
+  parent so that
 
   XXX Currently, will not destroy if any back-propagating children.
 
   Family may be destroyed, if either
    -nothing flowing out, in which case both mutated_to and
     futureprogenitor hash = 0
-   -nothing flowing in 
+   -nothing flowing in
 
 */
 void pdl_destroy(pdl *it) {
@@ -255,7 +265,7 @@ void pdl_destroy(pdl *it) {
 	if(PDL_CHILDLOOP_THISCHILD(it)->flags & PDL_ITRANS_DO_DATAFLOW_B)
 	{
 		nback ++;
-		/* Cases where more than two in relationship 
+		/* Cases where more than two in relationship
 		 * must always be soft-destroyed */
 		if(curt->vtable->npdls > 2) nback2++;
 	}
@@ -278,7 +288,7 @@ void pdl_destroy(pdl *it) {
 /* First case where we may not destroy */
     if(nback2 > 0) goto soft_destroy;
     if(nback > 1) goto soft_destroy;
-    
+
 /* Also not here */
     if(it->trans && nforw) goto soft_destroy;
 
@@ -300,10 +310,10 @@ void pdl_destroy(pdl *it) {
         /* Ensure only if there are other children! */
 	/* XXX Bad: tmp! */
       if (it->trans->flags & PDL_ITRANS_NONMUTUAL)
-	pdl_destroytransform_nonmutual(it->trans,(it->trans->vtable->npdls 
+	pdl_destroytransform_nonmutual(it->trans,(it->trans->vtable->npdls
 	  			        - it->trans->vtable->nparents > 1));
       else
-    	pdl_destroytransform(it->trans,(it->trans->vtable->npdls 
+    	pdl_destroytransform(it->trans,(it->trans->vtable->npdls
 	  			        - it->trans->vtable->nparents > 1));
     }
 
@@ -317,7 +327,7 @@ void pdl_destroy(pdl *it) {
     if(it->progenitor) {
       if(!(it->progenitor->sv)) {
 	      pdl__family_destroy_if(it->progenitor);
-      } else 
+      } else
        	goto soft_destroy;
     } else if(it->living_for) {
     	pdl__family_fut_destroy_if(it);
@@ -326,6 +336,7 @@ void pdl_destroy(pdl *it) {
 
 /* ... and now we drink */
    pdl__free(it);
+   PDLDEBUG_f(printf("End destroy %d\n",it);)
 
    return;
 
@@ -343,17 +354,17 @@ pdl *pdl_hard_copy(pdl *src) {
 	it->state = 0;
 
 	pdl_make_physical(src); /* Wasteful XXX... should be lazier */
-	
+
 	it->datatype = src->datatype;
-	
+
 	pdl_setdims(it,src->dims,src->ndims);
 	pdl_allocdata(it);
 
  /* null != [0] */
 #ifdef ELIFSLEFJSEFSE
-	if(src->ndims == 1 && src->dims[0] == 0) 
+	if(src->ndims == 1 && src->dims[0] == 0)
 #else
-	if(src->state & PDL_NOMYDIMS) 
+	if(src->state & PDL_NOMYDIMS)
 #endif
 		it->state |= PDL_NOMYDIMS;
 
@@ -392,10 +403,10 @@ void pdl_dump_trans (pdl_trans *it, int nspac) {
 	}
 /*	if(it->vtable->dump) {it->vtable->dump(it);} */
 	printf("%s   INPUTS: (",spaces);
-	for(i=0; i<it->vtable->nparents; i++) 
+	for(i=0; i<it->vtable->nparents; i++)
 		printf("%s%d",(i?" ":""),it->pdls[i]);
 	printf(")     OUTPUTS: (");
-	for(;i<it->vtable->npdls; i++) 
+	for(;i<it->vtable->npdls; i++)
 		printf("%s%d",(i?" ":""),it->pdls[i]);
 	printf(")\n");
 	free(spaces);
@@ -450,11 +461,11 @@ void pdl_dump_spac(pdl *it,int nspac)
 	printf("%s   Dims: %d (",spaces,it->dims);
 	for(i=0; i<it->ndims; i++) {
 		printf("%s%d",(i?" ":""),it->dims[i]);
-	}; 
+	};
 	printf(")\n%s   ThreadIds: %d (",spaces,it->threadids);
 	for(i=0; i<it->nthreadids+1; i++) {
 		printf("%s%d",(i?" ":""),it->threadids[i]);
-	} 
+	}
 	if(PDL_VAFFOK(it)) {
 		printf(")\n%s   Vaffine ok: %d, o:%d, i:(",
 			spaces,it->vafftrans->from,it->vafftrans->offs);
@@ -507,7 +518,7 @@ void pdl_reallocdims(pdl *it,int ndims) {
       }
    }
    it->ndims = ndims;
-}    
+}
 
 /* Reallocate n threadids. Set the new extra ones to the end */
 /* XXX Check logic */
@@ -530,7 +541,7 @@ void pdl_reallocthreadids(pdl *it,int n) {
 			it->threadids[i] = olds[i];
 	}
 	if(olds != it->def_threadids) { free(olds); }
-	  
+
 	for(i=nold; i<it->nthreadids; i++) {
 		it->threadids[i] = it->ndims;
 	}
@@ -591,7 +602,7 @@ void pdl_print(pdl *it) {
 
 double pdl_get(pdl *it,int *inds) {
 	int i;
-	int offs=0; 
+	int offs=0;
 	for(i=0; i<it->ndims; i++)
 		offs += it->dimincs[i] * inds[i];
 	return pdl_get_offs(it,offs);
@@ -624,7 +635,7 @@ void pdl__addchildtrans(pdl *it,pdl_trans *trans,int nth)
 	} while(1) ;
 	c->next = malloc(sizeof(pdl_children));
 	c->next->trans[0] = trans;
-	for(i=1; i<PDL_NCHILDREN; i++) 
+	for(i=1; i<PDL_NCHILDREN; i++)
 		c->next->trans[i] = 0;
 	c->next->next = 0;
 }
@@ -637,8 +648,8 @@ void pdl__removechildtrans(pdl *it,pdl_trans *trans,int nth,int all)
 {
 	int i; pdl_children *c; int flag = 0;
 	if(all) {
-		for(i=0; i<trans->vtable->nparents; i++) 
-			if(trans->pdls[i] == it)	
+		for(i=0; i<trans->vtable->nparents; i++)
+			if(trans->pdls[i] == it)
 				trans->pdls[i] = NULL;
 	} else {
 		trans->pdls[nth] = 0;
@@ -658,7 +669,7 @@ void pdl__removechildtrans(pdl *it,pdl_trans *trans,int nth,int all)
 	} while(c);
 	/* this might be due to a croak when performing the trans; so
 	   warn only for now, otherwise we leave trans undestructed ! */
-	if(!flag) 
+	if(!flag)
 		warn("Child not found for pdl %d, %d\n",it, trans);
 }
 
@@ -700,9 +711,9 @@ void pdl_set_trans_childtrans(pdl *it, pdl_trans *trans,int nth)
 {
 	pdl__addchildtrans(it,trans,nth);
 /* Determine if we want to do dataflow */
-	if(it->state & PDL_DATAFLOW_F) 
+	if(it->state & PDL_DATAFLOW_F)
 		trans->flags |= PDL_ITRANS_DO_DATAFLOW_F;
-	if(it->state & PDL_DATAFLOW_B) 
+	if(it->state & PDL_DATAFLOW_B)
 		trans->flags |= PDL_ITRANS_DO_DATAFLOW_B;
 }
 
@@ -713,7 +724,7 @@ void pdl_set_trans_childtrans(pdl *it, pdl_trans *trans,int nth)
 void pdl_set_trans_parenttrans(pdl *it, pdl_trans *trans,int nth)
 {
 	int i; int nthind;
-	if((it->trans || is_parent_of(it,trans)) 
+	if((it->trans || is_parent_of(it,trans))
 	   /* && (it->state & PDL_DATAFLOW_F) */ ) {
 		/* XXX What if in several places */
 		nthind=-1;
@@ -740,7 +751,7 @@ void pdl_set_trans_parenttrans(pdl *it, pdl_trans *trans,int nth)
  * Alternatively may just execute transformation
  * that would require families but is not dataflown.
  */
-void pdl_make_trans_mutual(pdl_trans *trans) 
+void pdl_make_trans_mutual(pdl_trans *trans)
 {
   int i;
   int fflag=0;
@@ -765,11 +776,11 @@ void pdl_make_trans_mutual(pdl_trans *trans)
 /* If children are flowing, croak. It's too difficult to handle
  * properly */
 
-  if(cfflag) 
+  if(cfflag)
 	croak("Sorry, cannot flowing families right now\n");
 
 /* Same, if children have trans yet parents are flowing */
-  if(pfflag && fflag) 
+  if(pfflag && fflag)
 	croak("Sorry, cannot flowing families right now (2)\n");
 
 /* Now, if parents are not flowing, just execute the transformation */
@@ -803,7 +814,7 @@ void pdl_make_trans_mutual(pdl_trans *trans)
 #ifndef DONT_VAFFINE
 		if( PDL_VAFFOK(trans->pdls[i]) &&
 		    (trans->vtable->per_pdl_flags[i] & PDL_TPDL_VAFFINE_OK) )  {
-		    	if(wd[i] & PDL_PARENTDIMSCHANGED) 
+		    	if(wd[i] & PDL_PARENTDIMSCHANGED)
 				pdl_changed(trans->pdls[i],
 					PDL_PARENTDIMSCHANGED,0);
 		    	pdl_vaffinechanged(
@@ -818,9 +829,9 @@ void pdl_make_trans_mutual(pdl_trans *trans)
           PDLDEBUG_f(printf("make_trans_mutual flowing!\n"));
 	  for(i=0; i<trans->vtable->nparents; i++)
 		pdl_set_trans_childtrans(trans->pdls[i],trans,i);
-	  for(i=trans->vtable->nparents; i<trans->vtable->npdls; i++) 
+	  for(i=trans->vtable->nparents; i<trans->vtable->npdls; i++)
 		pdl_set_trans_parenttrans(trans->pdls[i],trans,i);
-	  if(!(trans->flags&PDL_ITRANS_REVERSIBLE)) 
+	  if(!(trans->flags&PDL_ITRANS_REVERSIBLE))
 		trans->flags &= ~PDL_ITRANS_DO_DATAFLOW_B;
 	  for(i=trans->vtable->nparents; i<trans->vtable->npdls; i++) {
 	  	if(trans->pdls[i]->state & PDL_NOMYDIMS) {
@@ -908,7 +919,7 @@ void pdl_make_physical(pdl *it) {
 			pdl_make_physical(it->trans->pdls[i]);
 		}
 	*/
-	/* 
+	/*
 	  We think we made them physical or physvaffine already...
 	for(i=0; i<it->trans->vtable->npdls; i++) {
 		if(!(it->trans->pdls[i]->state & PDL_ALLOCATED)) {
@@ -918,7 +929,7 @@ void pdl_make_physical(pdl *it) {
 	*/
 	it->trans->vtable->readdata(it->trans);
 	it->state &= (~PDL_ANYCHANGED) & (~PDL_OPT_ANY_OK);
-	
+
   mkphys_end:
 	PDLDEBUG_f(printf("Make_physical_exit %d\n",it));
 	END_RECURSE_GUARD;
@@ -956,15 +967,15 @@ void pdl_children_changesoon(pdl *it, int what)
 		if(!(it->trans->flags & PDL_ITRANS_REVERSIBLE)) {
 			die("PDL: Internal error: Trying to reverse irreversible trans");
 		}
-		for(i=0; i<it->trans->vtable->nparents; i++) 
+		for(i=0; i<it->trans->vtable->nparents; i++)
 			pdl_children_changesoon(it->trans->pdls[i],what);
 		return;
-	} 
+	}
 	pdl_children_changesoon_c(it,what);
 }
 
 /* what should always be PARENTDATA */
-void pdl_vaffinechanged(pdl *it, int what) 
+void pdl_vaffinechanged(pdl *it, int what)
 {
 	if(!PDL_VAFFOK(it)) {
 		croak("Vaffine not ok!, trying to use vaffinechanged");
@@ -987,7 +998,7 @@ void pdl_changed(pdl *it, int what, int recursing)
 		if(pdl__ismagic(it))
 			pdl__call_magic(it,PDL_MAGIC_MARKCHANGED);
 	}
-	if(it->trans && !recursing && 
+	if(it->trans && !recursing &&
 		(it->trans->flags & PDL_ITRANS_DO_DATAFLOW_B)) {
 		if((it->trans->flags & PDL_ITRANS_ISAFFINE) &&
 		   (PDL_VAFFOK(it))) {
@@ -1016,7 +1027,7 @@ void pdl_changed(pdl *it, int what, int recursing)
 		do {
 			for(i=0; i<PDL_NCHILDREN; i++) {
 				if(c->trans[i]) {
-					for(j=c->trans[i]->vtable->nparents; 
+					for(j=c->trans[i]->vtable->nparents;
 						j<c->trans[i]->vtable->npdls;
 						j++) {
 						pdl_changed(c->trans[i]->pdls[j],what,1);
@@ -1029,7 +1040,7 @@ void pdl_changed(pdl *it, int what, int recursing)
 }
 
 /* This transformation changes soon, so make sure the children
- * who don't flow go away 
+ * who don't flow go away
  * XXX Should be able to specify which children. */
 void pdl_trans_changesoon(pdl_trans *trans,int what)
 {
@@ -1039,7 +1050,7 @@ void pdl_trans_changesoon(pdl_trans *trans,int what)
 	}
 }
 
-/* Changed, just propagate changes to children 
+/* Changed, just propagate changes to children
  * XXX should be able to specify which children */
 void pdl_trans_changed(pdl_trans *trans,int what)
 {
@@ -1050,7 +1061,7 @@ void pdl_trans_changed(pdl_trans *trans,int what)
 }
 
 /* Make sure transformation is done */
-void pdl__ensure_trans(pdl_trans *trans,int what) 
+void pdl__ensure_trans(pdl_trans *trans,int what)
 {
 	int j;
 /* Make parents physical */
@@ -1064,10 +1075,12 @@ void pdl__ensure_trans(pdl_trans *trans,int what)
 		if(trans->vtable->per_pdl_flags[j] &
 		    PDL_TPDL_VAFFINE_OK) {
 			par_pvaf++;
+			if(!trans->pdls[j]) {return;} /* XXX!!! */
 			pdl_make_physvaffine(trans->pdls[j]);
 		} else {
 #endif
 #endif
+			if(!trans->pdls[j]) {return;} /* XXX!!! */
 			pdl_make_physical(trans->pdls[j]);
 		}
 	}
@@ -1078,12 +1091,14 @@ void pdl__ensure_trans(pdl_trans *trans,int what)
 			if(trans->vtable->per_pdl_flags[j] &
 			    PDL_TPDL_VAFFINE_OK) {
 			    	par_pvaf++;
+				if(!trans->pdls[j]) {return;} /* XXX!!! */
 				pdl_make_physvaffine(trans->pdls[j]);
 			} else
 #endif
 #endif
+				if(!trans->pdls[j]) {return;} /* XXX!!! */
 				pdl_make_physical(trans->pdls[j]);
-		} 
+		}
 		flag |= trans->pdls[j]->state & PDL_ANYCHANGED;
 	}
 	if(flag & PDL_PARENTDIMSCHANGED) {
@@ -1100,7 +1115,7 @@ void pdl__ensure_trans(pdl_trans *trans,int what)
 			pdl_make_physvaffine(trans->pdls[1]);
 			pdl_readdata_vaffine(trans->pdls[1]);
 		} else {
-#ifdef DONT_VAFFINE 
+#ifdef DONT_VAFFINE
 			for(i=0; i<trans->vtable->npdls; i++) {
 				if(!(trans->pdls[i]->state & PDL_ALLOCATED)) {
 					croak("Trying to readdata without physicality");
@@ -1135,8 +1150,13 @@ void pdl_destroytransform(pdl_trans *trans,int ensure)
 {
 	int j;
 	pdl *foo;
+	pdl *destbuffer[100];
+	int ndest = 0;
 
 	PDLDEBUG_f(printf("entering pdl_destroytransform %d %d\n",trans,ensure));
+	if(100 < trans->vtable->npdls) {
+		die("Huge trans");
+	}
 
 	PDL_TR_CHKMAGIC(trans);
 	if(!trans->vtable) {
@@ -1150,21 +1170,26 @@ void pdl_destroytransform(pdl_trans *trans,int ensure)
 		foo = trans->pdls[j];
 		if(!foo) continue;
 		PDL_CHKMAGIC(foo);
-		PDLDEBUG_f(printf("pdl_removectransform: %d %d\n",
-			trans->pdls[j], j));
+		PDLDEBUG_f(printf("pdl_removectransform(%d): %d %d\n",
+			trans, trans->pdls[j], j));
 		pdl__removechildtrans(trans->pdls[j],trans,j,1);
-		if(!(foo->state & PDL_DESTROYING) && !foo->sv) pdl_destroy(foo);
+		if(!(foo->state & PDL_DESTROYING) && !foo->sv) {
+			destbuffer[ndest++] = foo;
+		}
 	}
 	for(; j<trans->vtable->npdls; j++) {
 		foo = trans->pdls[j];
 		PDL_CHKMAGIC(foo);
-		PDLDEBUG_f(printf("pdl_removeptransform: %d %d\n", trans->pdls[j], j));
+		PDLDEBUG_f(printf("pdl_removeptransform(%d): %d %d\n",
+			trans, trans->pdls[j], j));
 		pdl__removeparenttrans(trans->pdls[j],trans,j);
 		if(foo->vafftrans) {
 			PDLDEBUG_f(printf("pdl_removevafft: %d\n", foo));
 			pdl_vafftrans_remove(foo);
 		}
-		if(!(foo->state & PDL_DESTROYING) && !foo->sv) pdl_destroy(foo);
+		if(!(foo->state & PDL_DESTROYING) && !foo->sv) {
+			destbuffer[ndest++] = foo;
+		}
 	}
 	PDL_TR_CHKMAGIC(trans);
 	if(trans->vtable->freetrans) {
@@ -1180,6 +1205,11 @@ void pdl_destroytransform(pdl_trans *trans,int ensure)
 		PDLDEBUG_f(printf("call free\n"));
 		free(trans);
 	}
+
+	for(j=0; j<ndest; j++) {
+		pdl_destroy(destbuffer[j]);
+	}
+
 	PDLDEBUG_f(printf("leaving pdl_destroytransform %d\n", trans));
 
 }
@@ -1197,7 +1227,7 @@ void pdl_destroytransform_nonmutual(pdl_trans *trans,int ensure)
 	PDL_TR_CHKMAGIC(trans);
 	for(i=trans->vtable->nparents; i<trans->vtable->npdls; i++) {
 		trans->pdls[i]->state &= ~PDL_NOMYDIMS;
-		if(trans->pdls[i]->trans == trans) 
+		if(trans->pdls[i]->trans == trans)
 			trans->pdls[i]->trans = 0;
 	}
 	PDL_TR_CHKMAGIC(trans);
@@ -1245,7 +1275,7 @@ void pdl_vafftrans_free(pdl *it)
 	it->state &= ~PDL_OPT_VAFFTRANSOK;
 }
 
-/* Current assumptions: only 
+/* Current assumptions: only
  * "slice" and "diagonal"-type things supported.
  *
  * We need to do careful testing for clump-type things.
@@ -1311,11 +1341,11 @@ void pdl_make_physvaffine(pdl *it)
 				if(inc >= current->dimincs[j]) {
 					/* We used this many of this dim */
 					ninced = inc / current->dimincs[j];
-					if(cur_offset + it->dims[i]*ninced > 
+					if(cur_offset + it->dims[i]*ninced >
 						current->dims[j]) {
 					  int foo=
 					   (cur_offset + it->dims[i]*ninced)*
-					   current->dimincs[j]; 
+					   current->dimincs[j];
 					  int k;
 					  for(k=j+1; k<current->ndims; k++) {
 						foo -= current->dimincs[k-1] *
@@ -1325,11 +1355,11 @@ void pdl_make_physvaffine(pdl *it)
 						   at->incs[k-1] *
 						   current->dims[k-1]) {
 						   /* XXXXX */
-						   	flag=1; 
+						   	flag=1;
 						 /*
 	warn("Illegal vaffine; fix loop to break: %d %d %d k=%d s=%d, (%d+%d*%d>%d) %d %d %d %d.\n",at,current,it,
 		k,incsign,cur_offset,it->dims[i],ninced,current->dims[j],current->dimincs[j],
-		at->incs[k],at->incs[k-1],current->dims[k-1]); 
+		at->incs[k],at->incs[k-1],current->dims[k-1]);
 						*/
 						   	/* croak("Illegal vaffine; fix loop to break.\n"); */
 						}

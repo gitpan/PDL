@@ -33,7 +33,7 @@ Current maintainer: Christian Soeller (F<csoelle@sghms.ac.uk>).
 
 =head2 Where to find this document
 
-You can find the latest version of this document at F<http://www.aao.gov.au/local/www/kgb/perldl/faq.html>.
+You can find the latest version of this document at F<http://pdl.perl.org/faq.html>.
 This FAQ will be monthly posted to the PDL mailing list
 F<perldl@jach.hawaii.edu>.
 
@@ -231,7 +231,7 @@ F<http://www.perl.com> and use its CPAN multiplex service. Within CPAN you
 find the latest released version of PDL in the directory
 CPAN/modules/by-module/PDL/. Another site that has the latest PDL
 distribution and the latest beta versions is
-F<http://www.aao.gov.au/local/www/kgb/perldl>. Thanks to the efforts of Frossie (F<frossie@jach.hawaii.edu>) there is now a mirror site in the US at F<http://www.jach.hawaii.edu/~frossie/pdl-mirror/>
+F<http://pdl.perl.org>. Thanks to the efforts of Frossie (F<frossie@jach.hawaii.edu>) there is now a mirror site in the US at F<http://www.jach.hawaii.edu/~frossie/pdl-mirror/>
 
 
 =head2  What machines does PDL run on, then ?
@@ -243,10 +243,10 @@ compile those core routines that are written in C or XS. In practice, you
 might run into problems if you would try to compile PDL on some
 platform it has never been tested on before. A list of platforms on
 which PDL has been successfully tested is available at
-F<http://www.aao.gov.au/local/www/kgb/perldl/ports.html>. If you don't have a compiler you can check if a
+F<http://pdl.perl.org/ports.html>. If you don't have a compiler you can check if a
 binary distribution for your platform is available (we haven't yet got
 round to making binary versions/bundles available but it is definitely on
-the TODO list) at the PDL home site located at F<http://www.aao.gov.au/local/www/kgb/perldl>.
+the TODO list) at the PDL home site located at F<http://pdl.perl.org>.
 
 If you can (or cannot) get PDL working on a new (previously
 unsupported) platform we would like to hear about it. Please, report
@@ -276,7 +276,7 @@ yourself.
 
 The complete PDL documentation is available with the PDL distribution.
 If you have PDL installed on your machine and are on a unix like system
-then you can read the PDL manuals with the C<man> command. 
+then you can read the PDL manuals with the C<man> command.
 C<man PDL::Intro> will lead the way to other PDL manual pages.
 In any case (i.e. also on non-unixes) C<perldoc PDL::Intro> should work.
 
@@ -315,7 +315,7 @@ talk about Perl in the PDL FAQ) there are tons of sources on the
 net. A good point to start is F<http://www.perl.com>.
 
 The PDL home site can
-be accessed by pointing your web browser to F<http://www.aao.gov.au/local/www/kgb/perldl>. It has
+be accessed by pointing your web browser to F<http://pdl.perl.org>. It has
 tons of goodies for anyone interested in PDL:
 
 =over 6
@@ -391,11 +391,11 @@ to get PDL).
 
 If there are alpha releases that haven't yet been put onto CPAN interested
 developers can find directions on where to get these distribs at
-F<http://www.aao.gov.au/local/www/kgb/perldl/alpha.html>.
+F<http://pdl.perl.org/alpha.html>.
 
 =head2 I am looking for a package to do XXX in PDL. Where shall I look for it?
 
-A good place to start is again F<http://www.aao.gov.au/local/www/kgb/perldl>. We hope to get round
+A good place to start is again F<http://pdl.perl.org>. We hope to get round
 to compiling a list of packages that have already been/are in the
 process of being interfaced to PDL RSN (you know what that
 means...). This information will be accessible through the PDL home
@@ -435,7 +435,7 @@ ask the question in the relevant perl newsgroups/mailing lists.
 
 =head2   There is this great XXX package on the net. Has it already been interfaced to PDL or how can I do it?
 
-Check on PDL's home site F<http://www.aao.gov.au/local/www/kgb/perldl> if the package in question
+Check on PDL's home site F<http://pdl.perl.org> if the package in question
 has already been ported/interfaced to PDL. How to interface a new
 package to PDL is explained in L<PDL::PP> (see below if you don't know
 what PDL::PP is). Note that people willing to write interfaces for new
@@ -481,7 +481,7 @@ If you would like to save an edited perldl.conf for future builds
 just copy it as ~/.perldl.conf into your home directory where it
 will be picked up automatically during the PDL build process.
 
-If you still can't make it work properly please submit a bug report 
+If you still can't make it work properly please submit a bug report
 including detailed information on the problems you encountered to
 the perldl mailing list (F<perldl@jach.hawaii.edu>, see also above). Response
 is often rapid.
@@ -496,7 +496,7 @@ Check the files INSTALL and perldl.conf for details.
 
 If you had to manually edit perldl.conf and are happy with the results
 you can keep the file handy for future reference. Place it in ~/.perldl.conf
-where it will be picked up automatically or use 
+where it will be picked up automatically or use
 C<perl Makefile.PL PDLCONF=your_file_name> next time you build PDL.
 
 =head2 B<[+]> Do I have to build PDL myself? Are there binary distributions?
@@ -547,7 +547,7 @@ opaque pointer to some stuff in memory) and therefore need special functions
 (or 'methods' if you are using the OO version) to access individual
 elements or a range of elements. The functions/methods to check are
 C<at>/C<sec> (see L<PDL::Impatient/"Sections">) or the
-powerful C<slice> function and friends (see L<PDL::Slices> and 
+powerful C<slice> function and friends (see L<PDL::Slices> and
 L<PDL::Indexing>).
 
 Finally, to confuse you completely, you can have perl arrays of plds,
@@ -566,7 +566,7 @@ to PDL.
 =head2  What on earth is this dataflow stuff ?
 
 Dataflow is an experimental project that you don't need to concern
-yourself with (it should not interfere with your usual programming). 
+yourself with (it should not interfere with your usual programming).
 However, if you want to know, have a look at L<PDL::Dataflow>. There
 are applications which will benefit from this feature (and it is already
 at work behind the scenes).
@@ -731,7 +731,7 @@ which is equivalent to
 
   $b = sumover $a;
 
-If this seems still a bit murky check L<PDL:Indexing> and L<PDL::PP>
+If this seems still a bit murky check L<PDL::Indexing> and L<PDL::PP>
 for details about calling conventions, the I<signature> and
 I<threading> (see also below).
 
@@ -758,7 +758,7 @@ L<PDL::PP>.
 
 =head2 B<[+]> How can I subclass (inherit from) piddles?
 
-The short answer is: read L<PDL::Objects> (e.g. type C<help PDL::Objects> 
+The short answer is: read L<PDL::Objects> (e.g. type C<help PDL::Objects>
 in the I<perldl> shell).
 
 The longer answer (extracted from L<PDL::Objects>):
@@ -772,7 +772,7 @@ PDL object to the attribute named C<PDL> and redefine the method
 initialize(). For example:
 
    package FOO;
-      
+
    @FOO::ISA = qw(PDL);
    sub initialize {
             my $class = shift;
@@ -796,7 +796,7 @@ rpic (see L<PDL::IO::Pic>) you could say:
   @names = qw/name1.tif .... nameN.tif/;  # some file names
   $dummy = PDL->rpic($names[0]);
   $cube = PDL->zeroes($dummy->type,$dummy->dims,$#names+1); # make 3D piddle
-  for (0..$#names) 
+  for (0..$#names)
     {($tmp = $cube->slice(":,:,($_)")) .= PDL->rpic($names[$_])}
 
 The for loop reads the actual images into a temporary 2D piddle whose
@@ -1008,16 +1008,16 @@ current FAQ maintainer Christian Soeller (F<csoelle@sghms.ac.uk>).
 Achim Bohnet (F<ach@mpe.mpg.de>) for suggesting CoolHTML as a
 prettypodder and various other improvements. Suggestions for
 some questions were taken from Perl Faq and adapted for PDL.
- 
+
 =cut
 
 
 
 =head1 AUTHOR & COPYRIGHT
 
-This document emerged from a joint effort of several PDL developers 
+This document emerged from a joint effort of several PDL developers
 (Karl Glazebrook (F<kgb@aaocbn1.aao.GOV.AU>), Tuomas J. Lukka
-(F<lukka@husc.harvard.edu>), Christian Soeller 
+(F<lukka@husc.harvard.edu>), Christian Soeller
 (F<csoelle@sghms.ac.uk>)) to compile a list of the most
 frequently asked questions about PDL with answers.  Permission is
 granted for verbatim copying (and formatting) of this material as part

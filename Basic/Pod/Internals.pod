@@ -15,8 +15,8 @@ intended for people interested in debugging or changing the internals
 of PDL. To read this, a good understanding of the C language
 and programming and data structures in general is required, as well
 as some perl understanding. If you read through this document
-and understand all of it and are able to point what any part of 
-this document refers to in the PDL core sources and additionally 
+and understand all of it and are able to point what any part of
+this document refers to in the PDL core sources and additionally
 struggle to understand PDL::PP, you will be awarded the title
 "PDL Guru" (of course, the current version of this document
 is so incomplete that this is not yet the case).
@@ -32,7 +32,7 @@ PDL, which is a pointer to a pdl structure, as well as some other fields.
 The file Core.pm uses some of these fields and the file pdlhash.c converts
 these to C when necessary.
 
-The pdl struct is defined in pdl.h and the meanings of the fields 
+The pdl struct is defined in pdl.h and the meanings of the fields
 are
 
 =over 8
@@ -63,7 +63,7 @@ field of the trans struct.
 
 =item vafftrans
 
-This is intended for speeding up e.g. the chaining of affine 
+This is intended for speeding up e.g. the chaining of affine
 transformations. See C<pdlapi.c> for the code handling this.
 Also, C<slices.pd> defines some things with / for this.
 
@@ -93,15 +93,15 @@ The dimensions of this pdl. Remember to physicalize the pdl before using.
 
 As an optimization, an increment for each dimension is stored here.
 In contrast to previous alpha versions, these are required to correspond
-exactly do dims. If you want to optimize for affine transformations, 
+exactly do dims. If you want to optimize for affine transformations,
 use the trans or vtrans.
 
 =item threadids, nthreadids
 
-This is where the threading tags are stored. The way this works 
+This is where the threading tags are stored. The way this works
 is that ndims and dims hold I<all> dimensions of the pdl, including
 threaded dimensions. The real dimensions of the pdl extend from 0 to
-threadids[0]-1, the thread dimensions with id 0 extend from 
+threadids[0]-1, the thread dimensions with id 0 extend from
 threadids[0] to threadids[1]-1 and the thread dimensions with the last id
 extend from threadids[nthreadids-1] to threadids[nthreadids]-1.
 For example, if a pdl has dimensions (2,3,4,5) (= 120 elements)
@@ -121,7 +121,7 @@ The children of this pdl i.e. where data is flowing to from this pdl.
 
 XXX Not quite clear right now. Has to do with families
 
-=item def_* 
+=item def_*
 
 To avoid mallocs, there is a suitable amount of space already allocated
 for each pointer in this pdl, with the ideology that if you have more
@@ -130,7 +130,7 @@ more overhead.
 
 =item magic
 
-If this pdl is magical (e.g. if it is bound to something), this 
+If this pdl is magical (e.g. if it is bound to something), this
 pointer is non-null and you must call the appropriate magic-handling
 routines when using the pdl.
 

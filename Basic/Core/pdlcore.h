@@ -39,7 +39,7 @@ void	SetSV_PDL( SV *sv, pdl *it );	     /* Outputting a pdl from.. */
 SV*     pdl_copy( pdl* a, char* option );     /* call copy method */
 PDL_Long *    pdl_packdims ( SV* sv, int*ndims ); /* Pack dims[] into SV aref */
 void    pdl_unpackdims ( SV* sv, PDL_Long *dims,  /* Unpack */
-                         int ndims );        
+                         int ndims );
 void*   pdl_malloc ( int nbytes );           /* malloc memory - auto free()*/
 
 void pdl_makescratchhash(pdl *ret,double data, int datatype);
@@ -49,7 +49,7 @@ void pdl_barf(const char* pat,...); /* General croaking utility */
 
 void pdl_vaffinechanged(pdl *it, int what);
 void pdl_trans_mallocfreeproc(struct pdl_trans *tr);
-void pdl_make_trans_mutual(pdl_trans *trans); 
+void pdl_make_trans_mutual(pdl_trans *trans);
 void pdl_destroytransform_nonmutual(pdl_trans *trans,int ensure);
 
 void pdl_vafftrans_free(pdl *it);
@@ -67,9 +67,10 @@ pdl *pdl_hard_copy(pdl *src);
 
 #define pdl_new() pdl_create(PDL_PERM)
 #define pdl_tmp() pdl_create(PDL_TMP)
+pdl* pdl_external_new();
+pdl* pdl_external_tmp();
 pdl* pdl_create(int type);
 void pdl_destroy(pdl *it);
-void pdl_clone( pdl* in, pdl* out );
 void pdl_setdims(pdl* it, PDL_Long* dims, int ndims);
 void pdl_reallocdims ( pdl *it,int ndims );  /* reallocate dims and incs */
 void pdl_reallocthreadids ( pdl *it,int ndims );  /* reallocate threadids */
@@ -131,7 +132,7 @@ void pdl_readdata_vaffine(pdl *it);
 
 void   pdl_swap(pdl** a, pdl** b);             /* Swap two pdl ptrs */
 void   pdl_converttype( pdl** a, int targtype, /* Change type of a pdl */
-                        Logical changePerl ); 
+                        Logical changePerl );
 void   pdl_coercetypes( pdl** a, pdl **b, Logical changePerl ); /* Two types to same */
 void   pdl_grow  ( pdl* a, int newsize);      /* Change pdl 'Data' size */
 void   pdl_retype( pdl* a, int newtype);      /* Change pdl 'Datatype' value */
@@ -143,11 +144,11 @@ int  pdl_get_offset(PDL_Long* pos, PDL_Long* dims, PDL_Long *incs, PDL_Long offs
 int  pdl_validate_section( int* sec, int* dims,           /* Check section */
                            int ndims );
 void pdl_row_plusplus ( int* pos, int* dims,              /* Move down one row */
-                        int ndims ); 
+                        int ndims );
 void pdl_subsection( char *y, char*x, int datatype,      /* Take subsection */
                  int* sec, int* dims, int *incs, int offset, int* ndims);
 void pdl_insertin( char*y, int* ydims, int nydims,        /* Insert pdl in pdl */
-                   char*x, int* xdims, int nxdims, 
+                   char*x, int* xdims, int nxdims,
                    int datatype, int* pos);
 double pdl_at( void* x, int datatype, PDL_Long* pos, PDL_Long* dims, /* Value at x,y,z,... */
              PDL_Long *incs, PDL_Long offset, int ndims);
@@ -169,21 +170,27 @@ void pdl_matrixmult( pdl *c, pdl* a, pdl* b);  /* Matrix multiplication */
 
 /* Structure to hold pointers core PDL routines so as to be used by many modules */
 
-struct Core { 
+struct Core {
     pdl*   (*SvPDLV)      ( SV*  );
     void   (*SetSV_PDL)( SV *sv, pdl *it );
-    SV*    (*copy)        ( pdl*, char* ); 
-    void   (*converttype) ( pdl**, int, Logical ); 
-    void** (*twod)        ( pdl* ); 
+    pdl*   (*new)         ( );
+    pdl*   (*tmp)         ( );
+    pdl*   (*create)      (int type);
+    void   (*destroy)     (pdl *it);
+    pdl*   (*null)        ();
+    SV*    (*copy)        ( pdl*, char* );
+    void   (*converttype) ( pdl**, int, Logical );
+    void** (*twod)        ( pdl* );
     void*  (*malloc)      ( int );
     int    (*howbig)      ( int );
     PDL_Long*   (*packdims)    ( SV* sv, int *ndims ); /* Pack dims[] into SV aref */
+    void   (*setdims)     ( pdl* it, PDL_Long* dims, int ndims );
     void   (*unpackdims)  ( SV* sv, PDL_Long *dims,    /* Unpack */
                             int ndims );
     void   (*grow)        ( pdl* a, int newsize); /* Change pdl 'Data' size */
     void (*flushcache)( pdl *thepdl );	     /* flush cache */
     void (*reallocdims) ( pdl *it,int ndims );  /* reallocate dims and incs */
-    void (*reallocthreadids) ( pdl *it,int ndims );  
+    void (*reallocthreadids) ( pdl *it,int ndims );
     void (*resize_defaultincs) ( pdl *it );     /* Make incs out of dims */
 
 void (*thread_copy)(pdl_thread *from,pdl_thread *to);
@@ -196,6 +203,8 @@ int (*iterthreadloop)(pdl_thread *thread,int which);
 void (*freethreadloop)(pdl_thread *thread);
 void (*thread_create_parameter)(pdl_thread *thread,int j,int *dims,
 				int temp);
+void (*add_deletedata_magic) (pdl *it,void (*func)(pdl *, int param), int param); /* Automagic destructor */
+  
 
 /* XXX NOT YET IMPLEMENTED */
 void (*setdims_careful)(pdl *pdl);
@@ -208,11 +217,11 @@ pdl *(*make_now)(pdl *it);
 
 pdl *(*get_convertedpdl)(pdl *pdl,int type);
 
-void (*make_trans_mutual)(pdl_trans *trans); 
+void (*make_trans_mutual)(pdl_trans *trans);
 
-/* Affine trans. THESE ARE SET IN ONE OF THE OTHER Basic MODULES 
+/* Affine trans. THESE ARE SET IN ONE OF THE OTHER Basic MODULES
    and not in Core.xs ! */
-void (*readdata_affine)(pdl_trans *tr); 
+void (*readdata_affine)(pdl_trans *tr);
 void (*writebackdata_affine)(pdl_trans *tr);
 void (*affine_new)(pdl *par,pdl *child,int offs,SV *dims,SV *incs);
 

@@ -23,7 +23,7 @@ typedef struct pdl_thread {
 	int *incs;	/* npdls * ndims array of increments. Fast because
 	 		   of constant indices for first loops */
 	int *realdims;  /* realdims for each pdl (e.g., specified by PP signature) */
-	pdl **pdls;	
+	pdl **pdls;
         char *flags;    /* per pdl flags */
 	int mag_nth;
 	int mag_nthpdl;
@@ -33,7 +33,7 @@ typedef struct pdl_thread {
 /* Thread per pdl flags */
 #define		PDL_THREAD_VAFFINE_OK	0x01
 
-#define PDL_TVAFFOK(flag) (flag & PDL_THREAD_VAFFINE_OK) 
+#define PDL_TVAFFOK(flag) (flag & PDL_THREAD_VAFFINE_OK)
 #define PDL_TREPRINC(pdl,flag,which) (PDL_TVAFFOK(flag) ? \
 		pdl->vafftrans->incs[which] : pdl->dimincs[which])
 

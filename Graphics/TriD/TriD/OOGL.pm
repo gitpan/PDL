@@ -10,7 +10,7 @@ use PDL::Graphics::OpenGL;
 
 sub tooogl {
 	my($this) = @_;
-	join "\n",map { $_->togl() } (@{$this->{Objects}}) 
+	join "\n",map { $_->togl() } (@{$this->{Objects}})
 }
 
 package PDL::Graphics::TriD::GL::Window;

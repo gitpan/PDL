@@ -8,6 +8,8 @@
 
 #define MAX2(a,b) if((b)>(a)) a=b;
 
+#define strndup strndup_mine
+
 static void *strndup(void *ptr, int size) {
 	if(size == 0) return 0; else
 	{
@@ -109,7 +111,7 @@ void pdl_initthreadstruct(int nobl,
 
 	thread->npdls = npdls;
 	thread->pdls = strndup(pdls,sizeof(*pdls)*npdls);
-	thread->realdims = realdims; 
+	thread->realdims = realdims;
 	thread->ndims = 0;
 
 	thread->mag_nth = -1;
@@ -129,7 +131,7 @@ void pdl_initthreadstruct(int nobl,
 		if(creating[j]) continue;
 		/* Check for magical piddles (parallelized) */
 		if((!nthr) &&
-		  pdls[j]->magic && 
+		  pdls[j]->magic &&
 		  (nthr = pdl_magic_thread_nthreads(pdls[j],&nthrd))) {
 			thread->mag_nthpdl = j;
 			thread->mag_nth = nthrd - realdims[j];
@@ -137,11 +139,11 @@ void pdl_initthreadstruct(int nobl,
 				die("Cannot magick non-threaded dims");
 			}
 		}
-		
+
 		for(i=0; i<nids; i++) {
 			mx=0; if(pdls[j]->nthreadids <= nids) {
 				MAX2(mx,
-				     pdls[j]->threadids[i+1] 
+				     pdls[j]->threadids[i+1]
 				     - pdls[j]->threadids[i]);
 			}
 			ndims += mx;
@@ -199,10 +201,10 @@ void pdl_initthreadstruct(int nobl,
 							pdls[j]->dims[i+thread->realdims[j]]);
 					}
 				} else {
-					thread->dims[nth] = 
+					thread->dims[nth] =
 						pdls[j]->dims[i+realdims[j]];
 				}
-				thread->incs[nth*npdls+j] = 
+				thread->incs[nth*npdls+j] =
 					PDL_TREPRINC(pdls[j],flags[j],i+realdims[j]);
 			}
 		}
@@ -223,7 +225,7 @@ void pdl_initthreadstruct(int nobl,
 			   thread->pdls[j]->threadids[nthid]
 					<= i) continue;
 			mydim = i+thread->pdls[j]->threadids[nthid];
-			if(pdls[j]->dims[mydim] 
+			if(pdls[j]->dims[mydim]
 					!= 1) {
 				if(thread->dims[nth] != 1) {
 					if(thread->dims[nth] !=
@@ -234,10 +236,10 @@ void pdl_initthreadstruct(int nobl,
 							pdls[j]->dims[i+thread->realdims[j]]);
 					}
 				} else {
-					thread->dims[nth] = 
+					thread->dims[nth] =
 						pdls[j]->dims[mydim];
 				}
-				thread->incs[nth*npdls+j] = 
+				thread->incs[nth*npdls+j] =
 					PDL_TREPRINC(pdls[j],flags[j],mydim);
 			}
 		}
@@ -250,7 +252,7 @@ void pdl_initthreadstruct(int nobl,
 
 	for(; nth<ndims; nth++) {
 		thread->dims[nth]=1;
-		for(j=0; j<npdls; j++) 
+		for(j=0; j<npdls; j++)
 			thread->incs[nth*npdls+j] = 0;
 	}
 /* If threading, make the true offsets and dims.. */
@@ -279,15 +281,15 @@ See the manual for why this is impossible");
 	pdl_reallocdims(thread->pdls[j], thread->realdims[j] + td);
 	for(i=0; i<thread->realdims[j]; i++)
 		thread->pdls[j]->dims[i] = dims[i];
-	if (!temp) 
-	  for(i=0; i<thread->nimpl; i++) 
+	if (!temp)
+	  for(i=0; i<thread->nimpl; i++)
 		thread->pdls[j]->dims[i+thread->realdims[j]] =
 			thread->dims[i];
 	thread->pdls[j]->threadids[0] = td + thread->realdims[j];
 	pdl_resize_defaultincs(thread->pdls[j]);
 	for(i=0; i<thread->nimpl; i++) {
 		thread->incs[thread->npdls*i + j] =
-		  temp ? 0 : 
+		  temp ? 0 :
 		  PDL_REPRINC(thread->pdls[j],i+thread->realdims[j]);
 	}
 }
@@ -308,10 +310,10 @@ int pdl_startthreadloop(pdl_thread *thread,void (*func)(pdl_trans *),
 		thread->gflags &= ~PDL_THREAD_MAGICK_BUSY;
 		return 1; /* DON'T DO THREADLOOP AGAIN */
 	}
-	for(i=0; i<thread->ndims; i++) 
+	for(i=0; i<thread->ndims; i++)
 		thread->inds[i] = 0;
 	offsp = pdl_get_threadoffsp_int(thread,&nthr);
-	for(j=0; j<thread->npdls; j++) 
+	for(j=0; j<thread->npdls; j++)
 		offsp[j] = PDL_TREPROFFS(thread->pdls[j],thread->flags[j]) +
 			(!nthr?0:
 				nthr * thread->dims[thread->mag_nth] *
@@ -330,9 +332,9 @@ int pdl_iterthreadloop(pdl_thread *thread,int nth) {
 		thread->offs[j] = PDL_TREPROFFS(thread->pdls[j],thread->flags[j]);
 	for(i=nth; i<thread->ndims; i++) {
 		thread->inds[i] ++;
-		if(thread->inds[i] >= thread->dims[i]) 
+		if(thread->inds[i] >= thread->dims[i])
 			thread->inds[i] = 0;
-		else 
+		else
 		{	stopdim = i; stop = 1; break; }
 	}
 	if(stop) goto calc_offs;
@@ -366,7 +368,7 @@ void pdl_croak_param(pdl_errorinfo *info,int j, char *pat, ...)
 	if(!info) {croak("PDL_CROAK_PARAM: Unknown: parameter %d: %s\n",
 		j,message);
 	} else {
-		if(j >= info->nparamnames) 
+		if(j >= info->nparamnames)
 			name = "ERROR: UNKNOWN PARAMETER";
 		else	name = info->paramnames[j];
 		croak("PDL: %s: Parameter '%s': %s\n",info->funcname,name,message);

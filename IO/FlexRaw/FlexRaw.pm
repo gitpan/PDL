@@ -9,7 +9,7 @@ PDL::IO::FlexRaw -- A flexible binary i/o format for PerlDL.
 
         ($x,$y,...) = readflex("filename" [, $hdr])
         ($x,$y,...) = mapflex("filename" [, $hdr] [, $opts])
-        
+
         $hdr = writeflex($file, $pdl1, $pdl2,...)
         writeflexhdr($file, $hdr)
 
@@ -81,9 +81,9 @@ swapped.
 The optional C<$hdr> argument allows the use of an anonymous array to
 give header information, rather than using a .hdr file.  For example,
 
-	$header = [ 
+	$header = [
 	    {Type => 'f77'},
-	    {Type => 'float', NDims => 3, Dims => [ 4,600,600 ] } 
+	    {Type => 'float', NDims => 3, Dims => [ 4,600,600 ] }
 	];
 	@a = readflex('banana',$header);
 
@@ -156,7 +156,7 @@ Read a binary file with flexible format specification
 =for usage
 
  ($x,$y,...) = readflex("filename" [, $hdr])
-   
+
 
 =head2 writeflex
 
@@ -167,10 +167,10 @@ Write a binary file with flexible format specification
 =for usage
 
   $hdr = writeflex($file, $pdl1, $pdl2,...)
-  
+
 
 =head2 mapflex
- 
+
 =for ref
 
 Memory map a binary file with flexible format specification
@@ -183,11 +183,11 @@ Memory map a binary file with flexible format specification
 
 =head1 AUTHOR
 
-Copyright (C) Robin Williams <rjrw@ast.leeds.ac.uk> 1997.  
+Copyright (C) Robin Williams <rjrw@ast.leeds.ac.uk> 1997.
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 
@@ -212,18 +212,21 @@ use PDL::IO::Misc qw(bswap2 bswap4 bswap8);
    $PDL_F => 'float', $PDL_D => 'double');
 
 %flextypes = (
-'byte'   => $PDL_B, '0' => $PDL_B, 'b' => $PDL_B, 'c' => $PDL_B, 
-'short'  => $PDL_S, '1' => $PDL_S, 's' => $PDL_S, 
+'byte'   => $PDL_B, '0' => $PDL_B, 'b' => $PDL_B, 'c' => $PDL_B,
+'short'  => $PDL_S, '1' => $PDL_S, 's' => $PDL_S,
 'ushort' => $PDL_US,'2' => $PDL_US,'u' => $PDL_US,
-'long'   => $PDL_L, '3' => $PDL_L, 'l' => $PDL_L, 
-'float'  => $PDL_F, '4' => $PDL_F, 'f' => $PDL_F, 
+'long'   => $PDL_L, '3' => $PDL_L, 'l' => $PDL_L,
+'float'  => $PDL_F, '4' => $PDL_F, 'f' => $PDL_F,
 'double' => $PDL_D, '5' => $PDL_D, 'd' => $PDL_D
 );
+
+$PDL::FlexRaw::verbose = 0;
 
 sub _read_flexhdr {
     my ($hname) = @_;
     my $hfile = new FileHandle "$hname"
 	or barf "Couldn't open '$hname' for reading";
+    binmode $hfile;
     my ($newfile) = 1;
     my ($tid, @str);
     my (@ret);
@@ -248,7 +251,7 @@ TOKEN:
 			    next ITEM;
 			}
 		    }
-		    barf("Bad typename '$_' in readflex") 
+		    barf("Bad typename '$_' in readflex")
 			if (!exists($flextypes{$_}));
 		    $tid = $flextypes{$_};
 		    $newfile = 0;
@@ -285,7 +288,8 @@ TOKEN:
 
 sub readchunk {
     my ($d, $pdl, $len, $name) = @_;
-    print "Reading $len at $offset from $name\n";
+    print "Reading $len at $offset from $name\n"
+      if $PDL::FlexRaw::verbose;
     $d->read($ {$pdl->get_dataref},$len) == $len
 	or barf "Couldn't read enough data from '$name'";
     $pdl->upd_data();
@@ -313,14 +317,14 @@ sub mapchunk {
 }
 
 sub readflex {
-    barf 'Usage ($x,$y,...) = readflex("filename" [, \@hdr])' 
+    barf 'Usage ($x,$y,...) = readflex("filename" [, \@hdr])'
 	if $#_ > 1;
     my ($name,$h) = @_;
     my ($hdr, $pdl, $len, @out, $chunk, $chunkread, $data);
     local ($offset) = 0;
     my ($newfile, $swapbyte, $f77mode, $zipt) = (1,0,0,0);
 
-    if ($name =~ s/\.gz$// || $name =~ s/\.Z$// || 
+    if ($name =~ s/\.gz$// || $name =~ s/\.Z$// ||
 	(! -e $name && (-e $name.'.gz' || -e $name.'.Z'))) {
 	$data = "gzip -dcq $name |";
 	$zipt = 1;
@@ -331,7 +335,7 @@ sub readflex {
     my ($size) = (stat $name)[7];
     my ($d) = new FileHandle $data
 	or barf "Couldn't open '$data' for reading";
-
+    binmode $d;
     if ($#_ == 0) {
 	$h = _read_flexhdr("$name.hdr");
     }
@@ -367,19 +371,19 @@ READ:
 	    }
 	}
 	if ($#_ == 1) {
-	    barf("Bad typename '$type' in readflex") 
+	    barf("Bad typename '$type' in readflex")
 		if (!defined($flextypes{$type}));
 	    $type = $flextypes{$type};
 	}
-	$pdl = PDL->zeroes ((new PDL::Type($type)), 
+	$pdl = PDL->zeroes ((new PDL::Type($type)),
 			    @{$hdr->{Dims}});
-	$len = length $ {$pdl->get_dataref};    
+	$len = length $ {$pdl->get_dataref};
 
 	&readchunk($d,$pdl,$len,$name) or last READ;
-	$chunkread += $len; 
+	$chunkread += $len;
 	if ($swapbyte) {
 	    bswap2($pdl) if $pdl->get_datatype == $PDL_S;
-	    bswap4($pdl) if $pdl->get_datatype == $PDL_L 
+	    bswap4($pdl) if $pdl->get_datatype == $PDL_L
 		|| $pdl->get_datatype == $PDL_F;
 	    bswap8($pdl) if $pdl->get_datatype == $PDL_D;
 	}
@@ -396,7 +400,7 @@ READ:
 		    bswap4($pdl) if $swapbyte;
 		    $chunk = $pdl->copy;
 		    next SWAP if ! seek($d,$pdl->at,1);
-		    next SWAP if 
+		    next SWAP if
 			read($d,$ {$chunk->get_dataref},$len) != $len;
 		    $chunk->upd_data;
 		    bswap4($chunk) if $swapbyte;
@@ -433,7 +437,7 @@ READ:
 }
 
 sub mapflex {
-    my ($usage) 
+    my ($usage)
 	= 'Usage ($x,$y,...) = mapflex("filename" [, \@hdr] [,\%opts])';
     my ($name) = shift @_;
     # reference to header array
@@ -455,7 +459,7 @@ sub mapflex {
 	}
     }
 
-    if ($name =~ s/\.gz$// || $name =~ s/\.Z$// || 
+    if ($name =~ s/\.gz$// || $name =~ s/\.Z$// ||
 	(! -e $name && (-e $name.'.gz' || -e $name.'.Z'))) {
 	barf "Can't map compressed file";
     }
@@ -513,16 +517,16 @@ READ:
 	    }
 	}
 	if ($#_ == 1) {
-	    barf("Bad typename '$type' in mapflex") 
+	    barf("Bad typename '$type' in mapflex")
 		if (!defined($flextypes{$type}));
 	    $type = $flextypes{$type};
 	}
-	$pdl = PDL->zeroes ((new PDL::Type($type)), 
+	$pdl = PDL->zeroes ((new PDL::Type($type)),
 			    @{$hdr->{Dims}});
-	$len = length $ {$pdl->get_dataref};    
+	$len = length $ {$pdl->get_dataref};
 
 	&mapchunk($d,$pdl,$len,$name) or last READ;
-	$chunkread += $len; 
+	$chunkread += $len;
 	if ($newfile && $f77mode) {
 	    if ($opts{Creat}) {
 		$pdl->set(0,$size - 8);
@@ -557,9 +561,10 @@ READ:
 sub writeflex {
     barf 'Usage writeflex("filename",$pdl,...)' if $#_<0;
     my($name) = shift; my (@ret);
-    barf 'Usage writeflex("filename",$pdl,...)' if ref $name;    
+    barf 'Usage writeflex("filename",$pdl,...)' if ref $name;
     my $d = new FileHandle ">$name"
 	or barf "Couldn't open '$name' for writing";
+    binmode $d;
     foreach $pdl (@_) {
 	barf 'Usage writeflex("filename",$pdl,...)' if ! ref $pdl;
 	# print join(' ',$pdl->getndims,$pdl->dims),"\n";
@@ -579,7 +584,7 @@ sub writeflexhdr {
     my $hname = "$name.hdr";
     my $h = new FileHandle ">$hname"
 	or barf "Couldn't open '$hname' for writing";
-    print $h 
+    print $h
 	"# Output from PDL::IO::writeflex, data in $name\n";
     foreach (@$hdr) {
 	my ($type) = $_->{Type};
@@ -588,7 +593,7 @@ sub writeflexhdr {
 	    next;
 	}
 	print $h join("\n",$_->{Type},
-		      $_->{NDims}, 
+		      $_->{NDims},
 		      (join ' ',@{ $_->{Dims}})),"\n\n";
     }
 }

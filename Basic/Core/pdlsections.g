@@ -1,8 +1,8 @@
 
 
-/*************************************************************** 
+/***************************************************************
 
-   pdlsections.c  
+   pdlsections.c
 
 ****************************************************************/
 
@@ -46,7 +46,7 @@ int pdl_validate_section( int* sec, int* dims, int ndims ){
        start = sec[2*i];
        end   = sec[2*i+1];
 
-       if (start<0 || end<0 || start>end || end>=dims[i]) 
+       if (start<0 || end<0 || start>end || end>=dims[i])
             croak("Invalid subsection specified");
 
        count = count * (end-start+1);
@@ -77,13 +77,13 @@ void pdl_row_plusplus ( int* pos, int* dims, int ndims ) {
           noescape = 0;    /* Exit */
        }
     }
-}   
+}
 
 /* Take the N-dimensional subsection of an N-dimensional array */
 
 #ifdef FOOBAR
 
-void pdl_subsection( char *y, char*x, int datatype, int* sec, 
+void pdl_subsection( char *y, char*x, int datatype, int* sec,
                      int* dims, int *incs, int offs, int* ndims) {
 
 
@@ -145,8 +145,8 @@ void pdl_subsection( char *y, char*x, int datatype, int* sec,
 
 /* Insert one N-dimensional array in another */
 
-void pdl_insertin( char*y, int* ydims, int nydims, 
-                   char*x, int* xdims, int nxdims, 
+void pdl_insertin( char*y, int* ydims, int nydims,
+                   char*x, int* xdims, int nxdims,
                    int datatype, int* pos) {
 
    /* Note inserts x[] in y[] */
@@ -165,7 +165,7 @@ void pdl_insertin( char*y, int* ydims, int nydims,
 
    nxvals = 1;
    for(i=0; i<nxdims; i++) /* Compute total elements */
-     nxvals *= xdims[i]; 
+     nxvals *= xdims[i];
 
 
    n1 = pdl_get_offset(pos, ydims, yincs, offset, nydims); /* Start pos in Y */
@@ -189,7 +189,7 @@ void pdl_insertin( char*y, int* ydims, int nydims,
        n1 = pdl_get_offset( pos, ydims, incs, nydims); /* New pos in Z */
 
        if (n1>=nyvals)  /* Off Y image */
-          break;         
+          break;
 
        n2 += nrow;  /* New pos in X */
 
@@ -211,14 +211,14 @@ double pdl_at( void* x, int datatype, PDL_Long* pos, PDL_Long* dims, PDL_Long *i
 
        /* leave pdl_get_offset to handle -ve offsets (i.e. from end of
           dimension), so elements of pos[] won't be changed */
- 
+
        if(pos[i]<-dims[i] || pos[i]>=dims[i])
           croak("Position out of range");
     }
-   
+
    i = pdl_get_offset(pos, dims, incs, offset, ndims);
 
-   GENERICLOOP (datatype) 
+   GENERICLOOP (datatype)
 
       generic *xx = (generic *) x;
       result = (double)xx[i];
@@ -239,7 +239,7 @@ void pdl_set( void* x, int datatype, PDL_Long* pos, PDL_Long* dims, PDL_Long *in
        if(pos[i]<-dims[i] || pos[i]>=dims[i])
           croak("Position out of range");
     }
-   
+
    i = pdl_get_offset(pos, dims, incs, offs, ndims);
 
    GENERICLOOP (datatype)

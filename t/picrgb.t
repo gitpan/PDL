@@ -9,6 +9,8 @@ sub ok {
 
 sub approx {
 	my($a,$b,$mdiff) = @_;
+        return 0 if $a->getdim(0) != $b->getdim(0) ||
+                    $a->getdim(1) != $b->getdim(1);
 	$mdiff = 0.01 unless defined($mdiff);
 	my $c = abs($a-$b);
 	my $d = max($c);
@@ -46,8 +48,8 @@ use PDL::IO::Pic;
 use PDL::ImageRGB;
 use PDL::Dbg;
 
-$PDL::verbose = 0;
-$iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate 
+$PDL::debug = 0;
+$iform=$iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate
                    # output format
 
 #              [FORMAT, extension, ushort-divisor,
@@ -62,7 +64,7 @@ $iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate
 	   );
 
 @allowed = ();
-for (PDL->wpiccan) { push @allowed, $_ 
+for (PDL->wpiccan) { push @allowed, $_
 	if PDL->rpiccan($_) && defined $formats{$_} }
 
 $ntests = 2 * (@allowed);
@@ -76,12 +78,12 @@ print("1..$ntests\n");
 print "Testable formats on this platform:\n  ".join(',',@allowed)."\n";
 
 
-$im1 = ushort pdl [[[0,0,0],[256,65535,256],[0,0,0]], 
-		   [[256,256,256],[256,256,256],[256,256,256]], 
+$im1 = ushort pdl [[[0,0,0],[256,65535,256],[0,0,0]],
+		   [[256,256,256],[256,256,256],[256,256,256]],
 		   [[2560,65535,2560],[256,2560,2560],[65535,65534,65535]]];
 $im2 = byte ($im1/256);
 
-if ($PDL::verbose){
+if ($PDL::debug){
    print $im1;
    print $im2;
 }
@@ -91,18 +93,20 @@ foreach $form (sort @allowed) {
     print " ** testing $form format **\n";
 
     $arr = $formats{$form};
+eval <<'EOD';
     $im1->wpic("tushort.$arr->[0]",{IFORM => $iform});
     $im2->wpic("tbyte.$arr->[0]",{IFORM => $iform});
-    
+
     $in1 = rpic_unlink("tushort.$arr->[0]");
     $in2 = rpic_unlink("tbyte.$arr->[0]");
 
     $comp = $im1 / PDL::ushort(mmax(depends_on($form),$arr->[1]));
-    print "Comparison arr: $comp" if $PDL::verbose;
+EOD
+    print "Comparison arr: $comp" if $PDL::debug;
     ok($n++,approx($comp,$in1,$arr->[3]) || tifftest($form));
     ok($n++,approx($im2,$in2) || tifftest($form));
 
-    if ($PDL::verbose) {
+    if ($PDL::debug) {
       print $in1->px;
       print $in2->px;
     }

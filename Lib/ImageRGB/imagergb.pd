@@ -71,7 +71,7 @@ and 8bit palette images. It does this through an interface to the ppm_quant
 routine from the pbmplus package that implements the median cut routine which
 intellegently selects the 'best' colors to represent your image on a <= 8bit
 display (based on the median cut algorithm). Optional args: $ncols sets the
-maximum nunmber of colours used for the output image (defaults to 256). 
+maximum nunmber of colours used for the output image (defaults to 256).
 There are images where a different color
 reduction scheme gives better results (it seems this is true for images
 containing large areas with very smoothly changing colours).
@@ -92,7 +92,7 @@ sub PDL::cquant {
     my @Dims = $image->dims;
     my ($out, $olut) = (null,null);
 
-    barf "input must be byte (3,x,x)" if (@Dims < 2) || ($Dims[0] != 3) 
+    barf "input must be byte (3,x,x)" if (@Dims < 2) || ($Dims[0] != 3)
 	    || ($image->get_datatype != $PDL_B);
     cquant_c($image,$out,$olut,$ncols);
     return ($out,$olut);
@@ -162,7 +162,7 @@ greyscale image (x,.....) using standard formula:
 sub PDL::rgbtogr {
     barf "Usage: \$im->rgbtogr" if $#_ < 0;
     my $im = shift;
-    barf "rgbtogr: exspecting RGB (3,...) input" 
+    barf "rgbtogr: exspecting RGB (3,...) input"
          if (($im->dims)[0] != 3);
 
     my $type = $im->get_datatype;
@@ -206,7 +206,7 @@ sub PDL::bytescl {
     if ($top < 0) { $force=1; $top *= -1; }
     $top = 255 if $top > 255;
 
-    print "bytescl: scaling from 0..$top\n" if $PDL::verbose;
+    print "bytescl: scaling from 0..$top\n" if $PDL::debug;
     my ($max, $min);
     $max = max $pdl;
     $min = min $pdl;
@@ -214,7 +214,7 @@ sub PDL::bytescl {
 
     # check for pathological cases
     if (($max-$min) < $EPS) {
-	print "bytescl: pathological case\n" if $PDL::verbose;
+	print "bytescl: pathological case\n" if $PDL::debug;
 	return byte $pdl
 	    if (abs($max) < $EPS) || ($max >= 0 && $max <= $top);
 	return byte ($pdl/$max);
@@ -234,11 +234,11 @@ This package doesn't yet contain enough useful functions!
 
 =head1 AUTHOR
 
-Copyright 1997 Christian Soeller <csoelle@sghms.ac.uk> 
+Copyright 1997 Christian Soeller <csoelle@sghms.ac.uk>
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 

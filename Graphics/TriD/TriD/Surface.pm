@@ -14,7 +14,7 @@ sub new {
 	};
 }
 
-# XXX Refit to use 
+# XXX Refit to use
 sub new_pdl2d {
 	my($pdl,%opts) = @_;
 	defined($opts{X}) or $opts{X} = xvals zeroes $pdl->getdim(0);

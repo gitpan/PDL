@@ -5,16 +5,16 @@
 
 require 'Dev.pm'; PDL::Core::Dev->import;
 
-$date = `date`; chop $date;
+# $date = `date`; chop $date;
 
 ##### HEADER ######
 
 print <<EOD;
 
 
-/*************************************************************** 
+/***************************************************************
 
-   pdlconv.c  
+   pdlconv.c
 
 ****************************************************************/
 
@@ -47,9 +47,9 @@ EOD
 
 ##### Generate code for each data type #####
 
-for $in ( keys %PDL_DATATYPES ) { 
+for $in ( keys %PDL_DATATYPES ) {
 
-    $intype = $PDL_DATATYPES{$in}; 
+    $intype = $PDL_DATATYPES{$in};
     print <<EOD;
 
     } else if (intype == $in)  {
@@ -76,7 +76,7 @@ EOD
 } #### End of perl loop ####
 
 print <<'EOD';
-	
+
 	}
 
 	free(inds);
@@ -117,7 +117,7 @@ void pdl_converttype( pdl** aa, int targtype, Logical changePerl ) {
 
     intype = a->datatype;
 
-    if (intype == targtype) 
+    if (intype == targtype)
        return;
 
     diffsize = pdl_howbig(targtype) != pdl_howbig(a->datatype);
@@ -203,7 +203,7 @@ print <<'EOD';
 
 
 /* Ensure 'a' and 'b' are the same data types of high enough precision,
-   using a reasonable set of rules. 
+   using a reasonable set of rules.
 */
 
 void pdl_coercetypes( pdl** aa, pdl** bb, Logical changePerl ) {
@@ -223,7 +223,7 @@ void pdl_coercetypes( pdl** aa, pdl** bb, Logical changePerl ) {
 
      /* Rules for deciding what the target data type is */
 
-     if (oneisscalar) {  /* Vector x Scalar case */ 
+     if (oneisscalar) {  /* Vector x Scalar case */
 
         scalar  = a; vector = b;
         if (b->nvals==1) {
@@ -240,30 +240,30 @@ void pdl_coercetypes( pdl** aa, pdl** bb, Logical changePerl ) {
 
            if (vector->datatype == PDL_F)  /* FxD is OK as F */
               targtype = vector->datatype;
-     
+
            else if (vector->datatype <= PDL_L && scalar->datatype <= PDL_L)
               targtype = vector->datatype; /* two ints is OK as input int */
 
-           else if (vector->datatype <= PDL_F && scalar->datatype==PDL_D) 
+           else if (vector->datatype <= PDL_F && scalar->datatype==PDL_D)
               targtype = PDL_F; /* Only promote FOOxD as far as F */
-   
-           else 
+
+           else
               targtype = scalar->datatype;
-           
+
         }
 
 
      }else{ /* Vector x Vector - easy */
 
         targtype = a->datatype;
-        if (b->datatype > a->datatype) 
+        if (b->datatype > a->datatype)
            targtype = b->datatype;
 
      }
 
      /* Do the conversion */
 
-     pdl_converttype(aa, targtype, changePerl);  
+     pdl_converttype(aa, targtype, changePerl);
      pdl_converttype(bb, targtype, changePerl);
 }
 
@@ -280,14 +280,14 @@ void ** pdl_twod( pdl* x ) {
 
    xx = (char*) x->data;
 
-   nx = *(x->dims); ny = x->ndims==2 ? *(x->dims+1) : 1; 
+   nx = *(x->dims); ny = x->ndims==2 ? *(x->dims+1) : 1;
 
    size=pdl_howbig(x->datatype);
 
    p = (long*) pdl_malloc( ny*sizeof(long) ); /* 1D array of ptrs p[i] */
    for (i=0;i<ny;i++)
        p[i] = (long) &xx[i*nx*size];
-    
+
    return (void**) p;
 }
 

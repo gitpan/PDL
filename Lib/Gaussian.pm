@@ -11,16 +11,16 @@ PDL::Gaussian -- Gaussian distributions.
 
 =head1 DESCRIPTION
 
-This package provides a set of standard routines to handle 
+This package provides a set of standard routines to handle
 sets gaussian distributions.
 
-A new set of gaussians is initialized by 
+A new set of gaussians is initialized by
 
 	$a = new PDL::Gaussian(xdims,gdims);
 
-Where I<xdims> is a reference to an array containing the 
+Where I<xdims> is a reference to an array containing the
 dimensions in the space the gaussian
-is in and I<gdimslist> is a reference to an array containing 
+is in and I<gdimslist> is a reference to an array containing
 the dimensionality of the gaussian space. For example, after
 
 	$a = new PDL::Gaussian([2],[3,4]);
@@ -28,7 +28,7 @@ the dimensionality of the gaussian space. For example, after
 
 The variable  $a contains set of 12 (=3*4) 2-Dimensional gaussians
 and $b is the simplest form: one 1D gaussian.
-Currently, I<xdims> may containe either zero or one dimensions 
+Currently, I<xdims> may containe either zero or one dimensions
 due to limitations of PDL::PP.
 
 To set the distribution parameters, you can use the routines
@@ -51,7 +51,7 @@ is important to update the other parts of the object.
 
 To get a string representation of the gaussians (most useful for
 debugging) use the routine
-	
+
 	$string = $a->asstr();
 
 It is possible to calculate the probability or logarithm of probability
@@ -61,7 +61,7 @@ of each of the distributions at some points.
 	$a->calc_lnvalue($x,$p);
 
 Here, $x must have dimensions (ndims,...) and $p must have dimensions
-(gdimslist, ...) where the elipsis represents the same dimensions in 
+(gdimslist, ...) where the elipsis represents the same dimensions in
 both variables. It is usually advisable to work with the logarithms
 of probabilities to avoid numerical problems.
 
@@ -73,7 +73,7 @@ The function
 where data is of dimensions (ndims,npoints) and wt is of dimensions
 (npoints,gdimslist), analyzes the data statistically and gives
 a corresponding gaussian distribution. The parameter $small_covariance
-is the smallest allowed covariance in any direction: if one or more of 
+is the smallest allowed covariance in any direction: if one or more of
 the eigenvalues of the covariance matrix are smaller than this, they
 are automatically set to $small_covariance to avoid singularities.
 
@@ -81,7 +81,7 @@ are automatically set to $small_covariance to avoid singularities.
 
 Stupid interface.
 
-Limitation to 1 x-dimensions is questionable (although 
+Limitation to 1 x-dimensions is questionable (although
 it's hard to imagine a case when more is needed).
 Note that this does not mean that you can only have 1-dimensional
 gaussians. It just means that if you want to have a 6-dimensional
@@ -93,7 +93,7 @@ to have the '1' dimensions explicitly everywhere.
 
 Singular distributions are not handled. This should use SVD
 and be able to handle both infinitely narrow and wide dimensions,
-preferably so that infinitely narrow dimensions can be queried 
+preferably so that infinitely narrow dimensions can be queried
 like $a->relations() or something like that.
 
 The routines should, if the user requests for it, check all the dimensions
@@ -101,11 +101,11 @@ of the given arguments for reasonability.
 
 =head1 AUTHOR
 
-Copyright (C) 1996 Tuomas J. Lukka (lukka@fas.harvard.edu) 
+Copyright (C) 1996 Tuomas J. Lukka (lukka@fas.harvard.edu)
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 
@@ -139,7 +139,7 @@ sub new {
 
 sub asstr {
 	my($this) = @_;
-	return join '', 
+	return join '',
 	  "Gaussian: NDims = $this->{NDims}[0], NFuncs = ",
 	  	(join ',',@{$this->{NFuncs}}),
 	  "\nCoVar: $this->{CV}, ICoVar: $this->{ICV},
@@ -323,13 +323,13 @@ sub calc_qavg {
 	PDL::Primitive::sumover($diag,$res);
 }
 
-# [(nvars,nvars[,npolys]), (nvars[,npolys])] => 
+# [(nvars,nvars[,npolys]), (nvars[,npolys])] =>
 # ([npolys,]@gdims)
 sub calc_poly2 {
 	my($this,$coeffs,$res) = @_;
 }
 
-# 
+#
 sub cross_entropy {
 }
 
@@ -346,7 +346,7 @@ sub fromweighteddata {
 	my($this,$data,$wt) = @_;
 }
 
-sub ph {my($a) = @_; for (keys %$a) {next if !ref $a->{$_} or 
+sub ph {my($a) = @_; for (keys %$a) {next if !ref $a->{$_} or
 	(ref $a->{$_}) eq "ARRAY";
    print "$_ :",$a->{$_},"\n	Dims:[",
 	(join ',',@{$a->{$_}{Dims}}),"]\n";}}

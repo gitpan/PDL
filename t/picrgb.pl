@@ -28,9 +28,9 @@ use PDL::Dbg;
 
 # private fix
 $ENV{PATH} .= ":$ENV{HOME}/perl/netpbm/bin" if `hostname` =~ /mbcsg1/;
-$PDL::verbose = 0;
+$PDL::debug = 0;
 $PDL::Debug = 0;
-$iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate 
+$iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate
                    # output format
 
 #              [FORMAT, extension, ushort-divisor,
@@ -43,12 +43,12 @@ $iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate
 $ntests = 2 * @formats;
 print("1..$ntests\n");
 
-$im1 = ushort pdl [[[0,0,0],[256,65535,256],[0,0,0]], 
-		   [[256,256,256],[256,256,256],[256,256,256]], 
+$im1 = ushort pdl [[[0,0,0],[256,65535,256],[0,0,0]],
+		   [[256,256,256],[256,256,256],[256,256,256]],
 		   [[2560,65535,2560],[256,2560,2560],[65535,65534,65535]]];
 $im2 = byte ($im1/256);
 
-if ($PDL::verbose){
+if ($PDL::debug){
    print $im1;
    print $im2;
 }
@@ -59,7 +59,7 @@ foreach $form (@formats) {
 
     wpic ($im1,"tushort.$form->[1]",{IFORM => $iform});
     wpic ($im2,"tbyte.$form->[1]",{IFORM => $iform});
-    
+
     $in1 = rpic_unlink("tushort.$form->[1]");
     $in2 = rpic_unlink("tbyte.$form->[1]");
 
@@ -67,7 +67,7 @@ foreach $form (@formats) {
     ok($n++,approx($comp,$in1,$form->[4]));
     ok($n++,approx($im2,$in2));
 
-    if ($PDL::verbose) {
+    if ($PDL::debug) {
       print $in1->px;
       print $in2->px;
     }

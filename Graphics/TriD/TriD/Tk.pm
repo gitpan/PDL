@@ -31,7 +31,7 @@ sub create_menu {
 	my $m = $t->Menu();
 	$m->separator();
 	$m->command(-label => 'Foobar', -command => sub {print "DOFOOBAR\n"});
-	$m->command(-label => 'Save', -command => sub {print "DOSVEBLABLA\n"; 
+	$m->command(-label => 'Save', -command => sub {print "DOSVEBLABLA\n";
 		save_dialog($win);
 		});
 	$m->command(-label => 'Quit', -command => sub{quit_dialog($win)});

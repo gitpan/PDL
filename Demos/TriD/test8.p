@@ -33,12 +33,12 @@ sub func {
 my $a = zeroes(3,10000);
 random $a->inplace;
 $a -= 0.5; $a *= 30;
-$mf = d2c(func($a)); 
+$mf = d2c(func($a));
 points3d($a,[$mf]);
 
 PDL::Graphics::OpenGL::glShadeModel (&PDL::Graphics::OpenGL::GL_SMOOTH);
 
-$PDL::verbose = 1;
+$PDL::debug = 1;
 my $win = PDL::Graphics::TriD::get_current_window();
 my $g = PDL::Graphics::TriD::get_current_graph();
 $fcc = [$followcs,pdl(0.2),$followcs];
@@ -66,14 +66,14 @@ my $perround = 1;
 #		print $_[0],$_[1];
 #		print "NDONE: $ndone\n";
 		if($ndone == $asize)  {
-			return; 
+			return;
 		}
 		$nrounds++;
 #		$follow->dump();
 #		$followc->dump();
 #		$followcs->dump();
-		($tmp = $follow->slice(":,:,($ndone)")) .= $_[0]; 
-		($tmp = $followc->slice(":,($ndone)")) .= d2c($_[1]); 
+		($tmp = $follow->slice(":,:,($ndone)")) .= $_[0];
+		($tmp = $followc->slice(":,($ndone)")) .= d2c($_[1]);
 		$ndone++;
 		if($nrounds % $perround != 0) {return}
 #		print "FOLLOW1:\n";

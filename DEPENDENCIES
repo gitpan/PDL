@@ -15,7 +15,7 @@ PDL (all)	perl 5.004_01		you need at least this version
 
 perldl (shell)  Term::ReadLine    	perl provides a stub but if you
 					compile and install a better one
-					(Term::ReadLine or 
+					(Term::ReadLine or
 					Term::ReadLine::Gnu)
 
 PDL::Graphics::TriD
@@ -53,7 +53,7 @@ PDL::Graphics::Karma
                                         if library is installed on
                                         system.
 
-PDL::IO::Pic     
+PDL::IO::Pic
                 rpic/wpic: pbm+ or netpbm converters
                  ftp://wuarchive.wustl.edu/graphics/graphics/packages/NetPBM
                  and ftp://ftp.uu.net/graphics/jpeg for jpeg converter

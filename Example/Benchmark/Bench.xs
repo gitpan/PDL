@@ -15,7 +15,7 @@ c_use_pp(sv)
 	SV *sv;
 	CODE:
 	/* Let's hope the C compiler isn't smart enough to optimize
-	 * away everything 
+	 * away everything
 	 */
 	double *p = (double *) SvPV(sv,na);
 	int i = SvCUR(sv) / sizeof(double);

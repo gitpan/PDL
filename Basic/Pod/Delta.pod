@@ -11,7 +11,7 @@ between PDL versions 1.0 and 2.0.
 
 =head1 Core Changes
 
-=head2 Piddles are not hashes any more: 
+=head2 Piddles are not hashes any more:
 
     $a = zeroes 10,10;
     $$a{FOO} = "bar"
@@ -40,15 +40,15 @@ Order of the arguments has changed.
 
 No longer copies the header. This may not be a misfeature.
 
-=head2 
+=head2
 
 =head1 Documentation Changes
 
-Many of the base and library pods were updated.  
+Many of the base and library pods were updated.
 
-=back 
+=back
 
- 
+
 =head1 SEE ALSO
 
 The F<Changes> file for exhaustive details on what changed.

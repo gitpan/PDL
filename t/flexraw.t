@@ -92,7 +92,7 @@ sub byte4swap {
     close (IN);
     rename $ofile, $file;
 }
-     
+
 
 # Types to test the translation for, perl + f77 forms
 %types = ( 'float' => 'real*4', 'double' => 'real*8', 'long' => 'integer*4',
@@ -147,9 +147,9 @@ EOT
 
     system("$F77 $F77flags -o tmprawtest tmprawtest.f".
 	   (($Verbose || $DEBUG)?'':' 2>/dev/null'));
-    unlink 'tmprawdata' if -f 'tmprawdata'; 
+    unlink 'tmprawdata' if -f 'tmprawdata';
     system('./tmprawtest');
- 
+
     open(FILE,'>tmprawdata.hdr');
     print FILE <<"EOT";
 # FlexRaw file header
@@ -225,9 +225,9 @@ EOT
     print "$F77 $F77flags -o tmprawtest tmprawtest.f\n";
     system("$F77 $F77flags -o tmprawtest tmprawtest.f".
 	   (($Verbose || $DEBUG)?'':' 2>/dev/null'));
-    unlink 'tmprawdata' if -f 'tmprawdata'; 
+    unlink 'tmprawdata' if -f 'tmprawdata';
     system('./tmprawtest');
- 
+
     open(FILE,'>tmprawdata.hdr');
     print FILE <<"EOT";
 # FlexRaw file header
@@ -274,9 +274,9 @@ EOT
 
     system("$F77 $F77flags -o tmprawtest tmprawtest.f".
 	   (($Verbose || $DEBUG)?'':' 2>/dev/null'));
-    unlink 'tmprawdata' if -f 'tmprawdata'; 
+    unlink 'tmprawdata' if -f 'tmprawdata';
     system('./tmprawtest');
- 
+
     open(FILE,'>tmprawdata.hdr');
     print FILE <<"EOT";
 # FlexRaw header file
@@ -330,9 +330,9 @@ EOT
 
     system("$F77 $F77flags -o tmprawtest tmprawtest.f".
 	   (($Verbose || $DEBUG)?'':' 2>/dev/null'));
-    unlink 'tmprawdata' if -f 'tmprawdata'; 
+    unlink 'tmprawdata' if -f 'tmprawdata';
     system('./tmprawtest');
- 
+
     open(FILE,'>tmprawdata.hdr');
     print FILE <<"EOT";
 # FlexRaw file header
@@ -383,7 +383,7 @@ close(FILE);
 
 system("$F77 $F77flags -o tmprawtest tmprawtest.f".
 	(($Verbose || $DEBUG)?'':' 2>/dev/null'));
-unlink 'tmprawdata' if -f 'tmprawdata'; 
+unlink 'tmprawdata' if -f 'tmprawdata';
 system('./tmprawtest');
 
 open(FILE,'>tmprawdata.hdr');

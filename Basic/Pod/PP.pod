@@ -40,8 +40,8 @@ as transposes) it is nice to be able to do this transparently and to
 be able to do this 'in-place' - i.e, not to have to make a memory copy
 of the section. PP handles all the necessary element and offset
 arithmetic for you. There are also the notions of threading (repeated
-calling of the same routine for multiple slices, see L<PDL::Indexing>) 
-and dataflow (see L<PDL::Dataflow>) which use of PP allows. 
+calling of the same routine for multiple slices, see L<PDL::Indexing>)
+and dataflow (see L<PDL::Dataflow>) which use of PP allows.
 
 So how do you use PP? Well for the most part you just write ordinary C
 code except for special PP constructs which take the form:
@@ -50,8 +50,8 @@ code except for special PP constructs which take the form:
 
 or:
 
-   PPfunction %{ 
-     <stuff> 
+   PPfunction %{
+     <stuff>
    %}
 
 The most important PP construct is the form C<$array()>. Consider the very
@@ -63,8 +63,8 @@ very similar to the actual code used by 'sumover'):
            Code => '
            	double tmp;
            	tmp = 0;
-           	loop(n) %{ 
-            	  tmp += $a(); 
+           	loop(n) %{
+            	  tmp += $a();
             	%}
             	$b() = tmp;
    ');
@@ -95,10 +95,10 @@ and write the loop explicitly using conventional C:
            Code => '
            	int i,n_size;
            	double tmp;
-           	n_size = $SIZE(n); 
+           	n_size = $SIZE(n);
            	tmp = 0;
            	for(i=0; i<n_size; i++) {
-            	  tmp += $a(n=>i); 
+            	  tmp += $a(n=>i);
             	}
             	$b() = tmp;
    ');
@@ -130,7 +130,7 @@ control of the loop and now you know how to do it ;).
 To revisit 'Why PP?' - the above code for sumit() will be
 generated for each data-type. It will operate on slices
 of arrays 'in-place'. It will thread automatically - e.g. if
-a 2D array is given it will be called repeatedly for each 
+a 2D array is given it will be called repeatedly for each
 1D row (again check L<PDL::Indexing> for the details of threading).
 And then b() will be a 1D array of sums of each row.
 We could call it with $a->xchg(0,1) to sum the colums instead.
@@ -161,8 +161,8 @@ we can do
 		   Code => '
 			double tmp;
 			tmp = '.$_->{Init}.';
-			loop(n) %{ 
-			  tmp '.$_->{Op}.' $a(); 
+			loop(n) %{
+			  tmp '.$_->{Op}.' $a();
 			%}
 			$b() = tmp;
 	   ');
@@ -174,13 +174,13 @@ to change one place in your code.
 Yeah, sure, your editor does have 'cut and paste' and 'search and replace'
 but it's still less bothersome and definitely more difficult to
 forget just one place and have strange bugs creep in.
-Also, adding 'orit' (bitwise or) later is a one-liner. 
+Also, adding 'orit' (bitwise or) later is a one-liner.
 
-And remember, you really have perl's full abilities with you - 
-you can very easily read any input file and make routines from 
+And remember, you really have perl's full abilities with you -
+you can very easily read any input file and make routines from
 the information in that file. For simple cases like the above,
 the author (Tjl) currently favors the hash syntax like the above -
-it's not too much more characters than the corresponding array 
+it's not too much more characters than the corresponding array
 syntax but much easier to understand and change.
 
 We should mention here also the ability to get the pointer to the
@@ -226,7 +226,7 @@ mailing lists).
 =head1 ABANDON ALL HOPE, YE WHO ENTER HERE (DESCRIPTION)
 
 Now that you have some idea how to use C<pp_def> to define new PDL functions
-it is time to explain the general syntax of C<pp_def>. 
+it is time to explain the general syntax of C<pp_def>.
 C<pp_def> takes as arguments first the name of the function
 you are defining and then a hash list that can contain various keys.
 
@@ -243,19 +243,19 @@ There are two main different types of usage of pp_def(),
 the 'data operation' and 'slice operation' prototypes.
 
 The 'data operation' is used to take some data, mangle it and
-output some other data; this includes for example the '+' operation, 
+output some other data; this includes for example the '+' operation,
 matrix inverse, sumover etc and all the examples we have talked about
 in this document so far. Implicit and explicit threading and the creation
-of the result are taken care of automatically in those opeartions. You 
-can even do dataflow with C<sumit>, C<sumover>, etc 
+of the result are taken care of automatically in those opeartions. You
+can even do dataflow with C<sumit>, C<sumover>, etc
 (don't be dismayed if you don't understand the concept of dataflow
 in PDL very well yet; it is still very much experimental).
 
 
 The 'slice operation' is a different kind of operation: in a slice
-operation, you are not changing any data, you are defining 
+operation, you are not changing any data, you are defining
 correspondences between different elements of two piddles (examples include
-the index manipulation/slicing function definitions in the file F<slices.pd> 
+the index manipulation/slicing function definitions in the file F<slices.pd>
 that is part of the PDL distribution; but beware, this is not introductory
 level stuff).
 
@@ -280,7 +280,7 @@ line is easy: we're defining a routine with the name 'add'.
 The second line simply declares our parameters and the parentheses
 mean that they are scalars. We call the string that defines our parameters
 and their dimensionality the I<signature> of that function. For its
-relevance with regard to threading and index manipulations check the 
+relevance with regard to threading and index manipulations check the
 L<PDL::Indexing> manpage.
 
 The third line is the actual operation. You need to use the
@@ -318,9 +318,9 @@ haven't used the value C<undef> to flag this instead of the PDL
 specific C<null>; we are currently thinking about it ;).
 
 [This should be explained in some other section of the manual
-as well!!] 
+as well!!]
 The reason for having this syntax as an alternative is that if you have
-really huge piddles, you can do 
+really huge piddles, you can do
 
 	$c = PDL->null;
 	for(some long loop) {
@@ -337,11 +337,11 @@ If you just say
 
   $c =  add($a,$b);
 
-the code generated by PP will automatically fill in C<$c=null> 
-and return 
+the code generated by PP will automatically fill in C<$c=null>
+and return
 the result. If you want to learn more
 about the reasons why PDL::PP supports this style where output arguments
-are given as last arguments check the 
+are given as last arguments check the
 L<PDL::Indexing> manpage.
 
 C<[o]> is not the only qualifier a pdl argument can have in the signature.
@@ -409,14 +409,14 @@ our previously defined functions with pdls of different type, e.g.
 
 where $a is of type C<PDL_Float> and $b of type C<PDL_Short>? With the signature
 as shown in the definition of C<add2> above the datatype of the operation
-(as determined at runtime) is that of the pdl with the 'highest' type 
+(as determined at runtime) is that of the pdl with the 'highest' type
 (sequence is byte < short < ushort < long < float < double). In the add2
 example the datatype of the operation is float ($a has that datatype). All
 pdl arguments are then type converted to that datatype (they are not
 converted inplace but a copy with the right type is created if a pdl argument
-doesn't have the type of the operation). 
+doesn't have the type of the operation).
 Null pdls don't contribute a type
-in the determination of the type of the operation. 
+in the determination of the type of the operation.
 However, they will be
 created with the datatype of the operation; here, for example, $ret will be
 of type float. You should be aware of these rules when calling PP functions
@@ -449,7 +449,7 @@ The function C<maximum_ind> finds the index of the largest element of
 a vector. If you look at the signature you notice that the output
 argument C<b> has been declared with the additional C<int> qualifier.
 This has the following consequences for type conversions: regardless of
-the type of the input pdl C<a> the output pdl C<b> will be of type 
+the type of the input pdl C<a> the output pdl C<b> will be of type
 C<PDL_Long> which makes sense since C<b> will represent an index into
 C<a>. Furthermore, if you call the function with an existing output
 pdl C<b> its type will not influence the datatype of the operation (see
@@ -537,7 +537,7 @@ C<a> is of type double then C<b> will be double as well. We hope you
 agree that this is sensible behaviour for C<sumover>. It should be
 obvious how the C<float+> qualifier works by analogy.
 It may become necessary to be able to specify a set of alternative
-types for the parameters. However, this will probably not be 
+types for the parameters. However, this will probably not be
 implemented until someone comes up with a reasonable use for it.
 
 Note that we now had to specify the C<$GENERIC> macro with the name
@@ -563,8 +563,8 @@ L<PDL::Indexing> for details.
 
 The C<Code> section contains the actual XS code that will be in the
 innermost part of a threadloop (if you don't know what a thread loop is then
-you still haven't read L<PDL::Indexing>; do it now ;) after any PP macros 
-(like C<$GENERIC>) and PP functions have been expanded (like the 
+you still haven't read L<PDL::Indexing>; do it now ;) after any PP macros
+(like C<$GENERIC>) and PP functions have been expanded (like the
 C<loop> function we are going to explain next).
 
 Let's quickly reiterate the C<sumover> example:
@@ -575,12 +575,12 @@ Let's quickly reiterate the C<sumover> example:
 		  loop(n) %{ tmp += a(); %}
 		  $b() = tmp;',
   );
-  
+
 
 
 The C<loop> construct in the C<Code> section also refers to the
 dimension name so you don't need to specify any limits: the loop is
-correctly sized and everything is done for you, again.  
+correctly sized and everything is done for you, again.
 
 Next, there is the surprising fact that C<$a()> and C<$b()> do B<not>
 contain the index. This is not necessary because we're looping over
@@ -613,7 +613,7 @@ the matrix sense that A^T = A where ^T means matrix transpose, or in PDL
 parlance $c == $c->xchg(0,1)). It does this by using only the values
 on and below the diagonal of $a. In the output matrix $c all values on
 and below the diagonal are the same as those in $a while those above the
-diagonal are a mirror image of those below the diagonal (above and below 
+diagonal are a mirror image of those below the diagonal (above and below
 are here interpreted in the way that PDL prints 2D pdls). If this explanation
 still sounds a bit strange just go ahead, make a little file into which you
 write this definition, build the new PDL extension (see section on Makefiles
@@ -683,10 +683,10 @@ this case C<double>. This has two advantages. Firstly the size of
 the compiled code is reduced vastly, secondly if non-double arguments
 are passed to C<myfunc()> PDL will automatically convert them to
 double before passing to the external C routine and convert them
-back afterwards. 
+back afterwards.
 
 One can also use C<Pars> to qualify the types of individual
-arguments. Thus one could also write this as: 
+arguments. Thus one could also write this as:
 
 	pp_def('myfunc',
 		Pars => 'double a(n); double [o]b(n);',
@@ -708,7 +708,7 @@ a more general example, e.g.:
 
 Note we still use C<GenericTypes> to reduce the size of the
 type loop, obviously PP could in principle spot this and do
-it automatically though the code has yet to attain that 
+it automatically though the code has yet to attain that
 level of sophistication!
 
 Finally note when types are converted automatically one MUST
@@ -725,13 +725,13 @@ functions in that library. For an example, please check the I<Slatec>
 interface in the C<Lib> tree of the PDL distribution. If you want to check
 (during debugging) which calls to PP functions your perl code generated
 a little helper package comes in handy which replaces the PP functions
-by identically named ones that dump their arguments to stdout. 
+by identically named ones that dump their arguments to stdout.
 
 Just say
 
    perl -MPDL::PP::Dump myfile.pd
 
-to see the calls to C<pp_def> and friends. Try it with F<ops.pd> and 
+to see the calls to C<pp_def> and friends. Try it with F<ops.pd> and
 F<slatec.pd>. If you're interested (or want to enhance it), the source
 is in Basic/Gen/PP/Dump.pm
 
@@ -747,7 +747,7 @@ C<Code> section of PDL::PP along with examples of their usage.
 
 The C<$T> macro is used for type switches. This is very useful when you have
 to use different external (e.g. library) functions depending on the input
-type of arguments. The general syntax is 
+type of arguments. The general syntax is
 
 	$Ttypeletters(type_alternatives)
 
@@ -777,7 +777,7 @@ Please note that you can't say
        Code => ' $TFD(float,double)_func ($P(a),$P(b));'
 
 since the C<$T> macro expands with trailing spaces, analogously to
-C preprocessor macros. 
+C preprocessor macros.
 The slightly longer form illustrated above is correct.
 If you really want brevity, you can of course do
 
@@ -788,7 +788,7 @@ If you really want brevity, you can of course do
 
 The C<$PP> macro is used for a so called I<physical pointer access>. The
 I<physical> refers to some internal optimisations of PDL (for those who
-are familiar with the PDL core we are talking about the vaffine 
+are familiar with the PDL core we are talking about the vaffine
 optimisations). This macro is mainly for internal use and you shouldn't
 need to use it in any of your normal code.
 
@@ -951,7 +951,7 @@ especially CPU intensive code) only once per thread, i.e.
 
 =item types
 
-The types function works similar to the C<$T> macro. However, with the 
+The types function works similar to the C<$T> macro. However, with the
 C<types> function the code in the following block (delimited by C<%{>
 and C<%}> as usual) is executed for all those cases in which the datatype
 of the operation is I<any of> the types represented by the letters in the
@@ -988,11 +988,13 @@ So far, we have described the C<pp_def> and C<pp_done> functions. PDL::PP
 exports a few other functions to aid you in writing concise PDL extension
 package definitions.
 
+=head3 pp_addhdr
+
 Often when you interface library functions as in the above example
 you have to include additional C include files. Since the XS file is
 generated by PP we need some means to make PP insert the appropriate
-include directives in the right place into the generated XS file. 
-To this end there is the C<pp_addhdr> function. This is also the function 
+include directives in the right place into the generated XS file.
+To this end there is the C<pp_addhdr> function. This is also the function
 to use when you want to define some C functions for internal use by some
 of the XS functions (which are mostly functions defined by C<pp_def>).
 By including these functions here you make sure that PDL::PP inserts your
@@ -1010,7 +1012,7 @@ A typical call would be
   static void do_the real_work(PDL_Byte * in, PDL_Byte * out, int n)
   {
 	/* do some calculations with the data */
-  }   
+  }
   ');
 
 This ensures that all the constants and prototypes you need will be properly
@@ -1025,6 +1027,8 @@ C<pp_def>s, e.g.:
                  ',
   );
 
+
+=head3 pp_addpm
 
 In many cases the actual PP code (meaning the arguments to C<pp_def>
 calls) is only part of the package you are currently
@@ -1061,13 +1065,15 @@ generated B<pm>-file. This is easily achieved with the C<pp_addpm> command:
 
    sub use_myfunc {
 	my $pdl = shift;
-	
+
 	myfunc($pdl->clump(-1),($res=null));
 
 	return $res->sum;
    }
 
    EOD
+
+=head3 pp_add_exported
 
 You have probably got the idea. In some cases you also want to export
 your additional functions. To avoid getting into trouble with PP which
@@ -1078,11 +1084,15 @@ your functions to the list of exported functions:
 
 Note the initial empty string argument (reason for it?).
 
+=head3 pp_add_isa
+
 Similar as the C<pp_add_exported> function works the C<pp_add_isa>
 command. As the name already tells you C<pp_add_isa> adds its
 arguments to the @ISA list so that you can say, e.g.
 
   pp_add_isa(' Some::Other::Class ');
+
+=head3 pp_addxs
 
 Sometimes you want to add extra XS code of your own
 (that is generally not involved with any threading/indexing issues
@@ -1100,10 +1110,10 @@ side) to the generated XS file, for example
        PDL_Byte *b;
 
        i = 42; b = (PDL_Byte*) (void*) &i;
-  
-       if (*b == 42) 
+
+       if (*b == 42)
           RETVAL = 0;
-       else if (*(b+1) == 42) 
+       else if (*(b+1) == 42)
           RETVAL = 1;
        else
           croak("Impossible - machine is neither big nor little endian!!\n");
@@ -1117,6 +1127,8 @@ to the standard list of function exported by default (the list defined by the
 export tag ``:Func''). If you use C<pp_addxs> you shouldn't try to do anything
 that involves threading or indexing directly. PP is much better at generating
 the appropriate code from your definitions.
+
+=head3 pp_add_boot
 
 Finally, you may want to add some code to the BOOT section of the XS file
 (if you don't know what that is check L<perlxs>). This is easily done
@@ -1132,6 +1144,49 @@ with the C<pp_add_boot> command:
 	GlobalStruc->maxfiles = 200;
   EOB
 
+=head3 pp_export_nothing
+
+By default, PP.pm puts all subs defined using the defpdl function into the output .pm
+file's EXPORT list. This can create problems if you are creating a subclassed
+object where you don't want any methods exported. (i.e. the methods will only
+be called using the $object->method syntax).
+
+For these cases you can call pp_export_nothing() to clear out the export list. Example (At 
+the end of the .pd file):
+	
+
+  pp_export_nothing();
+  pp_done();
+
+=head3 pp_core_importList
+
+By default, PP.pm puts the 'use Core;' line into the output .pm file. This imports Core's
+exported names into the current namespace, which can create 
+problems if you are over-riding one of Core's methods in the current file.
+You end up getting messages like "Warning: sub sumover redefined in file
+subclass.pm" when running the program.
+
+For these cases the pp_core_importList can be used to change what is imported from Core.pm. 
+For example: 
+      
+
+  pp_core_importList('()') 
+      
+This would result in 
+
+  use Core();
+
+being generated in the output .pm file. This would result in no names being imported
+from Core.pm. Similarly, calling 
+
+  pp_core_importList(' qw/ barf /')
+       
+would result in
+ 
+  use Core qw/ barf/;
+        
+being generated in the output .pm file. This would result in just 'barf'
+being imported from Core.pm.
 
 
 =head2 Slice operation
@@ -1145,7 +1200,7 @@ And anyway, the slice operations require a much more intimate knowledge
 of PDL internals than the data operations. Furthermore, the complexity
 of the issues involved is considerably higher than that in the average
 data operation. If you would like to convince yourself of this fact
-take a look at the C<Basic/Slices/slices.pd> file in the PDL 
+take a look at the C<Basic/Slices/slices.pd> file in the PDL
 distribution :-). Nevertheless,
 functions generated using the slice operations are at the heart of the
 index manipulation and dataflow capabilities of PDL.
@@ -1163,7 +1218,7 @@ of a perl Makefile to automatically build and install your package
 from a description in a PP file. Most of the rules to build the xs, pm
 and other required files from the PP file are already predefined in
 the PDL::Core::Dev package. We just have to tell MakeMaker to use
-it. 
+it.
 
 In most cases you can define your Makefile like
 
@@ -1172,16 +1227,16 @@ In most cases you can define your Makefile like
   use PDL::Core::Dev;            # Pick up development utilities
   use ExtUtils::MakeMaker;
 
-  $package = ["mylib.pd",Mylib,PDL::Lib::Mylib];  
+  $package = ["mylib.pd",Mylib,PDL::Lib::Mylib];
   %hash = pdlpp_stdargs($package);
   $hash{OBJECT} .= ' additional_Ccode$(OBJ_EXT) ';
-  $hash{clean}->{FILES} .= ' todelete_Ccode$(OBJ_EXT) '; 
+  $hash{clean}->{FILES} .= ' todelete_Ccode$(OBJ_EXT) ';
   $hash{'VERSION_FROM'} = 'mylib.pd';
   WriteMakefile(%hash);
 
-  sub MY::postamble { pdlpp_postamble($package); }  
+  sub MY::postamble { pdlpp_postamble($package); }
 
-Here, the list in $package is: first: PP source file name, 
+Here, the list in $package is: first: PP source file name,
 then the prefix for the produced files and finally the whole package name.
 You can modify the hash in whatever way you like but it would be reasonable
 to stay within some limits so that your package will continue to work
@@ -1200,12 +1255,12 @@ needs:
   WriteMakefile(
    'NAME'  	=> 'PDL::Lib::Mylib',
    'VERSION_FROM'	=> 'mylib.pd',
-   'TYPEMAPS'     => [&PDL_TYPEMAP()], 
+   'TYPEMAPS'     => [&PDL_TYPEMAP()],
    'OBJECT'       => 'mylib$(OBJ_EXT) additional_Ccode$(OBJ_EXT)',
    'PM'		=> { 'Mylib.pm'            => '$(INST_LIBDIR)/Mylib.pm'},
    'INC'          => &PDL_INCLUDE(), # add include dirs as required by your lib
    'LIBS'         => [''],   # add link directives as necessary
-   'clean'        => {'FILES'  => 
+   'clean'        => {'FILES'  =>
 			  'Mylib.pm Mylib.xs Mylib$(OBJ_EXT)
 			  additional_Ccode$(OBJ_EXT)'},
   );
@@ -1213,9 +1268,9 @@ needs:
   # Add genpp rule; this will invoke PDL::PP on our PP file
   # the argument is an array reference where the array has three string elements:
   #   arg1: name of the source file that contains the PP code
-  #   arg2: basename of the xs and pm files to be generated  
+  #   arg2: basename of the xs and pm files to be generated
   #   arg3: name of the package that is to be generated
-  sub MY::postamble { pdlpp_postamble(["mylib.pd",Mylib,PDL::Lib::Mylib]); }  
+  sub MY::postamble { pdlpp_postamble(["mylib.pd",Mylib,PDL::Lib::Mylib]); }
 To make life even easier PDL::Core::Dev defines the function C<pdlpp_stdargs>
 that returns a hash with default values that can be passed (either
 directly or after appropriate modification) to a call to WriteMakefile.
@@ -1224,8 +1279,8 @@ as follows:
 
 	(
 	 'NAME'  	=> $mod,
-	 'TYPEMAPS'     => [&PDL_TYPEMAP()], 
-	 'OBJECT'       => "$pref\$(OBJ_EXT)",           
+	 'TYPEMAPS'     => [&PDL_TYPEMAP()],
+	 'OBJECT'       => "$pref\$(OBJ_EXT)",
 	 PM 	=> {"$pref.pm" => "\$(INST_LIBDIR)/$pref.pm"},
 	 MAN3PODS => {"$src" => "\$(INST_MAN3DIR)/$mod.\$(MAN3EXT)"},
 	 'INC'          => &PDL_INCLUDE(),
@@ -1233,7 +1288,7 @@ as follows:
 	 'clean'        => {'FILES'  => "$pref.xs $pref.pm $pref\$(OBJ_EXT)"},
 	)
 
-Here, C<$src> is the name of the source file with PP code, C<$pref> the 
+Here, C<$src> is the name of the source file with PP code, C<$pref> the
 prefix for the generated .pm and .xs files and C<$mod> the name of the
 exntension module to generate.
 
@@ -1268,7 +1323,7 @@ arguments which are not pdls. Default: nothing.
 
 =item Code
 
-the actual code that implements the functionality; several PP macros and 
+the actual code that implements the functionality; several PP macros and
 PP functions are recognised in the string value
 
 =item GenericTypes
@@ -1283,7 +1338,7 @@ Default: [qw/B S U L F D/]
 
 Used to specify a documentation string in Pod format. See PDL::Doc
 for information on PDL documentation conventions. Note: in
-the special case where the PP 'Doc' string is one line this is 
+the special case where the PP 'Doc' string is one line this is
 implicitly used for the quick reference AND the documentation!
 
 If the Doc field is omitted PP will generate default documentation
@@ -1340,7 +1395,7 @@ where XXX is some string that is matched by /[BSULFD+]/.
 =over 3
 
 =item C<loop(DIMS) %{ ... %}>
- 
+
 loop over named dimensions; limits are generated automatically by PP
 
 =item C<threadloop %{ ... %}>
@@ -1352,7 +1407,7 @@ enclose following code in a threadloop
 execute following code if type of operation is any of C<TYPES>
 
 =back
- 
+
 =head1 SEE ALSO
 
 L<PDL>
@@ -1369,7 +1424,7 @@ RedoDimsCode, $RESIZE()
 
 =head1 BUGS
 
-PDL::PP is still, even in its rewritten form, too complicated. 
+PDL::PP is still, even in its rewritten form, too complicated.
 It needs to be rethought a little as well as deconvoluted and
 modularized some more (e.g. all the NS things).
 

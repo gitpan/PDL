@@ -2,10 +2,15 @@
 #define PDL_CORE      /* For certain ifdefs */
 #include "pdl.h"      /* Data structure declarations */
 #include "pdlcore.h"  /* Core declarations */
-
+#include "patchlevel.h" /* Needed for ifdefs on perl version */
+#if PATCHLEVEL < 5      /*  Don't include PL_ in front of perl variables for versions < 5.005 */
+#define PL_mess_sv    mess_sv
+#define PL_in_eval    in_eval
+#define PL_restartop restartop
+#endif  /* PATCHLEVEL < 5 */
 /* If running on 5.004_04 or earlier */
 #ifndef dTHR
-#define dTHR
+#define dTHR extern int errno
 #endif
 
 static SV *getref_pdl(pdl *it) {
@@ -95,7 +100,7 @@ void pdl_makescratchhash(pdl *ret,double data, int datatype) {
 #endif
 
   /* This is an important point: it makes this whole piddle mortal
-   * so destruction will happen at the right time. 
+   * so destruction will happen at the right time.
    * If there are dangling references, pdlapi.c knows not to actually
    * destroy the C struct. */
        sv_2mortal(getref_pdl(ret));
@@ -108,7 +113,7 @@ void pdl_makescratchhash(pdl *ret,double data, int datatype) {
 
 }
 
-/* 
+/*
   "Convert" a perl SV into a pdl (alright more like a mapping as
    the data block isn't actually copied)  - scalars are automatically
    converted
@@ -124,7 +129,7 @@ pdl* SvPDLV ( SV* sv ) {
       SV *dat;
       double data;
       int datatype;
-	
+
        ret = pdl_new();  /* Scratch pdl */
 
 /*       ret->sv = (void*) sv; !! */
@@ -132,7 +137,7 @@ pdl* SvPDLV ( SV* sv ) {
 /* Scratch hash for the pdl :( - slow but safest. */
 
        /* Figure datatype to use */
-       
+
        if ( !SvIOK(sv) && SvNOK(sv) && SvNIOK(sv)  )  {/* Perl Double (e.g. 2.0) */
           data = SvNV(sv);
           datatype = pdl_whichdatatype_double(data);
@@ -163,15 +168,15 @@ pdl* SvPDLV ( SV* sv ) {
 	if(*svp == NULL) {
 		croak("Hash given as a pdl - but not {PDL} key (*svp)!");
 	}
-	
-	/* This is the magic hook which checks to see if {PDL} 
+
+	/* This is the magic hook which checks to see if {PDL}
 	is a code ref, and if so executes it. It should
 	return a standard piddle. This allows
 	all kinds of funky objects to be derived from PDL,
 	and allow normal PDL functions to still work so long
 	as the {PDL} code returns a standard piddle on
 	demand - KGB */
-	
+
 	if (SvROK(*svp) && SvTYPE(SvRV(*svp)) == SVt_PVCV) {
 	   dSP;
 	   int count;
@@ -186,7 +191,7 @@ pdl* SvPDLV ( SV* sv ) {
 	   sv=newSVsv(POPs);
 	   PUTBACK ;
 	   FREETMPS ;
-	   LEAVE ;	
+	   LEAVE ;
 	}
 	else {
    	   sv = *svp;
@@ -217,11 +222,11 @@ pdl* SvPDLV ( SV* sv ) {
 #endif
    }
 
-          
-   if (SvTYPE(SvRV(sv)) != SVt_PVMG)
-      croak("Error - argument is not a recognised data structure"); 
 
-   sv2 = (SV*) SvRV(sv); 
+   if (SvTYPE(SvRV(sv)) != SVt_PVMG)
+      croak("Error - argument is not a recognised data structure");
+
+   sv2 = (SV*) SvRV(sv);
 
 #ifdef FOIJFSOEFJSEOFJSOEIJFOISJFEFSF
    /* Now, do magic: check if there are more than this one ref
@@ -250,11 +255,11 @@ pdl* SvPDLV ( SV* sv ) {
    	croak("Fatal error: argument is probably not a piddle, or\
  magic no overwritten. You're in trouble, guv: %d %d %d\n",sv2,ret,ret->magicno);
    }
-  
+
    return ret;
 }
 
-/* Make a new pdl object as a copy of an old one and return - implement by    
+/* Make a new pdl object as a copy of an old one and return - implement by
    callback to perl method "copy" or "new" (for scalar upgrade) */
 
 SV* pdl_copy( pdl* a, char* option ) {
@@ -270,18 +275,18 @@ SV* pdl_copy( pdl* a, char* option ) {
 
    /* Push arguments */
 
-#ifdef FOOBAR 
+#ifdef FOOBAR
    if (sv_isobject((SV*)a->hash)) {
 #endif
-       XPUSHs(sv_2mortal(getref_pdl(a))); 
-       strcpy(meth,"copy");    
-       XPUSHs(sv_2mortal(newSVpv(option, 0))) ;    
+       XPUSHs(sv_2mortal(getref_pdl(a)));
+       strcpy(meth,"copy");
+       XPUSHs(sv_2mortal(newSVpv(option, 0))) ;
 #ifdef FOOBAR
    }
    else{
        XPUSHs(perl_get_sv("PDL::name",FALSE)); /* Default object */
-       XPUSHs(sv_2mortal(getref_pdl(a))); 
-       strcpy(meth,"new");    
+       XPUSHs(sv_2mortal(getref_pdl(a)));
+       strcpy(meth,"new");
    }
 #endif
 
@@ -291,14 +296,14 @@ SV* pdl_copy( pdl* a, char* option ) {
 
    SPAGAIN;
 
-   if (count !=1) 
+   if (count !=1)
       croak("Error calling perl function\n");
 
    sv_setsv( retval, POPs ); /* Save the perl returned value */
-  
+
    PUTBACK ;   FREETMPS ;   LEAVE ;
 
-   return retval;  
+   return retval;
 }
 
 
@@ -316,7 +321,7 @@ PDL_Long* pdl_packdims ( SV* sv, int *ndims ) {
        return NULL;
 
    array = (AV *) SvRV(sv);   /* dereference */
-  
+
    *ndims = (int) av_len(array) + 1;  /* Number of dimensions */
 
    dims = (PDL_Long *) pdl_malloc( (*ndims) * sizeof(*dims) ); /* Array space */
@@ -325,10 +330,10 @@ PDL_Long* pdl_packdims ( SV* sv, int *ndims ) {
 
    for(i=0; i<(*ndims); i++) {
       bar = *(av_fetch( array, i, 0 )); /* Fetch */
-      dims[i] = (int) SvIV(bar); 
+      dims[i] = (int) SvIV(bar);
    }
    return dims;
-} 
+}
 
 /* unpack dims array into PDL SV* */
 
@@ -338,16 +343,16 @@ void pdl_unpackdims ( SV* sv, PDL_Long *dims, int ndims ) {
    HV* hash;
    int i;
 
-   hash = (HV*) SvRV( sv ); 
+   hash = (HV*) SvRV( sv );
    array = newAV();
    hv_store(hash, "Dims", strlen("Dims"), newRV( (SV*) array), 0 );
-  
+
    if (ndims==0 )
       return;
 
    for(i=0; i<ndims; i++)
          av_store( array, i, newSViv( (IV)dims[i] ) );
-} 
+}
 
 /*
    pdl_malloc - utility to get temporary memory space. Uses
@@ -358,13 +363,13 @@ void pdl_unpackdims ( SV* sv, PDL_Long *dims, int ndims ) {
 
 
 void* pdl_malloc ( int nbytes ) {
-   
+
    SV* work;
-   
+
    work = sv_2mortal(newSVpv("", 0));
-   
+
    SvGROW( work, nbytes);
-   
+
    return (void *) SvPV(work, na);
 }
 
@@ -399,9 +404,9 @@ pdl_mess(pat, args)
 {
     SV *sv;
 
-    if (!mess_sv)
-	mess_sv = pdl_mess_alloc();
-    sv = mess_sv;
+    if (!PL_mess_sv)
+	PL_mess_sv = pdl_mess_alloc();
+    sv = PL_mess_sv;
     sv_vsetpvfn(sv, pat, strlen(pat), args, Null(SV**), 0, Null(bool*));
     {
 	/* call the PDL message enhancing routine */
@@ -426,15 +431,14 @@ pdl_mess(pat, args)
 
 /*
    pdl_barf - warning routine to be called when PDL routine
-   croak 
-   
+   croak
+
    Note: we call back in to Perl as error reporting is
    not time critical, and this gives us lots of flexibility.
-   
+
    code stolen from croak() in util.c in Perl distribution
-   
 */
-   
+
 #ifdef I_STDARG
 void
 pdl_barf(const char* pat, ...)
@@ -459,7 +463,7 @@ pdl_barf(pat, va_alist)
 #endif
     message = pdl_mess(pat, &args);
     va_end(args);
-     
+
     if (diehook) {
 	/* sv_2cv might call croak() */
 	SV *olddiehook = diehook;
@@ -485,8 +489,8 @@ pdl_barf(pat, va_alist)
 	    LEAVE;
 	}
     }
-    if (in_eval) {
-	restartop = die_where(message);
+    if (PL_in_eval) {
+	PL_restartop = die_where(message);
 	JMPENV_JUMP(3);
     }
     PerlIO_puts(PerlIO_stderr(),message);

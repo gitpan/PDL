@@ -8,6 +8,15 @@ sub defpdl {
 	pp_def($_[0],%hash);
 }
 
+pp_addhdr(<<'EOD');
+#define IsNaN(x) (x != x)
+
+#ifndef RAND_MAX
+#error "You must have a working RAND_MAX! Something's wrong with your include files"
+#endif
+
+EOD
+
 pp_addpm({At=>Top},<<'EOD');
 
 use PDL::Slices;
@@ -19,7 +28,7 @@ PDL::Primitive - primitive operations for pdl
 
 =head1 DESCRIPTION
 
-This module provides some primitive and useful functions defined 
+This module provides some primitive and useful functions defined
 using PDL::PP and able to use the new indexing tricks.
 
 See L<PDL::Indexing> for how to use indices creatively.
@@ -46,7 +55,7 @@ sub projectdocs {
 
 Project via $name to N-1 dimensions
 
-This functions reduces the dimensionality of a piddle
+This function reduces the dimensionality of a piddle
 by one by taking the $name along the 1st dimension.
 
 By using C<xchg> etc. (see L<PDL::Slices>) it is possible to use
@@ -58,14 +67,49 @@ I<any> dimension.
 
 =for example
 
-	\$spectrum = $op \$image->xchg(0,1) 
+	\$spectrum = $op \$image->xchg(0,1)
 
-$extras	
+$extras
 =cut
 
 EOD
 
 }
+
+sub cumuprojectdocs {
+  my $name = shift;
+  my $op = shift;
+  my $extras = shift;
+  return <<EOD;
+
+=for ref
+
+Cumulative $name
+
+This function calculates the cumulative $name
+along the 1st dimension.
+
+By using C<xchg> etc. (see L<PDL::Slices>) it is possible to use
+I<any> dimension.
+
+The sum is started so that the first element in the cumulative $name
+is the first element of the parameter.
+
+=for usage
+
+    \$a = $op(\$b);
+
+=for example
+
+	\$spectrum = $op \$image->xchg(0,1)
+
+$extras
+=cut
+
+EOD
+
+}
+
 
 defpdl(
 	'sumover',
@@ -77,6 +121,18 @@ defpdl(
 	 projectdocs('sum','sumover','')
 );
 
+defpdl(
+	'cumusumover',
+	'a(n); int+ [o]b(n);',
+	'',
+	'$GENERIC(b) tmp = 0;
+	 loop(n) %{ tmp += $a();
+		 $b() = tmp;
+	 %}
+	',
+	 cumuprojectdocs('sum','cumusumover','')
+);
+
 
 defpdl(
 	'prodover',
@@ -85,6 +141,18 @@ defpdl(
 	'$GENERIC(b) tmp = 1;
 	 loop(n) %{ tmp *= $a(); %}
 	 $b() = tmp;',
+	 projectdocs('product','prodover','')
+);
+
+defpdl(
+	'cumuprodover',
+	'a(n); int+ [o]b(n);',
+	'',
+	'$GENERIC(b) tmp = 1;
+	 loop(n) %{ tmp *= $a();
+		 $b() = tmp;
+	 %}
+	 ',
 	 projectdocs('product','prodover','')
 );
 
@@ -110,11 +178,11 @@ for (keys %PDL::Types::typehash) {
    pp_addhdr("
 
       void pdl_qsort_$ppsym($ctype* xx, int a, int b) {
-      
+
          int i,j;
-      
+
          $ctype t, median;
-      
+
          i = a; j = b;
          median = xx[(i+j) / 2];
          do {
@@ -127,12 +195,12 @@ for (keys %PDL::Types::typehash) {
                i++; j--;
             }
          } while (i <= j);
-      
+
          if (a < j)
             pdl_qsort_$ppsym(xx,a,j);
          if (i < b)
             pdl_qsort_$ppsym(xx,i,b);
-      
+
       }
 
    ");
@@ -146,7 +214,7 @@ pp_def('medover',
 	   loop(n) %{ $tmp() = $a(); %}
            nn = $COMP(__n_size)-1;
            $TBSULFD(pdl_qsort_B,pdl_qsort_S,pdl_qsort_U,
-             pdl_qsort_L,pdl_qsort_F,pdl_qsort_D) ($P(tmp), 0, nn); 
+             pdl_qsort_L,pdl_qsort_F,pdl_qsort_D) ($P(tmp), 0, nn);
 
            nn1 = nn/2; nn2 = nn1+1;
            if (nn%2==0) {
@@ -173,23 +241,23 @@ some circumstances.
 	   loop(n) %{ $tmp() = $a(); %}
            nn = $COMP(__n_size)-1;
            $TBSULFD(pdl_qsort_B,pdl_qsort_S,pdl_qsort_U,
-             pdl_qsort_L,pdl_qsort_F,pdl_qsort_D) ($P(tmp), 0, nn); 
+             pdl_qsort_L,pdl_qsort_F,pdl_qsort_D) ($P(tmp), 0, nn);
 
            nn1 = nn/2;
-	   $b() = $tmp(n => nn1);           
+	   $b() = $tmp(n => nn1);
 ');
 
 
 # Generate small ops functions to do entire array
 
-for $op ( ['avg','average','average'], 
+for $op ( ['avg','average','average'],
           ['sum','sumover','sum'],
 	  ['min','minimum','minimum'],
 	  ['max','maximum','maximum'],
 	  ['median', 'medover', 'median'],
 	  ['oddmedian','oddmedover','oddmedian']) {
    pp_add_exported('', $op->[0]);
-	  
+
    pp_addpm(<<"EOD");
 
 =head2 $op->[0]
@@ -207,26 +275,26 @@ Return the $op->[2] of all elements in a piddle
 *$op->[0] = \\&PDL::$op->[0];
 sub PDL::$op->[0] {
 	my(\$x) = \@_; my \$tmp;
-	$op->[1](\$x->clump(-1),(\$tmp=null));
+	\$x->clump(-1)->$op->[1](\$tmp=PDL->nullcreate(\$x) );
 	return \$tmp->at();
 }
 EOD
 
 } # for $op
-	  
+
 pp_addpm(<<'EOD'
 
 =head2 minmax
 
 =for ref
 
-Returns piddle with minimum, maximum of a piddle.
+Returns an array with minimum, maximum of a piddle.
 
 =for usage
 
  ($mn, $mx) = minmax($pdl);
 
- Return $mn as minimum, $mx as maximum, $mn_ind as the index of minimum and 
+ Return $mn as minimum, $mx as maximum, $mn_ind as the index of minimum and
  $mx_ind as the index of the maximum.
 
 =for example
@@ -243,7 +311,8 @@ Returns piddle with minimum, maximum of a piddle.
 *minmax = \&PDL::minmax;
 sub PDL::minmax {
   my ($x)=@_; my $tmp;
-  return minmaximum($x->clump(-1));
+  my @arr = $x->clump(-1)->minmaximum;
+  return @arr[0,1];
 }
 
 EOD
@@ -260,7 +329,7 @@ pp_def('qsort',
 	   loop(n) %{ $b() = $a(); %}
            nn = $COMP(__n_size)-1;
            $TBSULFD(pdl_qsort_B,pdl_qsort_S,pdl_qsort_U,
-             pdl_qsort_L,pdl_qsort_F,pdl_qsort_D) ($P(b), 0, nn); 
+             pdl_qsort_L,pdl_qsort_F,pdl_qsort_D) ($P(b), 0, nn);
 
 ', Doc=>'
 =for ref
@@ -278,7 +347,7 @@ defpdl(
 	'',
 	'loop(n) %{ $a() = n; %}',
 	'
-=for ref 
+=for ref
 
 Internal routine
 
@@ -315,7 +384,7 @@ defpdl(
 
 outer product over one dimension
 
-Naturally, it is possiblet to achieve the effects of outer 
+Naturally, it is possiblet to achieve the effects of outer
 product simply by threading over the "C<*>"
 operator but this function is provided for convenience.
 
@@ -333,7 +402,7 @@ pp_addpm(<<'EOD');
 
 =for ref
 
-Matrix multiplication 
+Matrix multiplication
 
 We peruse the inner product to define matrix multiplication
 via a threaded inner product
@@ -342,8 +411,8 @@ via a threaded inner product
 
   sub matmult {
     my ($a,$b,$c) = @_;
-    if(!defined $c) {$c = PDL->null}
-    inner($a->dummy(1),$b->xchg(0,1)->dummy(2),$c);
+    if(!defined $c) {$c = PDL->nullcreate($a)}
+    $a->dummy(1)->inner($b->xchg(0,1)->dummy(2),$c);
     return $c;
   }
 EOD
@@ -423,7 +492,7 @@ defpdl(
 	%}',<<'EOD');
 =for ref
 
-Efficient Triple matrix product a*b*c 
+Efficient Triple matrix product a*b*c
 
 Efficiency comes from by using the temporary tmp. This operation only scales as
 N**3 whereas threading using inner2 would scale as N**4.
@@ -460,7 +529,7 @@ defpdl(
 	'a(n); [o]c();','',
 	'$GENERIC() cur;
 	 loop(n) %{
-	 	if(!n || $a() '.$which->[1].' cur) {cur = $a();}
+	 	if(!n || $a() '.$which->[1].' cur || IsNaN(cur)) {cur = $a();}
 	 %}
 	 $c() = cur;
 	', projectdocs($which->[0],$which->[0])
@@ -470,7 +539,8 @@ defpdl(
 	'a(n); int[o]c();','',
 	'$GENERIC() cur; int curind;
 	 loop(n) %{
-	 	if(!n || $a() '.$which->[1].' cur) {cur = $a(); curind = n;}
+	 	if(!n || $a() '.$which->[1].' cur || IsNaN(cur))
+		   {cur = $a(); curind = n;}
 	 %}
 	 $c() = curind;
 	',"Like $which->[0] but returns the index rather than the value"
@@ -486,7 +556,8 @@ defpdl(
 		 	for(nm=0; nm<m; nm++) {
 				if($c(m=>nm) == n) {flag=1; break;}
 			}
-			if(!flag && (n<=m || $a() '.$which->[1].' cur)) 
+			if(!flag &&
+			   (n<=m || $a() '.$which->[1].' cur || IsNaN(cur)))
 				{cur = $a(); curind = n;}
 		 %}
 		 $c() = curind;
@@ -507,11 +578,11 @@ pp_addpm(<<'EOD'
  Find minimum and maximum and their indices for a given piddle;
 
 =for usage
-   
+
         perldl> $a=pdl [[-2,3,4],[1,0,3]]
 
 	perldl> ($min, $max, $min_ind, $max_ind)=minmaximum($a)
- 
+
         perldl> p $min, $max, $min_ind, $max_ind
         [-2 0] [4 3] [0 1] [2 2]
 
@@ -526,13 +597,13 @@ pp_def( 'minmaximum',
 	Code => '$GENERIC() curmin, curmax;
                  int curmin_ind, curmax_ind;
 	 loop(n) %{
-	 	if (!n || ($a() < curmin)) {curmin = $a(); curmin_ind = n;}; 
-	 	if (!n || ($a() > curmax)) {curmax = $a(); curmax_ind = n;}; 
+	 	if (!n || ($a() < curmin) || IsNaN(curmin)) {curmin = $a(); curmin_ind = n;};
+	 	if (!n || ($a() > curmax) || IsNaN(curmax)) {curmax = $a(); curmax_ind = n;};
 	 %}
 	 $cmin() = curmin;
          $cmax() = curmax;
 	 $cmin_ind() = curmin_ind;
-         $cmax_ind() = curmax_ind;' 
+         $cmax_ind() = curmax_ind;'
 	);
 
 
@@ -548,13 +619,13 @@ sub PDL::$_->[0] {
    my \$c;
    if (\$a->is_inplace) {
        \$a->set_inplace(0); \$c = \$a;
-   } elsif (\$#_ > 1) {\$c=\$_[2]} else {\$c=PDL->null}
+   } elsif (\$#_ > 1) {\$c=\$_[2]} else {\$c=PDL->nullcreate(\$a)}
    &PDL::_$_->[0]_int(\$a,\$b,\$c);
    return \$c;
 }
 EOD
     );
-} 
+}
 
 pp_add_exported('', clip);
 
@@ -568,7 +639,7 @@ Clip a piddle by (optional) upper or lower bounds.
 
 =for usage
 
-	$b = $a->clip(0,3); 
+	$b = $a->clip(0,3);
 	$c = $a->clip(undef, $x);
 
 =cut
@@ -577,8 +648,8 @@ Clip a piddle by (optional) upper or lower bounds.
 sub PDL::clip {
   my($a, $b, $c) = @_;
   my $d; if($a->is_inplace) {$a->set_inplace(0); $d = $a} 
-  elsif($#_ > 2) {$d=$_[3]} else {$d = PDL->null}
-  if(defined $b) {
+  elsif($#_ > 2) {$d=$_[3]} else {$d = PDL->nullcreate($a)}
+ if(defined $b) {
   	&PDL::_lclip_int($a,$b,$d);
 	if(defined $c) {
 		&PDL::_hclip_int($d,$c,$d);
@@ -597,7 +668,7 @@ defpdl(
 	'int deg',
 	'double wtsum = 0;
 	 double statsum=0;
-	 loop(n) %{ 
+	 loop(n) %{
 		 register double tmp; register int i;
 		 wtsum += $wt();
 		tmp=1; for(i=0; i<$COMP(deg); i++) tmp*=$a();
@@ -610,8 +681,8 @@ defpdl(
 
 Weighted statistical moment of given degree
 
-This calculates a weighted statistic over the vector a. 
-The formula is  
+This calculates a weighted statistic over the vector a.
+The formula is
 
  b() = (sum_i wt_i * (a_i ** degree - avg)) / (sum_i wt_i)
 
@@ -631,7 +702,7 @@ Constructor which returns piddle of random numbers
 
    $a = random([type], $nx, $ny, $nz,...);
    $a = random $b;
-   
+
    etc. (see 'zeroes')
 
 This is the uniform distribution between 0 and 1 (assumedly
@@ -649,7 +720,7 @@ Constructor which returns piddle of random numbers
 
    $a = randsym([type], $nx, $ny, $nz,...);
    $a = randsym $b;
-   
+
    etc. (see 'zeroes')
 
 This is the uniform distribution between 0 and 1 (excluding both 0 and
@@ -709,7 +780,7 @@ Constructor which returns piddle of Gaussian random numbers
    $a = grandom $b;
 
    etc. See 'zeroes'
-   
+
 This is generated by summing 12 uniform random
 distributions for now. Hopefully someone can be
 inspired to create a better version!
@@ -791,6 +862,8 @@ for events and want to generate indices to events:
 	$b = random 20;
 	$c = vsearch($b, $a); # Now, $c will have the appropriate distr.
 
+It is possible to use the C<cumusumover> function to obtain
+cumulative probabilities from absolute probabilities.
 EOD
 
 pp_def('interpol',
@@ -859,15 +932,15 @@ Converts a one dimensional index piddle to a set of ND coordinates
 
   @coords=one2nd($a, $indices)
 
-returns an array of piddles containing the ND indexes corresponding to 
+returns an array of piddles containing the ND indexes corresponding to
 the one dimensional list indices. The indices are assumed to correspond
-to array $a clumped using clump(-1). This routine is used in whichND, 
+to array $a clumped using clump(-1). This routine is used in whichND,
 but is useful on its own occasionally.
 
 =for example
- 
+
  perldl> $a=pdl [[[1,2],[-1,1]], [[0,-3],[3,2]]]; $c=$a->clump(-1)
-  
+
  perldl> $maxind=maximum_ind($c); p $maxind;
  6
  perldl> print one2nd($a, maximum_ind($c))
@@ -907,10 +980,10 @@ Returns piddle of indices of non-zero values.
  $i = which($mask);
 
 returns a pdl with indices for all those elements that are
-nonzero in the mask. Note that mask really has to be 1-D (use clump(-1) 
-if you need to work with ND-images) 
+nonzero in the mask. Note that mask really has to be 1-D (use clump(-1)
+if you need to work with ND-images)
 
-If you want to return both the indices of non-zero values and the 
+If you want to return both the indices of non-zero values and the
 complement, use the function which_both.
 
 
@@ -945,7 +1018,7 @@ This works just as which, but the complement of $i will be in $c_i.
 
 =cut
 
-  
+
 EOD
 );
 
@@ -953,21 +1026,21 @@ for ({Name=>'which',
       Pars => 'mask(n); int [o] inds(m);',
       Variables => 'int dm=0;',
       Elseclause => "",
-      Autosize => '$PRIV(__m_size) = sum;'},
+      Autosize => '$SIZE(m) = sum;'},
      {Name => 'which_both',
       Pars => 'mask(n); int [o] inds(m); int [o]notinds(q)',
       Variables => 'int dm=0; int dm2=0;',
       Elseclause => "else { \n          \$notinds(q => dm2)=n; \n           dm2++;\n     }",
-      Autosize => '$PRIV(__m_size) = sum;'."\n".'  	  $PRIV(__q_size) = dpdl->dims[0]-sum;'})
+      Autosize => '$SIZE(m) = sum;'."\n".'  	  $SIZE(q) = dpdl->dims[0]-sum;'})
 {
 pp_def($_->{Name},
 	Pars => $_->{Pars},
-	Code => $_->{Variables} . 
+	Code => $_->{Variables} .
                  'loop(n) %{
 			if ($mask()) {
 				$inds(m => dm) = n;
 				dm++;
-			}'.$_->{Elseclause} . "\n".  		
+			}'.$_->{Elseclause} . "\n".
 		' %}',
 #		the next one is currently a dirty hack
 #               this will probably break once dataflow is enabled again
@@ -975,13 +1048,13 @@ pp_def($_->{Name},
 	RedoDimsCode => '
 		PDL_Long sum = 0;
 		/* not sure if this is necessary */
-		pdl * dpdl = $PRIV(pdls[0]);
+		pdl * dpdl = $PDL(mask);
 		$GENERIC() *m_datap = (($GENERIC() *)(PDL_REPRP(dpdl)));
 		PDL_Long inc = PDL_REPRINC(dpdl,0);
 		PDL_Long offs = PDL_REPROFFS(dpdl);
 		int i;
 
-		if ($PRIV(pdls[0]->ndims) != 1)
+		if (dpdl->ndims != 1)
 		  barf("dimflag currently works only with 1D pdls");
 
 		for (i=0; i<dpdl->dims[0]; i++) {
@@ -1004,7 +1077,7 @@ Returns indices to non-zero values or those values from another piddle.
 
  $i = $x->where($x+5 > 0); # $i contains elements of $x
                            # where mask ($x+5 > 0) is 1
- 
+
 Note: $i is always 1-D, even if $x is >1-D. The first argument
 (the values) and the second argument (the mask) currently have to have
 the same initial dimensions (or horrible things happen).
@@ -1014,11 +1087,11 @@ the same call:
 
  ($i,$j,$k) = where($x,$y,$z, $x+5>0);
 
-There is also the following syntax, retained only for compatibility 
-with PDL versions <1.99. 
+There is also the following syntax, retained only for compatibility
+with PDL versions <1.99.
 This use is deprecated, and will be removed
 in the future.  Use C<which> instead.
- 
+
  $i = where($x > 0);       # indices to $x, equivalent to 'which()'
 
 Note: the mask has to be 1-D. See the documentation for C<which>
@@ -1037,7 +1110,7 @@ sub PDL::where {
 	} else {
 		if($_[-1]->getndims > 1) {
 			my $mask = $_[-1]->clump(-1)->which;
-			return map {$_->clump(-1)->index($mask)} 
+			return map {$_->clump(-1)->index($mask)}
 				@$_[0..$#$_-1];
 		} else {
 			my $mask = $_[-1]->which;
@@ -1052,6 +1125,40 @@ EOD
 
 pp_add_exported("", where);
 
+pp_def('append',
+	Pars => 'a(n); b(m); [o] c(mn)',
+# note that ideally we want to say '$SIZE(mn) = $SIZE(m)+$SIZE(n);'
+# but that requires placing RedoDimsParsedCode *after* assignment of
+# childdims to $SIZE(XXX)!!!  XXXXXmake that workXXXXX
+	RedoDimsCode => '
+		pdl * dpdla = $PDL(a);
+		pdl * dpdlb = $PDL(b);
+		$SIZE(mn) = dpdla->dims[0] + dpdlb->dims[0];',
+	Code => 'register PDL_Long mnp;
+		 PDL_Long ns = $SIZE(n);
+                 threadloop %{
+                       loop(n) %{ $c(mn => n) = $a(); %}
+		       loop(m) %{ mnp = m+ns; $c(mn => mnp) = $b(); %}
+		 %}',
+	Doc => << 'EOD',
+=for ref
+
+append two piddles by concantening along their respective first dimensions
+
+=for example
+
+   $a = ones(2,4,7);
+   $b = sequence 5;
+   $c = $a->append($b);  # size of $c is now (7,4,7) (a jumbo-piddle ;)
+
+C<append> appends two piddles along their first dims. Rest of the dimensions
+must be compatible in the threading sense. Resulting size of first dim is
+sum of sizes of the two argument piddles' first dims.
+
+EOD
+);
+
+
 for({Name => 'histogram',
     WeightPar => '',
      HistType => 'int+',
@@ -1062,7 +1169,7 @@ for({Name => 'histogram',
      HistOp => '+= $wt()'})
 {
 pp_def($_->{Name},
-	Pars => 'in(n); '.$_->{WeightPar}.$_->{HistType}.  '[o] hist(m)', 
+	Pars => 'in(n); '.$_->{WeightPar}.$_->{HistType}.  '[o] hist(m)',
 		# set outdim by Par!
 	OtherPars => 'double step; double min; int msize => m',
 	Code => 'register int j;
@@ -1087,7 +1194,7 @@ Doc=><<"EOD");
 
 Calculates a histogram for given stepsize and minimum.
 
-The output is reset in a different threadloop so that you 
+The output is reset in a different threadloop so that you
 can take a histogram of \$a(10,12) into \$b(15) and get the result
 you want.
 
@@ -1108,7 +1215,7 @@ for({Name => 'histogram2d',
      HistOp => '+= $wt()'})
 {
 pp_def($_->{Name},
-	Pars => 'ina(n); inb(n); '.$_->{WeightPar}.$_->{HistType}.  '[o] hist(ma,mb)', 
+	Pars => 'ina(n); inb(n); '.$_->{WeightPar}.$_->{HistType}.  '[o] hist(ma,mb)',
 		# set outdim by Par!
 	OtherPars => 'double stepa; double mina; int masize => ma;
 	              double stepb; double minb; int mbsize => mb;',
@@ -1199,7 +1306,7 @@ Calculates useful statistics on a piddle
 
 =for usage
 
- ($mean,$rms,$median,$min,$max) = stats($piddle,[$weights]); 
+ ($mean,$rms,$median,$min,$max) = stats($piddle,[$weights]);
 
 This utility calculates all the most useful
 quantities in one call.
@@ -1213,12 +1320,12 @@ sub PDL::stats {
     my ($data,$weights) = @_;
     my ($mean,$rms);
     if ($#_==0) {
-       $mean = sum($data)/($data->nelem);
-       $rms = sqrt( sum( ($data-$mean)**2 )/($data->nelem) );
+       $mean = ($data->sum)/($data->nelem);
+       $rms = sqrt(  ((($data-$mean)**2 )->sum) / ($data->nelem) );
     }
     else {
-       $mean = sum($weights*$data)/sum($weights);
-       $rms = sqrt( sum( $weights*(($data-$mean)**2) )/sum($weights) );
+       $mean = (($weights*$data)->sum) / (($weights)->sum);
+       $rms = sqrt(  ( ( $weights*(($data-$mean)**2) )->sum )  / ($weights->sum) );
     }
     my ($median,$min,$max) = ($data->median,$data->min,$data->max);
     print "Mean = $mean, RMS = $rms, Median = $median\n".
@@ -1245,7 +1352,7 @@ that are non-zero in $mask.
 =for example
 
    perldl> $a=sequence(10,10,3,4)
-   
+
    perldl> ($x, $y, $z, $w)=whichND($a == 203); p $x, $y, $z, $w)
    [3] [0] [2] [0]
    perldl> print $a->at($x,$y,$z,$w)
@@ -1255,10 +1362,9 @@ that are non-zero in $mask.
 *whichND = \&PDL::whichND;
 sub PDL::whichND {
   my $mask = shift;
-  my $ind=which($mask->clump(-1));
+  my $ind=($mask->clump(-1))->which;
 
-  return one2nd($mask, $ind);
-  
+  return $mask->one2nd($ind);
 }
 
 EOD
@@ -1296,17 +1402,18 @@ EOD
 ');
 
 
+
 pp_addpm({At=>Bot},<<'EOD');
 
 =head1 AUTHOR
 
 Copyright (C) Tuomas J. Lukka 1997 (lukka@husc.harvard.edu). Contributions
 by Christian Soeller (csoelle@sghms.ac.uk) and Karl Glazebrook
-(kgb@aaoepp.aao.gov.au). 
+(kgb@aaoepp.aao.gov.au).
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 

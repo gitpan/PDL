@@ -1,5 +1,5 @@
 # Test ->slice(). This is not yet good enough: we need
-# nasty test cases, 
+# nasty test cases,
 
 use PDL::LiteF;
 # kill INT,$$  if $ENV{UNDER_DEBUGGER}; # Useful for debugging.

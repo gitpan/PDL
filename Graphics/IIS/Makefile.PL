@@ -1,3 +1,13 @@
+BEGIN {
+  PDL::Core::Dev->import();
+  $skip = 0;
+  if ($^O =~ /win32/i) {
+    write_dummy_make(unsupported('PDL::Graphics::IIS','win32'));
+    $skip=1;
+  }
+}
+
+goto SKIP if $skip;
 
 # Makefile.PL for PDL::Graphics::IIS module.
 
@@ -10,7 +20,7 @@ PDL::Core::Dev->import();
 
 use ExtUtils::MakeMaker;
 
-# Replace this wit:e 
+# Replace this wit:e
 
 @pack = (["iis.pd",IIS,PDL::Graphics::IIS]);
 
@@ -21,3 +31,5 @@ WriteMakefile(
 sub MY::postamble {
 	pdlpp_postamble_int(@::pack);
 }  # Add genpp rule
+
+SKIP: return;

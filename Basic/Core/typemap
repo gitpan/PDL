@@ -12,9 +12,9 @@ T_PDL
 T_PDLTRANS
 	if(sv_isa($arg,\"PDL::Trans\"))
 		$var = (pdl_trans *)SvIV(SvRV($arg));
-	else 
+	else
 	        croak(\"$var is not of type PDL::Trans\")
-	
+
 
 OUTPUT
 

@@ -30,33 +30,36 @@ $PDL::Core::FOO_FOO_::VERSION = '1.56';
 
 @EXPORT = qw( pdl null barf ); # Only stuff always exported!
 
-@EXPORT_OK = qw( howbig threadids topdl nelem dims null byte short ushort 
-   long float double convert log10 inplace zeroes ones list listindices 
+@EXPORT_OK = qw( howbig threadids topdl nelem dims null byte short ushort
+   long float double convert log10 inplace zeroes ones list listindices
    set at flows thread_define over reshape dog cat barf type diagonal
    dummy mslice);
-  
+
 %EXPORT_TAGS = (
-   Func=>[qw/nelem dims null byte short ushort 
-    long float double convert log10 inplace zeroes ones list listindices 
+   Func=>[qw/nelem dims null byte short ushort
+    long float double convert log10 inplace zeroes ones list listindices
     set at flows thread_define over reshape pdl null dog cat barf type
-    diagonal dummy mslice/], 
+    diagonal dummy mslice/],
    Internal=>[qw/howbig threadids topdl/]
 );
 
 use PDL::Exporter;
-use DynaLoader; 
+use DynaLoader;
 
-@ISA    = qw( PDL::Exporter DynaLoader ); 
+@ISA    = qw( PDL::Exporter DynaLoader );
 
 bootstrap PDL::Core;
 
 # Important variables (place in PDL namespace)
+# (twice to eat "used only once" warning)
 
-$PDL::verbose      =	       # Eat "used only once" warning
-$PDL::verbose      = 0;        # Whether or not functions waffle
+$PDL::debug      =	     # Debugging info
+$PDL::debug      = 0;
+$PDL::verbose      =	     # Functions provide chatty information
+$PDL::verbose      = 0;
 $PDL::use_commas   = 0;        # Whether to insert commas when printing arrays
-$PDL::floatformat  = "%7g";    # Default print format for long numbers 
-$PDL::doubleformat = "%10.8g"; 
+$PDL::floatformat  = "%7g";    # Default print format for long numbers
+$PDL::doubleformat = "%10.8g";
 
 ################ Exportable functions of the Core ######################
 
@@ -67,8 +70,8 @@ $PDL::doubleformat = "%10.8g";
 *null	      = \&PDL::null;	  *set  	= \&PDL::set;
 *byte	      = \&PDL::byte;	  *at		= \&PDL::at;
 *short        = \&PDL::short;	  *flows	= \&PDL::flows;
-*ushort       = \&PDL::ushort;	   
-*long	      = \&PDL::long;	  
+*ushort       = \&PDL::ushort;	
+*long	      = \&PDL::long;	
 *float        = \&PDL::float;	  *cutmask	 = \&PDL::cutmask;
 *double       = \&PDL::double;	  *thread_define = \&PDL::thread_define;
 *convert      = \&PDL::convert;   *over 	 = \&PDL::over;
@@ -77,6 +80,7 @@ $PDL::doubleformat = "%10.8g";
 *diagonal     = \&PDL::diagonal;
 *dummy        = \&PDL::dummy;
 *mslice       = \&PDL::mslice;
+
 
 sub barf;
 
@@ -116,16 +120,71 @@ Returns a 'null' piddle.
 =for usage
 
    $x = null;
-   
+
 null() has a special meaning to C<PDL::PP>. It is used to
 flag a special kind of empty piddle, which can grow to
 appropriate dimensions to store a result. (As opposed to
-storing a result in an existing piddle).    
+storing a result in an existing piddle).
 
 =for example
 
  perldl> sumover sequence(10,10), $ans=null;p $ans
  [45 145 245 345 445 545 645 745 845 945]
+
+=cut
+
+sub PDL::null{
+	my $class = scalar(@_) ? shift : undef; # if this sub called with no
+						#  class ( i.e. like 'null()', instead
+						#  of '$obj->null' or 'CLASS->null', setup
+						
+	if( defined($class) ){
+		$class = ref($class) || $class;  # get the class name
+	}
+	else{
+		$class = 'PDL';  # set class to the current package name if null called
+					# with no arguments
+	}
+
+	return $class->initialize();
+}
+
+=head2 nullcreate
+
+=for ref
+
+Returns a 'null' piddle.
+
+=for usage
+
+   $x = PDL->nullcreate($arg)
+   
+This is an routine used by many of the threading primitives (i.e. sumover, minimum,
+etc.) to generate a null piddle for the function's output that will behave properly
+for derived (or subclassed) PDL objects. 
+
+For the above usage:
+If $arg is a PDL, or a derived PDL, then $arg->null is returned. 
+If $arg is a scalar (i.e. a zero-dimensional PDL) then $PDL->null 
+is returned.
+
+=for example
+
+ PDL::Derived->nullcreate(10)
+   returns PDL::Derived->null.
+
+ PDL->nullcreate($pdlderived)
+   returns $pdlderived->null.
+
+=cut
+
+sub PDL::nullcreate{
+	
+	my ($type,$arg) = @_;
+
+        return ref($arg) ? $arg->null : $type->null ;
+}
+
 
 =head2 nelem
 
@@ -135,11 +194,11 @@ Return the number of elements in a piddle
 
 =for usage
 
- $n = nelem($piddle); $n = $piddle->nelem;  
+ $n = nelem($piddle); $n = $piddle->nelem;
 
 =for example
 
- $mean = sum($data)/nelem($data); 
+ $mean = sum($data)/nelem($data);
 
 =head2 dims
 
@@ -181,7 +240,7 @@ alternate piddle constructor - ensures arg is a piddle
 =for usage
 
    $a = topdl(SCALAR|ARRAY REFERENCE|ARRAY);
-   
+
 The difference between pdl() and topdl() is that the
 latter will just 'fall through' if the argument is
 already a piddle. It will return a reference and NOT
@@ -197,7 +256,7 @@ will ensure nothing breaks if passed with '2'.
    $a = topdl 43;         # $a is piddle with value '43'
    $b = topdl $piddle;    # fall through
    $a = topdl (1,2,3,4);  # Convert 1D array
-   
+
 =head2 PDL::get_datatype
 
 =for ref
@@ -206,12 +265,12 @@ Internal: Return the numeric value identifying the piddle datatype
 
 =for usage
 
-  $x = $piddle->get_datatype; 
+  $x = $piddle->get_datatype;
 
-Mainly used for internal routines. 
+Mainly used for internal routines.
 
 NOTE: get_datatype returns 'just a number' not any special
-type  object. 
+type  object.
 
 
 =head2 howbig
@@ -223,9 +282,9 @@ Returns the size of a piddle datatype in bytes.
 =for usage
 
  $size = howbig($piddle->get_datatype);
- 
-Mainly used for internal routines. 
- 
+
+Mainly used for internal routines.
+
 NOTE: NOT a method! This is because get_datatype returns
 'just a number' not any special object.
 
@@ -258,18 +317,18 @@ BEGIN {
 
    use overload (
      (map {my $op = $_;
-     	    ($op => sub {my $foo = PDL::null(); # print "OP: $op\n";
+     	    ($op => sub {my $foo = $_[0]->null(); # print "OP: $op\n";
      		       PDL::Ops::my_biop1(&PDL::Core::rswap,$foo,$op); $foo;},
-	    "$op=" => sub {PDL::Ops::my_biop1(&PDL::Core::rswapass,$op); 
+	    "$op=" => sub {PDL::Ops::my_biop1(&PDL::Core::rswapass,$op);
 	    	          return $_[0];})} @PDL::biops1),
      (map {my $op = $_;
-     	    ($op => sub {my $foo = PDL::null(); 
+     	    ($op => sub {my $foo = $_[0]->null(); 
      		       PDL::Ops::my_biop2(&PDL::Core::rswap,$foo,$op); $foo;})} 
 		       			  @PDL::biops2),
      (map {my $op = $_;
-     	    ($op => sub {my $foo = PDL::null(); 
+     	    ($op => sub {my $foo = $_[0]->null(); 
      		       PDL::Ops::my_biop3(&PDL::Core::rswap,$foo,$op); $foo;},
-	    "$op=" => sub {PDL::Ops::my_biop3(&PDL::Core::rswapass,$op); 
+	    "$op=" => sub {PDL::Ops::my_biop3(&PDL::Core::rswapass,$op);
 	    	          return $_[0];})} @PDL::biops3),
 
      (map {my $op = $_;
@@ -285,14 +344,14 @@ BEGIN {
      	    ($op => sub {my $foo = PDL::Core::new_or_inplace($_[0]);
      		       PDL::Ops::my_ufunc2f($_[0],$foo,$op); $foo;})} @PDL::ufuncs2f),
 
-     (map {my $op = (ref $_ ? $_->[0] : $_); 
+     (map {my $op = (ref $_ ? $_->[0] : $_);
      	   my $opname = (ref $_ ? $_->[1] : $_);
-    ($opname => sub {my $foo = PDL::null();
+    ($opname => sub {my $foo = $_[0]->null();
 		PDL::Ops::my_bifunc1(&PDL::Core::rswap,$foo,$op); $foo;})} 
 		   @PDL::bifuncs),
 
-#     "="      =>  sub {shift->pdl_hard_copy}, # Copy 
-     "="      =>  sub {$_[0]}, # Don't copy 
+#     "="      =>  sub {shift->pdl_hard_copy}, # Copy
+     "="      =>  sub {$_[0]}, # Don't copy
 
      "**="    => sub {my @args = (&PDL::Core::rswap);
      			PDL::Ops::my_bifunc1(@args,$args[0],"pow"); $args[0];},
@@ -305,9 +364,12 @@ BEGIN {
 		      PDL::Primitive::assgn(@args);
 		      return $args[1];},
      
-     'x'      =>  sub{my $foo = PDL::null();
+     'x'      =>  sub{my $foo = $_[0]->null();
      		      PDL::Primitive::matmult(@_[0,1],$foo); $foo;},
-     '~'      =>  \&PDL::Basic::transpose,               
+     '~'      =>  \&PDL::Basic::transpose,
+     'bool' => sub { !($_[0]->getndims == 1 && ($_[0]->dims)[0] == 0); }, # For Boolean tests, 
+									  # just check to see if the
+									  # PDL is null
      "\"\""   =>  \&PDL::Core::string
    );
 }
@@ -392,7 +454,7 @@ sub PDL::doflow {
 	$this->set_dataflow_f(1);
 	$this->set_dataflow_b(1);
 }
-  
+
 =head2 flows
 
 =for ref
@@ -414,23 +476,23 @@ sub PDL::flows {
 
 =for ref
 
-new piddle constructor method 
+new piddle constructor method
 
 =for usage
 
-  $x = PDL->new(SCALAR|ARRAY|ARRAY REF); 
+  $x = PDL->new(SCALAR|ARRAY|ARRAY REF);
 
 =for example
 
   $x = PDL->new(42);
   $y = new PDL [1..10];
-  
+
   Constructs piddle from perl numbers and lists.	
 
 =cut
 
 
-sub PDL::new {         
+sub PDL::new {
    my $this = shift;
    return $this->copy if ref($this);
    my $type = ref($_[0]) eq 'PDL::Type' ? ${shift @_}[0]  : $PDL_D;
@@ -438,19 +500,19 @@ sub PDL::new {
    $new->set_datatype($type);
    my $value = (scalar(@_)>1 ? [@_] : shift);  # ref thyself
    $value = 0 if !defined($value);
-   if (ref(\$value) eq "SCALAR") { 
+   if (ref(\$value) eq "SCALAR") {
        $new->setdims([]);
-       ${$new->get_dataref}     = pack( $pack[$new->get_datatype], $value ); 
+       ${$new->get_dataref}     = pack( $pack[$new->get_datatype], $value );
        $new->upd_data();
    }
-   elsif (ref($value) eq "ARRAY") { 
+   elsif (ref($value) eq "ARRAY") {
        $level = 0; @dims = (); # package vars
-       my $str = rpack($pack[$new->get_datatype], $value); 
+       my $str = rpack($pack[$new->get_datatype], $value);
        $new->setdims([reverse @dims]);
        ${$new->get_dataref()} = $str;
        $new->upd_data();
    }
-   elsif (blessed($value)) { # Object 
+   elsif (blessed($value)) { # Object
        $new = $value->copy;
    }
    else {
@@ -459,7 +521,8 @@ sub PDL::new {
    return $new;
 }
 
-sub PDL::initialize { bless &PDL::null(), (ref $_[0] ? ref $_[0]: $_[0]) }
+# Call pdl_null XS function, bless it and return.
+sub PDL::initialize { bless &PDL::pdl_null(), (ref $_[0] ? ref $_[0]: $_[0]) }
 
 =head2 PDL::copy
 
@@ -475,7 +538,6 @@ Make a physical copy of a piddle
 Since C<$new = $old> just makes a new reference, the
 C<copy> method is provided to allow real independent
 copies to be made.
-  
 
 =cut
 
@@ -484,7 +546,7 @@ copies to be made.
 # XXX Must be fixed
 # Inplace is handled by the op currently.
 
-sub PDL::copy { 
+sub PDL::copy {
     my $value = shift;
     barf("Argument is an ".ref($value)." not an object") unless blessed($value);
     my $option  = shift;
@@ -507,7 +569,7 @@ that all threadids have been removed.
 
 =for usage
 
- $y = $x->unwind;  
+ $y = $x->unwind;
 
 =cut
 
@@ -525,7 +587,7 @@ Make sure the data portion of a piddle can be accessed from XS code.
 Ensures that a piddle gets its own allocated copy of data. This obviously
 implies that there are certain piddles which do not have their own data.
 These are so called I<virtual> piddles that make use of the I<vaffine>
-optimisation (see L<pdlindexing>). They do not have their own copy of
+optimisation (see L<PDL::Indexing>). They do not have their own copy of
 data but instead store only access information to some (or all) of another
 piddle's data.
 
@@ -533,7 +595,7 @@ Note: this function should not be used unless absolutely neccessary
 since otherwise memory requirements might be severly increased. Instead
 of writing your own XS code with the need to call make_physical you
 might want to consider using the PDL preprocessor (see L<PDL::PP>)
-which can be used to transparently access virtual piddles without the 
+which can be used to transparently access virtual piddles without the
 need to physicalise them (though there are exceptions).
 
 
@@ -541,7 +603,7 @@ need to physicalise them (though there are exceptions).
 
 sub PDL::unwind {
 	my $value = shift;
-	my $foo = PDL::null();
+	my $foo = $value->null();
 	$foo .= $value->unthread();
 	return $foo;
 }
@@ -556,11 +618,11 @@ No relation to the 'Dungeon Dimensions' in Discworld!
 
 =for usage
 
- $y = $x->dummy($position[,$dimsize]);   
+ $y = $x->dummy($position[,$dimsize]);
 
 =for example
 
-  perldl> p sequence(3)->dummy(0,3) 
+  perldl> p sequence(3)->dummy(0,3)
   [
    [0 0 0]
    [1 1 1]
@@ -593,7 +655,7 @@ define functions that support threading at the perl level
 
 
 C<thread_define> provides some support for threading (see
-L<pdlindexing>) at the perl level. It allows you to do things for
+L<PDL::Indexing>) at the perl level. It allows you to do things for
 which you normally would have resorted to PDL::PP (see L<PDL::PP>);
 however, it is most useful to wrap existing perl functions so that the
 new routine supports PDL threading.
@@ -601,12 +663,12 @@ new routine supports PDL threading.
 C<thread_define> is used to define new I<threading aware>
 functions. Its first argument is a symbolic repesentation of the new
 function to be defined. The string is composed of the name of the new
-function followed by its signature (see L<pdlindexing> and L<PDL::PP>)
+function followed by its signature (see L<PDL::Indexing> and L<PDL::PP>)
 in parentheses. The second argument is a subroutine that will be
 called with the slices of the actual runtime arguments as specified by
 its signature. Correct dimension sizes and minimal number of
 dimensions for all arguments will be checked (assuming the rules of
-PDL threading, see L<pdlindexing>).
+PDL threading, see L<PDL::Indexing>).
 
 The actual work is done by the C<signature> class which parses the signature
 string, does runtime dimension checks and the routine C<threadover> that
@@ -659,7 +721,7 @@ sub PDL::thread_define ($$) {
   barf "invalid string $str" unless $str =~ /\s*([^(]+)\((.+)\)\s*$/x;
   my ($name,$sigstr) = ($1,$2);
   print "defining '$name' with signature '$sigstr' and $others extra args\n"
-						  if $PDL::verbose;
+						  if $PDL::debug;
   my $sig = new PDL::PP::Signature($sigstr);
   # TODO: $sig->dimcheck(@_) + proper creating generation
   my $def = '$sig->checkdims(@_);
@@ -836,7 +898,7 @@ my %info = (
 		 },
 	    M => {
 		  Name => 'Mem',
-		  Sub => sub { my ($size,$unit) = ($_[0]->allocated ? 
+		  Sub => sub { my ($size,$unit) = ($_[0]->allocated ?
 						   $_[0]->nelem*
                       PDL::howbig($_[0]->get_datatype)/1024 : 0, 'Kb');
 			       if ($size > 0.01*1024) { $size /= 1024;
@@ -951,7 +1013,7 @@ of dimensions in perl code.
 
 =for usage
 
-  $a = $x->mslice(...); 
+  $a = $x->mslice(...);
 
 =for example
 
@@ -964,21 +1026,21 @@ sub PDL::mslice {
         return $pdl->slice(join ',',(map {
                         $_ eq "X" ? ":" :
                         ref $_ eq "ARRAY" ? join ':',@$_ :
-                        !ref $_ ? $_ : 
+                        !ref $_ ? $_ :
                         die "INVALID SLICE DEF $_"
                 } @_));
 }
 
 # Utility to determine if argument is blessed object
 
-sub blessed { 
+sub blessed {
     my $ref = ref(shift);
     return $ref =~ /^(REF|SCALAR|ARRAY|HASH|CODE|GLOB||)$/ ? 0 : 1;
-} 
-       
+}
+
 # Convert numbers to PDL if not already
 
-sub PDL::topdl {      
+sub PDL::topdl {
     return $_[1] if blessed($_[1]); # Fall through
     return $_[0]->new($_[1]) if ref(\$_[1]) eq "SCALAR";
     barf("Can not convert a ".ref($_[1])." to a ".$_[0]);
@@ -986,7 +1048,7 @@ sub PDL::topdl {
 
 # Convert everything to PDL if not blessed
 
-sub alltopdl {    
+sub alltopdl {
     return $_[1] if blessed($_[1]); # Fall through
     return $_[0]->new($_[1]);
 0;}
@@ -999,18 +1061,18 @@ Flag a piddle so that the next operation is done 'in place'
 
 =for usage
 
-  somefunc($x->inplace); somefunc(inplace $x); 
-  
+  somefunc($x->inplace); somefunc(inplace $x);
+
 In most cases one likes to use the syntax C<$y = f($x)>, however
 in many case the operation C<f()> can be done correctly
-'in place', i.e. without making a new copy of the data for 
+'in place', i.e. without making a new copy of the data for
 output. To make it easy to use this, we write C<f()> in such
 a way that it operates in-place, and use C<inplace> to hint
 that a new copy should be disabled. This also makes for
 clear syntax.
 
 Obviously this will not work for all functions, and if in
-doubt see the function's documentation. However one 
+doubt see the function's documentation. However one
 can assume this is
 true for all elemental functions (i.e. those which just
 operate array element by array element like C<log10>).
@@ -1021,7 +1083,7 @@ operate array element by array element like C<log10>).
  perldl> $x = xvals zeroes 10;
  perldl> log10(inplace $x)
  perldl> p $x
- [      -Inf 0    0.30103 0.47712125 0.60205999    0.69897 
+ [      -Inf 0    0.30103 0.47712125 0.60205999    0.69897
  0.77815125 0.84509804 0.90308999 0.95424251]
 
 =cut
@@ -1053,7 +1115,7 @@ sub new_or_inplace {
 
 Internal method: create piddle by specification
 
-This is the argument processing method called by C<zeroes> (q.v.) 
+This is the argument processing method called by C<zeroes> (q.v.)
 and some other functions
 which constructs piddles from argument listss of the form:
 
@@ -1065,23 +1127,23 @@ sub PDL::new_from_specification{
     my $class = shift;
     my $type = ref($_[0]) eq 'PDL::Type' ? ${shift @_}[0]  : $PDL_D;
     my $nelems = 1; my @dims;
-    for (@_) { 
+    for (@_) {
        barf "Trying to use piddle as dimensions?" if ref $_;
        barf "Dimensions must be positive" if $_<=0;
-       $nelems *= $_; push @dims, $_ 
+       $nelems *= $_; push @dims, $_
     }
     my $pdl = $class->initialize();
     $pdl->set_datatype($type);
     $pdl->setdims([@dims]);
-    print "Dims: ",(join ',',@dims)," DLen: ",(length $ {$pdl->get_dataref}),"\n" if $PDL::verbose;
+    print "Dims: ",(join ',',@dims)," DLen: ",(length $ {$pdl->get_dataref}),"\n" if $PDL::debug;
     return $pdl;
-}    
+}
 
 =head2 zeroes
 
 =for ref
 
-construct a zero filled piddle from dimension list or template piddle. 
+construct a zero filled piddle from dimension list or template piddle.
 
 Various forms of usage,
 
@@ -1098,10 +1160,10 @@ Various forms of usage,
     $a = $b->zeroes
     zeroes inplace $a;     # Equivalent to   $a .= 0;
     $a->inplace->zeroes;   #  ""
- 
+
 =for example
 
- perldl> $z = zeroes 4,3  
+ perldl> $z = zeroes 4,3
  perldl> p $z
  [
   [0 0 0 0]
@@ -1113,7 +1175,7 @@ Various forms of usage,
  [ushort() etc. with no arg returns a PDL::Types token]
 
 =cut
- 
+
 
 
 sub zeroes { ref($_[0]) && ref($_[0]) ne 'PDL::Type' ? $_[0]->zeroes : PDL->zeroes(@_) }
@@ -1136,7 +1198,7 @@ construct a one filled piddle
 
    $a = ones([type], $nx, $ny, $nz,...);
    etc. (see 'zeroes')
-   
+
 
 =for example
 
@@ -1161,10 +1223,10 @@ Change the shape (i.e. dimensions) of a piddle, preserving contents.
 =for usage
 
  $x->reshape(NEWDIMS); reshape($x, NEWDIMS);
- 
+
 The data elements are preserved, obviously they will wrap
 differently and get truncated if the new array is shorter.
-If the new array is longer it will be zero-padded.   
+If the new array is longer it will be zero-padded.
 
 Note: an explicit copy is forced - this is the only way
 (for now) of stopping a crash if $x is a slice.
@@ -1179,7 +1241,7 @@ Note: an explicit copy is forced - this is the only way
    [6 7 8]
    [9 0 0]
   ]
-  perldl> reshape $x,5; p $x        
+  perldl> reshape $x,5; p $x
   [0 1 2 3 4]
 
 =cut
@@ -1198,7 +1260,7 @@ sub PDL::reshape{
   $_[0] = $pdl;
   return $pdl;
 }
-                      
+
 =head2 convert
 
 =for ref
@@ -1207,12 +1269,12 @@ Generic datatype conversion function
 
 =for usage
 
- $y = convert($x, $newtype);  
+ $y = convert($x, $newtype);
 
 =for example
 
  $y = convert $x, long
- $y = convert $x, ushort 
+ $y = convert $x, ushort
 
 C<$newtype> is a type number, for convenience they are
 returned by long() etc when called without arguments.
@@ -1243,22 +1305,22 @@ byte|short|ushort|long|float|double convert shorthands
 =for usage
 
   $y = double $x; $y = ushort [1..10];
-  
+
   (all of byte|short|ushort|long|float|double behave similarly)
-  
+
 When called with a piddle argument, they convert to the specific
 datatype.
-	
+
 When called with a numeric or list ref argument they construct
 a new piddle. This is a convenience to avoid having to be
 long-winded and say <$x = long(pdl(42))>
-	
+
 When called with no arguments return a special type token.
 This allows syntactical sugar like:
 
-  $x = ones byte, 1000,1000; 
-  
-This example creates a large piddle directly as byte datatype in 
+  $x = ones byte, 1000,1000;
+
+This example creates a large piddle directly as byte datatype in
 order to save memory.
 
 =for example
@@ -1324,7 +1386,7 @@ for(
 ) {
 	eval ('sub PDL::'.$_->[0]." { ".
 		'return bless ['.$_->[1].'], PDL::Type unless @_;
-		 convert(alltopdl(\'PDL\',shift),'.$_->[1].') 
+		 convert(alltopdl(\'PDL\',shift),'.$_->[1].')
 		}');
 }
 
@@ -1334,7 +1396,7 @@ for(
 	  if(ref $val and $val->isa(PDL)) {
 		if($val->getndims != 0) {
 		  PDL::Core::barf("Can't make a type out of non-scalar piddle $val!");
-		} 
+		}
 		$val = $val->at;
 	  }
 	  PDL::Core::barf("Can't make a type out of non-scalar $val!".(ref $val)."!") if ref $val;
@@ -1367,7 +1429,7 @@ sub PDL::type {
 
 $PDL::_STRINGIZING = 0;
 
-sub string { 
+sub string {
     my($self,$format)=@_;
     if($PDL::_STRINGIZING) {
     	return "ALREADY_STRINGIZING_NO_LOOPS";
@@ -1398,7 +1460,7 @@ sub string {
 
 =for ref
 
-Convert piddle to perl list 
+Convert piddle to perl list
 
 =for usage
 
@@ -1407,14 +1469,14 @@ Convert piddle to perl list
 Obviously this is grossly inefficient for the large datasets PDL is designed to
 handle. This was provided as a get out while PDL matured. It  should now be mostly
 superseded by superior constructs, such as PP/threading. However it is still
-occasionally useful and is provied for backwards compatibility.    
+occasionally useful and is provied for backwards compatibility.
 
 =for example
 
   for (list $x) {
     # Do something on each value...
   }
-  
+
 
 =cut
 
@@ -1422,6 +1484,7 @@ occasionally useful and is provied for backwards compatibility.
 sub PDL::list{ # pdl -> @list
      barf 'Usage: list($pdl)' if $#_!=0;
      my $pdl = PDL->topdl(shift);
+     return () if nelem($pdl)==0;
      @{listref_c($pdl)};
 }
 
@@ -1429,18 +1492,18 @@ sub PDL::list{ # pdl -> @list
 
 =for ref
 
-Convert piddle indices to perl list 
+Convert piddle indices to perl list
 
 =for usage
 
    @tmp = listindices $x;
-   
-C<@tmp> now contains the values 0..nelem($x).   
-   
+
+C<@tmp> now contains the values 0..nelem($x).
+
 Obviously this is grossly inefficient for the large datasets PDL is designed to
 handle. This was provided as a get out while PDL matured. It  should now be mostly
 superseded by superior constructs, such as PP/threading. However it is still
-occasionally useful and is provied for backwards compatibility.    
+occasionally useful and is provied for backwards compatibility.
 
 =for example
 
@@ -1452,7 +1515,8 @@ occasionally useful and is provied for backwards compatibility.
 
 sub PDL::listindices{ # Return list of index values for 1D pdl
      barf 'Usage: list($pdl)' if $#_!=0;
-     my $pdl = shift; 
+     my $pdl = shift;
+     return () if nelem($pdl)==0;
      barf 'Not 1D' if scalar(dims($pdl)) != 1;
      return (0..nelem($pdl)-1);
 }
@@ -1466,7 +1530,7 @@ Set a single value inside a piddle
 =for usage
 
  set $piddle, @position, $value
-   
+
 C<@position> is a coordinate list, of size equal to the
 number of dimensions in the piddle. Occasionally useful,
 mainly provided for backwards compatibility as superseded
@@ -1475,8 +1539,8 @@ by use of C<slice> and assigment operator C<.=>.
 =for example
 
  perldl> $x = sequence 3,4
- perldl> set $x, 2,1,99   
- perldl> p $x             
+ perldl> set $x, 2,1,99
+ perldl> p $x
  [
   [ 0  1  2]
   [ 3  4 99]
@@ -1486,7 +1550,7 @@ by use of C<slice> and assigment operator C<.=>.
 
 =cut
 
-sub PDL::set{    # Sets a particular single value 
+sub PDL::set{    # Sets a particular single value
     barf 'Usage: set($pdl, $x, $y,.., $value)' if $#_<2;
     my $self  = shift; my $value = pop @_;
     set_c ($self, [@_], $value);
@@ -1511,7 +1575,7 @@ in a general context, quite useful too inside PDL internals.
 
  perldl> $x = sequence 3,4
  perldl> p $x->at(1,2)
- 7 
+ 7
 
 =cut
 
@@ -1608,7 +1672,7 @@ sub PDL::dog {
   my $p = shift;
   my @res; my $s = ":,"x($p->getndims-1);
   for my $i (0..$p->getdim($p->getndims-1)-1) {
-     $res[$i] = $p->slice($s."(".$i.")"); 
+     $res[$i] = $p->slice($s."(".$i.")");
      $res[$i] = $res[$i]->copy if $$opt{Break};
      $i++;
   }
@@ -1630,13 +1694,13 @@ line in the module user's script rather than in the PDL module.
 It does this magic by unwinding the stack frames until it reaches
 a package NOT beginning with "PDL::". If you DO want it to report
 errors in some module PDL::Foo (e.g. when debugging PDL::Foo) then
-set the variable C<$PDL::Foo::Debugging=1>.  
+set the variable C<$PDL::Foo::Debugging=1>.
 
 Additionally if you set the variable C<$PDL::Debugging=1> you will
 get a COMPLETE stack trace back up to the top level package.
 
-Finally barf() will try and report usage information from the 
-PDL documentation database if the error message is of the 
+Finally barf() will try and report usage information from the
+PDL documentation database if the error message is of the
 form 'Usage: func'.
 
 Remember barf() is your friend. *Use* it!
@@ -1649,8 +1713,8 @@ At the perl level:
 
 In C or XS code:
 
-  barf("You have made %d errors", count);    
-  
+  barf("You have made %d errors", count);
+
 Note: this is one of the few functions ALWAYS exported
 by PDL::Core
 
@@ -1672,14 +1736,14 @@ sub barf_msg {
     $msg .= " Level $i: file $file, line $line, pkg $pack\n" if $PDL::Debugging;
     last if !$PDL::Debugging and ($pack !~ /^PDL::|^PDL$/ or eval '$'.$pack."::Debugging");
     $i++;
-  }  
-     
+  }
+
   if ($err =~ /^Usage: (PDL.*::)_(\w+)_int/ or $err =~ /^Usage: (PDL.*::)?\s*(\w+)/) {
      local $match = $2;
      eval << "EOD";
      \$msg .= "PDL barfed: incorrect usage of function '$match()'\nFile $file, line $line, pkg $pack\n" if \$pack;
      \$msg .= "Usage information from PDL docs database:\n";
-     use PDL::Doc::Perldl; 
+     use PDL::Doc::Perldl;
      \$msg .= PDL::Doc::Perldl::usage_string ('$match');
 EOD
   }
@@ -1696,8 +1760,8 @@ EOD
 # Recursively pack an N-D array ref in format [[1,1,2],[2,2,3],[2,2,2]] etc
 # package vars $level and @dims must be initialised first.
 
-sub rpack {             
-            
+sub rpack {
+
     my ($ptype,$a) = @_;  my ($ret,$type);
 
     $ret = "";
@@ -1711,7 +1775,7 @@ sub rpack {
        $level++;
 
        $type = ref($$a[0]);
-       for(@$a) { 
+       for(@$a) {
           barf 'Array is not rectangular' unless $type eq ref($_); # Equal types
           $ret .= rpack($ptype,$_);
        }
@@ -1724,7 +1788,7 @@ sub rpack {
     }elsif (ref(\$a) eq "SCALAR") { # Note $PDL_D assumed
 
       $ret = pack($ptype,$_);
- 
+
     }else{
         barf "Don't know how to make a PDL object from passed argument";
     }
@@ -1732,7 +1796,7 @@ sub rpack {
 }
 
 sub rcopyitem {        # Return a deep copy of an item - recursively
-    my $x = shift; 
+    my $x = shift;
     my ($y, $key, $value);
     if (ref(\$x) eq "SCALAR") {
        return $x;
@@ -1750,7 +1814,7 @@ sub rcopyitem {        # Return a deep copy of an item - recursively
           $$y{$key} = rcopyitem($value);
        }
        return $y;
-    }elsif (blessed($x)) { 
+    }elsif (blessed($x)) {
        return $x->copy;
     }else{
        barf ('Deep copy of object failed - unknown component with type '.ref($x));
@@ -1764,18 +1828,18 @@ sub strND {
 #    $self->make_physical();
     my @dims = $self->dims;
     # print "STRND, $#dims\n";
-    
+
     if ($#dims==1) { # Return 2D string
        return str2D($self,$format,$level);
     }
     else { # Return list of (N-1)D strings
        my $secbas = join '',map {":,"} @dims[0..$#dims-1];
-       my $ret="\n"." "x$level ."["; my $j;       
+       my $ret="\n"." "x$level ."["; my $j;
        for ($j=0; $j<$dims[$#dims]; $j++) {
        	   my $sec = $secbas . "($j)";
 #	   print "SLICE: $sec\n";
 
-           $ret .= strND($self->slice($sec),$format, $level+1); 
+           $ret .= strND($self->slice($sec),$format, $level+1);
 	   chop $ret; $ret .= $sep2;
        }
        chop $ret if $PDL::use_commas;
@@ -1783,7 +1847,7 @@ sub strND {
        return $ret;
     }
 }
-  
+
 
 # String 1D array in nice format
 
@@ -1799,7 +1863,7 @@ sub str1D {
         if ($format) {
 	  $t = sprintf $format,$t;
 	}
-	else{ # Default 
+	else{ # Default
            if ($dformat && length($t)>7) { # Try smaller
              $t = sprintf $dformat,$t;
 	   }
@@ -1812,7 +1876,7 @@ sub str1D {
 
 # String 2D array in nice uniform format
 
-sub str2D{ 
+sub str2D{
     my($self,$format,$level)=@_;
 #    print "STR2D:\n"; $self->printdims();
     my @dims = $self->dims();
@@ -1821,17 +1885,17 @@ sub str2D{
     my ($i, $f, $t, $len, $ret);
 
     my $findmax = 1;
-    if (!defined $format || $format eq "") { # Format not given? - 
+    if (!defined $format || $format eq "") { # Format not given? -
                                              # find max length of default
        $len=0;
        for (@$x) {$i = length($_); $len = $i>$len ? $i : $len };
-       $format = "%".$len."s"; 
-       
+       $format = "%".$len."s";
+
        if ($len>7) { # Too long? - perhaps try smaller format
           if ($self->get_datatype() == $PDL_F) {
-	    $format = $PDL::floatformat  
+	    $format = $PDL::floatformat
 	  } elsif ($self->get_datatype() == $PDL_D) {
-	    $format = $PDL::doubleformat 
+	    $format = $PDL::doubleformat
 	  } else {
 	     # Stick with default
 	     $findmax = 0;
@@ -1841,25 +1905,24 @@ sub str2D{
           # Default ok
 	  $findmax = 0;
        }
-    } 
+    }
 
     if($findmax) {
 	    # Find max length of strings in final format
 	    $len=0;
-	    for (@$x) { 
+	    for (@$x) {
 	       $i = length(sprintf $format,$_); $len = $i>$len ? $i : $len;
 	    }
     }
-       
 
     $ret = "\n" . " "x$level . "[\n";
     { my $level = $level+1;
       $ret .= " "x$level ."[";
-      for ($i=0; $i<=$#$x; $i++) { 
+      for ($i=0; $i<=$#$x; $i++) {
           $f = sprintf $format,$$x[$i];
           $t = $len-length($f); $f = " "x$t .$f if $t>0;
           $ret .= $f;
-	  if (($i+1)%$dims[0]) { 
+	  if (($i+1)%$dims[0]) {
 	     $ret.=$sep;
           }
 	  else{ # End of output line
@@ -1884,11 +1947,11 @@ sub str2D{
 
 Copyright (C) Karl Glazebrook (kgb@aaoepp.aao.gov.au),
 Tuomas J. Lukka, (lukka@husc.harvard.edu) and Christian
-Soeller (csoelle@sghms.ac.uk) 1997. 
+Soeller (csoelle@sghms.ac.uk) 1997.
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 

@@ -5,6 +5,7 @@
 use lib "."; # For included ExtUtils::F77
 
 use ExtUtils::MakeMaker;
+PDL::Core::Dev->import();
 
 # This mess sorts out the Fortran availability - KGB.
 # Depends on ExtUtils::F77 (copy included)
@@ -56,7 +57,9 @@ BEGIN {
       print OUT "\t\@echo \n";
 	  my $emsg = substr($msg, 1);	# Get rid of leading \n
 	  $emsg =~ s/\n+$//;			# Remove final \n(s)
-      print OUT "\t\@echo $emsg\n";
+	  $emsg =~ s/"//g;	
+	  $emsg =~ s/\n/"\n\t\@echo "/g;		# Echo other lines
+      print OUT "\t\@echo \"$emsg\"\n";
       print OUT "\t\@echo \n";
       print OUT "\nall: fred\n";
       print OUT "\ntest: fred\n";
@@ -79,7 +82,6 @@ EOT
 
 return if $donot;
 
-PDL::Core::Dev->import();
 
 @pack = (["slatec.pd",Slatec,PDL::Slatec]);
 @slatecfiles = map {s/^slatec\///; s/\.f$//; $_} glob("slatec/*.f");

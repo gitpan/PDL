@@ -13,7 +13,7 @@ Though know functions are defined (apart from
 a few always exported by Core) you can still
 use method syntax, viz:
 
-  $x->wibble(42);  
+  $x->wibble(42);
 
 =head1 SYNOPSIS
 
@@ -29,7 +29,7 @@ use method syntax, viz:
 =cut
 
 # Load the fundamental PDL packages, no imports
-# Because there are no imports, we do not need 
+# Because there are no imports, we do not need
 # the usual 'eval in the user's namespace' routine.
 
 use PDL::Core '';

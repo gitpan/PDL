@@ -1,5 +1,5 @@
 # Test ->slice(). This is not yet good enough: we need
-# nasty test cases, 
+# nasty test cases,
 
 use PDL::LiteF;
 # kill INT,$$  if $ENV{UNDER_DEBUGGER}; # Useful for debugging.
@@ -20,7 +20,7 @@ sub approx {
 	$d < 0.01;
 }
 
-print "1..26\n";
+print "1..28\n";
 
 if(1) {
 
@@ -87,7 +87,7 @@ $a++;
 $linepr = "$line";
 
 
-ok(15,$linepr eq '[1 1 1]'); 
+ok(15,$linepr eq '[1 1 1]');
 
 # Test whether error is properly returned:
 
@@ -183,7 +183,7 @@ ok(21,!approx(ones(byte,9,3),$im2));
 # here we encounter the problem
 print ($im2 = $im1->clump(2)->slice(':,-1:0')->px);
 ok(22,!approx(ones(byte,9,3),$im2));
-                  
+
 $a = xvals( zeroes 10,10) + 0.1*yvals(zeroes 10,10);
 ok(23, approx($a->mslice('X',[6,7]),pdl([
   [0.6, 1.6, 2.6, 3.6, 4.6, 5.6, 6.6, 7.6, 8.6, 9.6],
@@ -201,3 +201,12 @@ $in .= pdl 1;
 ok(25, approx($in,pdl([1,1])));
 
 ok(26, approx($lut,pdl([[1,0],[1,1]])));
+
+# can we catch indices which are to negative
+$a = PDL->sequence(10);
+$b = $a->slice('0:-10');
+
+ok(27, approx($b,pdl([0])));
+$b = $a->slice('0:-14');
+eval 'print $b';
+ok(28, $@ =~ /Negative slice cannot start or end above limit/);

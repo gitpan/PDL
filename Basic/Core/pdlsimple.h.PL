@@ -34,16 +34,15 @@ print OUT <<"!GROK!THIS!";
 
 $PDL_DATATYPES
 
-#endif 
+#endif
 
-/* 
+/*
    Define a simple pdl C data structure which maps onto passed
    piddles for passing with callext().
-   
+
    Note it is up to the user at the perl level to get the datatype
    right. Anything more sophisticated probably ought to go through
    PP anyway (which is fairly trivial).
- 
 */
 
 struct pdlsimple {

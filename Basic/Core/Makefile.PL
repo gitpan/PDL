@@ -1,7 +1,7 @@
 
 # Makefile.PL for PDL::Core module
 
-#require '../Core/Dev.pm'; 
+#require '../Core/Dev.pm';
 PDL::Core::Dev->import();
 
 my $pthread_include = '/usr/include/pthread.h';
@@ -25,7 +25,7 @@ if ($Config::Config{libs} =~ /-lpthread/) {
 	if ($Config::Config{usemymalloc} eq 'n') {
 		print "\tFine pthread, works with Digital Unixs malloc\n";
 	} else {
-		# 
+		#
 		print "\tPerls malloc has problems when perl is not linked with -lpthreads\n";
 		$pthread_library = '';
 	}
@@ -66,7 +66,7 @@ WriteMakefile(
 						  Dbg.pm Exporter.pm Config.pm/
 		)),
   		(map {($_,'$(INST_LIBDIR)/Core/'.$_)} (
-			qw/Dev.pm typemap.pdl pdl.h pdlcore.h pdlmagic.h pdlsimple.h 
+			qw/Dev.pm typemap.pdl pdl.h pdlcore.h pdlmagic.h pdlsimple.h
 				pdlthread.h/
 		)),
 		},
@@ -87,10 +87,10 @@ PDL::Core::Dev::postamble().
 '
 # Bits of C code we generate from special perl scripts
 
-pdlbasicops.c:  mkpdlbasicops.p 
+pdlbasicops.c:  mkpdlbasicops.p
 	$(PERL) mkpdlbasicops.p > pdlbasicops.c
 
-pdlconv.c:  mkpdlconv.p 
+pdlconv.c:  mkpdlconv.p
 	$(PERL) mkpdlconv.p > pdlconv.c
 
 ';

@@ -67,7 +67,7 @@ typedef struct pdl_magic_deletedata {
 
 typedef struct pdl_magic_pthread {
 	PDL_MAGICSTART;
-	int nthdim; 
+	int nthdim;
 	int nthreads;
 	pthread_key_t key;
 } pdl_magic_pthread;

@@ -1,13 +1,13 @@
 
 =head1 NAME
 
-PDL::Basic -- Basic utility functions for PDL 
+PDL::Basic -- Basic utility functions for PDL
 
 =head1 DESCRIPTION
 
 This module contains basic utility functions for
 creating and manipulating piddles. Most of these functions
-are simplified interfaces to the more flexible functions in 
+are simplified interfaces to the more flexible functions in
 the modules PDL::Primitive and PDL::Slices.
 
 =head1 SYNOPSIS
@@ -25,16 +25,16 @@ use PDL::Exporter;
 
 @ISA=qw/PDL::Exporter/;
 @EXPORT_OK = qw/ rvals axisvals xvals yvals zvals sec ins hist
-	similar_assign transpose sequence xlinvals ylinvals 
+	similar_assign transpose sequence xlinvals ylinvals
 	zlinvals axislinvals/;
 %EXPORT_TAGS = (Func=>[@EXPORT_OK]);
 
 # Exportable functions
-*axisvals       = \&PDL::axisvals;		  
-*sec            = \&PDL::sec;		  
-*ins            = \&PDL::ins;		  
-*hist           = \&PDL::hist;		  
-*similar_assign = \&PDL::similar_assign;  
+*axisvals       = \&PDL::axisvals;		
+*sec            = \&PDL::sec;		
+*ins            = \&PDL::ins;		
+*hist           = \&PDL::hist;		
+*similar_assign = \&PDL::similar_assign;
 *transpose      = \&PDL::transpose;
 *xlinvals 	= \&PDL::xlinvals;
 *ylinvals 	= \&PDL::ylinvals;
@@ -50,8 +50,8 @@ Fills a piddle with X index values
 
  $x = xvals($somearray);
  $x = xvals([OPTIONAL TYPE],$nx,$ny,$nz...);
- 
-etc. see 'zeroes' 
+
+etc. see 'zeroes'
 
 =for example
 
@@ -82,7 +82,7 @@ Fills a piddle with Y index values
  $x = yvals($somearray); yvals(inplace($somearray));
  $x = yvals([OPTIONAL TYPE],$nx,$ny,$nz...);
 
-etc. see 'zeroes' 
+etc. see 'zeroes'
 
 =for example
 
@@ -112,8 +112,8 @@ Fills a piddle with Z index values
 
  $x = zvals($somearray); zvals(inplace($somearray));
  $x = zvals([OPTIONAL TYPE],$nx,$ny,$nz...);
- 
-etc. see 'zeroes' 
+
+etc. see 'zeroes'
 
 =for example
 
@@ -144,7 +144,7 @@ X,Y or Z axis values between endpoints. (see xvals,yvals,zvals)
 =for usage
 
  $a = zeroes(100,100);
- $x = $a->xlinvals(0.5,1.5); 
+ $x = $a->xlinvals(0.5,1.5);
  $y = $a->ylinvals(-2,-1);
  $z = f($x,$y);            # calculate Z for X between 0.5 and 1.5 and
  			   # Y between -2 and -1.
@@ -208,12 +208,13 @@ Create histogram of a piddle
 
 =for usage
 
- ([$xvals],$hist) = hist($data,[$min,$max,$step]);
+ $hist = hist($data,[$min,$max,$step]);
+ ($xvals,$hist) = hist($data,[$min,$max,$step]);
 
- - $xvals is returned with the computed bin centres
- 
- A nice idiom (with PDL::Graphics::PG) is
- 
+If requested, $xvals gives the computed bin centres
+
+A nice idiom (with PDL::Graphics::PG) is
+
  bin hist $data;  # Plot histogram
 
 =for example
@@ -243,7 +244,7 @@ sub PDL::hist {
     barf "step is zero (or all data equal to one value)" if $step == 0;
     my $bins = int(($max-$min)/$step);
     print "hist with step $step, min $min and $bins bins\n"
-      if $PDL::verbose;
+      if $PDL::debug;
     PDL::Primitive::histogram($pdl->clump(-1),(my $hist = null),
 			      $step,$min,$bins);
     my $xvals = $min + $step/2 + sequence(PDL::Type->new($ntype),$bins)*
@@ -260,7 +261,8 @@ Create array filled with a sequence of values
 =for usage
 
  $a = sequence($b); $a = sequence [OPTIONAL TYPE], @dims;
- etc. see 'zeroes'
+
+etc. see 'zeroes'
 
 =for example
 
@@ -286,7 +288,7 @@ sub PDL::sequence {
     my $bar = $pdl->clump(-1)->inplace;
     my $foo = $bar->xvals;
     return $pdl;
-} 
+}
 
 =head2 rvals
 
@@ -296,7 +298,7 @@ Fills a piddle with radial distance values from some centre.
 
 =for usage
 
- $r = rvals $piddle,{OPTIONS}; 
+ $r = rvals $piddle,{OPTIONS};
  $r = rvals [OPTIONAL TYPE],$nx,$ny,...{OPTIONS};
 
 =for options
@@ -339,7 +341,7 @@ sub PDL::rvals { # Return radial distance from given point and offset
          $offset = (defined $pos[$i] ? $pos[$i] : int($r->getdim($i)/2));
 	 # Note careful coding for speed and min memory footprint
 	 PDL::Primitive::axisvalues($tmp->xchg(0,$i));
-	 $tmp -= $offset; $tmp *= $tmp; 
+	 $tmp -= $offset; $tmp *= $tmp;
          $r += $tmp;
     }
     my $nothing = sqrt $r->inplace;
@@ -358,7 +360,7 @@ Fills a piddle with index values on Nth dimension
 
 This is the routine, for which xvals(), yvals() etc
 are mere shorthands. axisvals() can be used to fill
-along any dimension. 
+along any dimension.
 
 Note the 'from specification' style (see 'zeroes') is
 not available here, for obvious reasons.
@@ -419,7 +421,7 @@ sub PDL::ins {
 	   (join ',',map {int($coords[$_]).":".
 	   	((int($coords[$_])+$w->getdim($_)-1)<$this->getdim($_) ?
 	   	(int($coords[$_])+$w->getdim($_)-1):$this->getdim($_))
-	   	} 
+	   	}
 	   	0..$#coords)))
 		.= $w;
 	return $this;

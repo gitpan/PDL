@@ -38,10 +38,10 @@ void pdl_grow (pdl* a, int newsize) {
 
    nbytes = newsize * pdl_howbig(a->datatype);
    ncurr  = SvCUR( foo );
-   if (ncurr == nbytes) 
+   if (ncurr == nbytes)
       return;    /* Nothing to be done */
 
-/* We don't want to do this: if someone is resizing it 
+/* We don't want to do this: if someone is resizing it
  * but wanting to preserve data.. */
 #ifdef FEOIJFOESIJFOJE
    if (ncurr>nbytes)  /* Nuke back to zero */
@@ -51,7 +51,7 @@ void pdl_grow (pdl* a, int newsize) {
    if(nbytes > (1024*1024*1024)) {
    	die("Probably false alloc of over 1Gb piddle!");
    }
-      
+
    SvGROW ( foo, nbytes );   SvCUR_set( foo, nbytes );
    a->data = (void *) SvPV( foo, len ); a->nvals = newsize;
 }
@@ -65,11 +65,11 @@ void pdl_unpackarray ( HV* hash, char *key, int *dims, int ndims ) {
 
    array = newAV();
    hv_store(hash, key, strlen(key), newRV( (SV*) array), 0 );
-  
+
    if (ndims==0 )
       return;
 
    for(i=0; i<ndims; i++)
          av_store( array, i, newSViv( (IV)dims[i] ) );
-} 
+}
 

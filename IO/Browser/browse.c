@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef CURSES
 #include <curses.h>
+#endif
+#ifdef NCURSES
+#include <ncurses.h>
+#endif
 #include <string.h>
 #include "pdl.h"
 
@@ -16,7 +21,7 @@ char *format[] = {
 int  width[] = {
   4,7,7,12,11,12};
 
-char *str_value(int x, int y, 
+char *str_value(int x, int y,
 		int type, int nx, void *data, char *str)
 {
   switch (type) {
@@ -42,7 +47,7 @@ char *str_value(int x, int y,
   return str;
 }
 
-void set_value(int x, int y, 
+void set_value(int x, int y,
 		int type, int nx, void *data, char *str)
 {
   switch (type) {
@@ -139,7 +144,7 @@ void set_cell(WINDOW *win, int i, int j, int ioff, int joff,
   mvwaddchnstr(win,j-joff,(i-ioff)*colwid,chline,colwid);
 }
 
-void update_row(WINDOW *win, int y, int ioff, int joff, 
+void update_row(WINDOW *win, int y, int ioff, int joff,
 		int type, int nx, void *data)
 {
   char line[BUFSIZ];
@@ -160,7 +165,7 @@ void update_row(WINDOW *win, int y, int ioff, int joff,
     mvwaddchnstr(win,y,i*colwid,chline,colwid);
   }
 }
-void update_col(WINDOW *win, int x, int ioff, int joff, 
+void update_col(WINDOW *win, int x, int ioff, int joff,
 		int type, int nx, void *data)
 {
   char line[BUFSIZ];
@@ -240,7 +245,7 @@ void browse(int type, int nc, int nr, void *in)
     update_row(warray,j,0,0,type,nc,in);
   }
 
-  i = j = eps = 0; 
+  i = j = eps = 0;
   ioff = joff = 0;
   while (tolower(ch=mvwgetch(warray,j-joff,(i-ioff)*colwid+
 		      MIN(eps,colwid-2))) != 'q') {

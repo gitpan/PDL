@@ -1,7 +1,5 @@
 package PDL::Graphics::TriD::Logo;
 use PDL::Lite;
-PDL::Graphics::VRMLNode->import();
-PDL::Graphics::VRMLProto->import();
 
 @ISA=qw/PDL::Graphics::TriD::Object/;
 
@@ -477,7 +475,7 @@ sub new {
 
 
 # ***add these lines to, e.g. tvrml2.pl
-# 
+#
 # use PDL::Graphics::TriD::Logo;
 # $win->add_object(new PDL::Graphics::TriD::Logo);
 

@@ -42,7 +42,7 @@ unless ($loaded) {
         }
         exit;
 }
-ok(1,$loaded); 
+ok(1,$loaded);
 
 #DEFERRED
 

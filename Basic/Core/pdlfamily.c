@@ -18,12 +18,12 @@
  * Now:  hash($a) -> a1,  hash($b) -> b1,
  *       a0 and b0 saved in memory with tmp hashes,
  *       transformation between them duplicated.
- * 
- * Because $b was a slice (and not, for example, inversion), 
+ *
+ * Because $b was a slice (and not, for example, inversion),
  * it only covers a part of the original $a and therefore we
  * need to first assign a0 to a1 and then add 3 from b0 to b1
  * (or b1 to b1).
- * 
+ *
  */
 #define PDL_CORE      /* For certain ifdefs */
 #include "pdl.h"      /* Data structure declarations */
@@ -38,7 +38,7 @@ static void pdl_identity_readdata(pdl_trans *__tr);
    we are. This should actually be implemented a little differently
    so that different places in perl could hold on to their ref
    if they wanted. But for now, */
-void pdl__xchghashes(pdl *a,pdl *b) 
+void pdl__xchghashes(pdl *a,pdl *b)
 {
 	SV *t;
 	void *d;
@@ -47,7 +47,7 @@ void pdl__xchghashes(pdl *a,pdl *b)
 	b->sv = tmp;
 	if(a->sv) sv_setiv(a->sv,(IV) a);
 	if(b->sv) sv_setiv(b->sv,(IV) b);
-	t = a->datasv; 
+	t = a->datasv;
 	a->datasv = b->datasv;
 	b->datasv = t;
 	a->data = (a->datasv?SvPV((SV*)a->datasv,na):NULL);
@@ -56,7 +56,7 @@ void pdl__xchghashes(pdl *a,pdl *b)
 
 /* Recurse everywhere and set progenitor */
 
-void pdl_family_setprogenitor(pdl *what,pdl *progenitor,pdl_trans *notthis) 
+void pdl_family_setprogenitor(pdl *what,pdl *progenitor,pdl_trans *notthis)
 {
 	PDL_DECL_CHILDLOOP(what)
 	pdl_trans *t; int i;
@@ -71,17 +71,17 @@ void pdl_family_setprogenitor(pdl *what,pdl *progenitor,pdl_trans *notthis)
 	PDL_END_CHILDLOOP(what)
 }
 
-/* Because make_physdims(mutateto) calls our make_physdims again, 
+/* Because make_physdims(mutateto) calls our make_physdims again,
    need to set !dimschanged */
-static void family_redodims(pdl_trans *tr) 
+static void family_redodims(pdl_trans *tr)
 {
 	int i;
 	pdl_family_trans *tr2 = (pdl_family_trans *)tr;
 	pdl_identity_redodims(tr);
 	tr2->pdls[1]->state &= ~(PDL_PARENTDIMSCHANGED | PDL_PARENTREPRCHANGED);
 	if(tr2->mutateto != tr2->pdls[1]) {
-		pdl_make_physdims(tr2->mutatefrom); 
-		pdl_make_physdims(tr2->mutateto); 
+		pdl_make_physdims(tr2->mutatefrom);
+		pdl_make_physdims(tr2->mutateto);
 	}
 	pdl__ensure_transdims(tr2->realtrans);
 }
@@ -93,7 +93,7 @@ static void family_readdata(pdl_trans *tr)
 	pdl_identity_readdata(tr);
 	if(tr2->mutateto != tr2->pdls[1]) {
 		tr2->pdls[1]->state &= ~PDL_ANYCHANGED; /* Avoid infinite loops */
-		pdl_make_physical(tr2->mutateto); 
+		pdl_make_physical(tr2->mutateto);
 	}
 	pdl__ensure_trans(tr2->realtrans,PDL_PARENTDATACHANGED);
 	if(tr2->mutateto != tr2->pdls[1]) {
@@ -147,7 +147,7 @@ pdl *pdl_family_clone2now(pdl *from)
 			die("Cannot copy source transformation!!!\n");
 		}
 		ntrans = from->trans->vtable->copy(from->trans);
-		
+
 /* Set the new transformation for us */
 		for(i=0; i<ntrans->vtable->npdls; i++) {
 			if(ntrans->pdls[i] == from->trans->pdls[0]) {
@@ -188,7 +188,7 @@ void pdl_family_create(pdl *from,pdl_trans *trans,int ind1,int ind2)
 /* 2. Go to all the reversible children and mark them
  *    and set their progenitor */
 	pdl_family_setprogenitor(progfrom,progfrom,trans);
-	
+
 /* 3. Make the clones */
    	progto = pdl_family_clone2now(progfrom);
 	progto->living_for  |= PDL_LIVINGFOR_FAMILY_NEWPROGENITOR;
@@ -231,7 +231,7 @@ static void pdl_identity_redodims(pdl_trans *__tr) {
 		pdl *__it = __tr->pdls[1];
 		pdl *__parent = __tr->pdls[0];
 		{
-	
+
 			pdl_reallocdims(__it,__parent->ndims);
 			for(__dim=0; __dim<__it->ndims; __dim++) { __it->dims[__dim] = __parent->dims[__dim]; }
 			pdl_setdims_careful(__it);
@@ -249,16 +249,16 @@ static void pdl_identity_readdata(pdl_trans *__tr) {
 	    		 int *__parentinds = pdl_malloc(sizeof(int)*__parent->ndims);
 			 int __parentoffs; int __myoffs=0;
 			 int __stop = 0; int __ind;
-			 for(__ind = 0; __ind < __it->ndims; __ind++) 
+			 for(__ind = 0; __ind < __it->ndims; __ind++)
 			 	__myinds[__ind] = 0;
 			 while(!__stop) {
-			 for(__ind=0; __ind<__parent->ndims; __ind++) 
+			 for(__ind=0; __ind<__parent->ndims; __ind++)
 					__parentinds[__ind] = __myinds[__ind];;__parentoffs=0;
 		 for(__ind=0; __ind<__parent->ndims; __ind++) {
 			__parentoffs += __parent->dimincs[__ind]*__parentinds[__ind];
 		 }
-		 
-			pdl_put_offs(__it, __myoffs, 
+
+			pdl_put_offs(__it, __myoffs,
 				pdl_get_offs(__parent, __parentoffs));
 	  		__myoffs++;
 	  		__stop=1;
@@ -272,6 +272,6 @@ static void pdl_identity_readdata(pdl_trans *__tr) {
 /*	free(__myinds); */
 		}
 			}
-			
+
 	}
 

@@ -52,12 +52,12 @@ creates the documentation database for use in the perldl shell.
 COMMON PROBLEMS
 ---------------
 
-There are some more common error messages and problems, which 
+There are some more common error messages and problems, which
 are included here for your convenience
 
 Q: "Can't find include file GL.h" or somesuch.
 
-A: If you dont' have either OpenGL or Mesa installed, you need to 
+A: If you dont' have either OpenGL or Mesa installed, you need to
 edit perldl.conf (see above) and set WITH_3D to 0. Then, start the
 build process again as described above (from the toplevel):
 
@@ -102,11 +102,11 @@ being defined
 A: This shouldn't happen any more. If it does, please inform the mailing
 list. However, on certain platforms (notably Digital and IRIX), you will
 not get pthread support in PDL unless your perl executable was linked
-with -lpthread. 
+with -lpthread.
 
 
 Q: Make fails at some point with "can't find pdl.h" or somesuch or
-alternatively everything compiles fine and then, when trying to do 
+alternatively everything compiles fine and then, when trying to do
 something, PDL complains about finding a "PDL/Primitive/assgn.al"
 for autoloading.
 
@@ -119,7 +119,7 @@ Also, it might be worth a try to get a different 'make' - gmake seems
 to work well.
 
 
-Q: What does 
+Q: What does
 > Converting input file
 > Doc/mkhtmldoc.pl: /usr/lib/perl5/site_perl/PDL/PP.pod: cannot resolve
 > L<PDL::Indexing> in paragraph 8: no such page 'PDL/Indexing'
@@ -141,5 +141,5 @@ Q: What does
 mean?
 
 A: the html documentation is experimental - nothing is wrong
-with your system. 
+with your system.
 

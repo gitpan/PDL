@@ -17,7 +17,7 @@ beginners and allows rapid prototyping. However until recently it did not
 support data structures which allowed it to do fast number crunching.
 
 However with the development of Perl v5, Perl acquired 'Objects'. To put
-it simply users can define their own special data types, and write 
+it simply users can define their own special data types, and write
 custom routines to manipulate them either in low level languages (C and
 Fortran) or in Perl itself.
 
@@ -33,7 +33,7 @@ PDL variables (or 'piddles' as they have come to be known)
 support a wide range of fundamental data types - arrays can be bytes,
 short integers (signed or unsigned), long integers, floats or
 double precision floats. And because of the Object-Oriented nature
-of PDL new customised datatypes can be derived from them.  
+of PDL new customised datatypes can be derived from them.
 
 As well as the PDL modules, that can be used by normal perl programs, PerlDL
 comes with a command line perl shell, called 'perldl', which supports command

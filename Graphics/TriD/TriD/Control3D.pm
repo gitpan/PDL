@@ -7,7 +7,7 @@ package PDL::Graphics::TriD::Control3D;
 # A quaternion-based controller framework with the following transformations:
 #   1. world "origin". This is what the world revolves around
 #   2. world "rotation" at origin.
-#   3. camera "distance" along z axis after that (camera looks 
+#   3. camera "distance" along z axis after that (camera looks
 #	at negative z axis).
 #   4. camera "rotation" after that (not always usable).
 

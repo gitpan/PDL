@@ -1,5 +1,5 @@
 /* I cut out useless pieces of this X.h file and
- * kept what was useful for generating the 
+ * kept what was useful for generating the
  * opengl perl module
  */
 
@@ -39,13 +39,13 @@ Copyright 1987 by Digital Equipment Corporation, Maynard, Massachusetts.
 
                         All Rights Reserved
 
-Permission to use, copy, modify, and distribute this software and its 
-documentation for any purpose and without fee is hereby granted, 
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
 provided that the above copyright notice appear in all copies and that
-both that copyright notice and this permission notice appear in 
+both that copyright notice and this permission notice appear in
 supporting documentation, and that the name of Digital not be
 used in advertising or publicity pertaining to distribution of the
-software without specific, written prior permission.  
+software without specific, written prior permission.
 
 DIGITAL DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
 ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
@@ -86,8 +86,8 @@ typedef unsigned char KeyCode;
    /*** deleted***/
 
 
-/***************************************************************** 
- * EVENT DEFINITIONS 
+/*****************************************************************
+ * EVENT DEFINITIONS
  *****************************************************************/
 
 /* Input Event Masks. Used as event-mask window attribute and as arguments
@@ -95,31 +95,31 @@ typedef unsigned char KeyCode;
 
 /* I removed the "L"'s from the folloing 26 lines to make it parseable */
 #define NoEventMask			0
-#define KeyPressMask			(1<<0)  
-#define KeyReleaseMask			(1<<1)  
-#define ButtonPressMask			(1<<2)  
-#define ButtonReleaseMask		(1<<3)  
-#define EnterWindowMask			(1<<4)  
-#define LeaveWindowMask			(1<<5)  
-#define PointerMotionMask		(1<<6)  
-#define PointerMotionHintMask		(1<<7)  
-#define Button1MotionMask		(1<<8)  
-#define Button2MotionMask		(1<<9)  
-#define Button3MotionMask		(1<<10) 
-#define Button4MotionMask		(1<<11) 
-#define Button5MotionMask		(1<<12) 
-#define ButtonMotionMask		(1<<13) 
+#define KeyPressMask			(1<<0)
+#define KeyReleaseMask			(1<<1)
+#define ButtonPressMask			(1<<2)
+#define ButtonReleaseMask		(1<<3)
+#define EnterWindowMask			(1<<4)
+#define LeaveWindowMask			(1<<5)
+#define PointerMotionMask		(1<<6)
+#define PointerMotionHintMask		(1<<7)
+#define Button1MotionMask		(1<<8)
+#define Button2MotionMask		(1<<9)
+#define Button3MotionMask		(1<<10)
+#define Button4MotionMask		(1<<11)
+#define Button5MotionMask		(1<<12)
+#define ButtonMotionMask		(1<<13)
 #define KeymapStateMask			(1<<14)
-#define ExposureMask			(1<<15) 
-#define VisibilityChangeMask		(1<<16) 
-#define StructureNotifyMask		(1<<17) 
-#define ResizeRedirectMask		(1<<18) 
-#define SubstructureNotifyMask		(1<<19) 
-#define SubstructureRedirectMask	(1<<20) 
-#define FocusChangeMask			(1<<21) 
-#define PropertyChangeMask		(1<<22) 
-#define ColormapChangeMask		(1<<23) 
-#define OwnerGrabButtonMask		(1<<24) 
+#define ExposureMask			(1<<15)
+#define VisibilityChangeMask		(1<<16)
+#define StructureNotifyMask		(1<<17)
+#define ResizeRedirectMask		(1<<18)
+#define SubstructureNotifyMask		(1<<19)
+#define SubstructureRedirectMask	(1<<20)
+#define FocusChangeMask			(1<<21)
+#define PropertyChangeMask		(1<<22)
+#define ColormapChangeMask		(1<<23)
+#define OwnerGrabButtonMask		(1<<24)
 
 /* Event names.  Used in "type" field in XEvent structures.  Not to be
 confused with event masks above.  They start from 2 because 0 and 1
@@ -216,7 +216,7 @@ are reserved in the protocol for errors and replies. */
 #define NotifyWhileGrabbed	3
 
 #define NotifyHint		1	/* for MotionNotify events */
-		       
+
 /* Notify detail */
 
 #define NotifyAncestor		0
@@ -283,13 +283,13 @@ are reserved in the protocol for errors and replies. */
 /*** deleted***/
 
 /*****************************************************************
- * ERROR CODES 
+ * ERROR CODES
  *****************************************************************/
  /*** deleted***/
 
 
 /*****************************************************************
- * WINDOW DEFINITIONS 
+ * WINDOW DEFINITIONS
 *****************************************************************/
  /*** deleted***/
 
@@ -301,17 +301,17 @@ are reserved in the protocol for errors and replies. */
 
 
 /*****************************************************************
- * FONTS 
+ * FONTS
  *****************************************************************/
   /*** deleted***/
 
 /*****************************************************************
- *  IMAGING 
+ *  IMAGING
  *****************************************************************/
   /*** deleted***/
 
 /*****************************************************************
- *  COLOR MAP STUFF 
+ *  COLOR MAP STUFF
  *****************************************************************/
   /*** deleted***/
 
@@ -320,13 +320,13 @@ are reserved in the protocol for errors and replies. */
  *****************************************************************/
   /*** deleted***/
 
-/***************************************************************** 
+/*****************************************************************
  * KEYBOARD/POINTER STUFF
  *****************************************************************/
  /*** deleted***/
 
 /*****************************************************************
- * SCREEN SAVER STUFF 
+ * SCREEN SAVER STUFF
  *****************************************************************/
  /*** deleted***/
 
@@ -336,7 +336,7 @@ are reserved in the protocol for errors and replies. */
  /*** deleted***/
 
 
-/* Display classes  used in opening the connection 
+/* Display classes  used in opening the connection
  * Note that the statically allocated ones are even numbered and the
  * dynamically changeable ones are odd numbered */
 

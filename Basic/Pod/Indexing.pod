@@ -74,20 +74,20 @@ the indexing commands and some typical examples how they might be used
 in PDL programs. We will further illustrate the pointer/dataflow
 analogies in the context of some of the examples later on.
 
-There are two different implementations of this ``smart pointer'' 
+There are two different implementations of this ``smart pointer''
 relationship: the first one, which is a little slower but works
 for any transformation is simply to do the transformation forwards
 and backwards as necessary. The other is to consider the child piddle
 a ``virtual'' piddle, which only stores a pointer to the parent
 and access information so that routines which use the child piddle
-actually directly access the data in the parent. 
-If the virtual piddle is given to a routine which cannot use it, 
+actually directly access the data in the parent.
+If the virtual piddle is given to a routine which cannot use it,
 PDL transparently physicalizes the virtual piddle before letting
 the routine use it.
 
 Currently (1.94_01) all transformations which are ``affine'',
 i.e. the indices of the data item in the parent piddle are determined
-by a linear transformation (+ constant) from the indices of the 
+by a linear transformation (+ constant) from the indices of the
 child piddle result in virtual piddles. All other indexing
 routines (e.g. C<->index(...)>) result in physical piddles.
 All routines compiled by PP can accept affine piddles (except
@@ -96,8 +96,8 @@ those routines that pass pointers to external library functions).
 Note that whether something is affine or not does not affect the semantics
 of what you do in any way: both
 
-	$a->index(...) .= 5; 
-	$a->slice(...) .= 5; 
+	$a->index(...) .= 5;
+	$a->slice(...) .= 5;
 
 change the data in $a. The affinity does, however, have a significant
 impact on memory usage and performance.
@@ -196,7 +196,7 @@ explanation of the syntax for the string argument to slice:
 
 where ind0 specifies what to do with index No 0 of the pdl $a,
 etc. Each element of the comma separated list can have one of the
-following forms: 
+following forms:
 
 =over 6
 
@@ -238,7 +238,7 @@ Spot the difference to the previous example?
 Take the range of indices from C<n1> to C<n2> or (second form)
 take the range of indices from C<n1> to C<n2> with step
 C<n3>. An example for the use of this format is the previous
-definition of the subimage composed of even lines. 
+definition of the subimage composed of even lines.
 
  perldl> $even = $im->slice(':,1:-1:2')
 
@@ -306,7 +306,7 @@ also be used as lvalues in assignments (as the use of '++' in some of
 the examples above has already demonstrated). For explicit assignments
 to the data represented by a virtual pdl you have to use the
 overloaded '.=' operator (which in this context we call I<propagated
-assignment>). Why can't you use the normal assignment operator '='? 
+assignment>). Why can't you use the normal assignment operator '='?
 
 Well, you definitely still can use the '=' operator but it wouldn't do
 what you want. This is due to the fact that the '=' operator cannot be
@@ -355,7 +355,7 @@ instead you have to say something like
 
  perldl> ($pdl = $im->slice(':,(2)')) .= zeroes(5)->xvals->float
 
-We hope that future versions of perl will allow the simpler 
+We hope that future versions of perl will allow the simpler
 syntax (i.e. allow subroutines to return lvalues).
 
 Note that there can be a problem with assignments like this when
@@ -412,7 +412,7 @@ them again).
      $xc = sum($im*xvals(zeroes($xd))->dummy(1,$yd))/sum($im);
 
 Let's explain how that works in a little more detail. First, the
-product: 
+product:
 
      $xvs = xvals(zeroes($xd));
      print $xvs->dummy(1,$yd);   # repeat the line $yd times
@@ -438,10 +438,10 @@ same source element:
 Unfortunately this trick cannot be used to convert your old B/W
 photos to color ones in the way you'd like. :(
 
-Note that the memory usage of piddles with dummy dimensions 
+Note that the memory usage of piddles with dummy dimensions
 is especially sensitive to the internal representation. If the piddle
-can be represented as a virtual affine (``vaffine'') piddle, 
-only the control structures are stored. But if $b in 
+can be represented as a virtual affine (``vaffine'') piddle,
+only the control structures are stored. But if $b in
 
 	$a = zeroes(10000);
 	$b = $a->dummy(1,10000);
@@ -640,7 +640,7 @@ following to process the whole image:
  for ($j=0;$j<dims[2];$j++) {
 	for ($i=0;$i<dims[1];$i++) {
             # compute the pixel value
-            $tmp = inner($w,$im->slice(':,(i),(j)')); 
+            $tmp = inner($w,$im->slice(':,(i),(j)'));
 	    set($grey,$i,$j,$tmp); # and set it in the greyscale image
  }}
 
@@ -652,7 +652,7 @@ aware function defined in the PDL::Primitive package)
 We have ended up with a one-liner that automatically
 creates the pdl $grey with the right number and size of dimensions and
 performs the loops automatically (these loops are implemented as fast C code
-in the internals of PDL). 
+in the internals of PDL).
 Well, we
 still owe you an explanation how this 'magic' is achieved.
 
@@ -680,7 +680,7 @@ Here is the point when threading finally enters the game. If you call
 PP-functions with pdls that have I<more> than the required core
 dimensions the first dimensions of the pdl arguments are used as the
 core dimensions and the additional extra dimensions are threaded
-over. Let us demonstrate this first with our example above 
+over. Let us demonstrate this first with our example above
 
   $grey = inner($im,$w); # w is the weight vector from above
 
@@ -852,7 +852,7 @@ First in the row is a slightly reworked centroid example, now coded
 with threading in mind.
 
  # threaded mult to calculate centroid coords, works for stacks as well
- $xc = sumover(($im*xvals(($im->dims)[0]))->clump(2)) / 
+ $xc = sumover(($im*xvals(($im->dims)[0]))->clump(2)) /
        sumover($im->clump(2));
 
 Let's analyse what's going on step by step. First the product:
@@ -1004,7 +1004,7 @@ function in question and R1-R5 in mind!). Easy, isn't it ?
 
 At this point we have to divert to some technical detail that has to
 do with the general calling conventions of PP-functions and the
-automatic creation of output arguments. 
+automatic creation of output arguments.
 Basically, there are two ways of invoking pdl routines, namely
 
   $result = func($a,$b);
@@ -1051,7 +1051,7 @@ temporary pdl in each step of the loop that comes along with the
   }
 
 The take-home message of this section once more: be aware of the
-limitation on output creation when using B<explicit threading>. 
+limitation on output creation when using B<explicit threading>.
 
 =head2 Explicit threading
 
@@ -1218,7 +1218,7 @@ Example 1:
   PDL::Primitive::inner($evecs->xchg(0,1)->thread(-1,1),
                         $tmp->thread(0,-1),
                         $inv->thread(0,1));
-  # alternative for matrix mult using implicit threading, 
+  # alternative for matrix mult using implicit threading,
   # first xchg only for transpose
   PDL::Primitive::inner($evecs->xchg(0,1)->dummy(1),
                         $tmp->xchg(0,1)->dummy(2),
@@ -1340,7 +1340,7 @@ the basic ones defined in primitiv.pd
 
  # functions in primitiv.pp
 
-  sumover		((n),[o]())	
+  sumover		((n),[o]())
   prodover	((n),[o]())
   axisvalues      ((n))					inplace
   inner		((n),(n),[o]())

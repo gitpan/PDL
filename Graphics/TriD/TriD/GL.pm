@@ -1,6 +1,6 @@
 #
 #
-# ToDo: 
+# ToDo:
 #  - multiple windows - requires editing generate.pl in OpenGL/
 #  - clean up
 #
@@ -25,6 +25,8 @@ sub PDL::Graphics::TriD::Material::togl{
   glMaterialfv(&GL_FRONT_AND_BACK,&GL_DIFFUSE,$diff);
 }
 
+$PDL::Graphics::TriD::any_cannots = 0;
+
 sub PDL::Graphics::TriD::Object::cannot_mklist {
 	return 0;
 }
@@ -38,11 +40,13 @@ sub PDL::Graphics::TriD::Object::gl_update_list {
 	$this->{List} = $lno;
 	print "GENLIST $lno\n" if $PDL::Graphics::TriD::verbose;
 	glNewList($lno,GL_COMPILE);
-	for(@{$this->{Objects}}) {
-		if(!$_->cannot_mklist()) {
+	if ($PDL::Graphics::TriD::any_cannots) {
+	  for(@{$this->{Objects}}) {
+	        if(!$_->cannot_mklist()) {
 			$_->togl();
 		}
-	}
+	  }
+	} else { for (@{$this->{Objects}}) {$_->togl()} }
 	print "EGENLIST $lno\n" if $PDL::Graphics::TriD::verbose;
 #	pdltotrianglemesh($pdl, 0, 1, 0, ($pdl->{Dims}[1]-1)*$mult);
 	glEndList();
@@ -58,10 +62,20 @@ sub PDL::Graphics::TriD::Object::gl_call_list {
 		$this->gl_update_list();
 	}
 	glCallList($this->{List});
-	for(@{$this->{Objects}}) {
+	if ($PDL::Graphics::TriD::any_cannots) {
+	  for(@{$this->{Objects}}) {
 		if($_->cannot_mklist()) {
 			$_->togl();
 		}
+	  }
+        }
+}
+
+sub PDL::Graphics::TriD::Object::delete_displist {
+	my($this) = @_;
+	if($this->{List}) {
+		glDeleteLists($this->{List},1);
+		undef $this->{List};
 	}
 }
 
@@ -208,12 +222,17 @@ sub PDL::Graphics::TriD::EuclidAxes::togl_axis {
 use POSIX qw/acos/;
 sub PDL::Graphics::TriD::Quaternion::togl {my($this) = @_;
 	if(abs($this->[0]) == 1) { return ; }
-	if(abs($this->[0]) >= 1) { 
-		# die "Unnormalized Quaternion!\n"; 
+	if(abs($this->[0]) >= 1) {
+		# die "Unnormalized Quaternion!\n";
 		$this->normalize_this();
 	}
-	glRotatef(acos($this->[0])/3.14*180, @{$this}[1..3]);
+	glRotatef(2*acos($this->[0])/3.14*180, @{$this}[1..3]);
 }
+
+##################################
+# Graph Objects
+#
+#
 
 sub PDL::Graphics::TriD::GObject::togl {
 	$_[0]->gdraw($_[0]->{Points});
@@ -276,7 +295,7 @@ sub PDL::Graphics::TriD::SLattice::gdraw {
 	  PDL::gl_lines($points->xchg(1,2),$black);
 	}
 	glPopAttrib();
-}	
+}
 
 sub PDL::Graphics::TriD::SCLattice::gdraw {
 	my($this,$points) = @_;
@@ -305,7 +324,7 @@ sub PDL::Graphics::TriD::SCLattice::gdraw {
 	  PDL::gl_lines($points->xchg(1,2),$black);
 	}
 	glPopAttrib();
-}	
+}
 
 sub PDL::Graphics::TriD::SLattice_S::gdraw {
 	my($this,$points) = @_;
@@ -325,7 +344,7 @@ sub PDL::Graphics::TriD::SLattice_S::gdraw {
 	  $this->{Normals} = $this->smoothn($points)
 	    unless defined($this->{Normals});
 	  my $n = $this->{Normals};
-	  my $f = (!$this->{Options}{Material} ? 
+	  my $f = (!$this->{Options}{Material} ?
 	  		\&PDL::gl_triangles_wn : \&PDL::gl_triangles_wn_mat);
 	  &$f(
 			       (map {$points->slice($_)} @sls1),
@@ -338,7 +357,7 @@ sub PDL::Graphics::TriD::SLattice_S::gdraw {
 			       (map {$this->{Colors}->slice($_)} @sls2)
 			      );
 	} else {
-	  my $f = (!$this->{Options}{Material} ? 
+	  my $f = (!$this->{Options}{Material} ?
 	  		\&PDL::gl_triangles_n : \&PDL::gl_triangles_n_mat);
 	  &$f(
 			      (map {$points->slice($_)} @sls1),
@@ -356,7 +375,92 @@ sub PDL::Graphics::TriD::SLattice_S::gdraw {
 	  PDL::gl_lines($points->xchg(1,2),$black);
 	}
 	glPopAttrib();
-}	
+}
+
+##################################
+# PDL::Graphics::TriD::Image
+#
+#
+
+sub PDL::Graphics::TriD::Image::togl {
+	$_[0]->gdraw();
+}
+
+sub PDL::Graphics::TriD::Image::togl_graph {
+	&PDL::Graphics::TriD::Image::togl;
+}
+
+
+# The quick method is to use texturing for the good effect.
+sub PDL::Graphics::TriD::Image::gdraw {
+	my($this,$vert) = @_;
+	my ($p,$xd,$yd,$txd,$tyd) = $this->flatten(1); # do binary alignment
+	glColor3d(1,1,1);
+	glTexImage2D(&GL_TEXTURE_2D,
+		0,
+		&GL_RGB,
+		$txd,
+		$tyd,
+		0,
+		&GL_RGB,
+		&GL_FLOAT,
+		${$p->get_dataref()}
+	);
+	 glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+	    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+	       glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	          glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+
+	glDisable(&GL_LIGHTING);
+	glNormal3d(0,0,1);
+	glEnable(&GL_TEXTURE_2D);
+	glBegin(&GL_QUADS);
+	my @texvert = (
+		[0,0],
+		[$xd/$txd, 0],
+		[$xd/$txd, $yd/$tyd],
+		[0, $yd/$tyd]
+	);
+	if(!defined $vert) {$vert = $this->{Points}}
+	for(0..3) {
+#	for([0,0],[$xd/$txd,0],[$xd/$txd,$yd/$tyd],[0,$yd/$tyd]) {
+		glTexCoord2f(@{$texvert[$_]});
+		glVertex3f($vert->slice(":,($_)")->list);
+	}
+	glEnd();
+	glEnable(&GL_LIGHTING);
+	glDisable(&GL_TEXTURE_2D);
+}
+
+# XXX NOT USED
+
+# The careful method is to plot the image as quadrilaterals inside
+# the 0..1,0..1,0 box
+sub PDL::Graphics::TriD::Image::togl_old {
+	my($this) = @_;
+	my($x,$y);
+	my @dims = $this->{Im}->dims;
+	shift @dims; # remove the '3'
+	glDisable(GL_LIGHTING);
+	glNormal3d(0,0,1);
+	my $xmul = 1.0/$dims[0]; my $ymul = 1.0/$dims[1];
+#	print "IMAG2GL, $this->{R}, $this->{G}, $this->{B}\n";
+	my @rvals = $this->{R}->list;
+	my @gvals = $this->{G}->list;
+	my @bvals = $this->{B}->list;
+	for $x (0..$dims[0]-1) {
+#		print "$x\n";
+		for $y (0..$dims[1]-1) {
+			glColor3f((shift @rvals),(shift @gvals),(shift @bvals));
+			glRectd($x*$xmul,$y*$ymul,
+				($x+1)*$xmul,($y+1)*$ymul);
+		}
+	}
+#	print "IMAGDONE\n";
+	glEnd();
+	glEnable(GL_LIGHTING);
+}
+
 
 
 sub PDL::Graphics::TriD::EventHandler::new {
@@ -367,7 +471,7 @@ sub PDL::Graphics::TriD::EventHandler::new {
 
 sub PDL::Graphics::TriD::EventHandler::event {
 	my($this,$win,$type,@args) = @_;
-#	print "EH: $type\n";
+	print "EH: $type\n" if $PDL::Graphics::TriD::verbose;
 	if($type == &MotionNotify) {
 #		print "MOTION\n";
 	  my $but = -1;
@@ -432,11 +536,11 @@ BEGIN {
 
 sub new {my($type) = @_;
 	my($w,$h) = ($PDL::Graphics::TriD::GL::xsize, $PDL::Graphics::TriD::GL::ysize);
-	my $x = 0; 
+	my $x = 0;
 	my @db = &GLX_DOUBLEBUFFER;
 #	my @db = ();
 	if($PDL::Graphics::TriD::offline) {$x = -1; @db=()}
-	
+
 	print "STARTING OPENGL\n" if $PDL::Graphics::TriD::verbose;
 	glpOpenWindow(attributes=>[&GLX_RGBA, @db,
 				&GLX_RED_SIZE,1,
@@ -492,10 +596,10 @@ sub new {my($type) = @_;
 		# Create new mainwindow just for us.
 		my $mw = MainWindow->new();
 		$mw->iconify();
-		my $fh = new FileHandle("<&=$gld\n") 
+		my $fh = new FileHandle("<&=$gld\n")
 			or die("Couldn't reopen GL filehandle");
 		$mw->fileevent($fh,'readable',
-		   sub {# print "GLEV\n"; 
+		   sub {# print "GLEV\n";
 		        $this->twiddle(1)});
 		$this->{FileHandle} = $fh;
 		$this->{MW} = $mw;
@@ -558,7 +662,7 @@ sub do_perspective {
 
 sub setlist { my($this,$list) = @_;
 	$this->{List} = $list;
-	
+
 }
 
 # Resize window.
@@ -621,6 +725,7 @@ sub read_picture {
 
 sub new_viewport {
 	my($this,$x0,$y0,$x1,$y1) = @_;
+	# print "NEW_VIEWPORT: $#{$this->{ViewPorts}}\n";
 	push @{$this->{ViewPorts}},[(new PDL::Graphics::TriD::ViewPort()),
 		$x0,$y0,$x1,$y1];
 	return $this->{ViewPorts}[-1][0];
@@ -628,7 +733,13 @@ sub new_viewport {
 
 sub clear_viewports {
 	my($this) = @_;
+	# print "CLEAR VPs: $this->{ViewPorts} $#{$this->{ViewPorts}}\n";
+	for(@{$this->{ViewPorts}}) {
+		$_->[0]->clear();
+		undef %{$_->[0]};
+	}
 	$this->{ViewPorts} = [];
+	# print "CLEARED VPs: $this->{ViewPorts} $#{$this->{ViewPorts}}\n";
 }
 
 sub twiddle {my($this,$getout,$dontshow) = @_;
@@ -698,7 +809,7 @@ sub twiddle {my($this,$getout,$dontshow) = @_;
 # Because of the way GL does texturing, this must be the very last thing
 # in the object stack before the actual surface. There must not be any
 # transformations after this.
-# 
+#
 # There may be several of these but all of these must have just one texture.
 
 @PDL::Graphics::TriD::GL::SliceTexture::ISA = /PDL::Graphics::TriD::Object/;

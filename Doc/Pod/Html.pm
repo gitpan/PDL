@@ -132,7 +132,7 @@ Display progress messages.
 =head1 EXAMPLE
 
     pod2html("pod2html",
-	     "--podpath=lib:ext:pod:vms", 
+	     "--podpath=lib:ext:pod:vms",
 	     "--podroot=/usr/src/perl",
 	     "--htmlroot=/perl/nmanual",
 	     "--libpods=perlfunc:perlguts:perlvar:perlrun:perlop",
@@ -252,7 +252,7 @@ sub pod2html {
     init_globals();
 
     # cache of %pages and %items from last time we ran pod2html
-    my $podpath = '';		
+    my $podpath = '';
 
     #undef $opt_help if defined $opt_help;
 
@@ -261,14 +261,14 @@ sub pod2html {
 
     # set some variables to their default values if necessary
     local *POD;
-    unless (@ARGV && $ARGV[0]) { 
+    unless (@ARGV && $ARGV[0]) {
 	$podfile  = "-" unless $podfile;	# stdin
 	open(POD, "<$podfile")
 		|| die "$0: cannot open $podfile file for input: $!\n";
     } else {
 	$podfile = $ARGV[0];  # XXX: might be more filenames
 	*POD = *ARGV;
-    } 
+    }
     $htmlfile = "-" unless $htmlfile;	# stdout
     $htmlroot = "" if $htmlroot eq "/";	# so we don't get a //
 
@@ -288,16 +288,16 @@ sub pod2html {
     # put a title in the HTML file
     $title = '';
     TITLE_SEARCH: {
-	for (my $i = 0; $i < @poddata; $i++) { 
+	for (my $i = 0; $i < @poddata; $i++) {
 	    if ($poddata[$i] =~ /^=head1\s*NAME\b/m) {
-		for my $para ( @poddata[$i, $i+1] ) { 
+		for my $para ( @poddata[$i, $i+1] ) {
 		    last TITLE_SEARCH if ($title) = $para =~ /(\S+\s+-+\s*.*)/s;
 		}
-	    } 
+	    }
 
-	} 
-    } 
-    unless ($title) { 
+	}
+    }
+    unless ($title) {
 	$podfile =~ /^(.*)(\.[^.\/]+)?$/;
 	$title = ($podfile eq "-" ? 'No Title' : $1);
 		warn "found $title" if $verbose;
@@ -307,9 +307,9 @@ sub pod2html {
 	$title = $podfile;
     }
     print HTML <<END_OF_HEAD;
-    <HTML> 
-	<HEAD> 
-	    <TITLE>$title</TITLE> 
+    <HTML>
+	<HEAD>
+	    <TITLE>$title</TITLE>
 	</HEAD>
 
 	<BODY>
@@ -722,7 +722,7 @@ sub scan_headings {
     # scan for =head directives, note their name, and build an index
     #  pointing to each of them.
     foreach my $line (@data) {
-	if ($line =~ /^\s*=(head)([1-6])\s+(.*)/) {
+	if ($line =~ /^=(head)([1-6])\s+(.*)/) {
 	    ($tag,$which_head, $title) = ($1,$2,$3);
 	    chomp($title);
 	    $$sections{htmlify(0,$title)} = 1;
@@ -886,9 +886,9 @@ sub process_item {
 	}
 
        print HTML "<DT><STRONG>";
-       print HTML "<A NAME=\"item_" . htmlify(1,$text) . "\">" 
+       print HTML "<A NAME=\"item_" . htmlify(1,$text) . "\">"
 	    if $text && !$items_named{($text =~ /(\S+)/)[0]}++;
-	    # preceding craziness so that the duplicate leading bits in 
+	    # preceding craziness so that the duplicate leading bits in
 	    # perlfunc work to find just the first one.  otherwise
 	    # open etc would have many names
        $quote = 1;
@@ -958,7 +958,7 @@ sub process_for {
     my($whom, $text) = @_;
     if ( $whom =~ /^(pod2)?html$/i) {
 	print HTML $text;
-    } 
+    }
 }
 
 #
@@ -984,7 +984,7 @@ sub process_end {
     $whom = lc($whom);
     if ($begin_stack[-1] ne $whom ) {
 	die "Unmatched begin/end at chunk $paragraph\n"
-    } 
+    }
     pop @begin_stack;
 }
 
@@ -1039,9 +1039,9 @@ sub process_text {
                 file
                 wais
                 ftp
-            } ) 
+            } )
         . ')';
-  
+
   my $ltrs = '\w';
   my $gunk = '/#~:.?+=&%@!\-';
   my $punc = '.:?\-';
@@ -1137,7 +1137,7 @@ WARN
 		$s1 = $params;
 		if (!$tag || $tag eq " ") {	#  <> : no tag
 		    $s1 = "&lt;$params&gt;";
-		} elsif ($tag eq "L") {		# L<> : link 
+		} elsif ($tag eq "L") {		# L<> : link
 		    $s1 = process_L($params);
 		} elsif ($tag eq "I" ||		# I<> : italicize text
 			 $tag eq "B" ||		# B<> : bold text
@@ -1176,7 +1176,7 @@ sub html_escape {
     $rest   =~ s/>/&gt;/g;
     $rest   =~ s/"/&quot;/g;
     return $rest;
-} 
+}
 
 #
 # process_puretext - process pure text (without pod-escapes) converting
@@ -1233,7 +1233,7 @@ sub process_puretext {
 	} elsif ($word !~ /[a-z]/ && $word =~ /[A-Z]/) {  # all uppercase?
 	    $word = html_escape($word) if $word =~ /[&<>]/;
 	    $word = "\n<FONT SIZE=-1>$word</FONT>" if $netscape;
-	} else { 
+	} else {
 	    $word = html_escape($word) if $word =~ /[&<>]/;
 	}
     }
@@ -1385,7 +1385,7 @@ sub process_C {
 	$s1 = ($items{$s1} ?
 	       "<A HREF=\"$htmlroot/$items{$s1}#item_" . htmlify(0,$s2) .  "\">$str</A>" :
 	       "<A HREF=\"#item_" . htmlify(0,$s2) .  "\">$str</A>");
-	$s1 =~ s,(perl\w+/(\S+)\.html)#item_\2\b,$1,; 
+	$s1 =~ s,(perl\w+/(\S+)\.html)#item_\2\b,$1,;
 	confess "s1 has space: $s1" if $s1 =~ /HREF="[^"]*\s[^"]*"/;
     } else {
 	$s1 = "<CODE>$str</CODE>";
@@ -1434,7 +1434,7 @@ sub process_S {
 }
 
 #
-# process_X - this is supposed to make an index entry.  we'll just 
+# process_X - this is supposed to make an index entry.  we'll just
 # ignore it.
 #
 sub process_X {
@@ -1463,7 +1463,7 @@ sub htmlify {
     if ($compact) {
       $heading =~ /^(\w+)/;
       $heading = $1;
-    } 
+    }
 
   # $heading = lc($heading);
   $heading =~ s/[^\w\s]/_/g;

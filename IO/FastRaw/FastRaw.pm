@@ -41,14 +41,14 @@ This is what makes the approach efficient.
 
 It is also possible to mmap the file which can give a large
 speedup in certain situations as well as save a lot of memory
-by using a disk file as virtual memory. When a file is mapped, 
+by using a disk file as virtual memory. When a file is mapped,
 parts of it are read only as they are accessed in the memory
 (or as the kernel decides: if you are reading the pages in order,
-it may well preread some for you). 
+it may well preread some for you).
 
 Note that memory savings and copy-on-write are operating-system
 dependent - see Core.xs and your operating system documentation
-for exact semantics of whatever. Basically, if you write to a 
+for exact semantics of whatever. Basically, if you write to a
 mmapped file without c<ReadOnly>, the change will be reflected
 in the file immediately. C<ReadOnly> doesn't really make it impossible
 to write to the piddle but maps the memory privately so the file
@@ -80,7 +80,7 @@ Write a raw format binary file
 
  writefraw($pdl,"fname");
 
-   
+
 =head2 mapfraw
 
 =for ref
@@ -152,11 +152,11 @@ also have options (the author nowadays only uses C<mapfraw> ;)
 
 =head1 AUTHOR
 
-Copyright (C) Tuomas J. Lukka 1997. 
+Copyright (C) Tuomas J. Lukka 1997.
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 
@@ -214,6 +214,7 @@ sub PDL::writefraw {
 	_writefrawhdr($pdl,$name);
 	my $d = new FileHandle ">$name"
 	 or barf "Couldn't open '$name' for writing";
+	binmode $d;
 	print $d ${$pdl->get_dataref};
 }
 
@@ -222,6 +223,7 @@ sub PDL::readfraw {
 	my($name,$opts) = @_;
 	my $d = new FileHandle "$name"
 	 or barf "Couldn't open '$name' for reading";
+	binmode $d;
 	my $hdr = _read_frawhdr($name);
 	my $pdl = $class->zeroes ((new PDL::Type($hdr->{Type})), @{$hdr->{Dims}});
 	my $len = length ${$pdl->get_dataref};

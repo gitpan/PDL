@@ -10,12 +10,12 @@ PDL::Core::Dev->import();
 
 # Files for each routine (.c assumed)
 
-%FileToUse = qw( acosh acosh asinh asinh atanh atanh 
+%FileToUse = qw( acosh acosh asinh asinh atanh atanh
              	 erf ndtr erfc ndtr j0 j0 j1 j1 jn jn
 	     	 y0 j0 y1 j1 yn yn ndtri ndtri
 		 blas blas eigens eigens simq simq rint rint
 	       );
-%included = ();	   
+%included = ();
 
 # test for library features
 my (@ufuncs2) = qw(acosh asinh atanh erf erfc rint);
@@ -68,7 +68,7 @@ print "Using system version of functions: ";
 for $func (@ufuncs2,@besufuncs,@besbifuncs) {
   print $func," " unless grep {$func eq $_} @need;
 }
-print "\n\n"; 
+print "\n\n";
 
 @pack = (["math.pd",Math,PDL::Math]);
 %hash = pdlpp_stdargs_int(@::pack);
@@ -84,7 +84,7 @@ for $func (@need) {
 
 $hash{OBJECT} .= " const\$(OBJ_EXT) mtherr\$(OBJ_EXT) polevl\$(OBJ_EXT)"
    if scalar(@need)>0;
-   
+
 $hash{LIBS} = ['-lm'];
 WriteMakefile(%hash);
 

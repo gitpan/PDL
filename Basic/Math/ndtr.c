@@ -64,7 +64,7 @@
  *
  * The integral is
  *
- *                           x 
+ *                           x
  *                            -
  *                 2         | |          2
  *   erf(x)  =  --------     |    exp( - t  ) dt.
@@ -107,7 +107,7 @@
  *
  *  1 - erf(x) =
  *
- *                           inf. 
+ *                           inf.
  *                             -
  *                  2         | |          2
  *   erfc(x)  =  --------     |    exp( - t  ) dt

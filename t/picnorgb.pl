@@ -30,8 +30,8 @@ use PDL::Dbg;
 
 # private fix
 $ENV{PATH} .= ":$ENV{HOME}/perl/netpbm/bin" if `hostname` =~ /mbcsg1/;
-$PDL::verbose = 0;
-$iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate 
+$PDL::debug = 0;
+$iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate
                    # output format
 
 #              [FORMAT, extension, ushort-divisor,
@@ -53,7 +53,7 @@ $im3 = byte [[0,0,255,255,12,13],[1,4,5,6,11,124],
 	     [100,0,0,0,10,10],[2,1,0,1,0,14],[2,1,0,1,0,14],
 	     [2,1,0,1,0,14]];
 
-if ($PDL::verbose) {
+if ($PDL::debug) {
   print $im1;
   $im1->px;
   print $im2;
@@ -88,7 +88,7 @@ foreach $form (@formats) {
     $comp = $comp->ushort*65535 if $form->[0] eq 'SGI'; # yet another format quirk
     ok($n++,approx($comp,$in3));
 
-    if ($PDL::verbose) {
+    if ($PDL::debug) {
       print $in1->px unless $form->[0] eq 'TIFF';
       print $in2->px;
       print $in3->px;

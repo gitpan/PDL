@@ -7,7 +7,7 @@ PDL::Tests - tests for some PP features
 =head1 SYNOPSIS
 
   use PDL::Tests;
-  
+
   <test code>
 
 =head1 DESCRIPTION

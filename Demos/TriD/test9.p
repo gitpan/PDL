@@ -15,7 +15,7 @@ sub func1 {
 	my($x,$y,$z) = map {$_[0]->slice("($_)")} 0..2;
 	$r = $x**2 + 1.5*$y**2 + 0.3 * $z**2 + 5*($x**2-$y)**2;
 	$res = ($r - 1) *  -1;
-#	print $res; 
+#	print $res;
 	return $res;
 }
 

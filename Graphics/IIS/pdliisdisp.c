@@ -1,6 +1,6 @@
-/*************************************************************** 
+/***************************************************************
 
-   pdliisdisplay.c                                     
+   pdliisdisplay.c
 
 ****************************************************************/
 
@@ -38,14 +38,14 @@ void iis_cur(float*x, float*y, char* ch) {
    hdr[Z_REGISTER] = 0;
    hdr[T_REGISTER] = 0;
    iis_checksum(hdr);
-   iis_write((char*)hdr, 8*sizeof(short)); 
+   iis_write((char*)hdr, 8*sizeof(short));
 
    /* Read however many bytes it send in this case */
 
    if ((nbytes = read (iispipe_i, buf, SZ_WCSTEXT)) <= 0)
       iis_error ("iis_cur: cannot read IIS pipe\n","");
 
-   if (sscanf ((char*)buf, "%f %f %d %c", x, y, &wcs, ch) != 4) 
+   if (sscanf ((char*)buf, "%f %f %d %c", x, y, &wcs, ch) != 4)
       iis_error ("iis_cur: can't parse '%s'\n", (char*)buf);
 }
 
@@ -75,7 +75,7 @@ void iis_drawcirc(float xcen, float ycen, float radius, int colour, int frame) {
 
    /* Send WCS read request */
 
-   hdr[TRANSFER_ID] = -IREAD; 
+   hdr[TRANSFER_ID] = -IREAD;
    hdr[THING_COUNT] = 0;
    hdr[SUB_UNIT]   = WCS;
    hdr[CHECK_SUM]  = 0;
@@ -90,7 +90,7 @@ void iis_drawcirc(float xcen, float ycen, float radius, int colour, int frame) {
 
    sscanf(wcsbuf, "%[^\n]\n%f%f%f%f%f%f%f%f%d", label,
          &xx, &yx, &xy, &yy, &xo, &yo, &low, &high, &w_type);
-   
+
    /* Invert transform (I don't care about non-square coord systems! */
 
    xcen2 = (xcen-xo)/xx;
@@ -99,23 +99,23 @@ void iis_drawcirc(float xcen, float ycen, float radius, int colour, int frame) {
    /* Correct scale factor - OK for square images don't want to
       draw ellipses for non-square ones so take geometric mean  */
 
-   rr =  radius / sqrt(iis_abs(xx*yy)); 
+   rr =  radius / sqrt(iis_abs(xx*yy));
 
    /* Transfer limits (with buffer to allow for edge effects) */
-   
-   ymin = ycen2-rr-2; 
-   if (ymin<0) 
+
+   ymin = ycen2-rr-2;
+   if (ymin<0)
       ymin=0;
-   ymax = ycen2+rr+2; 
-   if (ymax>=frameY) 
+   ymax = ycen2+rr+2;
+   if (ymax>=frameY)
       ymax=frameY-1;
-   
+
    /* Work out how many lines to transfer at a go */
-   
+
    ntrans = RBUFFSZ/frameX;
-   if (ntrans<1) 
+   if (ntrans<1)
       ntrans = 1;
- 
+
    /* Allocate buffer for data transfers */
 
    data = (unsigned char*) calloc(ntrans*frameX, sizeof(unsigned char));
@@ -143,7 +143,7 @@ void iis_drawcirc(float xcen, float ycen, float radius, int colour, int frame) {
       iis_checksum(hdr);
       iis_write((char*)hdr, 8*sizeof(short));
       iis_read((char*)data, nlines*frameX*sizeof(char));
-   
+
       /* Write data */
 
       hdr[TRANSFER_ID] = IWRITE | PACKED | BLOCKXFER;
@@ -156,32 +156,32 @@ void iis_drawcirc(float xcen, float ycen, float radius, int colour, int frame) {
       hdr[T_REGISTER] = ALLBITPL;
       iis_checksum(hdr);
       iis_write((char*)hdr, 8*sizeof(short));
-   
+
       /* Change Data  - draw in i and j to fill circle gaps via symmetry */
 
-      for (j=0; j<nlines; j++) {       
+      for (j=0; j<nlines; j++) {
           dd = rr*rr - (y+j-ycen2)*(y+j-ycen2);
           if (dd>=0) {
              dd = sqrt(dd);
              i = iis_round( (float)xcen2 - dd  );
-             if (i>=0 && i<frameX) 
+             if (i>=0 && i<frameX)
                 data[ (nlines-j-1)*frameX + i ] = colour;
              i = iis_round( (float)xcen2 + dd );
-             if (i>=0 && i<frameX) 
+             if (i>=0 && i<frameX)
                 data[ (nlines-j-1)*frameX + i ] = colour;
           }
-      }   
+      }
 
-      for (i=0; i<frameX; i++) {       
+      for (i=0; i<frameX; i++) {
           dd = rr*rr - (i-xcen2)*(i-xcen2);
           if (dd>=0) {
              dd = sqrt(dd);
-             j = iis_round( (float)ycen2 - (float)y - dd ); 
+             j = iis_round( (float)ycen2 - (float)y - dd );
              if (j>=0 && j<nlines)
                 data[ (nlines-j-1)*frameX + i ] = colour;
              j = iis_round( (float)ycen2 - (float)y + dd );
-             if (j>=0 && j<nlines) 
-                data[ (nlines-j-1)*frameX + i ] = colour; 
+             if (j>=0 && j<nlines)
+                data[ (nlines-j-1)*frameX + i ] = colour;
           }
       }
 
@@ -196,35 +196,35 @@ void iis_drawcirc(float xcen, float ycen, float radius, int colour, int frame) {
 
 /*
    Open IIS connection - if inpipe or outpipe are "" default
-   pipes are searched for in the environment variable $IMTDEV, 
-   then in the directories (with the usual filenames) $HOME/iraf/dev, 
+   pipes are searched for in the environment variable $IMTDEV,
+   then in the directories (with the usual filenames) $HOME/iraf/dev,
    $HOME/dev, and finally /dev.
 
    Note the frame buffer configuration number and dimensions
-   must be suppled by hand - life is too short to write 
+   must be suppled by hand - life is too short to write
    imtoolrc parsing code in C!  If these don't match those in the
    appropriate imtoolrc file problems will occur.
 
 */
 
 void iis_open(char* inpipe, char* outpipe, int fb, int fbx, int fby) {
-    
+
    FILE *syspipe;
    char *home, *imtdev, *tok=NULL;
    char	iname[STRSIZE],oname[STRSIZE];
    int  i,j;
 
-   home    = getenv("HOME"); 
+   home    = getenv("HOME");
 
    imtdev  = getenv("IMTDEV");
    if (imtdev != NULL)  /* Start parsing IMTDEV environment variable */
        tok = strtok(imtdev,":");
    if (tok!=NULL && strcmp(tok,"fifo")!=0) /* Ignore if not fifo */
       tok = NULL;
-    
+
    /* Get input fifo name */
 
-   if (strcmp(inpipe,"")==0) { 
+   if (strcmp(inpipe,"")==0) {
 
       if (tok!=NULL) {  /* Check next bit of IMTDEV */
          tok = strtok(NULL,":");
@@ -298,7 +298,7 @@ void iis_open(char* inpipe, char* outpipe, int fb, int fbx, int fby) {
 	} else
             iis_error("iis_open: cannot open IIS output pipe %s\n",oname);
 	close (iispipe_i);
-    } else 
+    } else
        iis_error("iis_open: cannot open IIS output pipe %s\n",oname);
 
    /* Open the input fifo */
@@ -307,7 +307,7 @@ void iis_open(char* inpipe, char* outpipe, int fb, int fbx, int fby) {
 
       /* Clear input for reading. */
       fcntl (iispipe_i, F_SETFL, O_RDONLY);
-   } else 
+   } else
       iis_error("iis_open: cannot open IIS input pipe %s\n",iname);
 
    fbconfig = fb; frameX = fbx; frameY = fby; /* Frame buffer globals */
@@ -318,9 +318,9 @@ void iis_open(char* inpipe, char* outpipe, int fb, int fbx, int fby) {
 /* Close the IIS connection */
 
 void iis_close() {
-  close(iispipe_o); 
+  close(iispipe_o);
   close(iispipe_i);
-}  
+}
 
 /******************* Private routines ****************/
 
@@ -332,7 +332,7 @@ void iis_write (char* buf, int size) {
 
     while (total < size) {
 	n = write (iispipe_o, buf, size - total);
-	if (n <= 0) 
+	if (n <= 0)
             iis_error ("iis_write: can't write to pipe\n","");
 	total += n;
     }
@@ -346,7 +346,7 @@ void iis_read (char* buf, int size) {
 
     while (total < size) {
 	n = read (iispipe_i, buf, size - total);
-	if (n <= 0) 
+	if (n <= 0)
             iis_error ("iis_read: can't read from pipe\n","");
 	total += n;
     }
@@ -363,11 +363,11 @@ void iis_checksum ( unsigned short *hdr ) {
 
 /* Return the channel number associated with a display frame */
 
-int iis_chan(int frame) { 
+int iis_chan(int frame) {
    int chan[5];
 
    chan[1]=CHAN1; chan[2]=CHAN2; chan[3]=CHAN3; chan[4]=CHAN4;
-   if (frame>0 && frame<5) 
+   if (frame>0 && frame<5)
       return chan[frame];
    else
       iis_error("iis_display: invalid frame number, must be 1-4\n","");
@@ -375,15 +375,15 @@ int iis_chan(int frame) {
 
 /* Round to nearest int symmetrically about zero */
 
-int iis_round ( float i ) {  
-    if (i>=0) 
+int iis_round ( float i ) {
+    if (i>=0)
        return (int) (i+0.5);
     else
        return -( (int)(0.5-i) );
 }
 
 float iis_abs(float x) {
-   if (x<0) 
+   if (x<0)
       return (-x);
    else
       return x;

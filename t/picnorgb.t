@@ -9,6 +9,8 @@ sub ok {
 
 sub approx {
 	my($a,$b,$mdiff) = @_;
+       return 0 if $a->getdim(0) != $b->getdim(0) ||
+                   $a->getdim(1) != $b->getdim(1);
 	$mdiff = 0.01 unless defined($mdiff);
 	$c = abs($a-$b);
 	$d = max($c);
@@ -27,8 +29,8 @@ use PDL::IO::Pic;
 use PDL::ImageRGB;
 use PDL::Dbg;
 
-$PDL::verbose = 0;
-$iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate 
+$PDL::debug = 0;
+$iform=$iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate
                    # output format
 
 #              [FORMAT, extension, ushort-divisor,
@@ -43,7 +45,7 @@ $iform = 'PNMRAW'; # change to PNMASCII to use ASCII PNM intermediate
            );
 
 @allowed = ();
-for (PDL->wpiccan) { push @allowed, $_ 
+for (PDL->wpiccan) { push @allowed, $_
 	if PDL->rpiccan($_) && defined $formats{$_} }
 
 $ntests = 3 * @allowed;  # -1 due to TIFF converter
@@ -65,7 +67,7 @@ $im3 = PDL::byte [[0,0,255,255,12,13],[1,4,5,6,11,124],
 	     [100,0,0,0,10,10],[2,1,0,1,0,14],[2,1,0,1,0,14],
 	     [2,1,0,1,0,14]];
 
-if ($PDL::verbose) {
+if ($PDL::debug) {
   print $im1;
   $im1->px;
   print $im2;
@@ -81,7 +83,9 @@ $n = 1;
 foreach $format (sort @allowed) {
     print " ** testing $format format **\n";
     $form = $formats{$format};
+    $in1=0;
 
+eval <<'EOD';
     $im1->wpic("tushort.$form->[0]",{IFORM => "$iform"})
       unless $format eq 'TIFF';
     $im2->wpic("tbyte.$form->[0]",{IFORM => "$iform"});
@@ -96,12 +100,13 @@ foreach $format (sort @allowed) {
       ok($n++,approx($comp,$in1,$form->[3]));
     }
     $comp = ($form->[2] ? $im2->dummy(0,3) : $im2);
+EOD
     ok($n++,approx($comp,$in2));
     $comp = ($form->[2] ? ($im3->dummy(0,3)>0)*255 : ($im3 > 0));
     $comp = $comp->ushort*65535 if $format eq 'SGI'; # yet another format quirk
     ok($n++,approx($comp,$in3));
 
-    if ($PDL::verbose) {
+    if ($PDL::debug) {
       print $in1->px unless $format eq 'TIFF';
       print $in2->px;
       print $in3->px;

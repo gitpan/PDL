@@ -6,7 +6,7 @@ package PDL::Graphics::TriD::Pyramid;
 @ISA=qw/PDL::Graphics::TriD::Object/;
 
 sub new {
-	
+
 }
 
 sub togl {

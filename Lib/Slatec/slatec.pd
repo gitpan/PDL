@@ -127,6 +127,12 @@ sub defslatec {
 
 pp_addhdr('
 #include "SlatecProtos.h"
+
+void MAIN__ () {                                                                
+   /* Cheat to define MAIN__ symbol */                                          
+   croak("This should never happen");                                           
+}                                                                               
+   
 ');
 
 

@@ -6,7 +6,7 @@ PDL::Math - extended mathematical operations for PDL
 =head1 SYNOPSIS
 
  use PDL::Math;
- 
+
  use PDL::Graphics::TriD;
  imag3d [SURF2D,bessj0(rvals(zeroes(50,50))/2)];
 
@@ -19,7 +19,7 @@ functions than provided and standard Perl.
 Note all the functions have one input pdl, and one output,  unless otherwise
 stated.
 
-The functions are usually available from the system 
+The functions are usually available from the system
 maths library, however if they are not (determined
 when PDL is compiled) a version from the Cephes math
 library is used.
@@ -30,7 +30,7 @@ EOD
 # Internal doc util
 
 my %doco;
-sub doco { 
+sub doco {
   my @funcs = @_;
   my $doc = pop @funcs;
   for (@funcs) { $doco{$_} = $doc }
@@ -74,6 +74,7 @@ argument which gives the order of the function require.
 =cut
 EOD
 
+if ($^O !~ /win32/i) {  # doesn't seem to be in the MS VC lib
 doco( 'lgamma' ,<<'EOD');
 =for ref
 
@@ -84,16 +85,17 @@ while the second set, of integer values, gives the sign of the gamma
 function.  This is useful for determining factorials, amongst other
 things.
 
-
 =cut
 EOD
+
+}
 
 pp_addhdr('
 #include <math.h>
 #include "protos.h"
 ');
 
-# Standard `-lm' 
+# Standard `-lm'
 my (@ufuncs1) = qw(acos asin atan cosh sinh tan tanh); # F,D only
 my (@ufuncs1g) = qw(ceil floor rint); # Any type
 my (@bifuncs1) = qw(pow); # Any type
@@ -160,6 +162,7 @@ pp_def("bess$func",
 		$b() = '.$func.'($n(),$a());
 ');
 }
+if ($^O !~ /win32/i) {
 pp_def("lgamma",
 	Pars => 'a(); [o]b(); int[o]s()',
 	Doc => $doco{"lgamma"},
@@ -167,6 +170,14 @@ pp_def("lgamma",
 		extern int signgam;
 		$b() = lgamma($a());
 		$s() = signgam;
+');
+}
+
+pp_def('badmask',
+      Pars => 'a(); b(); [o]c();',
+      Doc => 'Clears all infs and nans in a to the corresponding value in b',
+      Code => '
+              $c() = finite($a()) ? $a() : $b();
 ');
 
 # Extra functions from cephes
@@ -199,8 +210,7 @@ Eigenvalues and -vectors of a matrix in lower triangular form
 
 XXX Hard interface
 
-=cut',
-);
+',);
 
 # XXX Destroys a!!!
 # To use the new a again, must store both a and ips.
@@ -209,17 +219,16 @@ pp_def("simq",
 	OtherPars => 'int flag;',
 	GenericTypes => [D],
 	Code => '
-		extern int simq( double *A, double *B, double *X, 
+		extern int simq( double *A, double *B, double *X,
 			int n, int flag, int *IPS );
 		simq($P(a),$P(b),$P(x),$SIZE(n),$COMP(flag),$P(ips));
 ', Doc => '
 =for ref
 
-Solution of simultaneous linear equations. 
+Solution of simultaneous linear equations.
 
 (XXX hard interface)
 
-=cut
 ');
 
 pp_def("squaretotri",
@@ -245,6 +254,17 @@ Convert a symmetric square matrix to triangular vector storage
 
 pp_addpm({At=>Bot},<<'EOD');
 
+sub eigen_c {
+	my($mat) = @_;
+	my $s = $mat->getdim(0);
+	my $z = zeroes($s * ($s+1) / 2);
+	my $ev = zeroes($s);
+	squaretotri($mat,$z);
+	my $k = 0 * $mat;
+	PDL::eigens($z, $k, $ev);
+	return ($ev, $k);
+}
+
 =head1 BUGS
 
 Hasn't been tested on all platforms to ensure Cephes
@@ -253,12 +273,12 @@ versions are picked up automatically and used correctly.
 =head1 AUTHOR
 
 Copyright (C) R.J.R. Williams 1997 (rjrw@ast.leeds.ac.uk), Karl Glazebrook
-(kgb@aaoepp.aao.gov.au) and Tuomas J. Lukka (Tuomas.Lukka@helsinki.fi). 
+(kgb@aaoepp.aao.gov.au) and Tuomas J. Lukka (Tuomas.Lukka@helsinki.fi).
 
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 

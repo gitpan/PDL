@@ -28,7 +28,7 @@ print OUT <<EOD;
 2 33 FOO
 3 7
 4 9  FOO
-5 66 
+5 66
 EOD
 close(OUT);
 
@@ -68,7 +68,7 @@ $t->sethdr(\%hdr);
 
 wfits($t, $file);
 
-$t2 = rfits $file; 
+$t2 = rfits $file;
 
 ok( (sum($t->slice('0:4,:')) == -sum($t2->slice('5:-1,:')) ));
 
@@ -87,7 +87,7 @@ ok(sum($a)==768 && sum($b)==50331648);
 ########### Check if r/wfits bugs are fixed ################
 
 # test 7 - 16
-{ 
+{
     local $| = 1;
     my $a1 =  [1,2];
     my $a2 = [[1,2],[1,2]];
@@ -112,7 +112,7 @@ ok(sum($a)==768 && sum($b)==50331648);
     }
     unlink 'x.fits';
 }
-    
+
 # test 17 - 26
 {
     local $| = 1;

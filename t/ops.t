@@ -25,7 +25,7 @@ $a = xvals zeroes 3,5;
 $b = yvals zeroes 3,5;
 
 $c = $a + $b;
-    
+
 ok(1,$c->at(2,2) == 4);
 ok(2,$c->at(2,3) == 5);
 eval '$c->at(3,3)';

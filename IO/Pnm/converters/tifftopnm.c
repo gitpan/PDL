@@ -188,7 +188,7 @@ main( argc, argv )
 		}
 	    else
 	      if (checkcmap(redcolormap,greencolormap,bluecolormap,bps) == 16
-		  && scale8bp) 
+		  && scale8bp)
 		for ( i = 0; i < numcolors; ++i )
 		  {
 		    register xelval r, g, b;

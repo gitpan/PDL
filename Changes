@@ -1,4 +1,150 @@
 (!!! = possible source of incompatibilities)
+1.99987
+Karl Glazebrook:
+	- Fix for minor array bounds bug in image2d.pd
+	- Addition of PDL->create and PDL->destroy to pdlcore
+	  Core.xs
+	- Change to perldl.conf to (a) Makes Karma find X better,
+	 (b) finds MesaGL as well as GL by default 
+        - Modification of the pic*rgb.t tests to fail more 
+	  gracefully with bad converters.
+	- Patch to Graphics/Karma/karma.pd to sort out some non-
+	  standard options casing.
+	- Patch to Basic/Math/mconf.h to conditionally define
+	  INFINITY 
+	- Fix to IO/Misc/misc.pd so you can use pipes, + minor doc fix/update
+
+Jarle Brinchmann:
+	- Minor Demos/PGPLOT_demo fix.
+
+Tim Jenness:
+	- Patch to Core to get PDL->new() etc working.
+		(pdlapi.c, pdlcore.h and Core.xs )
+	- Patch to perldl.PL so that $string, $code
+	  and $coderef can be used by the user.
+
+Kaj Wiik
+	- Minor syntax fix to PG_PLOT.pm
+
+1.99986
+Robin Williams:
+	- Test for fft and fftconvolve and
+	  fix for fft.pd
+
+Karl Glazebrook:
+	- Fix for PGPLOT to work more like
+ 	  it should
+
+Anton Berezin:
+	- F77 Fixes for freebsd
+
+Anton Berezin
+	- Fix to Pnm/pnm.pd to work under perl5.005
+
+John Cerney
+	- Fixes for subclassing to work properly
+	- Addition of more test cases.
+	- PP.pm and PP.pod additions for subclassing.
+	- Minor Change to Html.pm to correct problem with it 
+	  creating false html references from .pod text that contained
+	  '=head' as examples.
+	- Updates to Doc/mkhtmldoc.pl to fix most problems with html documents
+	  not referencing each other correctly. In order to not change multiple
+          .pod documents and documentation in .pm files, html docs will now be
+          installed in ..../site_perl/PDL/htmldocs/PDL instead of 
+	  ..../site_perl/PDL/htmldocs. (If installing over a previous version,
+	  the html files in .../site_perl/PDL/htmldocs should be deleted to
+ 	  avoid confusion.
+
+Robin Williams:
+	- FFT test file addition (t/fft.t)
+	  (Test number 2 fails... commented-out for now)
+
+Andy Dougherty, John Cerney
+	- Changes to compile with perl5.005
+
+Anton Berezin:
+	- Change for Browser to compile with freebsd
+
+Robin Williams:
+	- Change behavior of overloaded bool operator
+	  to not stringify. This was causing a major
+ 	  slowdown in cases where a PDL object was
+	  being tested in a boolean context. (e.g.
+	  if($PDL){ ...} )
+
+1.99985 (2.0 one half to go )
+Karl:
+	- PGPLOT_demo.pm was hosed by Tjl. Fixed
+	- same put in Makefile.PL and perldl.PL
+	- perldl.PL: syntax error.
+	- fft.pd: remove printf
+Tjl:
+	- (noticed by Robin Williams) Whitespace removals
+	- removed ops.pd SYNOPSIS
+Robin:
+	- fix to browse building
+Dov Grobgeld:
+	- the two pnm.pd one-liner for 5.005 (wpnm, rpnm)
+
+1.9998 (2.0 try 7, one more to go ;)
+Robin:
+	- spelling updates
+	- PP.pm: silence xsubpp about prototypes
+	- TriDGallery fixes
+	- perldl: use pager, accept sub as prompt (added to by Achim)
+	- PS to pnm in IO/Pnm/Pic.pm
+	- MPEG border
+	- ninterpol (n-dim regular grid interpolation), Lib/ImageND
+	- badmask
+	- fft.pd minimal patch
+	- "using"
+	- MPEG writing into stdin - save tmp files
+	- fft new version
+	- PP fixes: $P and cosmetics
+	- rebin (N-dim rebinning algorithm)
+	- rotate
+	- curses.h include
+	[ didn't include index() patch - incompatible. Maybe new name? ]
+Karl:
+	- ExtUtils/F77.pm new version
+	- debug/verbose patch
+	- shift_elements (but supplanted by Robin's rotate later)
+	- new Karma
+	- NAN shall not spoil minimum/maximum
+	- Make list() listindices do the right thing with nulls
+Tim Jenness:
+	- fix misc problem when trying to write complicated headers to fits
+	  files
+	- NDF writing/reading using the perl NDF module
+	- MAIN__ into slatec.pd to avoid linkage errors
+	- PDL::Options
+	- minmax docpatch (modified by Tjl)
+Jarle:
+	- PGPLOT update
+Joshua Pritikin:
+	- -M, -m, -I arguments to perldl
+schinder@pobox.com:
+	- use -f in Makefile.PL
+Tuomas:
+	- Fix strndup in pdlthread.c
+	- error if RAND_MAX not defined
+	- cumu* (cumulative sum,product
+
+1.9908 (2.0 try 6)
+Tjl:
+ - memleak patch (idea by Robin)
+ - pdl_destroytransform so that it doesn't core dump easily any more.
+
+1.9907 (2.0 try 5)
+Christian:
+ - major patch containing stuff from other people.
+Joshua:
+ - dTHR -> errno if not defined
+Tjl:
+ - quaternion rotate routine was totally hosed.
+   added tests (probably will cause bad things where TriD
+   doesn't exist :(..
 
 1.9906 (2.0 try 4)
 Robin:
@@ -22,7 +168,7 @@ Achim:
  - DEBUGGING => PDL_DEBUGGING
  - install patches for 5.005
 Tjl:
- - remove gotos from str2D to not tickle bug in 5.004_64, 
+ - remove gotos from str2D to not tickle bug in 5.004_64,
    which I couldn't reproduce at smaller scale :(
  - at Karl's prompting, removed the other mandelbrots for now :(
  - Fix memory leak (reported by Kaj Wiik)
@@ -30,7 +176,7 @@ Tjl:
    GenericTypes only.
 Robin:
  - TriDGallery: game of life! (edited by Tjl)
-Karl: 
+Karl:
  - new karma.pd
  - reshape patch
  - callext patch
@@ -39,7 +185,7 @@ Karl:
 Tjl:
  - (Andreas Heitmann): rename rs in the rest of places
  - (Robin): openglq.pd: make COLORSAD not to warn for nonconstant init
-Karl: 
+Karl:
  - histogram fix (which earlier fell through Tjl's fingers)
  - new ExtUtils::F77
  - "aargh" patch
@@ -70,7 +216,7 @@ Tjl:
  - fix pdlcore.c to work with MAGIC hashes, to enable really
    wild constructions to come
  - twiddle with flexraw.t
- - PP cleanup: let 'SIZE' be used in RedoDimsCode. (needs to be cleaned 
+ - PP cleanup: let 'SIZE' be used in RedoDimsCode. (needs to be cleaned
    up from the other kind of access to this.. also need '$PDL(a)')
  - null = just flag, so 0-dimensions are now allowed.
  - allow which to take other types for mask as well... - required
@@ -79,7 +225,7 @@ Tjl:
    (I needed to take ($a == byte 5)->which for a large byte $a and
    was horrified to find that my program grew to dozens of Mb)
    !!! Note: possible incompatibility: before a floating value 0<v<1
-   would be interpreted as false, now true - but more logical this    
+   would be interpreted as false, now true - but more logical this
    way.
  - where to take multiple arguments before the mask,
    to map them all through the mask.
@@ -104,7 +250,7 @@ Christian:
   - few changes to the demos (especially replaced
     'output ' with 'print' in the printouts; beginners might be confused
     by the 'output' abstraction)
-  - new demo '3dgal' for the TriD Gallery 
+  - new demo '3dgal' for the TriD Gallery
   - install PDL::Graphics::VRML::Protos in the correct place
   - fixed picrgb test to generate a warning when broken
     tiff converters are encountered (patched source now included)
@@ -149,7 +295,7 @@ Tjl:
  - allow even more flexible PDL::Type::new: let it be a scalar piddle.
  - made stringize use listref_c for additional speed & avoiding
    stack overflows and other nasty stuff.
- - add scope.t to finally test for export stuff working and fix PDL.pm 
+ - add scope.t to finally test for export stuff working and fix PDL.pm
    to use $pkg (from Karl).
  - undid the stupid glPolygonOffsetEXT fix, now it should finally work.
  - default.perldlrc: set verbose=0 to stop too much waffling!
@@ -189,10 +335,10 @@ Robin:
 1.96_01
 
  - TJL's jumbo patch
-     - stuff into Basic/Math 
+     - stuff into Basic/Math
      - TriD/MathGraph, for display of graphs in three
        dimensions, by finding an appropriate representation
-       via a molecular dynamics-type search       
+       via a molecular dynamics-type search
  - Christian's clipping patch
  - set -ve indice patch
  - added my wcols() to PDL::IO::Misc
@@ -207,24 +353,24 @@ Robin:
    done
  - better explanation of GenericTypes and Pars in PP.pod
  - improved scantree.pl (portable cwd).
- - HTML docs!! - thanks to Christian's mkhtmldoc.pl (some changes) 
+ - HTML docs!! - thanks to Christian's mkhtmldoc.pl (some changes)
    into the distribution. included a hacked Pod::Html (from perl
    5.004) as PDL::Pod::Html Still not great but gives us something
    to work from. Some links still broken - patches welcome. See
-   file:/usr/local/lib/perl5/site_perl/PDL/HtmlDocs  
+   file:/usr/local/lib/perl5/site_perl/PDL/HtmlDocs
    for docs after 'make install'
  - TJL's average() patch and primitive.t patch
- - Docs now only built during 'make install' or 'make doctest' 
-   (which builds them under ./blib), this saves them being built 
+ - Docs now only built during 'make install' or 'make doctest'
+   (which builds them under ./blib), this saves them being built
    unnecessarily during 'make'
  - PDL::Slatec now works on any system with a f77 compiler.
    All unused slatec functions were got rid of which fortunately
-   removed all the ones with COMPLEX arguments. Also changed 
+   removed all the ones with COMPLEX arguments. Also changed
    prototype generation which removes warnings on build.
    Added local copy of ExtUtils::F77 back into dist and WITH_SLATEC
    option to perldl.conf (undef by default for auto-decision).
  - removed Example/PP - out of date
- 
+
 
 1.95_07
 
@@ -237,28 +383,28 @@ Robin:
  - may have fixed executable install problem of 'perldl' shell
  - fixed PDL.pm being lost from docs db
  - Robin's problems 'compiling pdl 1.54_06 Basic/Math' patch 17/12/97
- 
-   Rejected because of following error (Linux/gcc) 
-   
+
+   Rejected because of following error (Linux/gcc)
+
      const.c:80: parse error before `3.14159265358979323846'
      const.c:99: parse error before `__extension__'
      const.c:99: parse error before `}'
- 
+
    Can the patch be revised?
-   
+
  - Robin's at() accepts -ve indices patch. Can we have set() to?
  - removed 'docscan' and 'pdlhead2item' from MANIFEST - OK ?
-       
+
 1.95_06
 
   KGB
-  
+
   - FITS patch
   - restored cc8compt fibonacci from pdl-porters archive (!)
   - fixed misc module name problems in tests (thanks Bob!)
   - Robin and Christian's help patches
   - Robin's Object.pod patch
-  - Achim: chmod 0755 on Doc/*.PL, 
+  - Achim: chmod 0755 on Doc/*.PL,
   - Achim wanted pdldoc.db in archlib, ignored this (don't understand
     why)
   - put fudge in ops.pd to get rid of that stupid compiler warning
@@ -267,11 +413,11 @@ Robin:
 
   - introduced new barf(...) routine in Core.pm and pdlcore.c
     [see help barf]
-    
+
     we should use barf(...) in C and Perl code instead of croak etc.
-    
+
     Note the barf engine is written in Perl, so is easy to customize!
-  
+
   - changed references to 'croak' in pd/xs/c code to barf(..)
     or Perl_croak where appropriate
   - changed references to 'croak' in various .pm files to barf()
@@ -279,22 +425,22 @@ Robin:
   - croak #defined to barf() in pdlcore.h to catch the use in
     xsubpp (..fingers crossed..). Perhaps future xsubpp will allow
     an override of this.
-    
+
   - renamed PDL::Io:: heirarchy PDL::IO:: for consistency with Perl IO::
 
 1.95_05
 
   KGB
-  
+
   - Renamed PDL.pdl_make_physical PDL.make_physical (woops!) - ditto
     physdims().
-    
+
   - Changed type config. Now Types.pm pdl.h pdlsimple.h are generated
     AUTOMATICALLY from Types.pm.PL pdl.h.PL and pdlsimple.h.PL
     files using perl Config information. int size issue is now handled
-    from perl config information. Lots of potential for more flexibility.  
-    Hope this doesn't break Alpha stuff by mistake!    
-    
+    from perl config information. Lots of potential for more flexibility.
+    Hope this doesn't break Alpha stuff by mistake!
+
   - Revised PDL::CallExt. Now uses make_physical rather than PP and allows
     unlimited args in the same way as PDL-1.11. Ought to be more compiler
     friendly too! Put callext.t back.
@@ -304,7 +450,7 @@ Robin:
 1.95_04
 
   KGB
-  
+
   - Added glEnable/DisableClientState to dontfunc in OpenGL
   - Doug: added fake MAIN_ to cfft.f in Slatec for old g77s
   - Achim's patches of 4/12
@@ -319,8 +465,8 @@ Robin:
     allow no quotes (with warning)
   - Added solaris_2 hints file for OpenGL
   - Robins perldl pod patches but NOT 'l' as a synonym for 'last'
-    (I don't like this as 'last' is a perl keyword)  
-  
+    (I don't like this as 'last' is a perl keyword)
+
 1.95_03
 
   KGB:
@@ -338,8 +484,8 @@ Robin:
 
  KGB:
 
- - Redid all the zeroes/ones/[xyrz]vals/[g]random/sequence stuff 
-   someone please please give me some objective advice :-)  
+ - Redid all the zeroes/ones/[xyrz]vals/[g]random/sequence stuff
+   someone please please give me some objective advice :-)
  - Added Robin's new FFT
  - 3 byte change to Pnm.pm for new zeroes()
  - added make_physical and make_physdims to PDL struct
@@ -352,8 +498,8 @@ KGB:
    jn, yn.
  - changed scalar convesion in pdlcore.c SvPDLV() - '2.0' is now
    double, '2' is now int. [Uses SvNOK SvIOK etc] - changed
-   Basic/t/conv.t to comply.       
- - Added magic {PDL} = code ref hook. And put test/example in 
+   Basic/t/conv.t to comply.
+ - Added magic {PDL} = code ref hook. And put test/example in
    subclass.t
  - random() is now like zeroes() and both allow type/dim and
    $x template arguments. New arg proc. method to support this.
@@ -365,7 +511,7 @@ KGB:
  - Reverted to manpages named PDL::FAQ.1, PDL::Dataflow.1, etc.
    This is simpler and maintains consistence between manpage
    and pod browsers. Fixed all the text links to comply.
- - small changes to Pod/ docs.   
+ - small changes to Pod/ docs.
  - shut PP the hell up! Much less scary build now.
  - added Pods to files scanned in building doc database.
  - [xvyz]rvals now act like zeroes - but they now act like
@@ -394,14 +540,14 @@ KGB: NOTE ONE MAJOR INCOMPATIBLE CHANGE [random]
    lots and lots and lots and lots and lots and lots and lots and
    lots and lots and lots and lots and lots and lots and lots and
    lots and lots and lots and lots and lots and lots and lots and
-   lots and lotsof miscellaneous docs. 
+   lots and lotsof miscellaneous docs.
  - Robin's browser patch of 26/11
  - Core now completely OO - i.e. none of the stuff below Basic/ export
    routines to each other and it still works!
  - changed occurences of foo(sig) to use '=for sig' as this seems to
    work better with Pod::Parser.
  - made random $x=random($y), i.e. to get inplace now random(inplace $y)
-   OK?????????? This is because I think it is natural to say 
+   OK?????????? This is because I think it is natural to say
    $r = random(zeroes(10,20,2)), etc.
    If this is a major headache let me know and I will change it back.
  - Docs => undef allowed - no PP docs at all (not even the sig)
@@ -409,12 +555,12 @@ KGB: NOTE ONE MAJOR INCOMPATIBLE CHANGE [random]
    now include module names and one-line desriptions. God I love this
    language.
  - Renamed Iutil module as ImageRGB - hope this is OK???
- - changed name of 'inv' to 'matinv' in Slatec for consistency 
+ - changed name of 'inv' to 'matinv' in Slatec for consistency
    with matmult in Primitive.
-   
+
 1.94_06
 
-Christian: 
+Christian:
   - lots of things.
 Robin:
   - add type to PdlParObj.pm
@@ -432,7 +578,7 @@ Lots of changes by everyone, e.g. FFT, Browser, ...
 
 1.94_01
 
-Christian: 
+Christian:
   - simplescaler
   - VRML !!!
 
@@ -443,7 +589,7 @@ Achim:
 Karl:
   - autocreation memleak patch
 
-Robin: 
+Robin:
   - flexraw test correction
 
 Jarle:
@@ -471,7 +617,7 @@ Christian:
 Kaj Wiik:
   - tsimp.pl use correction
 
-Achim: 
+Achim:
   - Tk patch
 
 Tjl:
@@ -492,7 +638,7 @@ Tjl:
 
 1.93_06
 
-Kgb: 
+Kgb:
   - PP: use PDLOBJ for the stub subs.
   - Basic.pm: sec, ins fixes - use "int" to ensure type of coords.
   - PG.pm fixes
@@ -503,22 +649,22 @@ Achim:
   - "small perldl fixes"
 
 Tjl:
-  - start making support for piddle-controlled (e.g. affine) 
+  - start making support for piddle-controlled (e.g. affine)
     transformations by using magic.
   - Core.xs: setdims should now work with dataflow properly.
   - Core.xs, pdl.h, pdlapi.h, PP.pm: add support for
-    foofunctions and PDL::Trans objects. These are a very basic way 
+    foofunctions and PDL::Trans objects. These are a very basic way
     of accessing the internals of transformations so that
-    in the future, as the mechanism is improved, 
+    in the future, as the mechanism is improved,
     you can e.g. change your slice from outside.
     The current level of support is enough to make a routine
     that takes a slice of one dimension and is given offset and
     increment and n in that.
-  - TriD: 
+  - TriD:
      - add test8.pl to demonstrate an use of foofunctions.
      - document OpenGLQ and Rout
      - add gl_triangles_n for shaded triangles
-     - TriD.pm: 
+     - TriD.pm:
         - realcoords: add more contexts
         - make the default routines all plot a graph
      - GL.pm:
@@ -551,9 +697,9 @@ Tjl:
 Tjl:
   - PP: several changes, basically inline *size and *incs into
     register variables to speed up execution.
-  - TriD: 
+  - TriD:
      - add TriD/Rout for misc C routines for TriD
-        - add a routine to do flowing combination of 3 piddles into 
+        - add a routine to do flowing combination of 3 piddles into
           coordinates or colours
      - this makes the test3.pl data_changed stuff work again.
      - imagrgb now defaults to a whole-window image - no reason
@@ -584,10 +730,10 @@ Tjl:
   - Io/Pnm/Pic.pm: use the new 'Func' convention
   - perldl.PL: new '-tk' option to use Tk and the Tk event loop.
 
-1.93_03 
+1.93_03
 
 Tjl:
-  - TriD: 
+  - TriD:
      - Change default controller to ArcCone
      - Graphs with axes!
   - PP:
@@ -596,7 +742,7 @@ Tjl:
   - OpenGL/Makefile.PL update + generate.PL tuning
   - Browse: manpage twiddle
 
-1.93_02 
+1.93_02
 
 Tjl:
   - Core/Basic.pm: use PDL::Core qw/:Func/;
@@ -618,28 +764,28 @@ Tjl:
   - MANIFEST.SKIP: add more ignorable stuff
 
 KGB:
- 
+
   - Fixed multiple 'use PDL' etc problem for loaders.
   - "use 5.004"
 
-1.93_01 (Kgb) MAJOR CHANGES 
+1.93_01 (Kgb) MAJOR CHANGES
 
 - these are very significant and affect code throughout the
   system so EXPECT problems. In particular note that this code
   is the new PATCHBASE.
 
 - NEW IMPORT/EXPORT system
- 
+
   PDL_OO.pm now deleted.
 
   PDL::Exporter is DEAD and gone!! (hooray)
 
   All modules now define their functions in package PDL.
-  
+
   The idea is a PDL::Module now looks like this:
-  
+
     package PDL::Module;
- 
+
     @EXPORT_OK  = qw( sub1 sub2 ...);
     %EXPORT_TAGS = (Func=>[@EXPORT_OK]);
 
@@ -647,20 +793,20 @@ KGB:
 
     *sub1 = \&PDL::sub1;
     sub PDL::sub1 { ... def ...}
-    
+
     # If you wanted to do something special (e.g. a constructor) you can:
-    
+
     sub rfits(PDL->rfits(@_)); # This gets exported
-    sub PDL::rfits { 
+    sub PDL::rfits {
       my $class = shift;
       # etc...
     }
-    
-  i.e. the onus is entirely on the module writer. 
-  
+
+  i.e. the onus is entirely on the module writer.
+
   Thus saying 'use PDL::Module' will load (cheaply) PDL methods.
   If you want to (less cheaply) import functions say 'use PDL::Module qw/:Func/'
-  
+
   PP has been modified to generate modules which follow this scheme. i.e. by
   default it stuffs its functions in to the PDL namespace, and writes stubs
   '*sub1 = \&PDL::sub1;' into the PM file. This can be changed at whim
@@ -669,43 +815,43 @@ KGB:
   Object-Oriented PP modules. (Up to the author how he writes his module).
   Also the pp_def(PMFunc=>'...') attribute can be used to generate special
   purpose PM code instead of the default.
-  
+
   Comments please, hopefully nice ones as I have spent all day changing
   code everywhere and debugging!!!
-  
+
   - Karl (exhausted)
-    
- 
+
+
 - Module defaults
 
   PDL.pm now loads a set of standard packages (with :Func) - including graphics
   and I/O for TPJ article and v1.11 compatibility. Thus a script with 'use PDL'
   is v1.11 compatible (modulo bug fixes!)
-  
+
   Lite.pm loads only the truly fundametal core, with no imports, for method
   speed freaks. Thus a lean script need only say 'use PDL::Lite' plus whatever
   else it needs.
-  
+
   I hope various other sets of meta-modules (PDL::Astronomy, PDL::Medical) etc
   will follow this simple scheme. Basically there is nothing sacred about
   'use PDL' anymore - it is just one of many loaders.
-  
+
 - perldl shell
 
   The 'perldl' script sources C<~/.perldlrc> if present or falls back to
   C<PDL/default.perldlrc>. The latter just does the standard 'use PDL'
-  
+
   Thus by creating a C<~/.perldlrc> you are free to 'use PDL::Lite' or
   whatever set of modules you fancy without impinging on v1.11 compatibility.
-  
+
   I think this is a rather elegant solution to all our aesthetic tastes
-  (namespace polluters vs method maniacs, module hoarders vs leany 
+  (namespace polluters vs method maniacs, module hoarders vs leany
   meanies) while still ensuring script compatibility with v1.11.
-  
+
   I hope everyone is happy with this!
-  
+
 - Fixed minor bug in FlexRaw
-  
+
 1.92_10: 'make test' ok but see flow.t
 
 - PATCHBASE reset to zero
@@ -713,12 +859,12 @@ KGB:
 (KGB)
 
 - new wfits() with BITPIX support and clever BSCALE/BZERO - PLEASE TEST!!
-- added Robin's PDL::Io::Browser 
+- added Robin's PDL::Io::Browser
 - Robin's 'cutmask' function (need PP version!!!) - needs docs SOMEWHERE!!
 - string() no longer make_physical()
 - added mslice and test (slice.t)
 - lags patch (Jun 29)
-- extra tests to flow.t which FAIL, currently disabled as 
+- extra tests to flow.t which FAIL, currently disabled as
   'make test' then stops early.
 - added some tests of simple ops and functions
 - moved all the 2D routines (med2d etc) into PDL::Image2D
@@ -754,7 +900,7 @@ Applied the 41(!) missing patches. See file KGB.1.92_06_TO_1.92_07
 
 1.92_05/06:
 - Rudimentary perl level threading; see documentation in Pthread.pm.
-- Diagonal patch 
+- Diagonal patch
 - workaround for slice and clump to *not* leave trans in
   a too ill-defined state when croaking (previously sometimes
   coredumped upon destruction (as reported by Karl), see tests
@@ -774,7 +920,7 @@ Applied the 41(!) missing patches. See file KGB.1.92_06_TO_1.92_07
 			get a Makefile that works with ExtUtils::F77)
 - Dev.pm : change postambles so that C files built from .pd's will be cleaned
 
-1.92_04: 
+1.92_04:
 Lots of patches from people installed. If I forget someone's
 attribution, please remind me.
 

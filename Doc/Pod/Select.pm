@@ -88,7 +88,7 @@ containing pod documentation. A file name of "-" or "<&STDIN" will
 be interpeted to mean standard input (which is the default if no
 filenames are given).
 
-=cut 
+=cut
 
 sub podselect {
     my(@argv) = @_;

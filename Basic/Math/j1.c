@@ -461,7 +461,7 @@ if( x < 0 )
 
 if( w <= 5.0 )
 	{
-	z = x * x;	
+	z = x * x;
 	w = polevl( z, RP, 3 ) / p1evl( z, RQ, 8 );
 	w = w * x * (z - Z1) * (z - Z2);
 	return( w );

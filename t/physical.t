@@ -1,5 +1,5 @@
 # Test ->*physical*(). This is not yet good enough: we need
-# nasty test cases, 
+# nasty test cases,
 
 use PDL::LiteF;
 

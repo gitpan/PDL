@@ -26,11 +26,11 @@ comment q|
 
 	Note that the script must start with
 
-		use PDL; 
-		use PDL::Graphics::TriD; 
+		use PDL;
+		use PDL::Graphics::TriD;
 		use PDL::Graphics::TriD::Image;
 
-	to work.  
+	to work.
 |;
 
 actnw q|
@@ -41,7 +41,7 @@ actnw q|
 	$r = (xvals zeroes $size+1,$size+1) / $size;
 	$g = (yvals zeroes $size+1,$size+1) / $size;
 	$b = ((sin($r*6.3) * sin($g*6.3)) ** 3)/2 + 0.5;   # Bumps
-	imagrgb [$r,$g,$b];	# Draw an image 
+	imagrgb [$r,$g,$b];	# Draw an image
 |;
 
 actnw q|
@@ -53,7 +53,7 @@ actnw q|
 	# Let's add the real image on top of this...
 	hold3d();
 	imag3d([$r,$g,$b+0.1], [$r,$g,$b]);
-	# For the next demo, please rotate this so that much 
+	# For the next demo, please rotate this so that much
 	# of the image is visible.
 	# Don't make your window too big or you might run out of memory
 	# at the next step.
@@ -83,7 +83,7 @@ actnw q|
 	# That was fun - let's do that again!
 	$pic1 = grabpic3d();
 
-	# Lighten it up 
+	# Lighten it up
 	$pic1 = ($pic1 + $l) / (1 + $l);
 
 	# And plot it in the picture ;) ;)

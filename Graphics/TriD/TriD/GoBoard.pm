@@ -1,5 +1,5 @@
 
-# Some 3D/2D representations of Go Boards. 
+# Some 3D/2D representations of Go Boards.
 # this may not be of great interest to people who don't play Go
 # except in some strange visualization senses.
 
@@ -16,7 +16,7 @@ sub new {
 		Data => $opts->{Data}
 	},$type;
 	my $d = $opts->{Data};
-	my $eo = ($d->slice("(3)")+0.000005) / 
+	my $eo = ($d->slice("(3)")+0.000005) /
 		($d->slice("(2)") + $d->slice("(3)") + 0.00001);
 	$this->{BG} = new PDL::Graphics::TriD::Image([$eo*0, $eo, 0*$eo]);
 	return $this;

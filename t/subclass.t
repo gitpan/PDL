@@ -78,10 +78,10 @@ sub new {
 
 sub cache {
   my $self = shift;
-  my $v = $self->{Coeff}; 
+  my $v = $self->{Coeff};
   $self->{Cache} = PDL->ones($v,$v)+2 unless exists $self->{Cache};
   return $self->{Cache};
-}  
+}
 
 package main;
 

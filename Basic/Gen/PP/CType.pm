@@ -92,8 +92,8 @@ sub get_copy {
 				$prev .= "
 				  if(!$deref0) {$deref1=0;}
 				  else {int __malloc_ind_$no;
-					for(__malloc_ind_$no = 0; 
-						__malloc_ind_$no < $1; 
+					for(__malloc_ind_$no = 0;
+						__malloc_ind_$no < $1;
 						__malloc_ind_$no ++) {";
 				$deref0 = $deref0."[__malloc_ind_$no]";
 				$deref1 = $deref1."[__malloc_ind_$no]";
@@ -152,8 +152,8 @@ sub get_malloc {
 				";
 			$no++;
 			$prev = "{int __malloc_ind_$no;
-				for(__malloc_ind_$no = 0; 
-					__malloc_ind_$no < $1; 
+				for(__malloc_ind_$no = 0;
+					__malloc_ind_$no < $1;
 					__malloc_ind_$no ++) {";
 			$deref = $deref."[__malloc_ind_$no]";
 			$close .= "}}";

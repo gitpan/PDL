@@ -17,6 +17,13 @@ for figuring out how to link for various combinations of OS and
 compiler. Please help save the world by sending database entries for
 your system to kgb@aaoepp.aao.gov.au
 
+The libs can be explicitly overridden by setting the environment 
+variable F77LIBS, e.g.
+
+  % setenv F77LIBS "-lfoo -lbar"
+  % perl Makefile.PL
+  ...
+  
 =cut
 
 $VERSION = "1.07";
@@ -176,31 +183,41 @@ sub import {
 
    print "$Pkg: Using system=$system compiler=$compiler\n";
    
-   # Try this combination
-
-   if (defined( $F77config{$system} )){
-      $Runtime = get ($F77config{$system}{$compiler}{Link}) . gcclibs();  
-      $ok = validate_libs($Runtime) if defined($Runtime);
-   }else {
-      $Runtime = $ok = "";
+   if (defined($ENV{F77LIBS})) {
+      print "Overriding Fortran libs from value of enviroment variable F77LIBS = $ENV{F77LIBS}\n";
+      $Runtime = $ENV{F77LIBS};
    }
+   else {
+      
+     # Try this combination
 
-   # If it doesn't work try Generic + GNU77
+     if (defined( $F77config{$system} )){
+     	my $flibs = get ($F77config{$system}{$compiler}{Link});
+     	$Runtime = $flibs . gcclibs();
+     	$ok = validate_libs($Runtime) if $flibs ne "";
+     }else {
+     	$Runtime = $ok = "";
+     }
 
-   unless (defined($Runtime) && $ok) {
-      print <<"EOD";
+     # If it doesn't work try Generic + GNU77
+
+     unless (defined($Runtime) && $ok) {
+     	print <<"EOD";
 $Pkg: Unable to guess and/or validate system/compiler configuration
 $Pkg: Will try system=Generic Compiler=G77
 EOD
-      $system   = "Generic";
-      $compiler = "G77";
-      $Runtime = get ($F77config{$system}{$compiler}{Link}) . gcclibs();  
-      $ok = validate_libs($Runtime) if $Runtime;
-      print "$Pkg: Well that didn't appear to validate. Well I will try it anyway.\n"
-           unless $Runtime && $ok;
-    }
-    
-   $RuntimeOK = $ok;
+    	 $system   = "Generic";
+    	 $compiler = "G77";
+    	 my $flibs = get ($F77config{$system}{$compiler}{Link});
+    	 $Runtime =  $flibs. gcclibs();
+    	 $ok = validate_libs($Runtime) if $flibs ne "";
+    	 print "$Pkg: Well that didn't appear to validate. Well I will try it anyway.\n"
+    	      unless $Runtime && $ok;
+       }
+ 
+      $RuntimeOK = $ok;
+      
+   } # Not overriding   
 
    # Now get the misc info for the methods.
       
@@ -358,9 +375,8 @@ sub gcclibs {
    my $isgcc = $Config{'cc'} eq 'gcc';
    if (!$isgcc && $^O ne 'VMS') {
       print "Checking for gcc in disguise\n";
-      open(T, "cc -v 2>&1 |"); my @tmp = <T>; close(T);
-      $isgcc = 1 if grep(/gcc/,@tmp)>0;
-      print "Compiler is $tmp[1]" if $isgcc;
+      $isgcc = 1 if $Config{gccversion};
+      print "Compiler is gcc version $Config{gccversion}" if $isgcc;
       print "Not gcc\n" unless $isgcc;
    }
    if ($isgcc) {
@@ -391,5 +407,4 @@ sub find_in_path {
 
 
 1; # Return true
-
 

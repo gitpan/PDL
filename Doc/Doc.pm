@@ -2,7 +2,7 @@
 # output into a string or simulate a portable null device
 
 package StrHandle;
- 
+
 sub new {
   my $type = shift;
   my $this = bless {},$type;
@@ -126,7 +126,7 @@ sub checkmode {
     barf "no function defined" unless defined $func;
     local $this->{INBLOCK} = 1; # can interpolate call textblock?
     my $itxt = $verbatim ? $txt : $this->interpolate($txt);
-    $this->{SYMHASH}->{$func}->{$this->{Parmode}} .= 
+    $this->{SYMHASH}->{$func}->{$this->{Parmode}} .=
       $this->trim($itxt,$verbatim);
     my $cr = ($verbatim && $this->{Parmode} ne 'Sig') ? "\n" : "";
     my $out = "\n\t\t$cr".$this->trim($itxt,$verbatim);
@@ -150,14 +150,14 @@ sub trim {
   $txt =~ s/(signature|usage):\s*//i if $this->{Parmode} eq 'Sig' ||
 			   $this->{Parmode} eq 'Usage';
   if ($this->{Parmode} eq 'Sig') {
-  
+
     $txt =~ s/^\s*//;
     $txt =~ s/\s*$//;
     while( $txt =~ s/^\((.*)\)$/\1/ ) {}; # Strip BALANCED brackets
-    
+
   }
   for (split "\n", $txt) {
-    s/^\s*(.*)\s*$/$1/ unless $verbatim; 
+    s/^\s*(.*)\s*$/$1/ unless $verbatim;
     $ntxt .= "$_\n" unless m/^\s*$/;
   }
   # $txt =~ s/^\s*(.*)\s*$/$1/;
@@ -332,7 +332,7 @@ following example (extracted from PDL/IO/Misc/misc.pd):
    =for example
 
      ($x,$y)    = rcols 'file1'
-     ($x,$y,$z) = rcols 'file2', "/foo/",3,4 
+     ($x,$y,$z) = rcols 'file2', "/foo/",3,4
      $x = PDL->rcols 'file1';
 
    Note: currently quotes are required on the pattern.
@@ -352,9 +352,9 @@ which is translated by, e.g, the standard C<pod2text> converter into:
     e.g.,
 
       ($x,$y)    = rcols 'file1'
-      ($x,$y,$z) = rcols 'file2', "/foo/",3,4 
+      ($x,$y,$z) = rcols 'file2', "/foo/",3,4
       $x = PDL->rcols 'file1';
-      
+
     Note: currently quotes are required on the pattern.
 
 It should be clear from the preceding example that readable output
@@ -463,7 +463,7 @@ with this object.
 sub savedb {
   my ($this) = @_;
   my $hash = $this->ensuredb();
-  open OUT, ">$this->{File}" or barf "can't write to symdb $this->{File}"; 
+  open OUT, ">$this->{File}" or barf "can't write to symdb $this->{File}";
   while (my ($key,$val) = each %$hash) {
     my $txt = "$key".chr(0).join(chr(0),%$val);
     print OUT pack("S",length($txt)).$txt;
@@ -556,20 +556,20 @@ sub scan {
   my ($this,$file,$verbose) = @_;
   $verbose = 0 unless defined $verbose;
   barf "can't find file '$file'" unless -f $file;
-  
+
   # First HTMLify file in the tree
-  
+
   # Does not work yet
-  
+
   #if  (system ("pod2html $file")!=0) {
   #   warn "Failed to execute command: pod2html $file2\n";
   #}
   #else{ # Rename result (crummy pod2html)
   #   rename ("$file.html","$1.html") if  $file =~ /^(.*)\.pm$/;
   #}
-  
+
   # Now parse orig pm/pod
-  
+
   my $infile =  new IO::File $file;
   # XXXX convert to absolute path
   # my $outfile = '/tmp/'.basename($file).'.pod';
@@ -584,31 +584,31 @@ sub scan {
   # print "mtime of $file: $stats[9]\n";
   my $phash = $parser->{SYMHASH};
   my $n = 0;
-  while (my ($key,$val) = each %$phash) { 
+  while (my ($key,$val) = each %$phash) {
     #print "adding '$key'\n";
     $n++;
     $val->{File} = $file;
-    $hash->{$key} = $val 
+    $hash->{$key} = $val
     }
-  
+
   # KGB pass2 - scan for module name and function
   # alright I admit this is kludgy but it works
   # and one can now find modules with 'apropos'
-    
+
   $infile =  new IO::File $file;
   $outfile = new StrHandle;
   $parser = new PDL::PodParser;
   $parser->select('NAME');
-  $parser->parse_from_filehandle($infile,$outfile);  
+  $parser->parse_from_filehandle($infile,$outfile);
   my @namelines = split("\n",$outfile->{Text});
   my ($name,$does);
   for (@namelines) {
      if (/^(PDL) (-) (.*)/ or /\s*(PDL::[\w:]*)\s*(-*)?\s*(.*)\s*$/){
-       $name = $1; $does = $3; 
+       $name = $1; $does = $3;
      }
    }
    $does = 'Hmmm ????' if $does =~ /^\s*$/;
-   my $type = ($file =~ /\.pod$/ ? 'Manual:' : 'Module:'); 
+   my $type = ($file =~ /\.pod$/ ? 'Manual:' : 'Module:');
    $hash->{$name} = {Ref=>"$type $does",File=>$file} if $name !~ /^\s*$/;
    return $n;
 }
@@ -684,7 +684,7 @@ sub getfuncdocs {
   my ($func,$in,$out) = @_;
   my $parser = new PDL::Pod::Parser;
   $parser->select("FUNCTIONS/$func(\\(.*\\))*\s*");
-  $parser->parse_from_filehandle($in,$out);  
+  $parser->parse_from_filehandle($in,$out);
 }
 
 1;
@@ -697,10 +697,10 @@ discussions on the pdl-porters mailing list.
 =head1 AUTHOR
 
 Copyright 1997 Christian Soeller <csoelle@sghms.ac.uk> and Karl Glazebrook
-<kgb@aaoepp.aao.gov.au> 
+<kgb@aaoepp.aao.gov.au>
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 

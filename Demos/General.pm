@@ -15,18 +15,18 @@ sub run {
 comment q|
 	Welcome to a short tour of PDL's capabilities.
 
-	This tour shows some of the main selling points 
+	This tour shows some of the main selling points
 	of PDL. However, because we want this script to
 	run everywhere, some modules which require external
 	modules for use are explicitly excluded, namely
 	 - Graphics::TriD (3D Graphics) [*]
-	 - Graphics::PG (PGPLOT graphics) 
+	 - Graphics::PG (PGPLOT graphics)
 	 - IO::FlexRaw (flexible raw input/output)
  	[*]: this module has its separate demos in a subdirectory.
 
 	Note that your own scripts must start with
 
-		use PDL; 
+		use PDL;
 
 	to work properly, so that you can simply say
 
@@ -89,7 +89,7 @@ act q|
 |;
 
 act q|
-	# One of the really nifty features is that the 
+	# One of the really nifty features is that the
 	# slices are actually references back to the original
 	# piddle:
 	$diag = $b->diagonal(0,1);
@@ -118,7 +118,7 @@ act q|
 	# and PDL::Slices - we can't show you all but here are some
 	# examples:
 
-	output $b; 
+	output $b;
 	output $b->sum, "\n";
 	output $b->sumover,"\n"; # Only over first dim.
 |;

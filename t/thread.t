@@ -15,7 +15,7 @@ print "1..7\n";
 
 if(1) {
 $a = pdl [2,3,4],[5,6,7];
-$a->doflow; 
+$a->doflow;
 
 #print $a;
 # $a->jdump;
@@ -48,7 +48,7 @@ END
 $a = pdl [[0,1,2],[3,4,5],[6,7,8]],[[10,11,12],[13,14,15],[16,17,18]];
 # print $a;
 
-$b = zeroes(3,3); 
+$b = zeroes(3,3);
 $c = $b->thread(0,1);
 $b->make_physical();
 $c->make_physical();

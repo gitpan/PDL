@@ -1,7 +1,7 @@
 # REPLACE FOLLOWING BY
 #
 # use PDL::PP qw/PDL::Experiment PDL::Experiment Experiment/;
-# 
+#
 # when using not in this package.
 
 pp_add_exported('',"rpnm wpnm");
@@ -15,7 +15,7 @@ PDL::IO::Pnm -- pnm format I/O for PDL
 
   use PDL::IO::Pnm;
   $im = wpnm $pdl, $file, $format[, $raw];
-  rpnm $stack->slice(':,:,:,(0)'),"PDL.ppm";  
+  rpnm $stack->slice(':,:,:,(0)'),"PDL.ppm";
 
 =head1 DESCRIPTION
 
@@ -134,13 +134,14 @@ sub PDL::rpnm {
     open(SAVEERR, ">&STDERR");
     open(STDERR, ">$efile") || barf "Can't redirect stderr";
     open(PNM, $file) or rbarf $efile,"Can't open pnm file";
+    binmode PNM;
     # redirection now in effect for child
     close(STDERR);
     open(STDERR, ">&SAVEERR");
 
     read(PNM,(my $magic),2);
     rbarf $efile, "Oops, this is not a PNM file" unless $magic =~ /P[1-6]/;
-    print "reading pnm file with magic $magic\n" if $PDL::verbose>1;
+    print "reading pnm file with magic $magic\n" if $PDL::debug>1;
 
     my ($isrgb,$israw,$params) = (0,0,3);
     $israw = 1 if $magic =~ /P[4-6]/;
@@ -167,7 +168,7 @@ sub PDL::rpnm {
 TYPES:	{  my $pdlt;
 	   foreach $pdlt ($PDL_B,$PDL_US,$PDL_L){
 	     if ($dims[2] <= dmax($pdlt))
-	       { $type = $pdlt; 
+	       { $type = $pdlt;
 	         last TYPES;
 	       }
 	   }
@@ -183,13 +184,13 @@ TYPES:	{  my $pdlt;
     my @Dims = @dims[0,1];
     $Dims[0] *= 3 if $isrgb;
     if ($pdl->getndims==1 && $pdl->getdim(0)==0 && $isrgb) { #input pdl is null
-	local $PDL::verbose = 0; # shut up
+	local $PDL::debug = 0; # shut up
 	$pdl = $pdl->zeroes(PDL::Type->new($type),3,@dims[0,1]);
     }
     my $npdl = $isrgb ? $pdl->clump(2) : $pdl;
     if ($israw) {
        pnminraw (convert(pdl(0),$type), $npdl, $Dims[0], $Dims[1],
-	 $magic =~ /P4/, 'PDL::IO::Pnm::PNM');
+	 $magic eq "P4", 'PDL::IO::Pnm::PNM');
     } else {
        my $form = $1 if $magic =~ /P([1-3])/;
        pnminascii (convert(pdl(0),$type), $npdl, $Dims[0], $Dims[1],
@@ -197,7 +198,7 @@ TYPES:	{  my $pdlt;
     }
     print("loaded pnm file, $dims[0]x$dims[1], gmax: $dims[2]",
 	   $isrgb ? ", RGB data":"", $israw ? ", raw" : " ASCII"," data\n")
-	if $PDL::verbose;
+	if $PDL::debug;
     unlink($efile);
     return $pdl;
 }
@@ -222,7 +223,7 @@ supported type when RAW == 'RAW'?). For details about the formats
 consult appropriate manpages that come with the netpbm/pbmplus
 packages.
 
-=for usage 
+=for usage
 
     $im = wpnm $pdl, $file, $format[, $raw];
 
@@ -269,11 +270,12 @@ sub PDL::wpnm {
     open(SAVEERR, ">&STDERR");
     open(STDERR, ">$efile") || barf "Can't redirect stderr";
     open(PNM, $pref . $file) or barf "Can't open pnm file";
+    binmode PNM;
     close(STDERR);
     open(STDERR, ">&SAVEERR");
 
     print "writing ". ($israw ? "raw" : "ascii") .
-      "format with magic $magic\n" if $PDL::verbose;
+      "format with magic $magic\n" if $PDL::debug;
     # write header
     print PNM "$magic\n";
     print PNM "$Dims[-2] $Dims[-1]\n";
@@ -281,9 +283,9 @@ sub PDL::wpnm {
 
 
     # if rgb clump first two dims together
-    my $out = ($isrgb ? $pdl->slice(':,:,-1:0')->clump(2) 
+    my $out = ($isrgb ? $pdl->slice(':,:,-1:0')->clump(2)
 		 : $pdl->slice(':,-1:0'));
-    pnmout($out,$israw,$type =~ /PBM/,'PDL::IO::Pnm::PNM');
+    pnmout($out,$israw,$type eq "PBM",'PDL::IO::Pnm::PNM');
 
 
     # check if our child returned an error (in case of a pipe)
@@ -292,7 +294,7 @@ sub PDL::wpnm {
       barf "wpnm: child (pbmconverter) returned error";
     }
     unlink($efile);
-}    
+}
 
 
 
@@ -314,11 +316,11 @@ treated ungracefully (C<rpnm> just barfs).
 
 =head1 AUTHOR
 
-Copyright (C) 1996,1997 Christian Soeller <csoelle@sghms.ac.uk> 
+Copyright (C) 1996,1997 Christian Soeller <csoelle@sghms.ac.uk>
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 
@@ -414,9 +416,9 @@ int getint(PerlIO *fp, PDL_Long *ip)
       return 0;   /* signal end of line */
     if (s == '#')
       SWALLOWLINE(fp);
-    if (s >='0' && s <='9') break; 
+    if (s >='0' && s <='9') break;
     if (s!=' ' && s!='\t' && s!='\r' && s!='\n' && s!=',')
-      return -1;  /* garbage */      
+      return -1;  /* garbage */
     s = PerlIO_getc(fp); /* else skip whitespace */
   }
   /* parse number */
@@ -499,7 +501,7 @@ pp_def( 'pnminascii',
 		   break;
 		} /* end switch */
 		?, Doc => '
-=for ref 
+=for ref
 
 Read in an ascii pnm file.
 
@@ -515,7 +517,7 @@ pp_def(	'pnmout',
 	GenericTypes => [B,U,S,L],
 	Code => 'PerlIO *fp;
 		 IO *io;
-		 
+
 		 io = GvIO(gv_fetchpv($COMP(fd),FALSE,SVt_PVIO));
 		 if (!io || !(fp = IoIFP(io)))
 			barf("Can\'t figure out FP");
@@ -548,12 +550,12 @@ pp_def(	'pnmout',
 		    int len=0;
 		    threadloop %{
 			loop(m) %{
-				PerlIO_printf(fp,"%3d ",$COMP(isbin) ? 
+				PerlIO_printf(fp,"%3d ",$COMP(isbin) ?
 					($a() < 1) :$a());
 				len +=4;
 				if (len>58) { PerlIO_printf(fp,"\n"); len=0; }
 		 	%}
-                 	if (len<=58) 
+                 	if (len<=58)
                      		PerlIO_printf(fp,"\n");
 		    %}
 		}

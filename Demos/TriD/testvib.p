@@ -79,7 +79,7 @@ $a->set(1,0,-$offs);
 # $as = $a->slice("");
 # $as->doflow(1);
 while(1) {
-	
+
 	$aav = ($asl1 + $asl2 + $asl3 + $asl4)/4;
 
 	$da = ($aav - $ach) * $fc;

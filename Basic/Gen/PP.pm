@@ -1,7 +1,7 @@
  #####################################################################
 #####################################################################
 ##
-## 
+##
 ## Here starts the actual thing.
 ##
 ## This is way too messy and uncommented. Still. :(
@@ -12,7 +12,8 @@ use FileHandle;
 use Exporter;
 @ISA = qw(Exporter);
 
-@PDL::PP::EXPORT = qw/pp_addhdr pp_addpm pp_bless pp_def pp_done pp_add_boot pp_add_exported pp_addxs pp_add_isa/;
+@PDL::PP::EXPORT = qw/pp_addhdr pp_addpm pp_bless pp_def pp_done pp_add_boot pp_add_exported pp_addxs pp_add_isa pp_export_nothing
+		  pp_core_importList	/;
 
 use Carp;
 
@@ -27,6 +28,9 @@ sub import {
  	for ('Top','Bot','Middle') { $::PDLPM{$_}="" }
 	$::PDLPMISA="PDL::Exporter DynaLoader";
 	$::DOCUMENTED = 0;
+	$::PDLCOREIMPORT = "";  #import list from core, defaults to everything, i.e. use Core
+				#  could be set to () for importing nothing from core. or qw/ barf / for
+				# importing barf only.
 	@_=("PDL::PP");
 	goto &Exporter::import;
 }
@@ -57,6 +61,10 @@ sub pp_add_exported {
 	$::PDLPMROUT .= $exp." ";
 }
 
+#  Sub to call to export nothing (i.e. for building OO package/object)
+sub pp_export_nothing {
+	$::PDLPMROUT = ' ';
+}
 
 sub pp_add_isa {
         my ($isa) = @_;
@@ -71,6 +79,12 @@ sub pp_add_boot {
 sub pp_bless{
    my($new_package)=@_;
    $::PDLOBJ = $new_package;
+}
+
+# sub to call to set the import list from core on the 'Use Core' line in the .pm file.
+#   set to '()' to not import anything from Core, or 'qw/ barf /' to import barf.
+sub pp_core_importList{
+   $::PDLCOREIMPORT = $_[0];
 }
 
 sub printxs {
@@ -104,11 +118,13 @@ $fh->print(qq%
 #include "pdlcore.h"
 static Core* PDL; /* Structure hold core C functions */
 static int __pdl_debugging = 0;
-SV* CoreSV;       /* Get's pointer to perl var holding core structure */
+SV* CoreSV;       /* Gets pointer to perl var holding core structure */
 
 $::PDLXSC
 
 MODULE = $::PDLMOD PACKAGE = $::PDLMOD
+
+PROTOTYPES: ENABLE
 
 int
 set_debugging(i)
@@ -118,7 +134,7 @@ set_debugging(i)
 	__pdl_debugging = i;
 	OUTPUT:
 	RETVAL
- 
+
 
 MODULE = $::PDLMOD PACKAGE = $::PDLOBJ
 
@@ -131,12 +147,12 @@ BOOT:
      Perl_croak("This module requires use of PDL::Core first");
    PDL = (Core*) (void*) SvIV( CoreSV );  /* Core* value */
    $::PDLXSBOOT
-%);                                                                
+%);
 
 	($fh = new FileHandle(">$::PDLPREF.pm")) or die "Couldn't open pm file\n";
 
 $fh->print(qq%
-# 
+#
 # GENERATED WITH PDL::PP! Don't modify!
 #
 package $::PDLPACK;
@@ -144,7 +160,7 @@ package $::PDLPACK;
 \@EXPORT_OK  = qw( $::PDLPMROUT);
 \%EXPORT_TAGS = (Func=>[\@EXPORT_OK]);
 
-use PDL::Core;
+use PDL::Core$::PDLCOREIMPORT;
 use PDL::Exporter;
 use DynaLoader;
 \@ISA    = qw( $::PDLPMISA );
@@ -156,7 +172,7 @@ $::PDLPM{Top}
 $::FUNCSPOD
 
 $::PDLPM{Middle};
- 
+
 $::PDLPM{Bot}
 
 # Exit with OK status
@@ -206,8 +222,8 @@ sub pp_def {
 use Carp;
 $SIG{__DIE__} = sub {print Carp::longmess(@_); die;};
 
-# Rule table syntax: 
-# make  $_->[0] from $_->[1]. 
+# Rule table syntax:
+# make  $_->[0] from $_->[1].
 # use "=" to assign to 1. unless "_" appended to parname, then use ".="
 
 use PDL::PP::Signature;
@@ -223,10 +239,10 @@ $PDL::PP::deftbl =
 [
  [[CopyName],	[],	sub {"__copy"}],
  [[DefaultFlow], [],	sub {0}],
- [[DefaultFlowCodeNS] ,[DefaultFlow], 
+ [[DefaultFlowCodeNS] ,[DefaultFlow],
  	sub {$_[0]?'$PRIV(flags) |= PDL_ITRANS_DO_DATAFLOW_F | PDL_ITRANS_DO_DATAFLOW_B;':"/* No flow: $_[0] */"}],
 
-# no docs by default 	
+# no docs by default
  [[Doc],        [],     sub {"\n=for ref\n\ninfo not available\n"}],
 
 # Default: no otherpars
@@ -244,7 +260,7 @@ $PDL::PP::deftbl =
  [[Priv],	[AffinePriv],		"affinepriv"],
  [[IsAffineFlag],	[AffinePriv],	sub {"PDL_ITRANS_ISAFFINE"}],
 
- [[RedoDims],		[EquivPDimExpr,FHdrInfo,_EquivDimCheck],	
+ [[RedoDims],		[EquivPDimExpr,FHdrInfo,_EquivDimCheck],
  				"pdimexpr2priv"],
  [[RedoDims],		[Identity,FHdrInfo],	"identity2priv"],
 
@@ -255,11 +271,11 @@ $PDL::PP::deftbl =
 	}
  	'}],
 
- [[Code],	[EquivCPOffsCode],	sub {my($ret) = @_;	
+ [[Code],	[EquivCPOffsCode],	sub {my($ret) = @_;
 		  $ret =~ s/\$EQUIVCPOFFS\(([^()]+),([^()]+)\)/\$PP(CHILD)[$1] = \$PP(PARENT)[$2]/g;
 		  $ret;
 		  }],
- [[BackCode],	[EquivCPOffsCode],	sub {my($ret) = @_;	
+ [[BackCode],	[EquivCPOffsCode],	sub {my($ret) = @_;
 		  $ret =~ s/\$EQUIVCPOFFS\(([^()]+),([^()]+)\)/\$PP(PARENT)[$2] = \$PP(CHILD)[$1]/g;
 		  $ret;
 		  }],
@@ -331,14 +347,14 @@ $PDL::PP::deftbl =
 
  [[DefaultFlowCode],	[DefaultFlowCodeNS,NewXSSymTab,Name], "dousualsubsts"],
 
- [[GenericTypes],	[],	sub {[B,S,U,L,F,D]}], 
+ [[GenericTypes],	[],	sub {[B,S,U,L,F,D]}],
 #  [[GenericTypes],	[],	sub {[F,D]}],
 
  [[NewXSFindDatatypeNS],	[ParNames,ParObjs,IgnoreTypesOf,NewXSSymTab,
-				GenericTypes],	
+				GenericTypes],
  						"find_datatype"],
 
- [[NewXSFindDatatype],	[NewXSFindDatatypeNS,NewXSSymTab,Name],	
+ [[NewXSFindDatatype],	[NewXSFindDatatypeNS,NewXSSymTab,Name],
  						"dousualsubsts"],
  [[NewXSTypeCoerce],	[NoConversion],		sub {""}],
 
@@ -354,10 +370,10 @@ $PDL::PP::deftbl =
  [[ExtraGenericLoops],	[],	sub {return {}}],
 
  [["ParsedCode"],	[Code,ParNames,ParObjs,DimObjs,GenericTypes,
- 			 ExtraGenericLoops,HaveThreading],	
+ 			 ExtraGenericLoops,HaveThreading],
  				sub {new PDL::PP::Code(@_)}],
  [["ParsedBackCode"],	[BackCode,ParNames,ParObjs,DimObjs,GenericTypes,
- 			 ExtraGenericLoops,HaveThreading],	
+ 			 ExtraGenericLoops,HaveThreading],
  				sub {new PDL::PP::Code(@_)}],
 
 # Compiled representations i.e. what the xsub function leaves
@@ -367,13 +383,13 @@ $PDL::PP::deftbl =
 
 # If the user wishes to specify his own code and compiled representation,
 # The next two definitions allow this.
-# Because of substitutions that will be there, 
+# Because of substitutions that will be there,
 # makecompiledrepr et al are array refs, 0th element = string,
 # 1th element = hashref of translated names
 # This makes the objects: type + ...
  [[CompNames,CompObjs],	[Comp],			"OtherPars_nft"],
  [[CompiledRepr],	[CompNames,CompObjs],	"NT2Decls_p"],
- [[MakeCompiledRepr],	[MakeComp,CompNames,CompObjs],		
+ [[MakeCompiledRepr],	[MakeComp,CompNames,CompObjs],
  						sub {subst_makecomp(COMP,@_)}],
 
  [[CompCopyCode],	[CompNames,CompObjs,CopyName], "NT2Copies_p"],
@@ -392,9 +408,9 @@ $PDL::PP::deftbl =
 
 # Threads
  [[Priv,PrivIsInc],	[ParNames,ParObjs,DimObjs,HaveThreading],"make_incsizes"],
- [[PrivCopyCode],	[ParNames,ParObjs,DimObjs,CopyName,HaveThreading],	
+ [[PrivCopyCode],	[ParNames,ParObjs,DimObjs,CopyName,HaveThreading],
  	"make_incsize_copy"],
- [[PrivFreeCode],	[ParNames,ParObjs,DimObjs,HaveThreading],	
+ [[PrivFreeCode],	[ParNames,ParObjs,DimObjs,HaveThreading],
  	"make_incsize_free"], # Frees thread.
  [[RedoDimsCode],       [],      sub {"/* none */"}],
 
@@ -404,7 +420,7 @@ $PDL::PP::deftbl =
 #				      @_}],
 
  [[RedoDimsParsedCode], [RedoDimsCode,ParNames,ParObjs,DimObjs,
-                         GenericTypes,ExtraGenericLoops,HaveThreading],	
+                         GenericTypes,ExtraGenericLoops,HaveThreading],
  				sub { # print "RedoDimsCode = $_[0]\n";
 				      return "/* no RedoDimsCode */"
                                         if $_[0] =~ m|^/[*] none [*]/$|;
@@ -422,9 +438,9 @@ $PDL::PP::deftbl =
  [[IsReversibleCode],	[IsReversibleCodeNS,NewXSSymTab,Name], "dousualsubsts"],
 
  [[NewXSStructInit2],	[MakeCompiledRepr, NewXSSymTab,Name],	sub {"{".dosubst(@_)."}"}],
- 
+
  [[CopyCodeNS],	[PrivCopyCode,CompCopyCode,StructName],	sub {"$_[2] *__copy
- 			= malloc(sizeof($_[2])); 
+ 			= malloc(sizeof($_[2]));
 			PDL_TR_CLRMAGIC(__copy);
 			__copy->flags = \$PRIV(flags);
 			__copy->vtable = \$PRIV(vtable);
@@ -432,7 +448,7 @@ $PDL::PP::deftbl =
 			__copy->freeproc = NULL;
 			__copy->__ddone = \$PRIV(__ddone);
 			{int i;
-			 for(i=0; i<__copy->vtable->npdls; i++) 
+			 for(i=0; i<__copy->vtable->npdls; i++)
 				__copy->pdls[i] = \$PRIV(pdls[i]);
 			}
 			$_[1]
@@ -440,7 +456,7 @@ $PDL::PP::deftbl =
 				$_[0]
 			}
 			return (pdl_trans*)__copy;"}],
- 
+
  [[FreeCodeNS],	[PrivFreeCode,CompFreeCode],	sub {"
 			PDL_TR_CLRMAGIC(__privtrans);
 			$_[1]
@@ -462,13 +478,13 @@ $PDL::PP::deftbl =
   ],		[_GlobalNew,_NewXSCHdrs,NewXSHdr,NewXSLocals,NewXSStructInit0,
  			 NewXSMakeNow, NewXSFindDatatype,NewXSTypeCoerce,
 			 NewXSStructInit1,
-			 NewXSStructInit2, 
+			 NewXSStructInit2,
 			 NewXSCoerceMustSubs,_IsReversibleCode,DefaultFlowCode,
 			 NewXSClearThread,
 			 NewXSSetTrans,
 			 ],	"mkxscat"],
  [[StructDecl],		[ParNames,ParObjs, CompiledRepr,
-                         PrivateRepr,StructName],		
+                         PrivateRepr,StructName],
 			 			"mkstruct"],
  [[RedoDimsSub],	[RedoDims,PrivNames,PrivObjs,_DimObjs],
 				sub {
@@ -482,14 +498,14 @@ $PDL::PP::deftbl =
 				 return $r;
 				 }],
  [[RedoDimsSubd],	[RedoDimsSub,NewXSSymTab,Name],	"dosubst"],
- [[RedoDimsFunc], 	[RedoDimsSubd,FHdrInfo,RedoDimsFuncName],	
+ [[RedoDimsFunc], 	[RedoDimsSubd,FHdrInfo,RedoDimsFuncName],
  				sub {wrap_vfn(@_,"redodims")}],
 
 #  [[ReGenedCode],	[ParsedCode,ParObjs,DimObjs],	sub {$_[0]->gen($_[1,2])}],
- [[ReadDataSub],	[ParsedCode],	
+ [[ReadDataSub],	[ParsedCode],
  				sub {subst_makecomp(FOO,@_)}],
  [[ReadDataSubd],	[ReadDataSub,NewXSSymTab,Name],	"dosubst"],
- [[ReadDataFunc], 	[ReadDataSubd,FHdrInfo,ReadDataFuncName],	
+ [[ReadDataFunc], 	[ReadDataSubd,FHdrInfo,ReadDataFuncName],
  			sub {wrap_vfn(@_,"readdata")}],
 
  [[WriteBackDataSub],	[ParsedBackCode],	sub {subst_makecomp(FOO,@_)}],
@@ -498,9 +514,9 @@ $PDL::PP::deftbl =
  [[WriteBackDataFuncName],	[BackCode,Name],	sub {"pdl_$_[1]_writebackdata"}],
  [[WriteBackDataFuncName],	[Code],	sub {"NULL"}],
 
- [[WriteBackDataFunc], 	[WriteBackDataSubd,FHdrInfo,WriteBackDataFuncName],	
+ [[WriteBackDataFunc], 	[WriteBackDataSubd,FHdrInfo,WriteBackDataFuncName],
  	sub {wrap_vfn(@_,"writebackdata")}],
- 
+
  [[CopyFunc],	[CopyCode,FHdrInfo,CopyFuncName],sub {wrap_vfn(@_,"copy")}],
  [[FreeFunc],	[FreeCode,FHdrInfo,FreeFuncName],sub {wrap_vfn(@_,"free")}],
 
@@ -516,25 +532,25 @@ $PDL::PP::deftbl =
 
 sub GenDocs {
   my ($name,$pars,$otherpars,$doc) = @_;
-  
+
   # Allow explcit non-doc using Doc=>undef
-  
-  return '' if $doc eq '' && (!defined $doc) && $doc==undef; 
+
+  return '' if $doc eq '' && (!defined $doc) && $doc==undef;
 
   # If the doc string is one line let's have to for the
   # reference card information as well
-  
+
   $doc = "=for ref\n\n".$doc if split("\n", $doc) <= 1;
-  
+
   return '' if $doc =~ /^\s*internal\s*$/i;
   $::DOCUMENTED++;
   $pars = "P(); C()" unless $pars;
   $pars =~ s/^\s*(.+[^;])[;\s]*$/$1/;
   $otherpars =~ s/^\s*(.+[^;])[;\s]*$/$1/ if $otherpars;
   my $sig = "$pars".( $otherpars ? "; $otherpars" : "");
-  
+
   $doc =~ s/\n(=cut\s*\n)+(\s*\n)*$/\n/m; # Strip extra =cut's
-   
+
   return << "EOD";
 
 =head2 $name
@@ -637,12 +653,12 @@ sub coerce_types {
                              $parobjs->{$_}->cenum()
 			: "\$PRIV(__datatype)";
 		($ignore->{$_} ? () :
-		 $parobjs->{$_}->{FlagCreateAlways} ? 
+		 $parobjs->{$_}->{FlagCreateAlways} ?
 		  "$_->datatype = $dtype; " :
-		   "if((($_->state & PDL_NOMYDIMS) && 
+		   "if((($_->state & PDL_NOMYDIMS) &&
 		         $_->trans == NULL) &&
 		       0$parobjs->{$_}->{FlagCreat}) {
-			  $_->datatype = $dtype;  
+			  $_->datatype = $dtype;
 		    } else if($dtype != $_->datatype) {
 			$_ = PDL->get_convertedpdl($_,$dtype);
 		    }")} (@$parnames))
@@ -692,12 +708,12 @@ sub make_incsize_copy {
 	 						sub{"$copyname->$_[0]"})} @$parnames).
 	 (join '',map {$_->get_copydim(sub{"\$PRIV($_[0])"},
 						sub{"$copyname->$_[0]"})} values %$dimobjs);
-	 
+
 }
 
 sub make_incsize_free {
 	my($parnames,$parobjs,$dimobjs,$havethreading) = @_;
-	$havethreading ? 
+	$havethreading ?
 	'PDL->freethreadloop(&($PRIV(__thread)));'
 	: ''
 }
@@ -710,7 +726,7 @@ sub make_parnames {
 			(join ",",map {qq|"$_"|} @$pnames)."};
 		static int __realdims[] = {".
 			(join ",",map {$#{$_->{IndObjs}}+1} @pdls). "};
-		static char __funcname[] = \"\$MODULE(): \$NAME()\";
+		static char __funcname[] = \"\$MODULE()::\$NAME()\";
 		static pdl_errorinfo __einfo = {
 			__funcname, __parnames, $npdls
 		};
@@ -722,7 +738,7 @@ sub make_redodims_thread {
 	my $str; my $npdls = @$pnames;
 	$str .= "int __creating[$npdls];";
 	$str .= join '',map {$_->get_initdim."\n"} values %$dobjs;
-	$str .= join '',map {"__creating[$_] = 
+	$str .= join '',map {"__creating[$_] =
 			(PDL_CR_SETDIMSCOND(__privtrans,\$PRIV(pdls[$_])))
 				&& ".($pobjs->{$pnames->[$_]}{FlagCreat}?1:0)." ;\n"} (0..$#$pnames);
 # - null != [0]
@@ -751,13 +767,13 @@ sub def_vtable {
 	my $nparents = 0 + grep {! $pobjs->{$_}->{FlagW}} @$pnames;
 	my $aff = ($affine_ok ? "PDL_TPDL_VAFFINE_OK" : 0);
 	my $npdls = scalar @$pnames;
-	"static char ${vname}_flags[] = 
+	"static char ${vname}_flags[] =
 	 	{ ".
 	 	(join",",map {$pobjs->{$pnames->[$_]}->{FlagPhys} ?
 				0 : $aff} 0..$npdls-1).
 			"};
 	 pdl_transvtable $vname = {
-		0,0, $nparents, $npdls, ${vname}_flags, 
+		0,0, $nparents, $npdls, ${vname}_flags,
 		$rdname, $rfname, $wfname,
 		$ffname,NULL,NULL,$cpfname,NULL,
 		sizeof($sname),\"$vname\",
@@ -842,7 +858,7 @@ sub pdimexpr2priv {
 			cor = '.$pdimexpr.';
 			$CHILD(dims[i]) = $PARENT(dims[cor]);
 			$PRIV(incs[i]) = $PARENT(dimincs[cor]);
-				
+
 		}
 		$SETDIMS();
 		$SETDELTATHREADIDS(0);
@@ -905,7 +921,7 @@ BEGIN {
 		}
 		}
 		'}
-				
+
 );
 }
 
@@ -914,7 +930,7 @@ sub subst_makecomp {
 	my($which,$mc,$cn,$co) = @_;
 	return [$mc,{
 		@::std_childparent,
-		($cn ? 
+		($cn ?
 			((DO.$which.DIMS) => sub {return join '',
 				map{$$co{$_}->need_malloc ?
 				    $$co{$_}->get_malloc('$PRIV('.$_.')') :
@@ -933,8 +949,8 @@ sub ParentChildPars {
 	"
 	*$name = \\&PDL::$name;
 	sub PDL::$name {
-		my \$foo=PDL->null;
 		my \$this = shift;
+		my \$foo=\$this->null;
 		PDL::${name}_XX(\$this,\$foo,\@_);
 		\$foo
 	}
@@ -1001,7 +1017,7 @@ sub NT2Free__ {
 }
 
 sub CopyOtherPars {
-	my($onames,$otypes,$symtab) = @_; my $repr; 
+	my($onames,$otypes,$symtab) = @_; my $repr;
 	my $sname = $symtab->get_symname(_PDL_ThisTrans);
 	for(@$onames) {
 		$repr .= $otypes->{$_}->get_copy("$_","$sname->$_");
@@ -1169,12 +1185,12 @@ sub pmcode {
 			push @tmap,$tcnt;
 			push @imap,-2;
 			$tcnt++;
-			$ispl .= "push \@ret,PDL->null; 
-			\$_[$acnt] = \$ret[-1];";
+			$ispl .= "push \@ret,$::PDLOBJ->nullcreate(\$_[0]);    # Create a null using nullcreate
+			\$_[$acnt] = \$ret[-1];";              
 		} elsif($parobjs->{$_}->{FlagTemp}) {
 			push @tmap,-1;
 			push @imap,-1;
-			my $spl = "\$_[$acnt] = PDL->null;";
+			my $spl = "\$_[$acnt] = $::PDLOBJ->nullcreate(\$_[0]);"; # Create a null using nullcreate
 			$tspl .= $spl; $ispl .= $spl
 		} else {
 			push @tmap,$tcnt;
@@ -1193,16 +1209,16 @@ sub pmcode {
 	my $ind;
 	for $ind (reverse 0..$#imap) {
 		if($imap[$ind] == -2) {
-			$icode .= "unshift \@ret,(\$_[$ind] = PDL->null);\n";
+			$icode .= "unshift \@ret,(\$_[$ind] = $::PDLOBJ->nullcreate(\$_[0]) );\n"; # Create a null using nullcreate
 		} elsif($imap[$ind] == -1) {
-			$icode .= "\$_[$ind] = PDL->null;\n";
+			$icode .= "\$_[$ind] = $::PDLOBJ->nullcreate(\$_[0]);\n"; # Create a null using nullcreate
 		} else {
 			$icode .= "\$_[$ind] = \$_[$imap[$ind]];\n";
 		}
 	}
 	for $ind (reverse 0..$#tmap) {
 		if($tmap[$ind] == -1) {
-			$tcode .= "\$_[$ind] = PDL->null;\n";
+			$tcode .= "\$_[$ind] = $::PDLOBJ->nullcreate(\$_[0])\n;"; # Create a null using nullcreate
 		} else {
 			$tcode .= "\$_[$ind] = \$_[$tmap[$ind]];\n";
 		}
@@ -1213,7 +1229,7 @@ sub pmcode {
 
 	return "sub ".$::PDLOBJ."::$name {
 		if(\$#_ == ". ($acnt-1) ." || \$#_ == -1 ) { &".$::PDLOBJ."::".$newxsname."; }
-		 elsif(\$#_ == ". ($tcnt-1) .") { 
+		 elsif(\$#_ == ". ($tcnt-1) .") {
 		 	\@_ = \@_;
 		 	$tcode
 			&".$::PDLOBJ."::".$newxsname.";
@@ -1230,7 +1246,7 @@ sub pmcode {
 # THIS IS BAD: ASSIGNMENTS DON'T WORK.
 	return "sub ".$::PDLOBJ."::$name {
 		if(\$#_ == ". ($acnt-1) ." || \$#_ == -1 ) { &".$::PDLOBJ."::".$newxsname."; }
-		 elsif(\$#_ == ". ($tcnt-1) .") { 
+		 elsif(\$#_ == ". ($tcnt-1) .") {
 		 	$tspl
 			&".$::PDLOBJ."::".$newxsname.";
 		} elsif(\$#_ == ". ($icnt-1) .") {

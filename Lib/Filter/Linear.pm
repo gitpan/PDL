@@ -33,7 +33,7 @@ sub new($$) {
 	my($type,$pars) = @_;
 
 	my $this = bless {},$type;
-	$this->{Weights} = ((delete $pars->{Weights}) or 
+	$this->{Weights} = ((delete $pars->{Weights}) or
 		barf("Must specify weights\n"));
 	$this->{Point} = (delete $pars->{Point} or 0);
 	$this;
@@ -44,7 +44,7 @@ sub predict($$) {
 	my $ldata = $data->lags(0,1,$this->{Weights}->getdim(0));
 	inner($ldata->xchg(0,1),$this->{Weights},
 		(my $pred = PDL->null));
-	return wantarray ?  ($pred,$ldata->slice(":,($this->{Point})")) : 
+	return wantarray ?  ($pred,$ldata->slice(":,($this->{Point})")) :
 		$pred ;
 }
 
@@ -59,7 +59,7 @@ sub new($$) {
 	my $cent = int($npoints/2);
 	my $x = ((PDL->zeroes($npoints )->xvals) - $cent)->float;
 	my $y = exp(-($x**2)/(2*$sigma**2));
-# Normalize to unit total 
+# Normalize to unit total
 	$y /= sum($y);
 	return PDL::Filter::Linear::new($type,{Weights => $y,
 			Point => $cent});
@@ -82,7 +82,7 @@ sub new($$) {
 		(my $tmp = $mat1->slice(":,($_)")) .= ($x ** $_);
 	}
 	my $y;
-# Normalize to unit total 
+# Normalize to unit total
 	return PDL::Filter::Linear::new($type,{Weights => $y,
 			Point => $nleft});
 }

@@ -1,15 +1,14 @@
 
 # What makes this complicated is that we want
-# imag(3,x,y,z,q,d,f) 
-# appear in one 2D image, flattened out appropriately, with 
+# imag(3,x,y,z,q,d,f)
+# appear in one 2D image, flattened out appropriately, with
 # one black space between the subimages.
-# The X coordinate will be ((x+1)*z+1)*d and the 
+# The X coordinate will be ((x+1)*z+1)*d and the
 # Y coordinate ((y+1)*q+1)*f. We need to use splitdim to obtain
 # a piddle of the imag dimensions from the flat piddle.
 
 package PDL::Graphics::TriD::Image;
 @ISA=qw/PDL::Graphics::TriD::Object/;
-use PDL::Graphics::OpenGL;
 use PDL::Lite;
 
 my $defaultvert = PDL->pdl([
@@ -47,24 +46,9 @@ sub data_changed {
 	$this->changed();
 }
 
-# In the future, have this happen automatically by the piddles.
-sub data_changed {
-	my($this) = @_;
-	$this->changed();
-}
-
-sub togl {
-	$_[0]->gdraw();
-}
-
-sub togl_graph {
-	&togl;
-}
-
-# The quick method is to use texturing for the good effect.
-sub gdraw {
-	my($this,$vert) = @_;
-	my($x,$y);
+# ND piddle -> 2D
+sub flatten {
+        my ($this,$bin_align) = @_;
 	my @dims = $this->{Im}->dims;
 	shift @dims; # get rid of the '3'
 	my $xd = $dims[0]; my $yd = $dims[1];
@@ -93,20 +77,23 @@ sub gdraw {
 	$xd -= $xm; $yd -= $ym;
 
 # R because the final texture must be 2**x-aligned ;(
-	my ($txd ,$tyd);
-	for($txd = 0; $txd < 10 and 2**$txd < $xdr; $txd++) {};
-	for($tyd = 0; $tyd < 10 and 2**$tyd < $ydr; $tyd++) {};
-	$txd = 2**$txd; $tyd = 2**$tyd;
-	my $xxd = ($xdr > $txd ? $xdr : $txd);
-	my $yyd = ($ydr > $tyd ? $ydr : $tyd);
+	my ($txd ,$tyd, $xxd, $yyd);
+	if ($bin_align) {
+	  for($txd = 0; $txd < 10 and 2**$txd < $xdr; $txd++) {};
+	  for($tyd = 0; $tyd < 10 and 2**$tyd < $ydr; $tyd++) {};
+	  $txd = 2**$txd; $tyd = 2**$tyd;
+	  $xxd = ($xdr > $txd ? $xdr : $txd);
+	  $yyd = ($ydr > $tyd ? $ydr : $tyd);
 
-	if($#dims > 1) {
+	  if($#dims > 1) {
 #		print "XALL: $xd $yd $xdr $ydr $txd $tyd\n";
 #		print "DIMS: ",(join ',',$this->{Im}->dims),"\n";
-	}
+	  }
 
-use PDL::Dbg;
-#	$PDL::verbose=1;
+#	$PDL::debug=1;
+	} else {
+	  $xxd=$txd=$xdr; $yyd=$tyd=$ydr;
+	}
 
 	my $p = PDL->zeroes(PDL::float(),3,$xxd,$yyd);
 
@@ -138,72 +125,15 @@ use PDL::Dbg;
 		$ind++; # Just to keep even/odd correct
 	}
 #	$foop->dump;
-	print "ASSGNFOOP!\n" if $PDL::verbose;
+	print "ASSGNFOOP!\n" if $PDL::debug;
 
 	$foop .= $this->{Im};
 #	print "P: $p\n";
-	glColor3d(1,1,1);
-	glTexImage2D(&GL_TEXTURE_2D,
-		0,
-		&GL_RGB,
-		$txd,
-		$tyd,
-		0,
-		&GL_RGB,
-		&GL_FLOAT,
-		${$p->get_dataref()}
-	);
-	 glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-	    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-	       glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	          glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-		    
-	glDisable(&GL_LIGHTING);
-	glNormal3d(0,0,1);
-	glEnable(&GL_TEXTURE_2D);
-	glBegin(&GL_QUADS);
-	my @texvert = (
-		[0,0],
-		[$xd/$txd, 0],
-		[$xd/$txd, $yd/$tyd],
-		[0, $yd/$tyd]
-	);
-	if(!defined $vert) {$vert = $this->{Points}}
-	for(0..3) {
-#	for([0,0],[$xd/$txd,0],[$xd/$txd,$yd/$tyd],[0,$yd/$tyd]) {
-		glTexCoord2f(@{$texvert[$_]});
-		glVertex3f($vert->slice(":,($_)")->list);
-	}
-	glEnd();
-	glEnable(&GL_LIGHTING);
-	glDisable(&GL_TEXTURE_2D);
+        return wantarray() ? ($p,$xd,$yd,$txd,$tyd) : $p;
 }
 
-# XXX NOT USED
-
-# The careful method is to plot the image as quadrilaterals inside
-# the 0..1,0..1,0 box
-sub togl_old {
-	my($this) = @_;
-	my($x,$y);
-	my @dims = $this->{Im}->dims;
-	shift @dims; # remove the '3'
-	glDisable(GL_LIGHTING);
-	glNormal3d(0,0,1);
-	my $xmul = 1.0/$dims[0]; my $ymul = 1.0/$dims[1];
-#	print "IMAG2GL, $this->{R}, $this->{G}, $this->{B}\n";
-	my @rvals = $this->{R}->list;
-	my @gvals = $this->{G}->list;
-	my @bvals = $this->{B}->list;
-	for $x (0..$dims[0]-1) {
-#		print "$x\n";
-		for $y (0..$dims[1]-1) {
-			glColor3f((shift @rvals),(shift @gvals),(shift @bvals));
-			glRectd($x*$xmul,$y*$ymul,
-				($x+1)*$xmul,($y+1)*$ymul);
-		}
-	}
-#	print "IMAGDONE\n";
-	glEnd();
-	glEnable(GL_LIGHTING);
+sub toimage {
+  # initially very simple implementation
+  my ($this) = @_;
+  return $this->flatten(0);
 }

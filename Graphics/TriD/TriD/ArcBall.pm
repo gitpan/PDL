@@ -26,7 +26,7 @@ sub normxy2qua {
 	return PDL::Graphics::TriD::Quaternion->new(0,$x,$y,$z);
 }
 
-# Tjl's version: a cone - more even change of 
+# Tjl's version: a cone - more even change of
 package PDL::Graphics::TriD::ArcCone;
 
 @ISA = qw/PDL::Graphics::TriD::QuaterController/;
@@ -66,7 +66,7 @@ package PDL::Graphics::TriD::QuaterController;
 sub new {my($type,$win,$inv,$quat) = @_;
 	my $this = {
 		Inv => $inv,
-		Quat => (defined($quat) ? $quat : 
+		Quat => (defined($quat) ? $quat :
 			new PDL::Graphics::TriD::Quaternion(1,0,0,0))
 	};
 	bless $this,$type;
@@ -90,7 +90,7 @@ sub xy2qua {
 	my($this,$x,$y) = @_;
 	$x -= $this->{W}/2; $y -= $this->{H}/2;
 	$x /= $this->{SC}; $y /= $this->{SC};
-	$y = -$y; 
+	$y = -$y;
 	return $this->normxy2qua($x,$y);
 }
 
@@ -99,12 +99,14 @@ sub mouse_moved {
 #	print "ARCBALL: $x0,$y0,$x1,$y1,$this->{W},$this->{H},$this->{SC}\n";
 # Convert both to quaternions.
 	my ($qua0,$qua1) = ($this->xy2qua($x0,$y0),$this->xy2qua($x1,$y1));
+#	print "ARCBALLQ: ",(join ', ',@$qua0),"     ",(join ', ',@$qua1),"\n";
 	my $arc = $qua1->multiply($qua0->invert());
 #	my $arc = $qua0->invert()->multiply($qua1);
 	if($this->{Inv}) {
 		$arc->invert_rotation_this();
 	}
 	$this->{Quat}->set($arc->multiply($this->{Quat}));
+#	print "ARCBALLQ: ",(join ', ',@$arc),"     ",(join ', ',@{$this->{Quat}}),"\n";
 #	$this->{Quat}->set($this->{Quat}->multiply($arc));
 }
 

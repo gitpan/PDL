@@ -1,4 +1,10 @@
 #define PDL_CORE      /* For certain ifdefs */
+#ifndef WIN32
+#define USE_MMAP
+#else
+#undef USE_MMAP
+#endif
+
 #include "pdlcore.h"
 
 /* Singly linked list */
@@ -28,7 +34,7 @@ void pdl__magic_rm(pdl *it,pdl_magic *mag)
 
 /* Test for undestroyability */
 
-int pdl__magic_isundestroyable(pdl *it) 
+int pdl__magic_isundestroyable(pdl *it)
 {
 	pdl_magic **foo = &(it->magic);
 	while(*foo) {
@@ -46,10 +52,10 @@ void *pdl__call_magic(pdl *it,int which)
 	pdl_magic **foo = &(it->magic);
 	while(*foo) {
 		if((*foo)->what & which) {
-			if((*foo)->what & PDL_MAGIC_DELAYED) 
+			if((*foo)->what & PDL_MAGIC_DELAYED)
 				pdl_add_delayed_magic(*foo);
-			else 
-				ret = (void *)((*foo)->vtable->cast(*foo)); 
+			else
+				ret = (void *)((*foo)->vtable->cast(*foo));
 					/* Cast spell */
 		}
 		foo = &((*foo)->next);
@@ -58,7 +64,7 @@ void *pdl__call_magic(pdl *it,int which)
 }
 
 /* XXX FINDS ONLY FIRST */
-pdl_magic *pdl__find_magic(pdl *it, int which) 
+pdl_magic *pdl__find_magic(pdl *it, int which)
 {
 	pdl_magic **foo = &(it->magic);
 	while(*foo) {
@@ -70,7 +76,7 @@ pdl_magic *pdl__find_magic(pdl *it, int which)
 	return NULL;
 }
 
-pdl_magic *pdl__print_magic(pdl *it) 
+pdl_magic *pdl__print_magic(pdl *it)
 {
 	pdl_magic **foo = &(it->magic);
 	while(*foo) {
@@ -98,7 +104,7 @@ pdl_magic *pdl__print_magic(pdl *it)
 }
 
 
-int pdl__ismagic(pdl *it) 
+int pdl__ismagic(pdl *it)
 {
 	return (it->magic != 0);
 }
@@ -122,7 +128,7 @@ void pdl_run_delayed_magic() {
 }
 
 /****************
- * 
+ *
  * ->bind - magic
  */
 
@@ -161,7 +167,7 @@ pdl_magic *pdl_add_svmagic(pdl *it,SV *func)
 
 
 /****************
- * 
+ *
  * ->bind - magic
  */
 
@@ -182,7 +188,7 @@ struct pdl_magic_vtable familymutmagic_vtable = {
 	NULL
 };
 
-pdl_magic *pdl_add_fammutmagic(pdl *it,pdl_trans *ft) 
+pdl_magic *pdl_add_fammutmagic(pdl *it,pdl_trans *ft)
 {
 	pdl_magic_fammut *ptr = malloc(sizeof(pdl_magic_fammut));
 	ptr->what = PDL_MAGIC_MUTATEDPARENT;
@@ -211,7 +217,7 @@ typedef struct ptarg {
 	int no;
 } ptarg;
 
-static void *pthread_perform(void *vp) { 
+static void *pthread_perform(void *vp) {
 	struct ptarg *p = (ptarg *)vp;
 	if(TVERB) printf("STARTING THREAD %d (%d)\n",p->no, pthread_self());
 	pthread_setspecific(p->mag->key,(void *)&(p->no));
@@ -291,15 +297,19 @@ int pdl_magic_thread_nthreads(pdl *it,int *nthdim) {return 0;}
 /***************************
  *
  * Delete magic
- * 
+ *
  */
 
 
-void pdl_delete_mmapped_data(pdl *p, int param) 
+void pdl_delete_mmapped_data(pdl *p, int param)
 {
 	if(!p) {return;}
 	if(!p->data) {return;}
+#ifdef USE_MMAP
 	munmap(p->data, param);
+#else
+        croak("internal error: trying to delete mmaped data on unsupported platform");
+#endif
 	p->data = 0;
 }
 

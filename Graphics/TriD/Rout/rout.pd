@@ -11,11 +11,11 @@ the PDL::Graphics::TriD module. Currently, there are
 
 =head1 AUTHOR
 
-Copyright (C) 1997 Tuomas J. Lukka. 
+Copyright (C) 1997 Tuomas J. Lukka.
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 
@@ -50,7 +50,7 @@ EOT
 );
 
 # checks all neighbouring boxes.
-# Returns (r = |dist|+d) a*r^-2 + b*r^-1 + c*r^-0.5 
+# Returns (r = |dist|+d) a*r^-2 + b*r^-1 + c*r^-0.5
 pp_def(
 	'repulse',
 	GenericTypes => [F,D],
@@ -78,8 +78,8 @@ pp_def(
 		loop(np) %{
 			int index = 0;
 			$links() = -1;
-			loop(nc) %{ 
-				$vecs() = 0; 
+			loop(nc) %{
+				$vecs() = 0;
 				index *= dmult;
 				index += (int)($coords()/boxsize);
 			%}
@@ -114,9 +114,9 @@ pp_def(
 							tmp =
 							   ($coords() -
 							    $coords(np => ind));
-							$vecs() -= 
+							$vecs() -=
 								func * tmp;
-							$vecs(np => ind) += 
+							$vecs(np => ind) +=
 								func * tmp;
 						%}
 						ind = $links(np => ind);
@@ -197,8 +197,8 @@ Attractive potential for molecule-like constructs.
 
 C<attract> is used to calculate
 an attractive force for many
-objects, of which some attract each other (in a way 
-like molecular bonds). 
+objects, of which some attract each other (in a way
+like molecular bonds).
 For use by the module PDL::Graphics::TriD::MathGraph.
 For definition of the potential, see the actual function.
 
@@ -206,6 +206,33 @@ For definition of the potential, see the actual function.
 '
 );
 
+sub trid {
+	my ($par,$ind) = @_;
+	join ',', map {"\$$par($ind => $_)"} (0..2);
+}
+
+pp_def('vrmlcoordsvert',
+	Pars => 'vertices(n=3)',
+	OtherPars => 	'char* space; char* fd',
+	GenericTypes => [F,D],
+	Code => q@
+		 PerlIO *fp;
+		 IO *io;
+		 PDL_Byte *buf, *bp;
+		 char *spc = $COMP(space);
+		 char formchar = $TFD(' ','l');
+		 char formatstr[25];
+
+		 io = GvIO(gv_fetchpv($COMP(fd),FALSE,SVt_PVIO));
+		 if (!io || !(fp = IoIFP(io)))
+			barf("Can\'t figure out FP");
+		 sprintf(formatstr,"%s%%.3%cf %%.3%cf %%.3%cf,\n",spc,
+			formchar,formchar,formchar);
+
+		threadloop %{
+			fprintf(fp,formatstr,@.trid(vertices,n).');
+		%}'
+);
 
 pp_done();
 

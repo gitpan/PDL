@@ -23,7 +23,7 @@ $seen_pdlconf = 0;
 
 if(!$seen_pdlconf) {
 	my $defname = "$ENV{HOME}/.perldl.conf";
-	if(-e $defname) {
+	if(-f $defname) {
 		$pdl_conf_file = $defname;
 	}
 }
@@ -38,7 +38,7 @@ require './perldl.conf';
 
 # Now read in the users config file if specified
 
-if (-e $pdl_conf_file) {
+if (-f $pdl_conf_file) {
     warn "\nINFORMATION: using file $pdl_conf_file to set configuration defaults\n\n";
     require $pdl_conf_file;
 }

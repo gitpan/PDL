@@ -8,7 +8,7 @@
 #
 # I try to make this general enough that all Surface methods
 # work on this data also.
-# 
+#
 
 # The different types of normals are a headache.
 # If we have a normal per vertex, we get smoothing.
@@ -157,7 +157,7 @@ sub pdltotrianglemesh {
 		$y = $y0;
 		for $d1 (0..$pdl->{Dims}[1]-2) {
 			glBegin(GL_TRIANGLE_STRIP);
-			($v00,$v01,$v11,$v10) = 
+			($v00,$v01,$v11,$v10) =
 			  (PDL::Core::at($pdl,$d0,$d1)
 			  ,PDL::Core::at($pdl,$d0,$d1+1)
 			  ,PDL::Core::at($pdl,$d0+1,$d1+1)

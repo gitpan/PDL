@@ -8,9 +8,9 @@ This still needs to be written properly.
 
 =head2 Inheritance
 
-There are basically two reasons for subclassing piddles. 
+There are basically two reasons for subclassing piddles.
 The first is simply that you want to be able to use your own routines
-like 
+like
 
 	$piddle->something()
 
@@ -37,7 +37,7 @@ I<IS-A> simply in that you assign the C<PDL> object to the attribute
 named PDL and redefine the method initialize().
 
     package FOO;
-  
+
     @FOO::ISA = qw(PDL);
     sub initialize {
         my $class = shift;
@@ -53,7 +53,7 @@ extentions are added by I<all> PDL constructors automaticly.   The
 C<PDL> attribute is used by perlDL to store the PDL object and
 all PDL methods use this attribute automaticly if they are called
 with a blessed hash reference instead of a PDL object (a blessed scalar).
- 
+
 Do remember that if you subclass a class that is subclassed from a piddle,
 you need to call SUPER::initialize.
 

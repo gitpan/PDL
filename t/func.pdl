@@ -4,9 +4,9 @@
 sub func {
 
    my $x = shift;
-   
+
    return ($x**3 + 2);
-   
+
 };
 
 1; # OK status

@@ -153,7 +153,7 @@ if( x < 0.5 )
 	if( sign < 0 )
 		a = -a;
 	return(a);
-	}	
+	}
 
 a = sqrt( z + 1.0 );
 return( sign * log(x + a) );

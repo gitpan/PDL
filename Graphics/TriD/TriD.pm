@@ -45,7 +45,7 @@ at C<http://vrml.sgi.com/> or C<http://www.vrml.org/>
 
 The default device for TriD is currently OpenGL.
 You can specify a different device either in your program
-or in the environment variable C<PDL_3D_DEVICE>. 
+or in the environment variable C<PDL_3D_DEVICE>.
 The one specified in the program takes priority.
 
 The currently available devices are
@@ -58,7 +58,7 @@ OpenGL
 
 =item GLpic
 
-OpenGL but off-line (pixmap) rendering and writing to 
+OpenGL but off-line (pixmap) rendering and writing to
 a graphics file.
 
 =item VRML
@@ -83,7 +83,7 @@ PDL and wait for the next PDL image over the network.
 
 Specifying a set of coordinates is generally a context-dependent operation.
 For a traditional 3D surface plot, you'll want two of the coordinates
-to have just the xvals and yvals of the piddle, respectively. 
+to have just the xvals and yvals of the piddle, respectively.
 For a line, you would generally want to have one coordinate held
 at zero and the other advancing.
 
@@ -103,7 +103,7 @@ The alternative syntaxes for specifying a set of coordinates (or colors) are
 
 where C<CONTEXT> is a string describing in which context you wish these
 piddles to be interpreted. Each routine specifies a default context
-which is explained in the routines documentation. 
+which is explained in the routines documentation.
 Context is usually used only to understand what the user wants
 when he/she specifies less than 3 piddles.
 
@@ -124,7 +124,7 @@ z coordinate over theta and r (theta = the first dimension of the piddle).
 
 =item COLOR
 
-A set of colors. [$piddle] is interpreted as grayscale color 
+A set of colors. [$piddle] is interpreted as grayscale color
 (equivalent to [$piddle,$piddle,$piddle]).
 
 =item LINE
@@ -162,8 +162,8 @@ routines are supported:
 
 =for usage
 
- line3d piddle(3,x), {OPTIONS}  
- line3d [CONTEXT], {OPTIONS}  
+ line3d piddle(3,x), {OPTIONS}
+ line3d [CONTEXT], {OPTIONS}
 
 =for example
 
@@ -175,13 +175,13 @@ Example:
  - Lines over X, Y, Z
  perldl> line3d $coords
  - Lines over the 3D coordinates in $coords.
- 
+
 Note: line plots differ from mesh plots in that lines
 only go in one direction. If this is unclear try both!
- 
+
 See module documentation for more information on
 contexts and options
- 
+
 =head2 imag3d
 
 =for ref
@@ -190,20 +190,20 @@ contexts and options
 
 =for usage
 
- imag3d piddle(3,x,y), {OPTIONS}  
- imag3d [piddle,...], {OPTIONS}  
+ imag3d piddle(3,x,y), {OPTIONS}
+ imag3d [piddle,...], {OPTIONS}
 
 =for example
 
 Example:
 
  perldl> imag3d [sqrt(rvals(zeroes(50,50))/2)], {{Lines=>0};
- 
+
  - Rendered image of surface
- 
+
 See module documentation for more information on
 contexts and options
- 
+
 =head2 mesh3d
 
 =for ref
@@ -212,25 +212,25 @@ contexts and options
 
 =for usage
 
- mesh3d piddle(3,x,y), {OPTIONS}  
- mesh3d [piddle,...], {OPTIONS}  
+ mesh3d piddle(3,x,y), {OPTIONS}
+ mesh3d [piddle,...], {OPTIONS}
 
 =for example
 
 Example:
 
  perldl> mesh3d [sqrt(rvals(zeroes(50,50))/2)]
- 
+
  - mesh of surface
- 
+
 Note: a mesh is defined by two sets of lines at
 right-angles (i.e. this is how is differs from
 line3d).
- 
+
 See module documentation for more information on
 contexts and options
- 
-=head2 lattice3d 
+
+=head2 lattice3d
 
 =for ref
 
@@ -244,8 +244,8 @@ alias for mesh3d
 
 =for usage
 
- points3d piddle(3), {OPTIONS}  
- points3d [piddle,...], {OPTIONS}  
+ points3d piddle(3), {OPTIONS}
+ points3d [piddle,...], {OPTIONS}
 
 =for example
 
@@ -253,10 +253,10 @@ Example:
 
  perldl> points3d [sqrt(rvals(zeroes(50,50))/2)];
  - points on surface
- 
+
 See module documentation for more information on
 contexts and options
- 
+
 =head2 imagrgb
 
 =for ref
@@ -265,9 +265,9 @@ contexts and options
 
 =for usage
 
- imagrgb piddle(3,x,y), {OPTIONS}  
- imagrgb [piddle,...], {OPTIONS}  
- 
+ imagrgb piddle(3,x,y), {OPTIONS}
+ imagrgb [piddle,...], {OPTIONS}
+
 This would be used to plot an image, specifying
 red, green and blue values at each point. Note:
 contexts are very useful here as there are many
@@ -277,8 +277,8 @@ ways one might want to do this.
 
 e.g.
 
- perldl> $a=sqrt(rvals(zeroes(50,50))/2)                                            
- perldl> imagrgb [0.5*sin(8*$a)+0.5,0.5*cos(8*$a)+0.5,0.5*cos(4*$a)+0.5]  
+ perldl> $a=sqrt(rvals(zeroes(50,50))/2)
+ perldl> imagrgb [0.5*sin(8*$a)+0.5,0.5*cos(8*$a)+0.5,0.5*cos(4*$a)+0.5]
 
 =head2 imagrgb3d
 
@@ -376,7 +376,7 @@ user explicitly presses 'q'.
 Wait for the user to rotate the image in 3D space.
 
 Let the user rotate the image in 3D space, either for one step
-or until (s)he presses 'q', depending on the 'keeptwiddling3d' 
+or until (s)he presses 'q', depending on the 'keeptwiddling3d'
 setting. If 'keeptwiddling3d' is not set the routine returns
 immediately and indicates that a 'q' event was received by
 returning 1. If the only events received were mouse events,
@@ -413,9 +413,9 @@ have their own manual pages.
 
 There are objects that are not mentioned here; they are either internal
 to PDL3D or in rapidly changing states. If you use them, you do so at
-your own risk. 
+your own risk.
 
-The syntax C<PDL::Graphics::TriD::Scale(x,y,z)> here means that you create 
+The syntax C<PDL::Graphics::TriD::Scale(x,y,z)> here means that you create
 an object like
 
 	$a = new PDL::Graphics::TriD::Scale($x,$y,$z);
@@ -430,7 +430,7 @@ defines the color between red and blue. This will probably change).
 
 This is a 2-dimensional RGB image consisting of colored
 rectangles. With OpenGL, this is implemented by texturing so this should
-be relatively memory and execution-time-friendly. 
+be relatively memory and execution-time-friendly.
 
 =head2 C<PDL::Graphics::TriD::Lattice>
 
@@ -483,6 +483,7 @@ use PDL::Graphics::TriD::Quaternion;
 # use PDL::Graphics::TriD::Control3D;
 use  PDL::Graphics::TriD::Objects;
 use PDL::Graphics::TriD::Rout;
+use PDL::Core '';  # barf
 
 # Then, see which display method are we using:
 
@@ -491,11 +492,11 @@ BEGIN {
 	$dev ||= $::PDL::Graphics::TriD::device; # First, take it from this variable.
 	$dev ||= $::ENV{PDL_3D_DEVICE};
 	if(!defined $dev) {
-#		warn "Default PDL 3D device is GL (OpenGL): 
+#		warn "Default PDL 3D device is GL (OpenGL):
 #Set PDL_3D_DEVICE=GL in your environment in order not to see this warning.
 #You must have OpenGL or Mesa installed and the PDL::Graphics::OpenGL extension
 #compiled. Otherwise you will get strange warnings.";
-		$dev = "GL";
+		$dev = $^O =~ /win32/i ? "VRML" : "GL";
 	}
 	my $dv;
 # The following is just a sanity check.
@@ -514,17 +515,20 @@ BEGIN {
 
 use PDL::Exporter;
 @ISA = qw/PDL::Exporter/;
-@EXPORT_OK = qw/imag3d_ns imag3d line3d mesh3d lattice3d points3d 
-	describe3d imagrgb imagrgb3d hold3d release3d 
+@EXPORT_OK = qw/imag3d_ns imag3d line3d mesh3d lattice3d points3d
+	describe3d imagrgb imagrgb3d hold3d release3d
 	keeptwiddling3d nokeeptwiddling3d
-	twiddle3d grabpic3d/;
+	twiddle3d grabpic3d tridsettings/;
 %EXPORT_TAGS = (Func=>[@EXPORT_OK]);
 
-# Allowable forms: 
-# x(3,..)  [x(..),y(..),z(..)]  
+# currently only used by VRML backend
+sub tridsettings {return $PDL::Graphics::TriD::Settings}
+
+# Allowable forms:
+# x(3,..)  [x(..),y(..),z(..)]
 sub realcoords {
 	my($type,$c) = @_;
-	if(ref $c ne "ARRAY") { 
+	if(ref $c ne "ARRAY") {
 		if($c->getdim(0) != 3) {
 			die "If one piddle given for coordinate, must be (3,...) or have default interpretation";
 		}
@@ -608,7 +612,7 @@ sub graph_object {
 *describe3d=\&PDL::describe3d;
 sub PDL::describe3d {
 	require PDL::Graphics::TriD::TextObjects;
-	my ($text) = @_; 
+	my ($text) = @_;
 	my $win = PDL::Graphics::TriD::get_current_window();
 	my $imag = new PDL::Graphics::TriD::Description($text);
 	$win->add_object($imag);
@@ -620,8 +624,8 @@ sub PDL::imagrgb {
 	require PDL::Graphics::TriD::Image;
 	my (@data) = @_; &checkargs;
 	my $win = PDL::Graphics::TriD::get_current_window();
-	$win->clear_viewports();
 	my $imag = new PDL::Graphics::TriD::Image(@data);
+	$win->clear_viewports();
 	my $vp = $win->new_viewport(0,0,1,1);
 	$vp->add_object($imag);
 	$win->twiddle();
@@ -638,6 +642,7 @@ sub PDL::line3d { &checkargs;
 # XXX Should enable different positioning...
 *imagrgb3d=\&PDL::imagrgb3d;
 sub PDL::imagrgb3d { &checkargs;
+	require PDL::Graphics::TriD::Image;
 	&graph_object(new PDL::Graphics::TriD::Image(@_));
 }
 
@@ -664,15 +669,17 @@ sub PDL::points3d { &checkargs;
 }
 
 *grabpic3d=\&PDL::grabpic3d;
-sub PDL::grabpic3d { 
+sub PDL::grabpic3d {
 	my $win = PDL::Graphics::TriD::get_current_window();
+	barf "backend doesn't support grabing the rendered scene"
+	  unless $win->can('read_picture');
 	my $pic = $win->read_picture();
 	return ($pic->float) / 255;
 }
 
 $PDL::Graphics::TriD::hold_on = 0;
 
-sub PDL::hold3d {$PDL::Graphics::TriD::hold_on = 
+sub PDL::hold3d {$PDL::Graphics::TriD::hold_on =
 			(!defined $_[0] ? 1 : $_[0]);}
 sub PDL::release3d {$PDL::Graphics::TriD::hold_on = 0;}
 *hold3d=\&PDL::hold3d;
@@ -719,7 +726,7 @@ sub get_current_window {
 		  $win->{Window}->set_eventhandler($win->{EventHandler});
 		  $win->{Control} = new PDL::Graphics::TriD::SimpleController();
 		  $win->{ArcBall1} = new PDL::Graphics::TriD::ArcCone(
-			$win->{Window}, 0, 
+			$win->{Window}, 0,
 			$win->{Control}{WRotation});
 		  $win->{Scaler} = new PDL::Graphics::TriD::SimpleScaler(
 			$win->{Window},
@@ -836,6 +843,18 @@ sub add_changedsub {
 	}
 }
 
+
+sub clear {
+	my($this) = @_;
+	# print "Clear: $this\n";
+	for(@{$this->{Objects}}) {
+		$_->clear();
+	}
+	$this->delete_displist();
+	delete $this->{ChangedSub};
+	delete $this->{Objects};
+}
+
 sub changed {
 	my($this) = @_;
 	print "VALID0 $this\n" if $PDL::Graphics::TriD::verbose;
@@ -860,7 +879,9 @@ sub i_keep_list {return 1} # For object.
 
 sub new {
 	my($type) = @_;
-	bless {},$type;
+	my $this = bless {},$type;
+	# print "CREATE VP $this\n";
+	return $this;
 }
 
 sub new_viewport {
@@ -868,6 +889,11 @@ sub new_viewport {
 	push @{$this->{ViewPorts}},[(new PDL::Graphics::TriD::ViewPort()),
 		$x0,$y0,$x1,$y1];
 	return $this->{ViewPorts}[-1][0];
+}
+
+sub DESTROY {
+	my($this) = @_;
+	# print "DESTROY VP $this\n";
 }
 
 ###################################
@@ -911,11 +937,11 @@ Not enough is there yet.
 =head1 AUTHOR
 
 Copyright (C) 1997 Tuomas J. Lukka (lukka@husc.harvard.edu). Documentation
-contributions from Karl Glazebrook (kgb@aaoepp.aao.gov.au).  
+contributions from Karl Glazebrook (kgb@aaoepp.aao.gov.au).
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 

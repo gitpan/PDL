@@ -1,12 +1,12 @@
-# use PDL::Graphics::TriD::VRML;
-# $win = new PDL::Graphics::TriD::VRML::Window;
-# print $win->display();
 BEGIN { $PDL::Graphics::TriD::device = "VRML"; }
 use PDL::Graphics::TriD;
 use PDL::LiteF;
 use Carp;
 
 $SIG{__DIE__} = sub {print Carp::longmess(@_); die;};
+
+$set = tridsettings();
+$set->browser_com('netscape/unix');
 
 $nx = 5;
 

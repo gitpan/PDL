@@ -1,7 +1,7 @@
 
-/* 
+/*
 
-  Example C routine for how to use callext() in PDL 
+  Example C routine for how to use callext() in PDL
   - return log x to base y vector.
 
   E.g. on Solaris this would be compiled:
@@ -9,7 +9,7 @@
   cc -o callext.so -G -Kpic callext.c
 
   to generate dynamically loadable code. For other systems
-  see the man pages on your C compiler or the Perl config 
+  see the man pages on your C compiler or the Perl config
   information.
 
 */
@@ -28,7 +28,7 @@ void loglog_doit( float *x, float *y, int nvals) {
       x[i] = log((float)x[i])/log((float)y[i]);
 }
 
-/* 
+/*
    This is the hook routine - nargs is the number of
    arguments and *args is an array of pdl structures
 */
@@ -48,9 +48,9 @@ int loglog_ext(int nargs, pdlsimple **args) {
    }
 
    x = args[0]; y = args[1];
-       
+
    if (x->datatype != PDL_F || y->datatype != PDL_F) {
-      fprintf(stderr, "Error in data type of arguments %d %d\n", 
+      fprintf(stderr, "Error in data type of arguments %d %d\n",
               x->datatype, y->datatype);
       return (0); /* Failure */
    }
@@ -62,7 +62,7 @@ int loglog_ext(int nargs, pdlsimple **args) {
 
    /* Now do the buisness! */
 
-   loglog_doit( (float*) x->data, (float*) y->data, x->nvals); 
+   loglog_doit( (float*) x->data, (float*) y->data, x->nvals);
 
    return(1);  /* Success! */
 }

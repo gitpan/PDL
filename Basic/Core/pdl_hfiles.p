@@ -3,7 +3,7 @@ use lib ".";
 require 'Types.pm';
 *T = *PDL::Types::typehash; # Alias
 
-# This file defines things that are in common between 
+# This file defines things that are in common between
 # pdl.h and pdlsimple.h
 
 $enum = '';

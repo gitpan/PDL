@@ -1,12 +1,16 @@
 
-/* 
+/*
    Core.xs
 
 */
 
+#ifndef WIN32
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fcntl.h>
+#define USE_MMAP
+#endif
+
 
 #include "EXTERN.h"   /* std perl include */
 #include "perl.h"     /* std perl include */
@@ -25,10 +29,6 @@
 #define setflag(reg,flagval,val) (val?(reg |= flagval):(reg &= ~flagval))
 
 #define SET_RETVAL_NV x->datatype<PDL_F ? (RETVAL=newSViv( (IV)result )) : (RETVAL=newSVnv( result ))
-
-#ifndef __CYGWIN32__
-#define USE_MMAP
-#endif
 
 Core PDL; /* Struct holding pointers to shared C routines */
 
@@ -60,10 +60,10 @@ static int* pdl_packint( SV* sv, int *ndims ) {
 
    for(i=0; i<(*ndims); i++) {
       bar = *(av_fetch( array, i, 0 )); /* Fetch */
-      dims[i] = (int) SvIV(bar); 
+      dims[i] = (int) SvIV(bar);
    }
    return dims;
-} 
+}
 
 static SV* pdl_unpackint ( PDL_Long *dims, int ndims ) {
 
@@ -89,12 +89,12 @@ DESTROY(sv)
   SV *	sv;
   CODE:
     pdl *self;
-    if (SvROK(sv) && SvTYPE(SvRV(sv)) == SVt_PVHV) 
+    if (SvROK(sv) && SvTYPE(SvRV(sv)) == SVt_PVHV)
        1; /* Do nothing */
     else {
        self = SvPDLV(sv);
        PDLDEBUG_f(printf("DESTROYING %d\n",self);)
-       if (self != NULL) 
+       if (self != NULL)
           pdl_destroy(self);
     }
 
@@ -134,6 +134,26 @@ call_trans_foomethod(trans,i1,i2,i3)
 MODULE = PDL::Core	PACKAGE = PDL
 
 int
+iscontig(x)
+   pdl*	x
+   CODE:
+      RETVAL = 1;
+      pdl_make_physvaffine( x );
+	if PDL_VAFFOK(x) {
+	   int i, inc=1;
+	   printf("vaff check...\n");
+  	   for (i=0;i<x->ndims;i++) {
+     	      if (PDL_REPRINC(x,i) != inc) {
+		     RETVAL = 0;
+		     break;
+              }
+     	      inc *= x->dims[i];
+  	   }
+        }
+  OUTPUT:
+    RETVAL
+
+int
 fflows(self)
 	pdl *self
 	CODE:
@@ -158,7 +178,7 @@ is_inplace(self)
   OUTPUT:
     RETVAL
 
-void 
+void
 set_inplace(self,val)
   pdl *self;
   int val;
@@ -255,7 +275,7 @@ set_data_by_mmap(it,fname,len,writable,shared,creat,mode,trunc)
 			ftruncate(fd,0);   /* Clear all previous data */
 			ftruncate(fd,len); /* And make it long enough */
 		}
-		it->data = mmap(0,len,PROT_READ | (writable ? 
+		it->data = mmap(0,len,PROT_READ | (writable ?
 					PROT_WRITE : 0),
 				(shared ? MAP_SHARED : MAP_PRIVATE),
 				fd,0);
@@ -336,6 +356,7 @@ set_debugging(i)
 
 
 
+
 SV *
 at_c(x,position)
    pdl*	x
@@ -347,14 +368,14 @@ at_c(x,position)
       pdl_make_physvaffine( x );
 
     pos = pdl_packdims( ST(1), &npos);
-    if (pos == NULL || npos != x->ndims) 
+    if (pos == NULL || npos != x->ndims)
        barf("Invalid position");
 
     result=pdl_at(PDL_REPRP(x), x->datatype, pos, x->dims,
         (PDL_VAFFOK(x) ? x->vafftrans->incs : x->dimincs), PDL_REPROFFS(x),
 	x->ndims);
 
-    SET_RETVAL_NV ;    
+    SET_RETVAL_NV ;
 
     OUTPUT:
      RETVAL
@@ -379,10 +400,10 @@ list_c(x)
 		PUSHs(sv_2mortal(newSVnv(pdl_at( data, x->datatype,
 			inds, x->dims, incs, offs, x->ndims))));
 		stop = 1;
-		for(ind = 0; ind < x->ndims; ind++) 
-			if(++(inds[ind]) >= x->dims[ind]) 
-				inds[ind] = 0; 
-			else 
+		for(ind = 0; ind < x->ndims; ind++)
+			if(++(inds[ind]) >= x->dims[ind])
+				inds[ind] = 0;
+			else
 				{stop = 0; break;}
 	}
 
@@ -410,10 +431,10 @@ listref_c(x)
 			inds, x->dims, incs, offs, x->ndims)));
 		lind++;
 		stop = 1;
-		for(ind = 0; ind < x->ndims; ind++) 
-			if(++(inds[ind]) >= x->dims[ind]) 
-				inds[ind] = 0; 
-			else 
+		for(ind = 0; ind < x->ndims; ind++)
+			if(++(inds[ind]) >= x->dims[ind])
+				inds[ind] = 0;
+			else
 				{stop = 0; break;}
 	}
 	RETVAL = newRV_noinc((SV *)av);
@@ -431,7 +452,7 @@ set_c(x,position,value)
     pdl_make_physvaffine( x );
 
     pos = pdl_packdims( ST(1), &npos);
-    if (pos == NULL || npos != x->ndims) 
+    if (pos == NULL || npos != x->ndims)
        barf("Invalid position");
 
     pdl_children_changesoon( x , PDL_PARENTDATACHANGED );
@@ -450,6 +471,11 @@ BOOT:
 
    PDL.SvPDLV      = SvPDLV;
    PDL.SetSV_PDL   = SetSV_PDL;
+   PDL.create      = pdl_create;
+   PDL.new         = pdl_external_new;
+   PDL.tmp         = pdl_external_tmp;
+   PDL.destroy     = pdl_destroy;
+   PDL.null        = pdl_null;
    PDL.copy        = pdl_copy;
    PDL.converttype = pdl_converttype;
    PDL.twod        = pdl_twod;
@@ -457,6 +483,7 @@ BOOT:
    PDL.howbig      = pdl_howbig;
    PDL.packdims    = pdl_packdims;
    PDL.unpackdims  = pdl_unpackdims;
+   PDL.setdims     = pdl_setdims;
    PDL.grow        = pdl_grow;
    PDL.flushcache  = NULL;
    PDL.reallocdims = pdl_reallocdims;
@@ -470,6 +497,7 @@ BOOT:
    PDL.iterthreadloop = pdl_iterthreadloop;
    PDL.freethreadloop = pdl_freethreadloop;
    PDL.thread_create_parameter = pdl_thread_create_parameter;
+   PDL.add_deletedata_magic = pdl_add_deletedata_magic;
 
    PDL.setdims_careful = pdl_setdims_careful;
    PDL.put_offs = pdl_put_offs;
@@ -487,8 +515,8 @@ BOOT:
    PDL.make_physdims = pdl_make_physdims;
    PDL.pdl_barf      = pdl_barf;
    PDL.allocdata      = pdl_allocdata;
-   
-   /* 
+
+   /*
       "Publish" pointer to this structure in perl variable for use
        by other modules
    */
@@ -497,7 +525,7 @@ BOOT:
 
 # version of eval() which propogates errors encountered in
 # any internal eval(). Must be passed a code reference - could
-# be use perl_eval_sv() but that is still buggy. This subroutine is 
+# be use perl_eval_sv() but that is still buggy. This subroutine is
 # primarily for the perlDL shell to use.
 #
 # Thanks to Sarathy (gsar@engin.umich.edu) for suggesting this, though
@@ -511,10 +539,17 @@ myeval(code)
    PUSHMARK(sp) ;
    perl_call_sv(code, G_EVAL|G_KEEPERR|GIMME);
 
-MODULE = PDL::Core	PACKAGE = PDL	PREFIX = pdl_
+
+MODULE = PDL::Core	PACKAGE = PDL
+# pdl_null is created/imported with no PREFIX  as pdl_null.
+#  'null' is supplied in Core.pm that calls 'initialize' which calls
+#   the pdl_null here
 
 pdl *
 pdl_null(...)
+
+
+MODULE = PDL::Core	PACKAGE = PDL	PREFIX = pdl_
 
 int
 isnull(self)
@@ -572,7 +607,7 @@ get_datatype(self)
 	OUTPUT:
 	RETVAL
 
-int 
+int
 upd_data(self)
 	pdl *self
 	CODE:
@@ -587,9 +622,9 @@ set_dataflow_f(self,value)
 	pdl *self;
 	int value;
 	CODE:
-	if(value) 
+	if(value)
 		self->state |= PDL_DATAFLOW_F;
-	else 
+	else
 		self->state &= ~PDL_DATAFLOW_F;
 
 void
@@ -597,9 +632,9 @@ set_dataflow_b(self,value)
 	pdl *self;
 	int value;
 	CODE:
-	if(value) 
+	if(value)
 		self->state |= PDL_DATAFLOW_B;
-	else 
+	else
 		self->state &= ~PDL_DATAFLOW_B;
 
 int
@@ -611,7 +646,7 @@ getndims(x)
 	OUTPUT:
 		RETVAL
 
-int 
+int
 getdim(x,y)
 	pdl *x
 	int y
@@ -621,7 +656,7 @@ getdim(x,y)
 	OUTPUT:
 		RETVAL
 
-int 
+int
 getnthreadids(x)
 	pdl *x
 	CODE:
@@ -630,7 +665,7 @@ getnthreadids(x)
 	OUTPUT:
 		RETVAL
 
-int 
+int
 getthreadid(x,y)
 	pdl *x
 	int y
@@ -689,7 +724,7 @@ sethdr(p,h)
 		if(p->hdrsv == NULL) {
 		      p->hdrsv = (void*) newSViv(0);
 		}
-		if (!SvROK(h) || SvTYPE(SvRV(h)) != SVt_PVHV) 
+		if (!SvROK(h) || SvTYPE(SvRV(h)) != SVt_PVHV)
 		      barf("Not a HASH reference");		
 		p->hdrsv = (void*) newRV( (SV*) SvRV(h) );
 
@@ -711,7 +746,7 @@ set_datatype(a,datatype)
    int datatype
    CODE:
     pdl_make_physical(a);
-    if(a->trans) 
+    if(a->trans)
 	    pdl_destroytransform(a->trans,1);
 /*     if(! (a->state && PDL_NOMYDIMS)) { */
     pdl_converttype( &a, datatype, PDL_PERM );
@@ -722,7 +757,7 @@ threadover_n(...)
    CODE:
    {
     int npdls = items - 1;
-    if(npdls <= 0) 
+    if(npdls <= 0)
     	barf("Usage: threadover_n(pdl[,pdl...],sub)");
     {
 	    int i,sd;
@@ -764,7 +799,7 @@ threadover(...)
     int npdls, nothers = -1;
     int targs = items - 4;
     if (items > 0) nothers = SvIV(ST(0));
-    if(targs <= 0 || nothers < 0 || nothers >= targs) 
+    if(targs <= 0 || nothers < 0 || nothers >= targs)
     	barf("Usage: threadover(nothers,pdl[,pdl...][,otherpars..],realdims,creating,sub)");
     npdls = targs-nothers;
     {
@@ -781,7 +816,7 @@ threadover(...)
 	    SV **others = malloc(sizeof(SV *) * nothers);
 	    int *creating = pdl_packint(cdimslist,&nd2);
 	    int *realdims = pdl_packint(rdimslist,&nd1);
-	    CHECKP(pdls); CHECKP(child); CHECKP(dims); 
+	    CHECKP(pdls); CHECKP(child); CHECKP(dims);
 	    CHECKP(incs); CHECKP(csv);
 
 	    if (nd1 != npdls || nd2 < npdls)

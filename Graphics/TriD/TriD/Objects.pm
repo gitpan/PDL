@@ -5,20 +5,20 @@
 package PDL::Graphics::TriD::GObject;
 @ISA=qw/PDL::Graphics::TriD::Object/;
 sub new {
-	my($type,$points,$colors,$options) = @_; 
+	my($type,$points,$colors,$options) = @_;
 	if(!defined $options and ref $colors eq "HASH") {
 		$options = $colors;
 		undef $colors;
 	}
 	$points = PDL::Graphics::TriD::realcoords($type->r_type,$points);
-	if(!defined $colors) {$colors = PDL->pdl(1,1,1); 
+	if(!defined $colors) {$colors = PDL->pdl(1,1,1);
 		$colors = $type->cdummies($colors,$points);
 	        $options->{UseDefcols} = 1;  # for VRML efficiency
 	} else {
 		$colors = PDL::Graphics::TriD::realcoords("COLOR",$colors);
 	}
 	my $this = bless {Points => $points, Colors => $colors, Options => $options},$type;
-	$this->check_options(); 
+	$this->check_options();
 	return $this;
 }
 
@@ -129,7 +129,7 @@ sub smoothn {
   # all triangles
   my $ortho = $trip->crossp($trid);
   $ortho->norm($ortho); # normalise inplace
-  
+
   # now add to vertices to smooth
   my $aver = ref($p)->zeroes($p->dims);
   # step 1, upper right tri0, upper left tri1

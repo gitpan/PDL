@@ -14,18 +14,18 @@ sub approx {
 }
 
 sub vars_ipv {
-  PDL::Dbg::vars if $PDL::verbose;
+  PDL::Dbg::vars if $PDL::debug;
 }
 
 sub p {
-  print @_ if $PDL::verbose;
+  print @_ if $PDL::debug;
 }
 
 use PDL::LiteF;
 use PDL::ImageRGB;
 use PDL::Dbg;
 
-$PDL::verbose = 0;
+$PDL::debug = 0;
 
 print "1..6\n";
 

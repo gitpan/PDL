@@ -52,7 +52,7 @@ sub xy2norm {
 
 sub mouse_moved {
 	my($this,$x0,$y0,$x1,$y1) = @_;
-	${$this->{Dist}} *= 
+	${$this->{Dist}} *=
            $this->xy2fac($this->xy2norm($x0,$y0),$this->xy2norm($x1,$y1));
 }
 

@@ -191,7 +191,7 @@ sub to_text {
     my $cols = $this->{Colors};
     my $seq = PDL->sequence(@dims);
     require PDL::Dbg;
-    local $PDL::verbose = 0;
+    local $PDL::debug = 0;
     $cols = pdl(0,0,0)->dummy(1)->dummy(2)->px
       if $this->{IsLattice} && $this->{Surface} && $this->{Lines};
     lines($this->{Points},$cols,$seq,
@@ -326,7 +326,8 @@ sub add_proto {
 sub print {
   my $this = shift;
   if ($#_ > -1) {
-    open VRML,">$_[0]" or barf "can't open $_[0]";
+    my $file = ($_[0] =~ /^\s*[|>]/ ? '' : '>') .$_[0];
+    open VRML,"$file" or barf "can't open $file";
   } else { *VRML = *STDOUT }
   print VRML "$this->{Header}\n";
   print VRML $this->{Info}->to_text;

@@ -22,7 +22,7 @@ perldl shell.
 
 package PDL::Dbg;
 
-# used by info 
+# used by info
 $PDL::Dbg::Title = "Type   Dimension       Flow  State          Mem";
 $PDL::Dbg::Infostr = "%6T %-15D  %3F   %-5S  %12M";
 
@@ -34,7 +34,7 @@ package PDL;
 
 =for ref
 
-Print info about a piddle (or all known piddles) 
+Print info about a piddle (or all known piddles)
 
 =for example
 
@@ -64,7 +64,7 @@ The default package is that of the caller.
 
 =item invoked as an instance method
 
-it prints info about that particular piddle if C<$PDL::verbose> is
+it prints info about that particular piddle if C<$PDL::debug> is
 true and returns the pdl object upon completion. It accepts an
 optional string argument that is simply prepended to the default info
 if it doesn't contain a C<%> character. If, however, the argument
@@ -94,8 +94,8 @@ sub px {
   my $str="";
 
   if (ref($arg)) {
-    return $arg unless $PDL::verbose;
-    my $info = $arg->info($#_ > -1 ? ($_[0] =~ /%/ ? 
+    return $arg unless $PDL::debug;
+    my $info = $arg->info($#_ > -1 ? ($_[0] =~ /%/ ?
 			 $_[0] : "$_[0] $PDL::Dbg::Infostr") :
 			  $PDL::Dbg::Infostr);
     print "$info\n";
@@ -123,7 +123,7 @@ sub px {
       $npdls++;
       $info = $pdl->info($PDL::Dbg::Infostr);
       printf "\$%-11s %s %s\n",$key,$info,(ref($pdl) eq $classname ? '' :
-					 "$classname");
+					 ref($pdl));
       # also print classname for derived classes
     }
   }
@@ -153,11 +153,11 @@ should be sent to the PDL mailing list perldl@jachw.hawaii.edu.
 
 =head1 AUTHOR
 
-Copyright(C) 1997 Christian Soeller (csoelle@sghms.ac.uk). 
+Copyright(C) 1997 Christian Soeller (csoelle@sghms.ac.uk).
 All rights reserved. There is no warranty. You are allowed
 to redistribute this software / documentation under certain
-conditions. For details, see the file COPYING in the PDL 
-distribution. If this file is separated from the PDL distribution, 
+conditions. For details, see the file COPYING in the PDL
+distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
 

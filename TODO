@@ -1,3 +1,4 @@
+tridgallery depends on m51.fits
 
                  perlDL TODO list
                  ================
@@ -10,8 +11,6 @@
 
 SuperHyperCritical:
 ----
-# * A test and a fix for $P() in vaffine.
-
 # * foo(zeroes(float,3))) and foo is defined only for byte doesn't work.
 ??? Doesn't it?o
 
@@ -129,4 +128,10 @@ Graphics
 
 * Nd plots
 
+FFT
+--------
 
+* Fix FFT test number 2.(Commented out for now) Robin Williams notes:
+	...this appears to be an
+	oddity with PP's promotion of byte data for GenericTypes => [F,D]
+	routines.
