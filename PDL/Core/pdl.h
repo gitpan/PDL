@@ -8,12 +8,17 @@
 */
 
 struct pdl {
-   void*    sv;      /* Pointer back to original sv */
-   int    datatype;  /* Ignored for now, assumed double - complex later */
-   void  *data;      /* Generic pointer to the data block (usually in the sv) */
-   int    nvals;     /* Number of data values */
-   int   *dims;      /* Array of data dimensions */
-   int    ndims;     /* Number of data dimensions */
+   void*    sv;      	/* Pointer back to original sv */
+   int    datatype;  	/* Ignored for now, assumed double - complex later */
+   void  *data;      	/* Generic pointer to the data block (usually in the sv) */
+   int    nvals;     	/* Number of data values */
+   int   *dims;      	/* Array of data dimensions */
+   int    ndims;     	/* Number of data dimensions */
+   int 	 *incs;	     	/* Array of data increments */
+   int   *threaddims;   /* Array of thread dimensions */
+   int    nthreaddims;  /* Number of thread dimensions */
+   int 	 *threadincs;	/* Array of thread increments */
+   int	 offs;          /* Data offset */
 };
 
 

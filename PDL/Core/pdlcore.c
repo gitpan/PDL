@@ -34,6 +34,7 @@ pdl SvPDLV ( SV* sv ) {
 
    HV*  hash;
    SV** foo;
+   SV * bar;
    pdl  ret;
    STRLEN len;
 
@@ -69,7 +70,15 @@ pdl SvPDLV ( SV* sv ) {
    if (foo == NULL)
       croak("Error accessing Object 'Data' component");
 
-   ret.data = SvPV( *foo, len ) ;
+   /* Now, if Data is a reference, we need to dereference it */
+
+   bar = *foo;
+
+   while(SvROK(bar)) {
+   	bar = SvRV(bar);
+   }
+
+   ret.data = SvPV( bar, len ) ;
 
    foo = hv_fetch( hash, "Datatype", strlen("Datatype"), 0);
    if (foo == NULL)
@@ -88,6 +97,50 @@ pdl SvPDLV ( SV* sv ) {
    ret.dims  = pdl_packdims( *foo, &(ret.ndims) ); /* Pack into PDL */
    if (ret.ndims > 0 && ret.dims == NULL)
       croak("Error reading 'Dims' component");
+
+   /* Fetch offset and increments, *if available* */
+
+   foo = hv_fetch ( hash, "Incs", strlen("Incs"), 0);
+   if(foo == NULL) {
+   	int inc=1; int i;
+   	ret.incs = pdl_malloc(sizeof(int) * ret.ndims);
+	for(i=0; i<ret.ndims; i++) {
+		ret.incs[i] = inc; inc *= ret.dims[i];
+	}
+   } else {
+   	int foon;
+   	ret.incs = pdl_packdims( *foo, &(foon) ); /* Pack */
+	if(foon != ret.ndims) {
+		croak("NDIMS AND NINCS UNEQUAL!\n");
+	}
+   }
+
+   foo = hv_fetch (hash, "Offs", strlen("Offs"), 0);
+   if(foo == NULL) {
+   	ret.offs = 0;
+   } else {
+   	ret.offs = SvIV( *foo );
+   }
+
+   /* Fetch ThreadDims and ThreadIncs *if available* */
+
+   foo = hv_fetch ( hash, "ThreadDims", strlen("ThreadDims"), 0);
+   if(foo == NULL) {
+   	ret.nthreaddims = 0;
+   } else {
+   	ret.threaddims = pdl_packdims( *foo, &(ret.nthreaddims) );
+   }
+   if(ret.nthreaddims) {
+  	int tmp;
+	foo = hv_fetch ( hash, "ThreadIncs", strlen("ThreadDims"), 0);
+	if(foo == NULL) {
+		die("Threaddims but not ThreadIncs given!\n");
+	}
+	ret.threadincs = pdl_packdims (*foo, &(tmp) );
+	if(tmp != ret.nthreaddims) { 
+		die("NThreaddims != NThreadIncs!\n");
+	}
+   }
               
    return ret;
 

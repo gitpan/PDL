@@ -1,0 +1,19 @@
+1.01 => 1.02
+	by Tuomas J. Lukka (lukka@fas.harvard.edu)
+
+- 1-line patch to perldl as a workaround to a perl bug
+
+- added members incs, threaddims, nthreaddims, threadincs and offs to
+  pdl struct
+
+- added code to SvPDLV to fill in the new members from the hash
+
+
+1.00 => 1.01
+	by Karl Glazebrook (...)
+
+add packdims, unpackdims and grow to the PDL virtual table.
+
+small bugfix to pdlcore.c
+
+

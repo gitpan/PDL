@@ -5,7 +5,7 @@
 unshift @INC, "./blib"; 
 print <<'EOD';
 
-perlDL shell v1.00 by Karl Glazebrook [kgb@aaoepp.aao.gov.au] 1 Oct 1996
+perlDL shell v1.02 by Karl Glazebrook [kgb@aaoepp.aao.gov.au] 11 Nov 1996
 
 EOD
 
@@ -84,6 +84,7 @@ sub {
    $_;
 }
 EOD
+	    %@ = (); # Workaround to prevent spurious loss of $@
             PDL::Core::myeval( $code ); # Do command with $@ keeping
         }else{
             eval $_;
