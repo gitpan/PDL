@@ -34,21 +34,33 @@ YOU HAVE BEEN WARNED!!
 
 EOM
   }
+
+  # check for red hat 5.8.0 problem described at
+  # http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=87682
+  if ($^V eq v5.8.0 &&
+      $Config{config_args} =~ m/-Dcf_by=Red Hat/) {
+    $redhat580problem = 1;
+  }
 }
 
 sub getpdl_config {
   my ($pdl_conf_file) = @_;
 
   # First read in distribution config file
+  # and convert y/n to 1/0
+  #
   require './perldl.conf';
+  foreach (values %PDL_CONFIG) { s/^y.*/1/i; s/^n.*/0/i; }
 
   %PDL_CONFIG_DIST = %PDL_CONFIG; # Save standard values
 
   # Now read in the users config file if specified
-
+  # and convert y/n to 1/0
+  #
   if (-f $pdl_conf_file) {
     warn "\nINFORMATION: using file $pdl_conf_file to set configuration defaults\n\n";
     require $pdl_conf_file;
+    foreach(values %PDL_CONFIG){ s/^y.*/1/i; s/^n.*/0/i; }
   }
 
   # Sanity checking of user supplied keys (look for ones not defined in dist)
@@ -404,4 +416,23 @@ EOP
 
   }
 
+  if ($redhat580problem) {
+    print << "EOP";
+
+************************************************************
+* IMPORTANT: You seem to be on a redhat system with        *
+* a Perl 5.8.0 installation. Your Perl installation may be *
+* broken and generate broken makefiles                     *
+* see                                                      *
+*                                                          *
+* http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=87682
+*                                                          *
+* for details and workarounds.                             *
+* In particular check the setting of the LANG environment  *
+* variable:                                                *
+*             current setting LANG=$ENV{LANG}              *
+************************************************************
+
+EOP
+  }
 }

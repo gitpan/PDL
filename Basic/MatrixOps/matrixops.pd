@@ -88,7 +88,7 @@ _row_ vectors; if you want a _column_ vector you must add a dummy dimension:
 Implicit threading works correctly with most matrix operations, but
 you must be extra careful that you understand the dimensionality.  In 
 particular, matrix multiplication and other matrix ops need nx1 PDLs
-as row vectors and 1xn PDLs as column vectors.  In many cases you must
+as row vectors and 1xn PDLs as column vectors.  In most cases you must
 explicitly include the trailing 'x1' dimension in order to get the expected
 results when you thread over multiple row vectors.
 
@@ -206,10 +206,11 @@ exists).  The code is inplace-aware, so you can get back the inverse
 in $a itself if you want -- though temporary storage is used either
 way.  You can cache the LU decomposition in an output option variable.
 
-C<inv> uses lu_decomp by default; that is a numerically stable (pivoting)
-LU decomposition method.  If you ask it to thread then a numerically
-unstable (non-pivoting) method is used instead, so avoid thread ing
-over largish or near-singular matrices unless precision is not important.
+C<inv> uses lu_decomp by default; that is a numerically stable
+(pivoting) LU decomposition method.  If you ask it to thread then a
+numerically unstable (non-pivoting) method is used instead, so avoid
+threading over collections of large (say, more than 4x4) or
+near-singular matrices unless precision is not important.
 
 
 OPTIONS:
@@ -220,7 +221,9 @@ OPTIONS:
 
 Boolean value indicating whether to complain if the matrix is singular.  If
 this is false, singular matrices cause inverse to barf.  If it is true, then 
-singular matrices cause inverse to return undef.
+singular matrices cause inverse to return undef.  In the threading case, no 
+checking for singularity is performed, if any of the matrices in your threaded 
+collection are singular, they receive NaN entries.
 
 =item * lu (I/O)
 
@@ -490,7 +493,7 @@ pp_def("eigens",
       
       &PDL::_eigens_int($lt, $ev, $e);
 
-      return $ev, $e
+      return $ev->xchg(0,1), $e
 	if(wantarray);
       $e;                #just eigenvalues
    }
@@ -499,7 +502,7 @@ pp_def("eigens",
 =for ref
 
 Eigenvalues and -vectors of a symmetric square matrix.  If passed
-an asymmetric matrix, the routine will warn and symmetrize it.
+an asymmetric matrix, the routine will warn and symmetrize it.  
 
 It\'s threadable, so if $a is 3x3x100, it\'s treated as 100 separate 3x3
 matrices, and both $ev and $e get extra dimensions accordingly.
@@ -507,6 +510,15 @@ matrices, and both $ev and $e get extra dimensions accordingly.
 If called in scalar context it hands back only the eigenvalues.  Ultimately,
 it should switch to a faster algorithm in this case (as discarding the 
 eigenvectors is wasteful).
+
+The eigenvectors are returned in COLUMNS of the returned PDL.  That
+makes it slightly easier to access individual eigenvectors, since the
+0th dim of the output PDL runs across the eigenvectors and the 1st dim
+runs across their components.
+
+	($ev,$e) = eigens $a;  # Make eigenvector matrix
+	$vector = $ev->($n);   # Select nth eigenvector as a column-vector
+	$vector = $ev->(($n)); # Select nth eigenvector as a row-vector
 
 =for usage
 
@@ -673,7 +685,7 @@ sub lu_decomp {
   my($sing_ok) = shift;
 
   my $TINY = 1e-30;
-  
+
   barf('lu_decomp requires a square (2D) PDL\n')
     if(!UNIVERSAL::isa($in,'PDL') || 
        $in->ndims < 2 || 
@@ -1095,14 +1107,16 @@ Convert a symmetric square matrix to triangular vector storage.
 pp_addpm({At=>'Bot'},<<'EOD');
 
 sub eigen_c {
-	my($mat) = @_;
-	my $s = $mat->getdim(0);
-	my $z = zeroes($s * ($s+1) / 2);
-	my $ev = zeroes($s);
-	squaretotri($mat,$z);
-	my $k = 0 * $mat;
-	PDL::eigens($z, $k, $ev);
-	return ($ev, $k);
+	print STDERR "eigen_c is no longer part of PDL::MatrixOps or PDL::Math; use eigens instead.\n";
+
+##	my($mat) = @_;
+##	my $s = $mat->getdim(0);
+##	my $z = zeroes($s * ($s+1) / 2);
+##	my $ev = zeroes($s);
+##	squaretotri($mat,$z);
+##	my $k = 0 * $mat;
+##	PDL::eigens($z, $k, $ev);
+##	return ($ev, $k);
 }
 
 

@@ -78,8 +78,6 @@ Basic/MatrixOps/NOTES
 Basic/MatrixOps/blas.c
 Basic/MatrixOps/eigens.c
 Basic/MatrixOps/matrixops.pd
-Basic/MatrixOps/mconf.h
-Basic/MatrixOps/mtherr.c
 Basic/MatrixOps/protos.h
 Basic/MatrixOps/simq.c
 Basic/MatrixOps/svd.c
@@ -314,6 +312,8 @@ IO/FastRaw/FastRaw.pm
 IO/FastRaw/Makefile.PL
 IO/FlexRaw/FlexRaw.pm
 IO/FlexRaw/Makefile.PL
+IO/FITS/FITS.pm
+IO/FITS/Makefile.PL
 IO/Makefile.PL
 IO/Misc/Makefile.PL
 IO/Misc/misc.pd
@@ -564,7 +564,7 @@ Lib/Transform/Cartography/earth_coast.vec.fits
 Lib/Transform/Cartography/earth_day.jpg
 Lib/Transform/Cartography/earth_night.jpg
 Lib/Transform/Makefile.PL
-Lib/Transform/Transform.pm
+Lib/Transform/transform.pd
 MANIFEST
 MANIFEST.SKIP
 Makefile.PL
@@ -639,6 +639,7 @@ t/lut.t
 t/lvalue.t
 t/magic.t
 t/matmult.t
+t/matrix.t
 t/matrixops.t
 t/misc.t
 t/ndf.t

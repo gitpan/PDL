@@ -2,6 +2,12 @@
 
 use ExtUtils::MakeMaker;
 use Config;
+
+# use PDL::Core::Dev;  # needed for stand-alone version of package.
+                       # Need to comment out
+                       # for package included in PDL distro.
+PDL::Core::Dev->import();
+
 use vars qw /$plplotvers/; # version of plplot used
 
 # Pick up development utilities
@@ -10,13 +16,17 @@ PDL::Core::Dev->import();
 # 
 ## Search for plplot library and include file
 #
+print "\nChecking PDL::Graphics::PLplot...\n";
 
 unlink ("OPTIONS!"); # remove file uses to communicate with plplot.pd
 
 my $libname = "libplplotd.so";
 my $incname = "plplot.h";
 
-my $found_plplot = (defined($PDL_CONFIG{WITH_PLPLOT}) && $PDL_CONFIG{WITH_PLPLOT} == 0) ? 0 : 1;
+print "\tPDL_CONFIG{WITH_PLPLOT} is '".$PDL_CONFIG{WITH_PLPLOT}."'   ";
+my $found_plplot = (defined($PDL_CONFIG{WITH_PLPLOT}) && (!$PDL_CONFIG{WITH_PLPLOT})) ? 0 : 1;
+print "found_plplot is $found_plplot\n";
+
 unless ($found_plplot) {
   buildDummy ("User requested no PLplot interface!");
   return if (caller); exit;
@@ -96,7 +106,7 @@ foreach my $l (
 	       ) {
   if (trylink( '', '#include <plplot.h>', 'plinit();', "$l $plplot_include_path")) {
     $libs = $l;
-    print "Succeeded linking PLplot with $libs\n";
+    print "\tSucceeded linking PLplot with $libs\n";
     last;
   } 
 }
@@ -113,7 +123,7 @@ main () {  plsmem (0, 0, NULL); }
 EOC
 };
 if ($@) {
-  print "plsmem function not available, no in-memory plotting available!\n";
+  print "\tplsmem function not available, no in-memory plotting available!\n";
   open (OPT, ">>OPTIONS!");
   print OPT "NOMEM!\n";
   close OPT;
@@ -126,18 +136,18 @@ main () {  plpoly3 (0, NULL, NULL, NULL, NULL); }
 EOC
 };
 if ($@) {
-  print "plpoly3 needs 6 arguments => version 5.2.0 or later!\n";
+  print "\tplpoly3 needs 6 arguments => version 5.2.0 or later!\n";
   open (OPT, ">>OPTIONS!");
   print OPT "PLPOLY3 = 6\n";
   close OPT;
 } else {
-  print "plpoly3 needs 5 arguments => version 5.1.1 or earlier!\n";
+  print "\tplpoly3 needs 5 arguments => version 5.1.1 or earlier!\n";
   open (OPT, ">>OPTIONS!");
   print OPT "PLPOLY3 = 5\n";
   close OPT;
 }  
 
-$VERSION = '0.19';
+$VERSION = '0.21';
 
 $PDL_CONFIG{WITH_PLPLOT} = 1;
 $package = ["plplot.pd",PLplot,PDL::Graphics::PLplot];
