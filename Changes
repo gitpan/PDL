@@ -1,5 +1,18 @@
 (!!! = possible source of incompatibilities)
 
+1.9906 (2.0 try 4)
+Robin:
+ - patch Tjl's botched edit to his game of life
+ - perldl.PL: do paging with page() and nopage().
+Achim:
+ - doc_install, pure_perl_install.. hopefully these now work
+Joshua Pritikin:
+ - rename 'thr', 'op' and fix fftn.c error message for non-sick compilers
+ - fix NAN on suns
+Tjl:
+ - add #ifdef dTHR to be compatible with 5.004_*
+
+
 1.9905 (2.0 try 3)
 Someone (lost the mail):
  - realclean Basic/Core/Config.pm

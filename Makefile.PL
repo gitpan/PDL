@@ -97,30 +97,19 @@ print OUT ");\n1;";
 sub MY::postamble {
 ' 
 doctest :: 
-	@echo "doctest"
-	@echo "Building PDL documentation database"
+	@echo "doctest: Building PDL documentation database in blib ..."
 	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
 		Doc/scantree.pl 
 	@$(PERL)  -I$(INST_ARCHLIB) -I$(INST_LIB) \
 		Doc/mkhtmldoc.pl 
-	@$(PERL) -I$(INST_ARCHLIB) -I$(INST_LIB) \
-		Doc/scantree.pl 
 
 doc_install ::
-	@echo "doc_install"
-	@echo "Building PDL documentation database"
-	-@$(CHMOD) 755  $(INSTALLARCHLIB)/PDL/pdldoc.db 
-	@$(PERL) Doc/scantree.pl $(INSTALLARCHLIB) \
-		$(INSTALLARCHLIB)/PDL/pdldoc.db 
-	@$(PERL) Doc/scantree.pl $(INSTALLSITELIB) \
-		$(INSTALLARCHLIB)/PDL/pdldoc.db 
-	@$(PERL) Doc/mkhtmldoc.pl $(INSTALLARCHLIB) $(INSTALLARCHLIB)/PDL/HtmlDocs
-	@$(PERL) Doc/mkhtmldoc.pl $(INSTALLSITELIB) $(INSTALLARCHLIB)/PDL/HtmlDocs
+	@echo "doc_install: Building PDL documentation database ..."
+	@$(PERL) Doc/scantree.pl
+	@$(PERL) Doc/mkhtmldoc.pl
 
 pure_perl_install ::
-	@echo "pure_perl_install"
-	@echo "Installing PDL documentation database"
-	-@$(CHMOD) 755  $(INSTALLPRIVLIB)/PDL/pdldoc.db 
+	@echo "pure_perl_install: Building PDL documentation database ..."
 	@$(PERL) Doc/scantree.pl
 	@$(PERL) Doc/mkhtmldoc.pl
 

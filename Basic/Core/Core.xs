@@ -728,7 +728,7 @@ threadover_n(...)
 	    int i,sd;
 	    pdl **pdls = malloc(sizeof(pdl *) * npdls);
 	    int *realdims = malloc(sizeof(int) * npdls);
-	    pdl_thread thr;
+	    pdl_thread pdl_thr;
 	    SV *code = ST(items-1);
 	    for(i=0; i<npdls; i++) {
 		pdls[i] = SvPDLV(ST(i));
@@ -736,9 +736,9 @@ threadover_n(...)
 		pdl_make_physical(pdls[i]);
 		realdims[i] = 0;
 	    }
-	    pdl_initthreadstruct(0,pdls,realdims,realdims,npdls,NULL,&thr,NULL);
-	    pdl_startthreadloop(&thr,NULL,NULL);
-	    sd = thr.ndims;
+	    pdl_initthreadstruct(0,pdls,realdims,realdims,npdls,NULL,&pdl_thr,NULL);
+	    pdl_startthreadloop(&pdl_thr,NULL,NULL);
+	    sd = pdl_thr.ndims;
 	    do {
 	    	dSP;
 		PUSHMARK(sp);
@@ -746,12 +746,12 @@ threadover_n(...)
 		PUSHs(sv_2mortal(newSViv((sd-1))));
 		for(i=0; i<npdls; i++) {
 			PUSHs(sv_2mortal(newSVnv(
-				pdl_get_offs(pdls[i],thr.offs[i]))));
+				pdl_get_offs(pdls[i],pdl_thr.offs[i]))));
 		}
 	    	PUTBACK;
 		perl_call_sv(code,G_DISCARD);
-	    } while(sd = pdl_iterthreadloop(&thr,0));
-	    pdl_freethreadloop(&thr);
+	    } while(sd = pdl_iterthreadloop(&pdl_thr,0));
+	    pdl_freethreadloop(&pdl_thr);
 	    free(pdls);
 	    free(realdims);
     }
@@ -772,7 +772,7 @@ threadover(...)
 	    SV* rdimslist = ST(items-3);
 	    SV* cdimslist = ST(items-2);
 	    SV *code = ST(items-1);
-	    pdl_thread thr;
+	    pdl_thread pdl_thr;
 	    pdl **pdls = malloc(sizeof(pdl *) * npdls);
 	    pdl **child = malloc(sizeof(pdl *) * npdls);
 	    SV **csv = malloc(sizeof(SV *) * npdls);
@@ -812,19 +812,19 @@ threadover(...)
 	        }
 #endif
 	    pdl_initthreadstruct(0,pdls,realdims,creating,npdls,
-				NULL,&thr,NULL);
+				NULL,&pdl_thr,NULL);
 	    for(i=0, nc=npdls; i<npdls; i++)  /* create as necessary */
               if (creating[i]) {
 		int *cp = creating+nc;
 		pdls[i]->datatype = dtype;
-		pdl_thread_create_parameter(&thr,i,cp,0);
+		pdl_thread_create_parameter(&pdl_thr,i,cp,0);
 		nc += realdims[i];
 		pdl_make_physical(pdls[i]);
 		PDLDEBUG_f(pdl_dump(pdls[i]));
 		/* And make it nonnull, now that we've created it */
 		pdls[i]->state &= (~PDL_NOMYDIMS);
 	      }
-	    pdl_startthreadloop(&thr,NULL,NULL);
+	    pdl_startthreadloop(&pdl_thr,NULL,NULL);
 	    for(i=0; i<npdls; i++) { /* will the SV*'s be properly freed? */
 		dims[i] = newRV(pdl_unpackint(pdls[i]->dims,realdims[i]));
 		incs[i] = newRV(pdl_unpackint(PDL_VAFFOK(pdls[i]) ?
@@ -834,7 +834,7 @@ threadover(...)
 		   pdls[i] = pdls[i]->vafftrans->from;
 		child[i]=pdl_null();
 		/*  instead of pdls[i] its vaffine parent !!!XXX */
-		PDL.affine_new(pdls[i],child[i],thr.offs[i],dims[i],
+		PDL.affine_new(pdls[i],child[i],pdl_thr.offs[i],dims[i],
 						incs[i]);
 		pdl_make_physical(child[i]); /* make sure we can get at
 						the vafftrans          */
@@ -850,8 +850,8 @@ threadover(...)
 		   /* just twiddle the offset - quick and dirty */
 		   /* we must twiddle both !! */
 		   traff = (pdl_trans_affine *) child[i]->trans;
-		   traff->offs = thr.offs[i];
-		   child[i]->vafftrans->offs = thr.offs[i];
+		   traff->offs = pdl_thr.offs[i];
+		   child[i]->vafftrans->offs = pdl_thr.offs[i];
 		   child[i]->state |= PDL_PARENTDATACHANGED;
 		   PUSHs(csv[i]);
 		}
@@ -859,8 +859,8 @@ threadover(...)
 		  PUSHs(others[i]);   /* pass the OtherArgs onto the stack */
 	    	PUTBACK;
 		perl_call_sv(code,G_DISCARD);
-	    } while (pdl_iterthreadloop(&thr,0));
-	    pdl_freethreadloop(&thr);
+	    } while (pdl_iterthreadloop(&pdl_thr,0));
+	    pdl_freethreadloop(&pdl_thr);
 	    free(pdls);  /* should all these be done with pdl_malloc */
 	    free(dims);  /* in case the sub barfs ? XXXX            */
 	    free(child);

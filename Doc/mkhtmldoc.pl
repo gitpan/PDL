@@ -35,7 +35,7 @@ sub mkdir_p ($$$) {
 
    $back = getcwd; 
 
-   $startdir = $ARGV[0];
+   $startdir = shift @ARGV; #$ARGV[0];
 
    unless (defined $startdir) {
 	require PDL;
@@ -47,7 +47,7 @@ sub mkdir_p ($$$) {
    $startdir = getcwd; # Hack to get absolute pathname
    chdir $back;
 
-   $htmldir = $ARGV[1];
+   $htmldir = shift @ARGV; #$ARGV[1];
    unless (defined $htmldir) {
 	$htmldir = "$startdir/HtmlDocs";
    }

@@ -113,14 +113,14 @@ $s=40;$a=zeroes 2*$s,$s/2;$t=$a->xlinvals(0,6.284);$u=$a->ylinvals(0,
 imag3d([$v*sin$t,$v*cos$t,$i*cos($u)+$o*sin(3*$t)]);
 |;
 
-actnw q|
+actnw q%
 # Game of life [Robin Williams (edited by Tjl)]
-use PDL; use PDL::Image2D; use PDL::Graphics::TriD;nokeeptwiddling3d;
-$d=(random(zeroes(40,40))>0.85);$k=pdl[[1,1,1],[1,0,1],[1,1,1]];
-($t=$d->slice("18:21,20:22")).=1; do{ imagrgb [$d]; $s=conv2d($d,$k);
-$d&=($s<3.5);$d&=($s>1.5);$d|=(abs($s-3)<1e-3);} while (!twiddle3d);
 
-|;
+use PDL; use PDL::Image2D; use PDL::Graphics::TriD;nokeeptwiddling3d;
+$d=byte(random(zeroes(40,40))>0.85);$k=byte [[1,1,1],[1,0,1],[1,1,1]];
+$s=null; do{ imagrgb [$d]; $s=conv2d($d,$k);
+$d&=($s<4);$d&=($s>1);$d|=($s==3);} while (!twiddle3d);
+%;
 
 comment q|
 	We hope you did like that and got a feeling of

@@ -94,26 +94,33 @@ double THPIO4 =  2.35619449019234492885;       /* 3*pi/4 */
 double TWOOPI =  6.36619772367581343075535E-1; /* 2/pi */
 
 #ifndef __sun
-#ifdef INFINITIES
+#  ifdef INFINITIES
 double INFINITY = 99e999;
-#else
+#  else
 double INFINITY =  1.79769313486231570815E308;    /* 2**1024*(1-MACHEP) */
-#endif
-#ifndef NAN
-#ifdef NANS
-#ifdef sgi
+#  endif
+#  ifndef NAN
+#    ifdef NANS
+#      ifdef sgi
 double get_nan(void) {
   double NAN = 0.0/0.0;
   return NAN;
 }
 #define NAN get_nan()
-#else
+#      else
 double NAN = 0.0/0.0;
-#endif
-#else
+#      endif
+#    else
 double NAN = 0.0;
-#endif /* def NANS */
-#endif /* ndef NAN */
+#    endif /* def NANS */
+#  endif /* ndef NAN */
+#else
+#  ifndef NAN
+double NAN = 0.0;
+#  endif
+#  ifndef INFINITY
+double INFINITY = 99e999;
+#  endif
 #endif /* ndef __sun */
 
 #ifdef MINUSZERO

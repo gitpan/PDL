@@ -3,6 +3,10 @@
 #include "pdl.h"      /* Data structure declarations */
 #include "pdlcore.h"  /* Core declarations */
 
+/* If running on 5.004_04 or earlier */
+#ifndef dTHR
+#define dTHR
+#endif
 
 static SV *getref_pdl(pdl *it) {
 	SV *newref;
@@ -447,7 +451,7 @@ pdl_barf(pat, va_alist)
     HV *stash;
     GV *gv;
     CV *cv;
-
+    dTHR;
 #ifdef I_STDARG
     va_start(args, pat);
 #else

@@ -38,7 +38,8 @@ print OUT <<'!NO!SUBS!';
 
 # Simple shell for PDL 
 
-use vars qw($VERSION $PERLDL_ESCAPE $PERLDL_PROMPT $HOME $Modules);    
+use vars qw($VERSION $PERLDL_ESCAPE $PERLDL_PROMPT $PERLDL_PAGE 
+	$PERLDL_PAGING $HOME $Modules);    
 
 $VERSION = 1.29; print "perlDL shell v$VERSION
  PDL comes with ABSOLUTELY NO WARRANTY. For details, see the file
@@ -50,6 +51,8 @@ $VERSION = 1.29; print "perlDL shell v$VERSION
 
 $PERLDL_ESCAPE = '#'; # Default shell escape
 $PERLDL_PROMPT = "perldl> ";
+$PERLDL_PAGE = 0;
+$PERLDL_PAGING = 0;
 $HOME = $ENV{HOME}; # Useful in shell
 $,=" "; # Default
 
@@ -139,6 +142,27 @@ sub l {
   } 
 }
 
+sub page {
+  $PERLDL_PAGE = (defined $_[0] ? $_[0] : 1);
+}
+sub nopage {
+  page(0);
+}
+sub startpage {
+  if ($PERLDL_PAGE) {
+    open(SAVEOUT, '>&STDOUT');
+    open(STDOUT, "| more");
+    $PERLDL_PAGING = 1;
+  }
+}
+sub endpage {
+  if ($PERLDL_PAGING) {
+    close(STDOUT);
+    open(STDOUT, '>&SAVEOUT');
+    $PERLDL_PAGING = 0;
+  }
+}
+
 # Global and local startup
 
 my $startup_file = -e "$HOME/.perldlrc" ? "$HOME/.perldlrc" : "PDL/default.perldlrc";
@@ -203,6 +227,7 @@ restart:
         system(substr($_,1)); # Shell escape
         next;
      }else{
+	startpage;
         if ($PDL_OK) {
             $code = eval <<"EOD";  # Create code ref
 sub {
@@ -214,6 +239,7 @@ EOD
         }else{
             eval $_;
         }
+	endpage;
      }
      if ($@) {
          $mess = $@; 

@@ -101,10 +101,10 @@ for $optype ([biop1,\@biops1,$arg3str,undef],
 pp_def("my_$optype->[0]",
 	($optype->[3] ? (GenericTypes => $optype->[3]) : ()),
 	Pars => $optype->[2],
-	OtherPars => "char* op",
+	OtherPars => "char* pdl_op",
 Code => "if(0) {".
 	  (join '',map {qq^	
-     } else if(!strcmp(\$COMP(op),"$_->[0]")) { 
+     } else if(!strcmp(\$COMP(pdl_op),"$_->[0]")) { 
 		  types(FD) %{ 
 		      threadloop %{
 			  ^.remove_float_casts($_).qq^;
@@ -119,7 +119,7 @@ Code => "if(0) {".
 # Close the type loop.
 # End the enclosing "if".
 		} @{$optype->[1]}).
-	q|}; /* printf("OMYBIOP, '%s'\n",op); */ |,
+	q|}; /* printf("OMYBIOP, '%s'\n",pdl_op); */ |,
 	Doc  => 'internal',
 );
 }
