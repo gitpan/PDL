@@ -1,0 +1,522 @@
+pp_addpm({At=>Top},<<'EOD');
+
+=head1 NAME
+
+PDL::Graphics::Karma - interface to Karma visualisation applications
+
+=head1 DESCRIPTION
+
+Can send PDL 2D/3D data to kview, xray, kslice_3d, etc...
+
+You can say
+
+  perldl> kim $a, {APP=>'xray'}
+
+to send to a specific viewer and/or 
+
+  perldl> kim $a, {BB=>[0,50,-100,100]}
+
+to specify the bounding box in world coordinates (here for a 2D image)
+or just
+
+  perldl> kim $a
+
+to reuse the last viewer.
+
+You can start the viewers from PDL.
+
+For further info about Karma see http://www.atnf.csiro.au/karma.
+The binary distribution can be downloaded from
+http://www.atnf.csiro.au/karma/ftp.html.
+
+
+=head1 SYNOPSIS
+
+ use PDL::Karma;
+ kview;
+ kim $data;
+
+=head1 FUNCTIONS
+
+=cut
+
+EOD
+
+pp_addhdr(<<'ENDOFHDR');
+#include <karma_iarray.h>
+#include <karma_dsxfr.h>
+#include <karma_conn.h>
+#include <karma_dm.h>
+#include <karma_ds.h>
+#include <karma_r.h>
+#include <karma_m.h>
+#include <karma_st.h>
+
+#define K_PDL_Byte	K_UBYTE
+#define K_PDL_Short	K_SHORT
+#define K_PDL_Ushort	K_USHORT
+#define K_PDL_Long	K_INT
+#define K_PDL_Float	K_FLOAT
+#define K_PDL_Double	K_DOUBLE
+
+/* Missing Karma macros */
+
+#define S3(a, z, y, x) ( *(signed short *) ( (a)->data + (a)->offsets[0][(z)] + (a)->offsets[1][(y)] + (a)->offsets[2][(x)] ) )
+#define US3(a, z, y, x) ( *(unsigned short *) ( (a)->data + (a)->offsets[0][(z)] + (a)->offsets[1][(y)] + (a)->offsets[2][(x)] ) )
+
+double* packdouble ( SV* sv, int *ndims ) {
+
+   SV*  bar;
+   AV*  array;
+   int i;
+   double *darr;
+
+   if (!(SvROK(sv) && SvTYPE(SvRV(sv))==SVt_PVAV))  /* Test */
+       return NULL;
+
+   array = (AV *) SvRV(sv);   /* dereference */
+  
+   *ndims = (int) av_len(array) + 1;  /* Number of dimensions */
+
+   darr = (double *) PDL->malloc( (*ndims) * sizeof(double) );
+   if (darr == NULL)
+      barf("Out of memory");
+
+   for(i=0; i<(*ndims); i++) {
+      bar = *(av_fetch( array, i, 0 )); /* Fetch */
+      darr[i] = (double) SvNV(bar); 
+   }
+   return darr;
+} 
+
+
+int ensure_connection(char *karma_app)
+{
+  static int first = 1;
+
+  if (first) {
+    first = 0;
+    /*  Initialise communications package  */
+    dm_native_setup ();
+    conn_initialise ( ( void (*) () ) NULL );
+    /*  Register multi_array client protocol support  */
+    dsxfr_register_connection_limits (-1, 1);
+  }
+  /*  Attempt connection to module  */
+    
+  if ( !conn_attempt_connection ("localhost",
+                                   r_get_def_port (karma_app, NULL),
+                                   "multi_array") )
+      return 0;
+  return 1;
+}
+
+static void add_cmap (multi_array **multi_desc, packet_desc* pack_desc,
+	char *packet)
+/*  This routine will add a colourmap to a multi_aray data structure.
+    The multi_array header pointer must be pointed to by  multi_desc  .This
+    pointer will be updated with a new pointer.
+    The pointer to the top level packet descriptor of the general data
+    structure which contains the colourmap must be pointed to by  pack_desc  .
+    The pointer to the top level packet of the general data structure which
+    contains the colourmap must be pointed to by  packet  .
+    The routine returns nothing.
+*/
+{
+    multi_array *new_multi_desc;
+    static char function_name[] = "add_cmap";
+
+    if ( ( new_multi_desc = ds_alloc_multi (2) ) == NULL )
+    {
+	m_abort (function_name, "multi_array");
+    }
+    if ( ( (*new_multi_desc).array_names[0] = st_dup ("Frame") ) == NULL )
+    {
+	m_abort (function_name, "frame name");
+    }
+    if ( ( (*new_multi_desc).array_names[1] = st_dup ("RGBcolourmap") )
+	== NULL )
+    {
+	m_abort (function_name, "colourmap name");
+    }
+    (*new_multi_desc).headers[0] = (**multi_desc).headers[0];
+    (*new_multi_desc).data[0] = (**multi_desc).data[0];
+    (*new_multi_desc).headers[1] = pack_desc;
+    (*new_multi_desc).data[1] = packet;
+    (**multi_desc).headers[0] = NULL;
+    (**multi_desc).data[0] = NULL;
+    ds_dealloc_multi (*multi_desc);
+    *multi_desc = new_multi_desc;
+}   /*  End Function add_cmap  */
+
+ENDOFHDR
+
+pp_addpm(<<'ENDOFPM');
+use vars qw($LASTAPP);
+$LASTAPP = 'kview'; # Default application
+ENDOFPM
+
+pp_add_exported('','kim kimagergb kstarted');
+
+pp_addpm(<<'ENDOFPM');
+
+# kim - send image data to karma app
+
+=head2 kim
+
+=for ref
+
+Sends piddle data array to an external Karma application for viewing
+
+=for usage
+
+ kim($pdl, [$karma-app, $lut])
+
+Sends $pdl data to Karma application viewer. Remembers the
+last one used [default: kview].
+
+=cut
+
+
+sub kim {
+  barf('Usage: kim $pdl [,{APP => $karma-app, LUT => $lut, BB => $bb}]')
+     if $#_==-1;
+  my $pdl = shift;
+  my $hash = shift;
+  my ($app,$inds);
+  $app = $LASTAPP unless ($app = delete($hash->{APP}));
+  my ($lut,$haslut) = (PDL->zeroes(PDL::byte,1,1),0);
+  if (defined($hash->{LUT})) {
+	$lut = $hash->{LUT};
+	$haslut = 1;
+  }
+  
+  if ($pdl->getndims == 3) {
+  $inds = [0,$pdl->getdim(0)-1,0,$pdl->getdim(1)-1,0,
+	$pdl->getdim(2)-1] unless $inds=delete($hash->{BB});
+      ksend3D ($pdl, $lut,$haslut,$app,$inds);
+   }
+  else {
+      $inds = [0,$pdl->getdim(0)-1,0,$pdl->getdim(1)-1]
+         unless $inds=delete($hash->{BB});
+      ksend2D ($pdl, $lut, $haslut,$app,$inds);
+  }
+  $LASTAPP = $app;
+}
+
+=head2 kstarted
+
+=for usage 
+
+kstarted([$karma-app])
+
+=for ref
+
+Tests if a Karma application is running.
+
+It tries to connect to the karma application, returns 1 on 
+success, 0 otherwise
+
+Can be used to check if a karma application has already been
+started, e.g.
+
+  xray unless kstarted 'xray';
+
+=cut
+
+sub kstarted {
+  barf('Usage: kstarted [$karma-app]')
+     if $#_>0;
+  my $app = $#_ > -1 ? shift : $LASTAPP;
+  $LASTAPP = $app;
+  return PDL::kconnect($app);
+}
+
+
+=head2 kimagergb
+
+=for usage
+
+kimagergb($lut, [$karma-app])
+
+=for ref
+
+Sends RGB image to an external Karma application for viewing
+
+
+Does not change current default viewer.
+
+=cut
+
+sub kimagergb { 
+barf('Usage: kimagergb($lut, [$karma-app])') if $#_==-1;
+$#_==0? kimagergb_private(@_,$LASTAPP) : kimagergb_private(@_) 
+};
+    
+ENDOFPM
+
+# Add all the karma app startup commands
+
+for $app (qw(kview koords  kpvslice  krenzo  kshell xray kslice_3d)) {
+
+   pp_add_exported('',$app);
+
+   pp_addpm(<<"ENDOFPM");
+
+=head2 $app()
+
+=for ref
+
+Starts external Karma application $app
+
+=for usage
+
+$app([OPTIONS])
+
+=for example
+
+ perldl> kview (-num_col => 42)
+ perldl> xray
+
+=cut
+
+sub $app {  # Start $app
+   if( !(\$pid = fork)) {	# error or child
+      exec("$app", \@_) if defined \$pid;
+      die "Can't start kview: \$!\n";
+   }
+   \$LASTAPP = "$app";
+   return \$pid;
+}
+
+ENDOFPM
+
+} # End app loop
+
+pp_addxs('
+int
+kconnect(app)
+  char * app
+
+  CODE:
+	RETVAL = ensure_connection(app);
+	if (RETVAL)
+           conn_close(conn_get_client_connection("multi_array",0));
+  OUTPUT:
+        RETVAL
+
+');
+
+# currently lut is assumed to be 8bits
+pp_def('ksend2D',
+	Pars => 'im(m,n); byte lut(o,p)', Doc=>undef,
+	OtherPars => 'int haslut; char* karma_app; SV *bb',
+	Code => 'multi_array *multi_desc;
+		 $GENERIC() *ptr;
+		 int ms, ns, os, ps;
+		 char *tpack;
+    		 packet_desc *tpack_desc;
+    		 unsigned short *cmap;
+		 double fc[2], lc[2];
+		 uaddr lengths[2];
+		 unsigned int dtype;
+		 static char *elem_names[1] = { "intensity" };
+		 int bblen;
+		 double *dbb = packdouble($COMP(bb),&bblen);
+
+		 if (bblen != 4)
+		    barf("need 4 coodinates for 2D boundary box");
+		 fc[0] = dbb[2]; lc[0] = dbb[3];
+		 fc[1] = dbb[0]; lc[1] = dbb[1];
+		 lengths[0] = $SIZE(n);
+		 lengths[1] = $SIZE(m);
+		 ms = $SIZE(m); ns = $SIZE(n); os = $SIZE(o); ps = $SIZE(p);
+		 printf("Sending to %s...\n",$COMP(karma_app));
+		 if (!ensure_connection($COMP(karma_app)))
+                      barf("Error connecting to %s via karma communications",
+				$COMP(karma_app));
+		 
+		 dtype = $TBSULFD(K_PDL_Byte,K_PDL_Short,K_PDL_Ushort,
+				K_PDL_Long,K_PDL_Float,K_PDL_Double);
+    		 if ( ( ptr = ($GENERIC()*) ds_easy_alloc_n_element_array
+	   		(&multi_desc, 2, lengths,
+	    		(CONST double *) fc, (CONST double *) lc,
+	    		(CONST char **) NULL, 1, &dtype,
+	    		(CONST char **) elem_names) ) == NULL )
+    		 {
+			barf("couldn\'t allocate mem for multi array");
+		 }
+		 if ($COMP(haslut)) {
+		        if (os != 3)
+		           barf("first dim must be 3 for rgb");
+    			if ( ( cmap = ds_cmap_alloc_colourmap (ps, 
+			     (multi_array **) NULL,
+					   &tpack_desc, &tpack) ) == NULL )
+			   barf("couldn\'t allocate mem for cmap");
+		        add_cmap(&multi_desc, tpack_desc, tpack);
+		 }
+		 threadloop %{
+			unsigned short *cm = cmap;
+			loop(n) %{
+			  loop(m) %{
+				*ptr++ = $im();
+			  %}
+			%}
+			if ($COMP(haslut)) {
+			  loop(p) %{
+			    loop(o) %{
+				*cm++ = $lut() * 256;
+			    %}
+			  %}
+			}
+			/*  Send  a  to module  */
+			dsxfr_put_multi("connections",multi_desc);
+		 %}
+
+                 conn_close(conn_get_client_connection("multi_array",0));
+		 ds_dealloc_multi(multi_desc);'
+);
+
+# Note reason for seperate 3D function is kview gives error:
+# right_x: 0.000000e+00 must not equal left_x: 0.000000e+00
+# if given a MxNx1 image
+
+# currently lut is assumed to be 8bits
+pp_def('ksend3D',
+	Pars => 'im(m,n,z); byte lut(o,p)', Doc=>undef,
+	OtherPars => 'int haslut; char* karma_app; SV* bb',
+	Code => 'multi_array *multi_desc;
+		 $GENERIC() *ptr;
+		 int ms, ns, os, ps, zs;
+		 char *tpack;
+    		 packet_desc *tpack_desc;
+    		 unsigned short *cmap;
+		 double fc[3], lc[3];
+		 uaddr lengths[3];
+		 unsigned int dtype;
+		 static char *elem_names[1] = { "intensity" };
+		 int bblen;
+		 double *dbb = packdouble($COMP(bb),&bblen);
+
+		 if (bblen != 6)
+		    barf("need 6 coodinates for 3D boundary box");
+		 fc[0] = dbb[4]; lc[0] = dbb[5];
+		 fc[1] = dbb[2]; lc[1] = dbb[3];
+		 fc[2] = dbb[0]; lc[2] = dbb[1];
+		 lengths[0] = $SIZE(z);
+		 lengths[1] = $SIZE(n);
+		 lengths[2] = $SIZE(m);
+		 zs = $SIZE(z); ms = $SIZE(m); ns = $SIZE(n);
+		 os = $SIZE(o); ps = $SIZE(p);
+		 printf("Sending to %s...\n",$COMP(karma_app));
+		 if (!ensure_connection($COMP(karma_app)))
+                      barf("Error connecting to %s via karma communications",
+				$COMP(karma_app));
+		 
+		 dtype = $TBSULFD(K_PDL_Byte,K_PDL_Short,K_PDL_Ushort,
+				K_PDL_Long,K_PDL_Float,K_PDL_Double);
+    		 if ( ( ptr = ($GENERIC()*) ds_easy_alloc_n_element_array
+	   		(&multi_desc, 3, lengths,
+	    		(CONST double *) fc, (CONST double *) lc,
+	    		(CONST char **) NULL, 1, &dtype,
+	    		(CONST char **) elem_names) ) == NULL )
+    		 {
+			barf("couldn\'t allocate mem for multi array");
+		 }
+		 if ($COMP(haslut)) {
+		        if (os != 3)
+		           barf("first dim must be 3 for rgb");
+    			if ( ( cmap = ds_cmap_alloc_colourmap (ps, 
+			     (multi_array **) NULL,
+					   &tpack_desc, &tpack) ) == NULL )
+			   barf("couldn\'t allocate mem for cmap");
+		        add_cmap(&multi_desc, tpack_desc, tpack);
+		 }
+		 threadloop %{
+			unsigned short *cm = cmap;
+			loop(z) %{
+			 loop(n) %{
+			  loop(m) %{
+				*ptr++ = $im();
+			  %}
+			 %}
+			%}
+			if ($COMP(haslut)) {
+			  loop(p) %{
+			    loop(o) %{
+				*cm++ = $lut() * 256;
+			    %}
+			  %}
+			}
+			/*  Send  a  to module  */
+			dsxfr_put_multi("connections",multi_desc);
+		 %}
+
+                 conn_close(conn_get_client_connection("multi_array",0));
+		 ds_dealloc_multi(multi_desc);'
+
+);
+
+
+pp_def( 'kimagergb_private',
+	Pars => 'im(m,n,o)', Doc=>undef,
+	OtherPars => 'char* karma_app;',
+	Code => q@int ms=$SIZE(m);
+		 multi_array *multi_desc;
+    		 char *array;
+		 uaddr lengths[2];
+                 static unsigned int elem_types[3] =
+                     {K_UBYTE, K_UBYTE, K_UBYTE};
+                 static char *elem_names[3] =
+                   {"Red Intensity", "Green Intensity", "Blue Intensity"};
+
+		 if (ms != 3)
+		     barf("first dim must be 3 for rgb");
+		 lengths[0] = $SIZE(o);
+		 lengths[1] = $SIZE(n);
+
+		 /* check if we can use the 'preallocated' equivalent */
+    		 if ( ( array = ds_easy_alloc_n_element_array
+	   		(&multi_desc, 2, lengths,
+	    		(CONST double *) NULL, (CONST double *) NULL,
+	    		(CONST char **) NULL, 3, elem_types,
+	    		(CONST char **) elem_names) ) == NULL )
+    		 {
+			barf("couldn\'t allocate mem for multi array");
+		 }
+
+		 if (!ensure_connection($COMP(karma_app)))
+                      barf("Error connecting to %s via karma communications",
+				$COMP(karma_app));
+
+		threadloop %{
+		  loop(o) %{
+		    loop(n) %{
+		      loop(m) %{
+			*array++ = $im();
+		      %}
+		    %}
+		  %}
+		  dsxfr_put_multi("connections",multi_desc);
+		%}
+
+		ds_dealloc_multi(multi_desc);
+                conn_close(conn_get_client_connection("multi_array",0));@
+);
+
+pp_addpm({At=>Bot},<<'EOD');
+
+
+=head1 AUTHORS
+
+Copyright (C) Christian Soeller, Karl Glazebrook 1997. Reproducing 
+documentation from the pdl distribution in any way that does not include a
+statement telling who the original authors are is forbidden.  Reproducing
+and/or distributing the documentation  in any  form that  alters the text is
+forbidden.
+
+=cut
+
+EOD
+
+pp_done();

@@ -15,6 +15,7 @@ chdir(dirname($0));
 $file =~ s/\.pl$//
         if ($^O eq 'VMS' or $^O eq 'os2');  # "case-forgiving"
 
+unlink $file if -f $file;
 open OUT,">$file" or die "Can't create $file: $!";
 
 print "Extracting $file (with variable substitutions)\n";
@@ -35,125 +36,143 @@ print OUT <<'!NO!SUBS!';
 ##########################################################################
 # Here starts the actual script
 
-=head1 NAME
+# Simple shell for PDL 
 
-=head2 perldl - Simple shell for PDL
+use vars qw($VERSION $PERLDL_ESCAPE $PERLDL_PROMPT $HOME $Modules);    
 
-=head1 DESCRIPTION
+$VERSION = 1.29; print "perlDL shell v$VERSION
+ PDL comes with ABSOLUTELY NO WARRANTY. For details, see the file
+ 'COPYING' in the PDL distribution. This is free software and you
+ are welcome to redistribute it under certain conditions, see
+ the same file for details.\n";
 
-The program 'perldl' is a simple shell (written in perl) for
-interactive use of PDL.  perl/PDL commands can simply be typed in - and
-edited if you have appropriate version of the ReadLines and ReadKeys
-modules installed.
-
-e.g.:
-
-   % perldl
-   ReadLines enabled
-   perldl> $a = rfits "foo.fits"
-   BITPIX =  -32  size = 88504 pixels 
-   Reading  354016 bytes
-   BSCALE =  &&  BZERO = 
-   
-   perldl> imag log($a+400)
-   Displaying 299 x 296 image from 4.6939525604248 to 9.67116928100586 ...
-
-
-Miscellaneous shell features:
-
-=over 4
-
-=item 1. 
-
-The command C<perldl -oo> starts perldl in Object-Oriented mode. It does 
-a 'C<use PDL::OO>' instead of 'C<use PDL>'. Whether this is a good idea
-remains to be determined. :-)
-
-=item 2. 
-
-The shell aliases C<p> to be a convenient short form of C<print>, e.g.
-
-   perldl> p ones 5,3
-    
-   [
-    [1 1 1 1 1]
-    [1 1 1 1 1]
-    [1 1 1 1 1]
-   ]
-
-=item 3. 
-
-The files C<~/.perldlrc> and C<local.perldlrc> (in the current
-directory) are sourced if found. This allows the user to have global
-and local PDL code for startup.
-
-=item 4. 
-
-Any line starting with the C<#> character is treated as a shell
-escape. This character is configurable by setting the perl variable
-$PERLDL_ESCAPE. This could, for example, be set in C<~/.perldlrc>.
-
-
-=back
-
-
-=cut
-
-unshift @INC, "./blib"; 
-print <<'EOD';
-perlDL shell v1.11
-EOD
+# Useful shell variables
 
 $PERLDL_ESCAPE = '#'; # Default shell escape
+$PERLDL_PROMPT = "perldl> ";
+$HOME = $ENV{HOME}; # Useful in shell
+$,=" "; # Default
 
-$Modules = "";
+$Modules = $Modules = "";	# pacify -w
 
-if ($ARGV[0] eq "-oo") {
-   shift @ARGV; $OO++;
-   print "Starting Object-Oriented perlDL\n";
-}
+# Parse ARGV
 
-if ($OO) {
-   eval "use PDL::OO"; 
-}else{
-   eval "use PDL";
-}
-  
-if ($@ eq "") {
-   $PDL_OK = 1;
-   print "Loaded PDL v$PDL::VERSION   ";
-}else{
-   $PDL_OK = 0;
-   warn "WARNING: PDL module not found only plain perl available\n";
+while(defined($_ = shift @ARGV)) {
+	if($_ eq "-tk") {
+		print "Using Tk";
+		eval "use Tk;";
+                if ($@ eq "") {
+                   print " v$Tk::VERSION\n"
+                      if defined $Tk::VERSION; # make -w happy
+                } else {
+                   print ", sorry can't load module Tk\n";
+                }
+		next;
+	} elsif(/^-f(.*)/) {
+		my $file = $1;
+		if(0 == length $1) {
+			$file = shift @ARGV;
+		}
+		print "Doing '$file'\n";
+		do $file;
+		if($@) {
+			die "Initialization error: $@";
+		}
+		next;
+	}
+	die("Unknown argument $_");
 }
 
 eval "use Term::ReadLine"; 
-
-$readlines = ($@ eq "");
+my $readlines = ($@ eq "");
 
 print "ReadLines enabled" if $readlines;
 
 print "\n";
 
-$prompt = "perldl> ";
+my($term);
+if ( $readlines ){
+    $term = new Term::ReadLine 'perlDL', \*STDIN, \*STDOUT ;
+    if(defined &Tk::DoOneEvent) {
+    	# Attempt to use with Tk
+        if(${$term->Features}{tkRunning}) {
+		print "Using Tk event loop\n";
+		$term->tkRunning(1);
+	} else {
+		warn("Sorry, cannot use Tk with this version of ReadLine\n");
+	}
+    }
+    if ( ( -e "$HOME/.perldl_hist" ) 
+	&& ( open HIST, "<$HOME/.perldl_hist" ) ) {
+	my @allhist = <HIST>;
+	close HIST;
+	map s/\n//g , @allhist ;
+	foreach (@allhist) {
+	    $term->addhistory($_);
+	}
+    }
+    eval <<'EOEND';
+sub END {
 
-$term = new Term::ReadLine 'perlDL', \*STDIN, \*STDOUT if $readlines;
+    # Save History in $ENV{'HOME'}/.perldl_hist
+    # GetHistory doesn't work on all versions...
+    my @a= $term->GetHistory() if $term->can('GetHistory');
 
-$,=" "; # Default
+    $#a-- if $a[-1] =~ /^(q$|x$|\s*exit\b)/; # chop off the exit command
+    @a= @a[($#a-50)..($#a)] if $#a > 50 ;
+    if( open HIST, ">$HOME/.perldl_hist" ) { 
+	print HIST join("\n",@a);
+	close HIST;
+    } else {
+	print " Unable to open \"~/.perldl_hist\"\n";
+    }
+}
+EOEND
+}
 
-$PDL::verbose = 1; # Make PDL functions waffle
+sub l { 
+  if ($readlines) {
+    my $n = $#_ > -1 ? shift : 20;
+    my @h = $term->GetHistory();
+    my $min = $#h < $n-1 ? 0 : $#h-$n+1; 
+    map {print "$_: $h[$_]\n"} ($min..$#h);
+  } 
+}
 
 # Global and local startup
 
-for ($ENV{'HOME'}."/.perldlrc", 'local.perldlrc') {
-    next unless -e $_;
-    print "Reading $_ ...\n";
-    require $_ ;
+my $startup_file = -e "$HOME/.perldlrc" ? "$HOME/.perldlrc" : "PDL/default.perldlrc";
+
+print "Reading $startup_file...\n";
+   
+eval 'require "'.$startup_file.'"';
+my $PDL_OK = ($@ eq "");
+ 
+if ($PDL_OK) {
+   require PDL::Version if not defined $PDL::Version::VERSION;
+   print "Type 'demo' for online demos\n";
+   print "Loaded PDL v$PDL::Version::VERSION\n";
+}else{
+   warn "WARNING: Error loading PDL: '$@' - trying blib. \n";
+   eval "use blib";
+   eval 'require "'.$startup_file.'"';
+   $PDL_OK = ($@ eq "");
+   if ($PDL_OK) {
+      require PDL::Version if not defined $PDL::Version::VERSION;
+      print "Loaded PDL v$PDL::Version::VERSION\n";
+   }else{
+      warn "WARNING: PDL startup not found only plain perl available\n";
+   }
+}
+
+if (-e 'local.perldlrc') {
+    print "Reading local.perldlrc ...\n";
+    require 'local.perldlrc' ;
 }
 
 $SIG{'INT'} = sub {print "Ctrl-C detected\n"; goto restart}; # Ctrl-C handler
   
-$|=1;
+$|=1; my ($sep,$code,$mess);
 while(1) {
 
 restart:
@@ -161,14 +180,24 @@ restart:
      $sep = $,; $,=""; # Save
 
      if ($readlines) {
-         $_ = $term->readline($prompt);
+         $_ = $term->readline($PERLDL_PROMPT);
      }else{
-         print $prompt; $_ = <>;
+         print $PERLDL_PROMPT; $_ = <>;
      }
      $,=$sep; #Restore 
 
-     exit() unless defined($_);
+     if(!defined $_ || lc $_ eq 'q' || lc $_ eq 'x') {exit};
      next if /^\s*$/; # Blank line - do nothing
+     
+     s/^\s*\?\?\s*/apropos /; # Make '??' = 'apropos'
+     s/^\s*\?\s*/help /; # Make lone '?' = 'help'
+	     
+     if (/^\s*(help|usage|apropos|sig|demo)\s+/) { # Allow help foo (no quotes)
+        @t = split;
+        foreach (@t) { s/^["']+//; s/['"]+$//; };
+	$t[1] = "'".$t[1]."'" if ($#t == 1 && !($t[1] =~ /^\$/));
+	$_ = join(' ',@t);
+     }	   
 
      if (substr($_,0,1) eq substr($PERLDL_ESCAPE,0,1)) { 
         system(substr($_,1)); # Shell escape
@@ -204,12 +233,170 @@ EOD
 
 # Short hand for some stuff
 
-sub p { print(@_); }
-sub x { exit(); }
+sub p { local $^W=0; print(@_); }  # suppress possible undefined var message (dirty)
+
+sub demo {
+	local $_ = lc $_[0] ;
+	require PDL::Demos::Screen; # Get the routines for screen demos.
+	if(/^$/) {
+		print <<EOD;
+Use:
+	demo pdl	# general demo
+	demo 3d		# 3d demo (requires TriD compiled with OpenGL or Mesa)
+			# as well as an X display properly set up. 
+	demo 3d2	# 3d demo, second part. This is very memory-heavy, make
+			# your window fairly small.
+EOD
+	} elsif(/^pdl$/) {
+		require PDL::Demos::General;
+		PDL::Demos::General::run();
+	} elsif(/^3d$/) {
+		require PDL::Demos::TriD1;
+		PDL::Demos::TriD1::run();
+	} elsif(/^3d2$/) {
+		require PDL::Demos::TriD2;
+		PDL::Demos::TriD2::run();
+	} else {
+		print "No such demo!\n";
+	}	
+}
+
+__END__
+
+=head1 NAME
+
+perldl - Simple shell for PDL
+
+=head1 SYNOPSIS
+
+	%> perldl
+	perldl> $a=sequence(10) # or any other PDL command
+
+=head1 DESCRIPTION
+
+The program B<perldl> is a simple shell (written in perl) for
+interactive use of PDL.  perl/PDL commands can simply be typed in - and
+edited if you have appropriate version of the ReadLines and ReadKeys
+modules installed. In that case B<perldl> also supports a history
+mechanism where the last 50 commands are always stored in the file
+F<.perldl_hist> in your home directory between sessions. The command 
+C<l [number]> shows you the last C<number> commands you typed where
+C<number> defaults to 20.
+
+e.g.:
+
+   % perldl
+   ReadLines enabled
+   perldl> $a = rfits "foo.fits"
+   BITPIX =  -32  size = 88504 pixels 
+   Reading  354016 bytes
+   BSCALE =  &&  BZERO = 
+   
+   perldl> imag log($a+400)
+   Displaying 299 x 296 image from 4.6939525604248 to 9.67116928100586 ...
+
+
+Miscellaneous shell features:
+
+=over 4
+
+=item 1. 
+
+The shell aliases C<p> to be a convenient short form of C<print>, e.g.
+
+   perldl> p ones 5,3
+    
+   [
+    [1 1 1 1 1]
+    [1 1 1 1 1]
+    [1 1 1 1 1]
+   ]
+   
+'q' and 'x' are short-hand for quit.
+
+'l' lists the history buffer
+
+'?' is an alias for help
+
+'help', 'apropos', 'usage' and 'sig': all words after these commands are
+used verbatim and not evaluated by perl. So you can write, e.g.,
+
+    help help
+
+instead of
+
+    help 'help'
+
+
+=item 2. 
+
+If the file F<~/.perldlrc> is found it is sourced at start-up to load default
+modules, set shell variables, etc. If it is NOT found the distribution file 
+F<PDL/default.perldlrc> is read instead. This loads various modules
+considered useful by default, and which ensure compatibility with
+v1.11. If you don't like this and want a more streamlined set of your
+own favourite modules simple create your own F<~/.perldlrc>
+
+To set even more local defaults the file  F<local.perldlrc> (in the current
+directory) is sourced if found. This lets you load modules and define
+subroutines for the project in the current directory.
+
+The name is chosen specfically because it was found hidden files were 
+NOT wanted in this circumstances.
+
+=item 3. 
+
+Shell variables: (if you don't like the defaults change them in F<~/.perldlrc>
+
+$PERLDL_ESCAPE  - default value '#'
+
+Any line starting with this character is treated as a shell
+escape. The default value is chosen because it escapes the
+code from the standard perl interpreter.
+
+$PERLDL_PROMPT - default value 'perldl> '
+
+Enough said
+
+$HOME
+
+The users home directory
+
+=item 4.
+
+A useful idiom for developing perldl scripts or editing functions
+on-line is
+
+      perldl> # emacs script &
+		      -- add perldl code to script and save the file
+      perldl> do 'script'
+
+-- substitute your favourite window-based editor for 'emacs' (you may
+also need to change the '&' on non-Unix systems).  
+
+Running "do 'script'" again updates any variables and function
+definitions from the current version of 'script'.
+
+=back
+
+=head2 Command-line options
+
+=over 4
+
+=item -tk
+
+Load Tk when starting the shell (the perl Tk module, which is
+available from CPAN must be installed). This enables readline
+event loop processing.
+
+=item -f file
+
+Loads the file before processing any user input. Any errors
+during the execution of the file are fatal.
+
+=cut
 
 !NO!SUBS!
 
-close OUT or die "Can't close $file: $!";
-chmod 0755, $file or die "Can't reset permissions for $file: $!\n";
-exec("$Config{'eunicefix'} $file") if $Config{'eunicefix'} ne ':';
-
+close OUT;
+chmod 0555, $file;
