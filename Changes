@@ -1,4 +1,138 @@
 (!!! = possible source of incompatibilities)
+2.1.1
+CS  - fix Perl_croak calls when 'usethreads=y'
+2.1
+Marc Lehmann (6/7/00)
+    - enable sincos optimization only for glibc >= 2.1
+CS  - warn if 5.004 that next version will require 5.005
+    - PL_na issue in PGPLOT.xs
+    - disable sincos optimization in complex.pd until glibc issues sorted
+John Cerney (6/2/00)
+    - Updated FAQ to match the Jarle's version at
+      http://www-astro.physics.ox.ac.uk/~jarle/PDLfaq/pdlfaq_new.html
+Doug Burke (5/31/00)
+    - more minor doc patches
+John Cerney (5/26/00)
+    - Applied patch to fix reflect options in conv2d (image2D
+      function) not being symmetric. Ref sourceforge Patches 100287,
+      100359, and Bug 104614.
+Doug Burke (5/25/00)
+    - added 'pdldoc' shell command to provide access to PDL documentation
+      without having to start up perldl
+    - cosmetic changes to output of usage + minor doc change to PDL::Basic
+John Cerney (5/25/00)
+    - Modified PP.pm to call $arg1->copy for subclassed
+      objects in some simple cases, otherwise call
+      $class->initialize. See Basic/Pod/Objects.pod
+      for a detailed discussion.
+Doug Burke (5/23/00,5/24/00)
+    - corrected faulty t/interp.t and t/interp_slatec.t scripts
+    - minor doc changes to Indexing.pod, image2d.pd, fft.pd & NDF.pm
+    - added FRAME option to iis (Graphics::IIS)
+CS      - hopefully the PDL::Filter modules will work now
+                a proper test should be added
+Doug Burke (5/22/00)
+    - Graphics::IIS - now works with new PP code + minor doc changes
+    - Func - changed gradient() to work as described + added PDL::Func::
+      to method names in the documentation so they do not get picked up
+      by perldl's help (eg 'help set')
+    - \s to \\s in getfuncdocs() to avoid warning in Doc/Doc.pm
+John Cerney (5/21/00)
+    - Minor Changes to Basic/Gen/PP.pm to fix error reporting, and
+      to get rid of some warning messages when run with the -w 
+      switch
+Doug Burke (5/19/00)
+        - Amalgated Interpolate & Interpolate::Slatec into PDL::Func (found
+          in Lib/). I've left the old files in the distribution, although they're
+          no longer made/installed, in case anyone wants to do a better job.
+        - minor doc changes to Image2D
+zowie   - Changed PGPLOT::im to PGPLOT::imag1 (1:1 aspect ratio shortcut).
+	  Avoids conflict with the imaginary-component sub by the same name.
+
+CS	- fix for sever mem-leak -> ultimate source seems to be
+		a problem in destroytransform on un-physvaffined
+		piddle -- needs proper tracking down!!!!
+	- more types for Otherpars (PP.pm)
+Doug Burke
+        - added PDL::Interpolate and PDL::Interpolate::Slatec which provide
+          a (hopefully) simple, OO interface to interpolation methods
+CS	- correct PDL::Ops docs
+	- fix problem in pdl_croak_param (pdlthread.c) due to changes
+		in Perl_mess in perl 5.6
+	- update TODO
+zowie   - Autoloader update (handles '+' for entire dir trees)
+	- Graphics::PGPLOT::imag update (includes options for image scaling)
+	- perldl update (minor fix to avoid null code ref bug in PDL::myeval)
+
+CS	- debian stuff
+	- image rotation (rot2d)
+	- karma  kimagergb renamed to krgb
+		krgb -> can send 3d RGB piddles now (i.e. [3,x,y,z] piddles)
+CS	- quick (and semi-dirty) inplace fix for ops.pd
+	- slices.pd: fix xchg,mv not catching negative dims,
+			treat neg dim indices like neg perl array indices
+Doug Burke (4/29/00)
+        - fixed interpol failing to recognise extrapolation at 'high' x +
+          added interpolate with slightly different error handling
+        - commented out 'use PDL::Lib::LLSQRout' in PDL/Lib/Gaussian.pm
+Tim Jenness (4/26/00)
+        - Patch mconf.h so that it works on Alphas running Linux
+Doug Burke
+        - fixed apropos command to work with perl 5.6.0
+        - t/poly.t failed on solaris 2.7 with new PP code. Changed check
+          from < 200 to < 210.
+        - added PDL:getdim to Core.pm documentation
+Doug Hunt (4/26/2000)
+        - Merged fast-xswrapper branch back to main PDL tree.
+        - Left Ops thus:
+          All ops are are overloaded to call XS as directly as possible, but
+          the direct call of ops such as : $a->plus($b, 0) requires the '0' argument
+          which tells the XS routine 'plus' not to swap the arguments.
+CS
+	- slight ops.pd changes
+	- match prototypes with original ones in complex.pd
+	- some more work on PP.pm (yet unfinished)
+Doug Hunt (4/19/2000)
+        - Cleaned up Ops to take advantage of new fast XS wrappers 
+
+Doug Burke
+        - changes to pod to HTML conversion. Links between modules - eg 
+          L<PDL::Graphics::PGPLOT|PDL::Graphics::PGPLOT> - should now work.
+          See Doc/mkhtmldoc.pl and Doc/scantree.pl
+        - minor doc changes to a number of files
+        - Improved output from apropos (aka ??) in the perldl shell:
+          1) ref string is now cleaned of any pod directives (eg C<$a> -> '$a')
+          2) the formatting has been improved, so that it fills the screen,
+             word-wraps, and indents the ref string if printed on new lines
+          3) better handling of long names 
+          As an example, try 'perldl> ?? str' before and after.
+          However, it's a *horrible* hack - using undocumented parts of
+          Pod::Text to do 1 and 2, and calculation of screen width is poor.
+          Needs testing on perl 5.6.0 for a start!
+CS
+	- applied vaffine leak fix to main branch
+	- new polyfill function (image2d.pd)
+	- some (unfinished) preparations for easier leak debugging, see perldl.conf
+Doug Burke
+        - Added PCHIP routines tp PDL::Slatec (interpolation,
+          differentiation, and integration of functions).
+          Also moved creation of SlatecProtos.h from Makefile.PL
+          to slatec.pd
+        - stop wfits() from complaining when reading in the header
+          of FITS files from the DSS server at STScI
+        - minor clean up of write_dummy_make() Basic/Core/Dev.pm
+        - minor doc updates for PDL::Primitive and PDL::Basic
+        - converted FFTW and GSL to use write_dummy_make() in Makefile.PL
+Tim Jenness
+	- Update PDL::IO::NDF to v1.02, enhance reading of axis errors
+	  plus some bug fixes.
+	- Add test for PDL::IO::NDF
+        - Added polynomial fitting routines to PDL::Slatec (polfit, 
+	  pvalue and pcoef)
+
+John Cerney
+	- Added (psuedo)-support for variable-size strings in PDL::Char
+
 2.005
 CS	- version to 2.005
 	- finally try to fix 5.6.0 problem correctly
@@ -1490,3 +1624,5 @@ Bug fixen
 New PDL::PP
 
 The perldl shell now aborts on <EOF>, q and Q.
+
+

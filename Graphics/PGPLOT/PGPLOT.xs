@@ -10,6 +10,38 @@
 #include "perl.h"     /* std perl include */
 #include "XSUB.h"     /* XSUB include */
 
+#ifndef PERL_PATCHLEVEL
+#      ifndef __PATCHLEVEL_H_INCLUDED__
+#              define PERL_PATCHLEVEL_H_IMPLICIT
+#              include "patchlevel.h"
+#      endif
+#endif
+#ifndef PERL_VERSION
+/* Replace: 1 */
+#      define PERL_VERSION PATCHLEVEL
+/* Replace: 0 */
+#endif
+#ifndef PERL_SUBVERSION
+/* Replace: 1 */
+#      define PERL_SUBVERSION SUBVERSION
+/* Replace: 0 */
+#endif
+
+#if (PERL_VERSION < 4) || ((PERL_VERSION == 4) && (PERL_SUBVERSION <= 5))
+/* Replace: 1 */
+#      define PL_sv_undef      sv_undef
+#      define PL_sv_yes        sv_yes
+#      define PL_sv_no         sv_no
+#      define PL_na            na
+#      define PL_stdingv       stdingv
+#      define PL_hints         hints
+#      define PL_curcop        curcop
+#      define PL_curstash      curstash
+#      define PL_copline       copline
+#      define PL_Sv            Sv
+/* Replace: 0 */
+#endif
+
 struct PGPLOT_function_handle {
    I32 binversion;
    void (*cpgmove) (float x, float y);
@@ -52,8 +84,11 @@ BOOT:
 
 	/* Get pointer to structure of core shared C routines */
 	ptr = perl_get_sv("PGPLOT::HANDLE",FALSE);  /* SV* value */
+#ifndef aTHX_
+#define aTHX_
+#endif
 	if (ptr==NULL)
-	  Perl_croak("This module requires PGPLOT version 2.16 or later.\nPlease install/upgrade PGPLOTLOT (see the PDL/DEPENDENCIES file).");
+	  Perl_croak(aTHX_ "This module requires PGPLOT version 2.16 or later.\nPlease install/upgrade PGPLOTLOT (see the PDL/DEPENDENCIES file).");
 	myhandle = (PGPLOT_function_handle*) SvIV( ptr );  
 
 	/* If the structure read from the PGPLOT module is too old */
@@ -61,7 +96,7 @@ BOOT:
 	  char msg[128];
           sprintf (msg, "This module requires PGPLOT with a structure version at least %d", 
                          PGPLOT_structure_version);
-          Perl_croak(msg);
+          Perl_croak(aTHX_ msg);
         }
 
 

@@ -9,6 +9,12 @@ BEGIN{
   die "PDL requires Perl v5.004 or later\n" if $@ ne "";
 }
 
+END{
+  eval "use 5.005";
+  warn "\n\n*The next version of PDL will require Perl v5.005 or later!*\n".
+    "*Upgrade your perl now for maximum PDL fun in the future!*\n\n" if $@ ne "";
+}
+
 $seen_pdlconf = 0;
 
 # Scan ARGV for config file argument
@@ -80,11 +86,11 @@ WriteMakefile(
  'PREREQ_PM' => { 'ExtUtils::F77' => 1.10, 'File::Spec' => 0.6 },
  'NAME' => 'PDL',
  'VERSION_FROM' => 'Basic/Core/Version.pm',
- 'EXE_FILES' => ['perldl'],
-				  # If you want speed, remove this
+ 'EXE_FILES' => ['perldl', 'pdldoc'],
+# 'OPTIMIZE'  => '-g',		  # If you want to debug, uncomment this.
  'linkext'  => {LINKTYPE => ''},  # No linking required in this directory
  'dist'     => { COMPRESS => 'gzip', SUFFIX => 'gz'},
- 'clean' => {'FILES' => 'perldl pdldoc.db tbyte.tif tmp0 tmp0.hdr tushort.tif MANIFEST.bak tmp1* tmpraw* t/tmpraw* t/tmp1*'},
+ 'clean' => {'FILES' => 'perldl pdldoc pdldoc.db tbyte.tif tmp0 tmp0.hdr tushort.tif MANIFEST.bak tmp1* tmpraw* t/tmpraw* t/tmp1*'},
  'realclean' => {'FILES' => 'Basic/Core/Config.pm'},
 );
 

@@ -8,11 +8,14 @@ PDL::Basic -- Basic utility functions for PDL
 This module contains basic utility functions for
 creating and manipulating piddles. Most of these functions
 are simplified interfaces to the more flexible functions in
-the modules PDL::Primitive and PDL::Slices.
+the modules 
+L<PDL::Primitive|PDL::Primitive> 
+and 
+L<PDL::Slices|PDL::Slices>.
 
 =head1 SYNOPSIS
 
-use PDL::Basic;
+ use PDL::Basic;
 
 =head1 FUNCTIONS
 
@@ -52,13 +55,11 @@ Fills a piddle with X index values
  $x = xvals($somearray);
  $x = xvals([OPTIONAL TYPE],$nx,$ny,$nz...);
 
-etc. see 'zeroes'
+etc. see L<zeroes|PDL::Core/zeroes>.
 
 =for example
 
   perldl> print xvals zeroes(5,10)
-  Dims:  5,10  DLen:  400
-
   [
    [0 1 2 3 4]
    [0 1 2 3 4]
@@ -83,13 +84,11 @@ Fills a piddle with Y index values
  $x = yvals($somearray); yvals(inplace($somearray));
  $x = yvals([OPTIONAL TYPE],$nx,$ny,$nz...);
 
-etc. see 'zeroes'
+etc. see L<zeroes|PDL::Core/zeroes>.
 
 =for example
 
  perldl> print yvals zeroes(5,10)
- Dims:  5,10  DLen:  400
-
  [
   [0 0 0 0 0]
   [1 1 1 1 1]
@@ -114,13 +113,11 @@ Fills a piddle with Z index values
  $x = zvals($somearray); zvals(inplace($somearray));
  $x = zvals([OPTIONAL TYPE],$nx,$ny,$nz...);
 
-etc. see 'zeroes'
+etc. see L<zeroes|PDL::Core/zeroes>.
 
 =for example
 
  perldl> print zvals zeroes(3,4,2)
- Dims:  3,4,2  DLen:  192
-
  [
   [
    [0 0 0]
@@ -136,23 +133,40 @@ etc. see 'zeroes'
   ]
  ]
 
-=head2 xlinvals, ylinvals, zlinvals
+=head2 xlinvals
 
 =for ref
 
-X,Y or Z axis values between endpoints. (see xvals,yvals,zvals)
+X axis values between endpoints (see L<xvals|/xvals>).
 
 =for usage
 
  $a = zeroes(100,100);
  $x = $a->xlinvals(0.5,1.5);
  $y = $a->ylinvals(-2,-1);
- $z = f($x,$y);            # calculate Z for X between 0.5 and 1.5 and
- 			   # Y between -2 and -1.
+ # calculate Z for X between 0.5 and 1.5 and
+ # Y between -2 and -1.
+ $z = f($x,$y);            
 
-xlinvals, ylinvals and zlinvals return a piddle with the same shape
+C<xlinvals>, C<ylinvals> and C<zlinvals> return a piddle with the same shape
 as their first argument and linearly scaled values between the two other
 arguments along the given axis.
+
+=head2 ylinvals
+
+=for ref
+
+Y axis values between endpoints (see L<yvals|/yvals>).
+
+See L<xlinvals|/xlinvals> for more information.
+
+=head2 zlinvals
+
+=for ref
+
+Z axis values between endpoints (see L<zvals|/zvals>).
+
+See L<xlinvals|/xlinvals> for more information.
 
 =cut
 
@@ -189,14 +203,14 @@ sub PDL::xlinvals {
 
 sub PDL::ylinvals {
 	my $dim = $_[0]->getdim(1);
-	barf "Must have at least two elements in dimension for xlinvals"
+	barf "Must have at least two elements in dimension for ylinvals"
 		if $dim <= 1;
 	return $_[0]->yvals * (($_[2] - $_[1]) / ($dim-1)) + $_[1];
 }
 
 sub PDL::zlinvals {
 	my $dim = $_[0]->getdim(2);
-	barf "Must have at least two elements in dimension for xlinvals"
+	barf "Must have at least two elements in dimension for zlinvals"
 		if $dim <= 1;
 	return $_[0]->zvals * (($_[2] - $_[1]) / ($dim-1)) + $_[1];
 }
@@ -212,22 +226,20 @@ Create histogram of a piddle
  $hist = hist($data,[$min,$max,$step]);
  ($xvals,$hist) = hist($data,[$min,$max,$step]);
 
-If requested, $xvals gives the computed bin centres
+If requested, C<$xvals> gives the computed bin centres
 
-A nice idiom (with PDL::Graphics::PG) is
+A nice idiom (with 
+L<PDL::Graphics::PGPLOT|PDL::Graphics::PGPLOT>) is
 
  bin hist $data;  # Plot histogram
 
 =for example
 
  perldl> p $y
- [13 10 13 10 9 13 9 12 11 10 10 13 7 6 8 10 11 7 12 9 11 11 12 6 12 7 10 10 10 13]
- perldl> $h = hist $y,0,20,1
- hist with step 1, min 0 and 21 bins
-
+ [13 10 13 10 9 13 9 12 11 10 10 13 7 6 8 10 11 7 12 9 11 11 12 6 12 7]
+ perldl> $h = hist $y,0,20,1; # hist with step 1, min 0 and 20 bins
  perldl> p $h
- [0 0 0 0 0 0 2 3 1 3 8 4 4 5 0 0 0 0 0 0 0]
-
+ [0 0 0 0 0 0 2 3 1 3 5 4 4 4 0 0 0 0 0 0]
 
 =cut
 
@@ -263,22 +275,19 @@ Create array filled with a sequence of values
 
  $a = sequence($b); $a = sequence [OPTIONAL TYPE], @dims;
 
-etc. see 'zeroes'
+etc. see L<zeroes|PDL::Core/zeroes>.
 
 =for example
 
-  perldl> p sequence(10)
-  Dims:  10  DLen:  80
-  [0 1 2 3 4 5 6 7 8 9]
-  perldl> p sequence(3,4)
-  Dims:  12  DLen:  96
-
-  [
-   [ 0  1  2]
-   [ 3  4  5]
-   [ 6  7  8]
-   [ 9 10 11]
-  ]
+ perldl> p sequence(10)
+ [0 1 2 3 4 5 6 7 8 9]
+ perldl> p sequence(3,4)
+ [
+  [ 0  1  2]
+  [ 3  4  5]
+  [ 6  7  8]
+  [ 9 10 11]
+ ]
 
 =cut
 
@@ -312,8 +321,6 @@ Fills a piddle with radial distance values from some centre.
 =for example
 
  perldl> print rvals long,7,7,{Centre=>[2,2]}
- Dims:  7,7  DLen:  196
-
  [
   [2 2 2 2 2 3 4]
   [2 1 1 1 2 3 4]
@@ -324,7 +331,7 @@ Fills a piddle with radial distance values from some centre.
   [4 4 4 4 4 5 5]
  ]
 
- For a more general metric, one can define, e.g.,
+For a more general metric, one can define, e.g.,
 
  sub distance {
    my ($a,$centre,$f) = @_;
@@ -335,12 +342,12 @@ Fills a piddle with radial distance values from some centre.
  sub euclid { use PDL::Math 'pow'; pow(sumover(pow($_[0],2)),0.5); }
  sub linfty { maximum(abs($_[0])); }
 
- so now
+so now
 
  distance($a, $centre, \&euclid);
 
- will emulate 'rvals', while '\&l1' and '\&linfty' will generate other
- well-known norms. 
+will emulate rvals, while C<\&l1> and C<\&linfty> will generate other
+well-known norms. 
 
 =cut
 
@@ -377,11 +384,11 @@ Fills a piddle with index values on Nth dimension
 
  $z = axisvals ($piddle, $nth);
 
-This is the routine, for which xvals(), yvals() etc
-are mere shorthands. axisvals() can be used to fill
+This is the routine, for which L<xvals|/xvals>, L<yvals|/yvals> etc
+are mere shorthands. C<axisvals> can be used to fill
 along any dimension.
 
-Note the 'from specification' style (see 'zeroes') is
+Note the 'from specification' style (see L<zeroes|PDL::Core/zeroes>) is
 not available here, for obvious reasons.
 
 =cut
@@ -425,14 +432,14 @@ Generates a piddle with index values
 
  $z = allaxisvals ($piddle);
 
-allaxisvals() produces an array with axis values along each dimension,
+C<allaxisvals> produces an array with axis values along each dimension,
 adding an extra dimension at the start.
 
-allaxisvals($piddle)->slice("($nth)") will produce the same result
-as axisvals($piddle,$nth) (although with extra work and not inplace).
+C<allaxisvals($piddle)-E<gt>slice("($nth)")> will produce the same result
+as C<axisvals($piddle,$nth)> (although with extra work and not inplace).
 
 It's useful when all the values will be required, as in the example
-given of a generalized 'rvals'.
+given of a generalized L<rvals|/rvals>.
 
 =cut
 
@@ -488,6 +495,35 @@ sub PDL::similar_assign {
 	}
 	$to .= $from;
 }
+
+=head2 transpose
+
+=for ref
+
+transpose rows and columns. 
+
+=for usage
+
+ $b = transpose($a); $b = ~$a;
+
+Also bound to the C<~> unary operator.
+
+=for example
+
+ perldl> $a = sequence(3,2)
+ perldl> p $a
+ [
+  [0 1 2]
+  [3 4 5]
+ ]                                                                               
+ perldl> p transpose( $a )
+ [
+  [0 3]
+  [1 4]
+  [2 5]                                                                          
+ ]
+
+=cut
 
 sub PDL::transpose {
 	my($this) = @_;

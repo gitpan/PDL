@@ -28,9 +28,27 @@ use vars qw(@ISA @EXPORT);
 
 use PDL::Doc;
 use IO::File;
+use Pod::Text;
 
 $PDL::onlinedoc = undef;
 $PDL::onlinedoc = new PDL::Doc (FindStdFile());
+
+# pod commands are stripped from the ref string before printing.
+# How we do this depends on the version of Pod::Text installed.
+#
+# I'm guessing the difference in behaviour is between versions
+# 1 and 2 of Pod::Text (it's certainly true for 
+# version 1.0203 (perl5.005_03) and 2.03 (perl 5.6.0))
+#
+# version 1:
+#  we use a private routine from Pod::Text
+#  (prepare_for_output) in printmatch() in order
+#  to strip away pod directives from the ref
+#  string
+#
+# version 2: (Thanks to Tim Jenness)
+#  create an object and use the interpol() method
+#
 
 # Find std file
 
@@ -39,22 +57,92 @@ sub FindStdFile {
   for $d (@INC) {
       $f = $d."/PDL/pdldoc.db";
       if (-f $f) {
-         print "Found docs database $f\n"; # if $PDL::debug;
-	 print "Type 'help' for online help\n"; # if $PDL::debug;
+         print "Found docs database $f\n" if $PDL::verbose;
+	 print "Type 'help' for online help\n" if $PDL::verbose;
          return $f;
       }
   }
   warn "Unable to find PDL/pdldoc.db in ".join(":",@INC)."\n";
 }
 
-sub printmatch {
-  my @match = @_;
-  unless (@match) {
-    print "no match\n\n";
-  } else {
-    for (@match) { printf "%-15s %s\n", $_->[0], $_->[1]->{Ref}}
-  }
+# used to find out how wide the screen should be
+# for printmatch() - really should check for a 
+# sensible lower limit (for printmatch >~ 40
+# would be my guess)
+#
+# taken from Pod::Text (v1.0203), then hacked to get it
+# to work (at least on my solaris and linux
+# machines)
+#
+sub screen_width() {
+    return $ENV{COLUMNS}
+       || (($ENV{TERMCAP} =~ /co#(\d+)/) and $1)
+       || ($^O ne 'MSWin32' and $^O ne 'dos' and 
+	   (`stty -a 2>/dev/null` =~ /columns\s*=?\s*(\d+)/) and $1)
+       || 72;                                                                   
 }
+
+# the $^W assignment stops Pod::Text::fill() from 
+# generating "Use of uninitialised values" errors
+#
+sub printmatch {
+    my @match = @_;
+    if (@match) {
+	foreach my $t ( format_ref( @_ ) ) { print $t; }
+    } else {
+	print "no match\n\n";
+    }
+} # sub: print_match()
+
+# return a string containing a formated version of the Ref string
+# for the given matches
+#
+sub format_ref {
+    my @match = @_;
+    my @text = ();
+
+    # XXX this is NASTY
+    my $width = screen_width()-17;
+    if ( $Pod::Text::VERSION < 2 ) {
+	$Pod::Text::indent = 0;
+	$Pod::Text::SCREEN = $width;
+	local $^W = 0;
+	for my $m (@match) { 
+	    $_ = $m->[1]->{Ref} || "[No reference available]";
+	  Pod::Text::prepare_for_output(); # adds a '\n' to $_
+	    $_ = Pod::Text::fill $_; # try and get `nice' wrapping 
+	    s/\n*$//; # remove last new lines (so substitution doesn't append spaces at end of text)
+	    s/\n/\n                /g;
+	    my $name = $m->[0];
+	    if ( length($name) > 15 ) { 
+	        push @text, sprintf "%s ...\n                %s\n", $name, $_; 
+	    } else {
+		push @text, sprintf "%-15s %s\n", $name, $_; 
+	    }
+	}
+    } else {
+	my $parser = new Pod::Text( width => $width, indent => 0, sentence => 0 );
+	
+	for my $m (@match) { 
+	    my $ref = $m->[1]->{Ref} || "[No reference available]";
+	    $ref = $parser->interpolate( $ref );
+	    $ref = $parser->reformat( $ref );
+	    
+	    # remove last new lines (so substitution doesn't append spaces at end of text)
+	    $ref =~ s/\n*$//; 
+	    $ref =~ s/\n/\n                /g;
+
+	    my $name = $m->[0];
+	    if ( length($name) > 15 ) { 
+		push @text, sprintf "%s ...\n                %s\n", $name, $ref; 
+	    } else {
+		push @text, sprintf "%-15s %s\n", $name, $ref; 
+	    }
+	}
+    }
+    return wantarray ? @text : $text[0];
+
+} # sub: format_ref()
 
 =head2 apropos
 
@@ -90,11 +178,11 @@ with the C<help> function
 =cut
 
 sub apropos  {
-	die "Usage: apropos \$funcname\n" unless $#_>-1;
-	die "no online doc database" unless defined $PDL::onlinedoc;
-	my $func = shift;
-	my @match = $PDL::onlinedoc->search($func,['Name','Ref','Module'],1);
-	printmatch @match;
+    die "Usage: apropos \$funcname\n" unless $#_>-1;
+    die "no online doc database" unless defined $PDL::onlinedoc;
+    my $func = shift;
+    my @match = $PDL::onlinedoc->search($func,['Name','Ref','Module'],1);
+    printmatch @match;
 }
 
 
@@ -152,18 +240,19 @@ sub usage_string{
     my $func = shift;
     my $str = "";
     my @match = $PDL::onlinedoc->search("m/^(PDL::)?$func\$/",['Name']);
-    unless (@match) { print "\n  no match\n" } else {
-     my ($name,$hash) = @{$match[0]};
-     $str .= sprintf "\n%-15s %s \n".(' 'x16)."(Module %s)\n\n", $name,
-    	    $hash->{'Ref'}, $hash->{'Module'};
-     die "No usage info found for $func\n"
-    	if !defined $hash->{Example} && !defined $hash->{Sig} &&
-    	    !defined $hash->{Usage};
-     $str .= "  Signature: $name($hash->{Sig})\n\n" if defined $hash->{Sig};
-     for (['Usage','Usage'],['Opt','Options'],['Example','Example']) {
-    	$str .= "  $_->[1]:\n\n".&allindent($hash->{$_->[0]},10)."\n\n"
-    	  if defined $hash->{$_->[0]};
-     }
+    unless (@match) { print "\n  no match\n" } 
+    else {
+	$str .= "\n" . format_ref( $match[0] );
+	my ($name,$hash) = @{$match[0]};
+	$str .= sprintf ( (' 'x16)."(Module %s)\n\n", $hash->{Module} );
+	die "No usage info found for $func\n"
+	    if !defined $hash->{Example} && !defined $hash->{Sig} &&
+		!defined $hash->{Usage};
+	$str .= "  Signature: $name($hash->{Sig})\n\n" if defined $hash->{Sig};
+	for (['Usage','Usage'],['Opt','Options'],['Example','Example']) {
+	    $str .= "  $_->[1]:\n\n".&allindent($hash->{$_->[0]},10)."\n\n"
+		if defined $hash->{$_->[0]};
+	}
     }
     return $str;
 }

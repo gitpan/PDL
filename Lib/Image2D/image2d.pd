@@ -4,11 +4,10 @@ pp_addpm({At=>Top},<<'EOD');
 
 PDL::Image2D - Miscellaneous 2D image processing functions
 
-
 =head1 DESCRIPTION
 
-  Miscellaneous 2D image processing functions - for want
-  of anywhere else to put them
+Miscellaneous 2D image processing functions - for want
+of anywhere else to put them
 
 =head1 SYNOPSIS
 
@@ -56,11 +55,13 @@ void pdl_lqsortD(double* xx, int a, int b) {
 ');
 
 pp_def('conv2d', Doc=><<'EOD',
-=head2 conv2d
-
 =for ref
 
 2D convolution of an array with a kernel (smoothing)
+
+For large kernels, using a FFT routine,
+such as L<PDL::FFT::fftconvolve()|PDL::FFT/fftconvolve>,
+will be quicker.
 
 =for usage
 
@@ -68,13 +69,14 @@ pp_def('conv2d', Doc=><<'EOD',
 
 =for example
 
-  perldl> $smoothed = conv2d $image, ones(3,3), {Boundary => Reflect}
+ $smoothed = conv2d $image, ones(3,3), {Boundary => Reflect}
 
 =for options
 
  Boundary - controls what values are assumed for the image when kernel
             crosses its edge:
- 	    => Default  - periodic boundary conditions (i.e. wrap around axis)
+ 	    => Default  - periodic boundary conditions 
+                          (i.e. wrap around axis)
  	    => Reflect  - reflect at boundary
  	    => Truncate - truncate at boundary
 
@@ -123,7 +125,7 @@ sub PDL::conv2d {
               switch (opt) {
 	case 1:      /* REFLECT */
                  if (i2<0)
-                    i2 = -i2;
+                    i2 = -i2-1;
                  else if (i2 >= m_size)
                     i2 = 2*m_size-(i2+1);
                  break;
@@ -141,7 +143,7 @@ sub PDL::conv2d {
               switch (opt) {
 	case 1:      /* REFLECT */
                  if (j2<0)
-                    j2 = -j2;
+                    j2 = -j2-1;
                  else if (j2 >= n_size)
                     j2 = 2*n_size-(j2+1);
                  break;
@@ -176,14 +178,11 @@ sub PDL::conv2d {
 
 
 pp_def('med2d', Doc=> <<'EOD',
-
-=head2 med2d
-
 =for ref
 
 2D median-convolution of an array with a kernel (smoothing)
 
-Note: only points in the kernel >0 are included in the median, other
+Note: only points in the kernel E<gt>0 are included in the median, other
 points are weighted by the kernel value (medianing lots of zeroes
 is rather pointless)
 
@@ -193,7 +192,7 @@ is rather pointless)
 
 =for example
 
-  perldl> $smoothed = med2d $image, ones(3,3), {Boundary => Reflect}
+ $smoothed = med2d $image, ones(3,3), {Boundary => Reflect}
 
 =for options
 
@@ -253,7 +252,7 @@ sub PDL::med2d {
               switch (opt) {
 	case 1:      /* REFLECT */
                  if (i2<0)
-                    i2 = -i2;
+                    i2 = -i2-1;
                  else if (i2 >= m_size)
                     i2 = 2*m_size-(i2+1);
                  break;
@@ -271,7 +270,7 @@ sub PDL::med2d {
               switch (opt) {
 	case 1:      /* REFLECT */
                  if (j2<0)
-                    j2 = -j2;
+                    j2 = -j2-1;
                  else if (j2 >= n_size)
                     j2 = 2*n_size-(j2+1);
                  break;
@@ -309,17 +308,15 @@ sub PDL::med2d {
 ');
 
 pp_def('patch2d', Doc=><<'EOD',
-=head2 patch2d
-
 =for ref
 
 patch bad pixels out of 2D images,
 
 =for usage
 
-$patched = patch2d $data, $bad;
+ $patched = patch2d $data, $bad;
 
-$bad is a 2D mask array where 1=bad pixel 0=good pixel. Pixels are replaced by the average
+C<$bad> is a 2D mask array where 1=bad pixel 0=good pixel. Pixels are replaced by the average
 of their non-bad neighbours.
 
 =cut
@@ -352,8 +349,6 @@ EOD
 
 
 pp_def('max2d_ind',Doc=><<'EOD',
-=head2 max2d_ind
-
 =for ref
 
 Return value/position of maximum value in 2D image
@@ -364,7 +359,7 @@ Contributed by Tim Jeness
 
 EOD
 
-        Pars => 'a(m,n); [o]b(); int [o]c(); int[o]d();',
+        Pars => 'a(m,n); [o]val(); int [o]x(); int[o]y();',
         Code => '
         double cur; int curind1; int curind2;
         curind1=0;
@@ -376,20 +371,18 @@ EOD
               }
            %}
         %}
-        $b() = cur;
-        $c() = curind1;
-        $d() = curind2;
+        $val() = cur;
+        $x()   = curind1;
+        $y()   = curind2;
         ');
 
 pp_def('centroid2d',Doc=><<'EOD',
-=head2 centroid2d
-
 =for ref
 
 Refine a list of object positions in 2D image by centroiding in a box
 
-$box is the full-width of the box, i.e. the window
-is +/- $box/2
+C<$box> is the full-width of the box, i.e. the window
+is C<+/- $box/2>.
 
 =cut
 
@@ -454,7 +447,7 @@ segmented objects and fill object pixels with object number
 
 =for example
 
-perldl> $segmented = cc8compt($image>$threshold);
+ $segmented = cc8compt( $image > $threshold );
 
 =cut
 
@@ -559,11 +552,196 @@ pixels */
       free(equiv); /* Tidy */
 ');
 
+pp_addhdr('
+#define MAXSEC 32
+#define line(x1, x2, y) for (k=x1;k<=x2;k++) \
+	{ /* printf("line from %d to %d\n",x1,x2); */ \
+	image[k+wx*y] = col; }
+#define PX(n) ps[2*n]
+#define PY(n) ps[2*n+1]
+	
+void polyfill(PDL_Long *image, int wx, int wy, float *ps, int n,
+	PDL_Long col, int *ierr)
+{
+   int ymin, ymax, xmin, xmax, fwrd = 1, i, j, k, nsect;
+   int x[MAXSEC], temp, l;
+   float s1, s2, t1, t2;
+   
+   ymin = PY(0); ymax = PY(0);
+   xmin = PX(0); xmax = PX(0);
+   *ierr = 0;
+   
+   for (i=1; i<n; i++) {
+     ymin = ymin > PY(i) ? PY(i) : ymin;	
+     ymax = ymax < PY(i) ? PY(i) : ymax;
+     xmin = xmin > PX(i) ? PX(i) : xmin;	
+     xmax = xmax < PX(i) ? PX(i) : xmax;
+   }
+   if (xmin < 0 || xmax >= wx || ymin < 0 || ymax >= wy) {
+   	*ierr = 1; /* clipping */
+	return;
+   }
+   s1 = PX(n-1);
+   t1 = PY(n-1);
+   for (l=ymin; l<= ymax; l++) {
+	nsect = 0;
+	fwrd = 1;
+	for (i=0; i<n; i++) {
+	  s2 = PX(i);
+	  t2 = PY(i);
+	  if ((t1 < l &&  l <= t2) || (t1 >= l && l > t2)) {
+		if (nsect > MAXSEC) {
+			*ierr = 2; /* too complex */
+			return;
+		}
+		x[nsect] = (s1+(s2-s1)*((l-t1)/(t2-t1)));
+	  	nsect += 1;
+	  }
+	  s1 = s2;
+	  t1 = t2;
+ 	}
+	/* sort the intersections */
+	for (i=1; i<nsect; i++)
+		for (j=0; j<i; j++)
+			if (x[j] > x[i]) {
+				temp = x[j];
+				x[j] = x[i];
+				x[i] = temp;
+			}
+	if (fwrd) {
+		for (i=0; i<nsect-1; i += 2)
+			line(x[i],x[i+1],l);
+		fwrd = 0;
+	} else {
+		for (i=nsect-1; i>0; i -= 2)
+			line(x[i-1],x[i],l);
+		fwrd = 1;
+	}
+   }
+}
+
+');
+
+pp_def('polyfill',
+	Pars => 'int [o,nc] im(m,n); float ps(two=2,np); int col()',
+	Code => 'int ierr = 0, nerr;
+	         threadloop %{
+		   polyfill($P(im), $SIZE(m), $SIZE(n), $P(ps), $SIZE(np), $col(), &nerr);
+		   ierr = ierr < nerr ? nerr : ierr;
+		 %}
+		 if (ierr) warn("errors during polygonfilling");
+		 ',
+	Doc => << 'EOD',
+=for ref
+
+fill the area inside the given polygon with a given colour
+
+This function works inplace, i.e. modifies C<im>.
+
+=cut
+EOD
+);
+
+pp_add_exported('', 'polyfillv');
+pp_addpm(<<'EOPM');
+
+=head2 polyfillv
+
+=for ref
+
+return the (dataflown) area of an image within a polygon
+
+=for example
+
+  # increment intensity in area bounded by $poly
+  $im->polyfillv($pol)++; # legal in perl >= 5.6
+  # compute average intensity within area bounded by $poly
+  $av = $im->polyfillv($poly)->avg;
+
+=cut
+
+sub PDL::polyfillv {
+  my ($im, $ps) = @_;
+  my $msk = zeroes(long,$im->dims);
+  polyfill($msk, $ps, 1);
+  return $im->where($msk == 1);
+}
+*polyfillv = \&PDL::polyfillv;
+
+EOPM
+
+pp_addhdr('#include "rotate.c"'."\n\n");
+pp_add_exported('','rotnewsz');
+pp_addxs('
+
+void
+rotnewsz(m,n,angle)
+	int m
+	int n
+	float angle
+	PPCODE:
+	int newcols, newrows;
+
+	if (getnewsize(m,n,angle,&newcols,&newrows) != 0)
+		croak("wrong angle (should be between -90 and +90)");
+	EXTEND(sp,2);
+	PUSHs(sv_2mortal(newSVnv(newcols)));
+	PUSHs(sv_2mortal(newSVnv(newrows)));
+');
+
+pp_def('rot2d',
+	Pars => 'im(m,n); float angle(); bg(); int aa(); [o] om(p,q)',
+	Code => 'int ierr;
+		 if ((ierr = rotate($P(im),$P(om),$SIZE(m),$SIZE(n),$SIZE(p),
+			$SIZE(q),$angle(),$bg(),$aa())) != 0)
+			if (ierr == -1)
+				croak("error during rotate, wrong angle");
+			else
+				croak("wrong output dims, did you set them?");
+		',
+	# ugly workaround since $SIZE(m) and $SIZE(n) are not initialized
+	# when the redodimscode is called
+	# need to fix this!
+	RedoDimsCode => 'int ncols, nrows;
+			if ($PDL(im)->ndims < 2)
+				croak("need > 2d piddle");
+			if (getnewsize($PDL(im)->dims[0],$PDL(im)->dims[1],
+				$angle(), &ncols,
+				&nrows) != 0) 
+			   croak("error during rotate, wrong angle");
+			/* printf("o: %d, p: %d\n",ncols,nrows); */
+			$SIZE(p) = ncols;
+			$SIZE(q) = nrows;',
+	GenericTypes => [B],
+	Doc => << 'EOD',
+=for ref
+
+rotate an image by given C<angle>
+
+=for example
+
+  # rotate by 10.5 degrees with antialiasing, set missing values to 7
+  $rot = $im->rot2d(10.5,7,1);
+
+This function rotates an image through an C<angle> between -90 and + 90
+degrees. Uses/doesn't use antialiasing depending on the C<aa> flag.
+Pixels outside the rotated image are set to C<bg>.
+
+Code modified from pnmrotate (Copyright Jef Poskanzer) with an algorithm based
+on "A Fast Algorithm for General  Raster  Rotation"  by  Alan Paeth,
+Graphics Interface '86, pp. 77-81.
+
+Use the C<rotnewsz> function to find out about the dimension of the
+newly created image
+
+  ($newcols,$newrows) = rotnewsz $oldn, $oldm, $angle;
+
+EOD
+);
+
 pp_def('bilin2d',
     Pars => 'I(n,m); O(q,p)',
     Doc=><<'EOD',
-=head2 bilin2d
-
 =for ref
 
 Bilineary maps the first piddle in the second. The
@@ -609,8 +787,6 @@ EOD
 pp_def('rescale2d',
     Pars => 'I(n,m); O(q,p)',
     Doc=><<'EOD',
-=head2 rescale2d
-
 =for ref
 
 The first piddle is rescaled to the dimensions of the second
@@ -729,7 +905,7 @@ else if(ox < ix && oy >= iy) {
     }
   %}
 }
-else barf("I am not supposed to be here, please report the bug to <chri@infis.univ.ts.it>"); 
+else barf("I am not supposed to be here, please report the bug to <chri@infis.univ.ts.it>");
   ');
 
 pp_addpm({At=>Bot},<<'EOD');
@@ -743,7 +919,6 @@ to redistribute this software / documentation under certain
 conditions. For details, see the file COPYING in the PDL
 distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
-
 
 =cut
 

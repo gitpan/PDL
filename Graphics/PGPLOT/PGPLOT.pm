@@ -5,41 +5,40 @@ PDL::Graphics::PGPLOT - PGPLOT enhanced interface for PDL
 
 =head1 SYNOPSIS
 
-   perldl> $a = pdl [1..100]
-   perldl> $b = sqrt($a)
-   perldl> line $b
-   perldl> hold
-   Graphics on HOLD
-   perldl> $c = sin($a/10)*2 + 4
-   perldl> line $c
+ perldl> $a = pdl [1..100]
+ perldl> $b = sqrt($a)
+ perldl> line $b
+ perldl> hold
+ Graphics on HOLD
+ perldl> $c = sin($a/10)*2 + 4
+ perldl> line $c
 
 =head1 DESCRIPTION
 
 PDL::Graphics::PGPLOT is an interface to the PGPLOT graphical libraries.
 
-=head1 FUNCTIONS
-
 Current display commands:
 
-  imag       -  Display an image (uses pgimag()/pggray() as appropriate)
-  ctab       -  Load an image colour table
-  line       -  Plot vector as connected points
-  points     -  Plot vector as points
-  errb       -  Plot error bars
-  cont       -  Display image as contour map
-  bin        -  Plot vector as histogram (e.g. bin(hist($data)) )
-  hi2d       -  Plot image as 2d histogram (not very good IMHO...)
-  poly       -  Draw a polygon
-  vect       -  Display 2 images as a vector field
+ imag     -  Display an image (uses pgimag()/pggray() as appropriate)
+ im       -  Shorthand to display an image with aspect ratio of 1
+ ctab     -  Load an image colour table
+ line     -  Plot vector as connected points
+ points   -  Plot vector as points
+ errb     -  Plot error bars
+ cont     -  Display image as contour map
+ bin      -  Plot vector as histogram (e.g. bin(hist($data)) )
+ hi2d     -  Plot image as 2d histogram (not very good IMHO...)
+ poly     -  Draw a polygon
+ vect     -  Display 2 images as a vector field
 
 Device manipulation commands:
 
-  hold       -  Hold current plot window range - allows overlays etc.
-  release    -  Release back to autoscaling of new plot window for each 
-                command
-  rel        -  short alias for 'release'
-  env        -  Define a plot window, put on 'hold'
-  dev        -  Explicitly set a new PGPLOT graphics device
+ hold     -  Hold current plot window range - allows overlays etc.
+ release  -  Release back to autoscaling of new plot window for each 
+             command
+ rel      -  short alias for 'release'
+ env      -  Define a plot window, put on 'hold'
+ dev      -  Explicitly set a new PGPLOT graphics device
 
 The actual PGPLOT module is loaded only when the first of these
 commands is executed.
@@ -51,8 +50,8 @@ zero-offset.
 For completeness: The transformation array connect the pixel index to a
 world coordinate such that:
 
-   X = tr[0] + tr[1]*i + tr[2]*j
-   Y = tr[3] + tr[4]*i + tr[5]*j
+ X = tr[0] + tr[1]*i + tr[2]*j
+ Y = tr[3] + tr[4]*i + tr[5]*j
 
 =head2 Variable passing and extensions
 
@@ -76,14 +75,14 @@ Thus, if you want to provide support for another PGPLOT function, the
 structure currently look like this (there are plans to use the Options
 package to simplify the options parsing):
 
-  # Extract the hash(es) on the commandline
-  ($arg, $opt)=_extract_hash(@_); 
-  <Check the number of input parameters>
-  <deal with $arg>
-  checkarg($x, 3); # For a hypothetical 3D routine.
-  ...
-  pgcube($n, $x->get_dataref);
-  1;
+ # Extract the hash(es) on the commandline
+ ($arg, $opt)=_extract_hash(@_); 
+ <Check the number of input parameters>
+ <deal with $arg>
+ checkarg($x, 3); # For a hypothetical 3D routine.
+ ...
+ pgcube($n, $x->get_dataref);
+ 1;
 
 =head2 Setting options
 
@@ -93,7 +92,7 @@ subsequent plotting without going via the PGPLOT commands.
 
 This is implemented such that the plotting settings (such as line width,
 line style etc.) are affected only for that plot, any global changes made,
-say, with pgslw() are preserved.
+say, with C<pgslw()> are preserved.
 
 =head2 Alphabetical listing of standard options
 
@@ -108,11 +107,12 @@ you thought was a unique substring.
 
 In the listing below examples are given of each option. The actual
 option can then be used in a plot command by specifying it as an argument
-to the function wanted. (It can be placed anywhere in the command list).
+to the function wanted (it can be placed anywhere in the command list).
 
 E.g:
-      $opt={COLOR=>2};
-      line $x, $y, $opt; # This will plot a line with red color
+
+ $opt={COLOR=>2};
+ line $x, $y, $opt; # This will plot a line with red color
 
 =over 4
 
@@ -126,7 +126,7 @@ SIZE to set the arrowsize.
 
 The following
 
-   $opt = {ARROW => {FS=>1, ANGLE=>60, VENT=>0.3, SIZE=>5}};
+ $opt = {ARROW => {FS=>1, ANGLE=>60, VENT=>0.3, SIZE=>5}};
 
 will make a broad arrow of five times the normal size.
 
@@ -134,7 +134,7 @@ Alternatively the arrow can be specified as a set of numbers
 corresponding to an extention to the syntax for pgsah. The equivalent to
 the above is
 
-   $opt = {ARROW => pdl([1, 60, 0.3, 5})};
+ $opt = {ARROW => pdl([1, 60, 0.3, 5})};
 
 For the latter the arguments must be in the given order, and if any are
 not given the default values of 1, 45, 0.3 and 1.0 respectively will
@@ -146,7 +146,7 @@ The arrowsize can be specified separately using this option to the
 options hash. It is useful if an arrowstyle has been set up and one
 wants to plot the same arrow with several sizes.
 
-   $opt = {ARROWSIZE => 2.5};
+ $opt = {ARROWSIZE => 2.5};
 
 =item axis
 
@@ -171,13 +171,14 @@ chosen so that the plot just fits; with this option you can increase
 Either specify a hash array, where the keys are C<TYPE> (set to 
 'relative' or 'absolute') and C<VALUE> (the amount to change the limits
 by), or set to 1, which is equivalent to
-C<BORDER =E<gt> { TYPE =E<gt> 'rel', VALUE =E<gt> 0.05 }>.
+
+ BORDER => { TYPE => 'rel', VALUE => 0.05 }
 
 =item charsize
 
 Set the character/symbol size as a multiple of the standard size.
 
-   $opt = {CHARSIZE => 1.5}
+ $opt = {CHARSIZE => 1.5}
 
 =item colour (or color)
 
@@ -186,9 +187,9 @@ specified as a number, and the most used colours can also be specified
 with name, according to the following table (note that this only works for
 the default colour map):
 
- 0 - WHITE    1 - BLACK      2 - RED       3 - GREEN     4 - BLUE
- 5 - CYAN     6 - MAGENTA    7 - YELLOW    8 - ORANGE   14 - DARKGRAY
-16 - LIGHTGRAY
+  0 - WHITE    1 - BLACK     2 - RED      3 - GREEN    4 - BLUE
+  5 - CYAN     6 - MAGENTA   7 - YELLOW   8 - ORANGE  14 - DARKGRAY
+ 16 - LIGHTGRAY
 
 =item filltype
 
@@ -197,12 +198,12 @@ The fill can either be specified using numbers or name, according to the
 following table, where the recognised name is shown in capitals - it is 
 case-insensitive, but the whole name must be specified.
 
-   1 - SOLID
-   2 - OUTLINE
-   3 - HATCHED
-   4 - CROSS_HATCHED
+ 1 - SOLID
+ 2 - OUTLINE
+ 3 - HATCHED
+ 4 - CROSS_HATCHED
 
-   $opt = {FILLTYPE => 'SOLID'};
+ $opt = {FILLTYPE => 'SOLID'};
 
 (see below for an example of hatched fill)
 
@@ -210,20 +211,20 @@ case-insensitive, but the whole name must be specified.
 
 Set the character font. This can either be specified as a number following
 the PGPLOT numbering or name as follows (name in capitals):
-   1 - NORMAL
-   2 - ROMAN
-   3 - ITALIC
-   4 - SCRIPT
+
+ 1 - NORMAL
+ 2 - ROMAN
+ 3 - ITALIC
+ 4 - SCRIPT
 
 (Note that in a string, the font can be changed using the escape sequences
 C<\fn>, C<\fr>, C<\fi> and C<\fs> respectively)
 
-   $opt = {FONT => 'ROMAN'};
+ $opt = {FONT => 'ROMAN'};
 
 gives the same result as
 
-   $opt = {FONT => 2};
-
+ $opt = {FONT => 2};
 
 =item hatching
 
@@ -236,12 +237,12 @@ in units of 1% of C<min(height, width)> of the view surface, and PHASE to
 set the offset the hatching. Alternatively this can be specified as a
 1x3 piddle C<$hatch=pdl[$angle, $sep, $phase]>.
 
-   $opt = {FILLTYPE => 'HATCHED', 
-           HATCHING => {ANGLE=>30, SEPARATION=>4}};
+ $opt = {FILLTYPE => 'HATCHED', 
+         HATCHING => {ANGLE=>30, SEPARATION=>4}};
 
 Can also be specified as
 
-   $opt = {FILL=> 'HATCHED', HATCH => pdl [30,4,0.0]};
+ $opt = {FILL=> 'HATCHED', HATCH => pdl [30,4,0.0]};
 
 For another example of hatching, see L</poly>.
 
@@ -254,12 +255,19 @@ the PGPLOT C<pgenv()> command for more information.
 =item linestyle
 
 Set the line style. This can either be specified as a number following
-the PGPLOT numbering (1 - SOLID line, 2 - DASHED, 3 - DOT-DASH-dot-dash,
-4 - DOTTED, 5 - DASH-DOT-DOT-dot) or using name (as given in capitals above).
+the PGPLOT numbering:
+
+ 1 - SOLID line
+ 2 - DASHED
+ 3 - DOT-DASH-dot-dash
+ 4 - DOTTED
+ 5 - DASH-DOT-DOT-dot
+
+or using name (as given in capitals above).
 Thus the following two specifications both specify the line to be dotted:
 
-   $opt = {LINESTYLE => 4};
-   $varopt = {LINESTYLE => 'DOTTED'};
+ $opt = {LINESTYLE => 4};
+ $varopt = {LINESTYLE => 'DOTTED'};
 
 The names are not case sensitive, but the full name is required.
 
@@ -267,9 +275,11 @@ The names are not case sensitive, but the full name is required.
 
 Set the line width. It is specified as a integer multiple of 0.13 mm.
 
-   $opt = {LINEWIDTH => 10}; # A rather fat line
+ $opt = {LINEWIDTH => 10}; # A rather fat line
 
 =back
+
+=head1 FUNCTIONS
 
 A more detailed listing of the functions and their usage follows. For
 all functions we specify which options take effect and what other options
@@ -283,11 +293,11 @@ Open PGPLOT graphics device
 
 =for usage
 
-  Usage: dev $device, [$nx,$ny];
+ Usage: dev $device, [$nx,$ny];
 
 C<$device> is a PGPLOT graphics device such as "/xserve" or "/ps",
 if omitted defaults to last used device (or value of env
-var PGPLOT_DEV if first time).
+var C<PGPLOT_DEV> if first time).
 C<$nx>, C<$ny> specify sub-panelling.
 
 =head2 env
@@ -298,19 +308,19 @@ Define a plot window, and put graphics on 'hold'
 
 =for usage
 
-  Usage: env $xmin, $xmax, $ymin, $ymax, [$justify, $axis];
-         env $xmin, $xmax, $ymin, $ymax, [$options];
+ Usage: env $xmin, $xmax, $ymin, $ymax, [$justify, $axis];
+        env $xmin, $xmax, $ymin, $ymax, [$options];
 
 C<$xmin>, C<$xmax>, C<$ymin>, C<$ymax> are the plot boundaries.  
-C<$justify> is a boolean value (default is 0);
+C<$justify> is a boolean value (default is B<0>);
 if true the axes scales will be the same (see L</justify>).
 C<$axis> describes how the axes should be drawn (see
-L</axis>) and defaults to 0.
+L</axis>) and defaults to B<0>.
 
 If the second form is used, $justify and $axis can be set in the options
 hash, for example:
 
-  env 0, 100, 0, 50, {JUSTIFY => 1, AXIS => 'GRID', CHARSIZE => 0.7};
+ env 0, 100, 0, 50, {JUSTIFY => 1, AXIS => 'GRID', CHARSIZE => 0.7};
 
 =head2 imag
 
@@ -320,11 +330,18 @@ Display an image (uses C<pgimag()>/C<pggray()> as appropriate)
 
 =for usage
 
-  Usage: imag ( $image,  [$min, $max, $transform], [$opt] )
+ Usage: imag ( $image,  [$min, $max, $transform], [$opt] )
 
 Notes: C<$transform> for image/cont etc. is used in the same way as the
 C<TR()> array in the underlying PGPLOT FORTRAN routine but is, 
 fortunately, zero-offset.
+
+There are several options related to scaling.  By default, the image
+is scaled to fit the PGPLOT default viewport on the screen.  Scaling,
+aspect ratio preservation, and 1:1 pixel mapping are available.  
+(1:1 pixel mapping GREATLY increases the speed of pgimag, and is useful
+for, eg, movie display; but it's not recommended for final output as 
+it's not device-independent.)
 
 Options recognised:
 
@@ -335,9 +352,59 @@ Options recognised:
              display stretch
       MAX  - Sets the maximum value for the same
  TRANSFORM - The transform 'matrix' as a 6x1 vector for display
+      PIX  - Sets the image pixel aspect ratio.  By default, imag
+             stretches the image pixels so that the final image aspect
+             ratio fits the viewport exactly.  Setting PIX=>1 causes
+             the image aspect ratio to be preserved.  (the image is
+             scaled to avoid cropping, unless you specify scaling 
+             manually).  Larger numbers yield "landscape mode" pixels.
+     PITCH - Sets the number of image pixels per screen unit, in the Y
+             direction.  The X direction is determined by PIX, which 
+             defaults to 1 if PITCH is specified and PIX is not.  PITCH 
+             causes UNIT to default to "inches" so that it's easy to say 
+             100dpi by specifying {PITCH=>100}.  Larger numbers yield 
+             higher resolution (hence smaller appearing) images.
+      UNIT - Sets the screen unit used for scaling.  Must be one of the
+             PGPLOT supported units (inch, mm, pixel, normalized).  You
+             can refer to them by name or by number.  Defaults to pixels
+             if not specified.
+     SCALE - Syntactic sugar for the reciprocal of PITCH.  Makes the
+             UNIT default to "pixels" so you can say "{SCALE=>1}"
+             to see your image in device pixels.   Larger SCALEs lead
+             to larger appearing images.
 
-    The following standard options influence this command:
-    AXIS, BORDER, JUSTIFY
+The following standard options influence this command:
+
+ AXIS, BORDER, JUSTIFY
+
+=for example
+
+   To see an image with maximum size in the current window, but square
+   pixels, say:
+         imag $a,{PIX=>1}
+   An alternative approach is to try:
+         imag $a,{JUSTIFY=>1}
+   To see the same image, scaled 1:1 with device pixels, say:
+         imag $a,{SCALE=>1}
+   To see an image made on a device with 1:2 pixel aspect ratio, with 
+   X pixels the same as original image pixels, say
+         imag $a,{PIX=>0.5,SCALE=>2}
+   To display an image at 100 dpi on any device, say:
+         imag $a,{PITCH=>100}
+   To display an image with 100 micron pixels, say:
+         imag $a,{PITCH=>10,UNIT=>'mm'}
+
+=head2 imag1
+
+=for ref
+
+Display an image with correct aspect ratio 
+
+=for usage
+
+ Usage:  imag1 ( $image, [$min, $max, $transform], [$opt] )
+
+Notes: This is syntactic sugar for imag({PIX=>1}).
 
 =head2 ctab
 
@@ -354,12 +421,8 @@ Usage:
    ctab ( $levels, $red, $green, $blue, [$contrast, $brightness] )
    ctab ( '', $contrast, $brightness ) # use last color table
 
-Note: See L<PDL::Graphics::LUT> for access to a large
+Note: See L<PDL::Graphics::LUT|PDL::Graphics::LUT> for access to a large
 number of colour tables.
-
-Options recognised:
-
-   Currently no options are implemented for this command.
 
 =head2 line
 
@@ -367,20 +430,18 @@ Options recognised:
 
 Plot vector as connected points
 
-If the 'MISSING' option is specified, those points in the $y vector
+If the 'MISSING' option is specified, those points in the C<$y> vector
 which are equal to the MISSING value are not plotted, but are skipped
 over.  This allows one to quickly draw multiple lines with one call to
-'line', for example to draw coastlines for maps.
-
+C<line>, for example to draw coastlines for maps.
 
 =for usage
 
  Usage: line ( [$x,] $y, [$opt] )
 
- Options recognised:
+The following standard options influence this command:
 
-    The following standard options influence this command:
-    AXIS, BORDER, COLO(U)R, JUSTIFY, LINESTYLE, LINEWIDTH, MISSING
+ AXIS, BORDER, COLO(U)R, JUSTIFY, LINESTYLE, LINEWIDTH, MISSING
 
 =for example
 
@@ -399,28 +460,27 @@ Plot vector as points
 
  Usage: points ( [$x,] $y, [$symbol(s)], [$opt] )
 
- Options recognised:
+Options recognised:
 
-    SYMBOL - Either a piddle with the same dimensions as $x, containing
-             the symbol associated to each point or a number specifying
-             the symbol to use for every point, or a name specifying the
-             symbol to use according to the following (recognised name in
+   SYMBOL - Either a piddle with the same dimensions as $x, containing
+            the symbol associated to each point or a number specifying
+            the symbol to use for every point, or a name specifying the
+            symbol to use according to the following (recognised name in
 	     capital letters):
+             0 - SQUARE   1 - DOT     2 - PLUS     3 - ASTERISK
+             4 - CIRCLE   5 - CROSS   7 - TRIANGLE 8 - EARTH
+             9 - SUN     11 - DIAMOND 12- STAR
+ PLOTLINE - If this is >0 a line will be drawn through the points.
 
-              0 - SQUARE   1 - DOT     2 - PLUS     3 - ASTERISK
-              4 - CIRCLE   5 - CROSS   7 - TRIANGLE 8 - EARTH
-              9 - SUN     11 - DIAMOND 12- STAR
+The following standard options influence this command:
 
-  PLOTLINE - If this is >0 a line will be drawn through the points.
-
-    The following standard options influence this command:
-    AXIS, BORDER, CHARSIZE, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
+ AXIS, BORDER, CHARSIZE, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
 
 =for example
 
-  $y = sequence(10)**2+random(10);
-  # Plot blue stars with a solid line through:
-  points $y, {PLOTLINE => 1, COLOUR => BLUE, SYMBOL => STAR};
+ $y = sequence(10)**2+random(10);
+ # Plot blue stars with a solid line through:
+ points $y, {PLOTLINE => 1, COLOUR => BLUE, SYMBOL => STAR};
 
 =head2 errb
 
@@ -432,26 +492,26 @@ Usage:
 
 =for usage
 
-   errb ( $y, $yerrors, [$opt] )
-   errb ( $x, $y, $yerrors, [$opt] )
-   errb ( $x, $y, $xerrors, $yerrors, [$opt] )
-   errb ( $x, $y, $xloerr, $xhierr, $yloerr, $yhierr, [$opt])
+ errb ( $y, $yerrors, [$opt] )
+ errb ( $x, $y, $yerrors, [$opt] )
+ errb ( $x, $y, $xerrors, $yerrors, [$opt] )
+ errb ( $x, $y, $xloerr, $xhierr, $yloerr, $yhierr, [$opt])
 
- Options recognised:
+Options recognised:
 
-    TERM - Length of terminals in multiples of the default length
-  SYMBOL - Plot the datapoints using the symbol value given, either
-           as name or number - see documentation for 'points'
+   TERM - Length of terminals in multiples of the default length
+ SYMBOL - Plot the datapoints using the symbol value given, either
+          as name or number - see documentation for 'points'
 
-    The following standard options influence this command:
-    AXIS, BORDER, CHARSIZE, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
+The following standard options influence this command:
+
+ AXIS, BORDER, CHARSIZE, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
 
 =for example
 
-  $y = sequence(10)**2+random(10);
-  $sigma=0.5*sqrt($y);
-  errb $y, $sigma, {COLOUR => RED, SYMBOL => 18};
-
+ $y = sequence(10)**2+random(10);
+ $sigma=0.5*sqrt($y);
+ errb $y, $sigma, {COLOUR => RED, SYMBOL => 18};
 
 =head2 cont
 
@@ -467,7 +527,7 @@ Notes: C<$transform> for image/cont etc. is used in the same way as the
 C<TR()> array in the underlying PGPLOT FORTRAN routine but is, 
 fortunately, zero-offset.
 
- Options recognised:
+Options recognised:
 
     CONTOURS - A piddle with the contour levels
       FOLLOW - Follow the contour lines around (uses pgcont rather than
@@ -483,38 +543,38 @@ fortunately, zero-offset.
                overridden by CONTOURS
    TRANSFORM - The pixel-to-world coordinate transform vector
 
-    The following standard options influence this command:
-    AXIS, BORDER, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
+The following standard options influence this command:
+
+ AXIS, BORDER, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
 
 =for example
 
-   $x=sequence(10,10);
-   $ncont = 4;
-   $labels= ['COLD', 'COLDER', 'FREEZING', 'NORWAY']
-   # This will give four blue contour lines labelled in red.
-   cont $x, {NCONT => $ncont, LABELS => $labels, LABELCOLOR => RED,
-             COLOR => BLUE}
-
+ $x=sequence(10,10);
+ $ncont = 4;
+ $labels= ['COLD', 'COLDER', 'FREEZING', 'NORWAY']
+ # This will give four blue contour lines labelled in red.
+ cont $x, {NCONT => $ncont, LABELS => $labels, LABELCOLOR => RED,
+           COLOR => BLUE}
 
 =head2 bin
 
 =for ref
 
-Plot vector as histogram ( e.g. C<bin(hist($data))> )
+Plot vector as histogram (e.g. C<bin(hist($data))>)
 
 =for usage
 
-   Usage: bin ( [$x,] $data )
+ Usage: bin ( [$x,] $data )
 
- Options recognised:
+Options recognised:
 
-    CENTRE - if true, the x values denote the centre of the bin 
-             otherwise they give the lower-edge (in x) of the bin
-    CENTER - as CENTRE
+ CENTRE - if true, the x values denote the centre of the bin 
+          otherwise they give the lower-edge (in x) of the bin
+ CENTER - as CENTRE
 
-    The following standard options influence this command:
-    AXIS, BORDER, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
+The following standard options influence this command:
 
+ AXIS, BORDER, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
 
 =head2 hi2d
 
@@ -524,27 +584,29 @@ Plot image as 2d histogram (not very good IMHO...)
 
 =for usage
 
-   Usage: hi2d ( $image, [$x, $ioff, $bias], [$opt] )
+ Usage: hi2d ( $image, [$x, $ioff, $bias], [$opt] )
 
- Options recognised:
+Options recognised:
 
-    IOFFSET - The offset for each array slice. >0 slants to the right
-                                               <0 to the left.
-       BIAS - The bias to shift each array slice up by.
+ IOFFSET - The offset for each array slice. >0 slants to the right
+                                            <0 to the left.
+    BIAS - The bias to shift each array slice up by.
 
-    The following standard options influence this command:
-    AXIS, BORDER, JUSTIFY
+The following standard options influence this command:
 
-Note that meddling with the ioffset and bias often will require you to
+ AXIS, BORDER, JUSTIFY
+
+Note that meddling with the C<ioffset> and C<bias> often will require you to
 change the default plot range somewhat. It is also worth noting that if
-you have TriD working you will probably be better off using C<mesh3d> or
-a similar command - see C<help TriD>.
+you have TriD working you will probably be better off using 
+L<mesh3d|PDL::Graphics::TriD/mesh3d> or
+a similar command - see L<PDL::Graphics::TriD>.
 
 =for example
 
-     $r=sequence(100)/50-1.0;
-     $y=exp(-$r**2)*transpose(exp(-$r**2))
-     hi2d $y, {IOFF => 1.5, BIAS => 0.07};
+ $r=sequence(100)/50-1.0;
+ $y=exp(-$r**2)*transpose(exp(-$r**2))
+ hi2d $y, {IOFF => 1.5, BIAS => 0.07};
 
 =head2 poly
 
@@ -554,24 +616,25 @@ Draw a polygon
 
 =for usage
 
-   Usage: poly ( $x, $y )
+ Usage: poly ( $x, $y )
 
- Options recognised:
+Options recognised:
 
-    The following standard options influence this command:
-    AXIS, BORDER, COLOUR, FILLTYPE, HATCHING, JUSTIFY, LINESTYLE, 
-    LINEWIDTH
+The following standard options influence this command:
+
+ AXIS, BORDER, COLOUR, FILLTYPE, HATCHING, JUSTIFY, LINESTYLE, 
+ LINEWIDTH
 
 =for example
 
-  # Fill with hatching in two different colours
-  $x=sequence(10)/10;
-  # First fill with cyan hatching
-  poly $x, $x**2, {COLOR=>5, FILL=>3};
-  hold;
-  # Then do it over again with the hatching offset in phase:
-  poly $x, $x**2, {COLOR=>6, FILL=>3, HATCH=>{PHASE=>0.5}};
-  release;
+ # Fill with hatching in two different colours
+ $x=sequence(10)/10;
+ # First fill with cyan hatching
+ poly $x, $x**2, {COLOR=>5, FILL=>3};
+ hold;
+ # Then do it over again with the hatching offset in phase:
+ poly $x, $x**2, {COLOR=>6, FILL=>3, HATCH=>{PHASE=>0.5}};
+ release;
 
 =head2 vect
 
@@ -581,7 +644,7 @@ Display 2 images as a vector field
 
 =for usage
 
-   Usage: vect ( $a, $b, [$scale, $pos, $transform, $misval] )
+ Usage: vect ( $a, $b, [$scale, $pos, $transform, $misval] )
 
 Notes: C<$transform> for image/cont etc. is used in the same way as the
 C<TR()> array in the underlying PGPLOT FORTRAN routine but is, 
@@ -590,19 +653,20 @@ fortunately, zero-offset.
 This routine will plot a vector field. C<$a> is the horizontal component
 and C<$b> the vertical component.
 
- Options recognised:
+Options recognised:
 
-    SCALE - Set the scale factor for vector lengths.
-      POS - Set the position of vectors.
-            <0 - vector head at coordinate
-            >0 - vector base at coordinate
-            =0 - vector centered on the coordinate
-TRANSFORM - The pixel-to-world coordinate transform vector
-  MISSING - Elements with this value are ignored.
+     SCALE - Set the scale factor for vector lengths.
+       POS - Set the position of vectors.
+             <0 - vector head at coordinate
+             >0 - vector base at coordinate
+             =0 - vector centered on the coordinate
+ TRANSFORM - The pixel-to-world coordinate transform vector
+   MISSING - Elements with this value are ignored.
 
-    The following standard options influence this command:
-    ARROW, ARROWSIZE, AXIS, BORDER, CHARSIZE, COLOUR, JUSTIFY, 
-    LINESTYLE, LINEWIDTH
+The following standard options influence this command:
+
+ ARROW, ARROWSIZE, AXIS, BORDER, CHARSIZE, COLOUR, JUSTIFY, 
+ LINESTYLE, LINEWIDTH
 
 =for example
 
@@ -622,7 +686,6 @@ conditions. For details, see the file COPYING in the PDL
 distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
 
-
 =cut
 
 
@@ -635,7 +698,7 @@ package PDL::Graphics::PGPLOT;
 # Just a plain function exporting package
 
 @EXPORT = qw( dev hold release rel env bin cont errb line points
-	      imag image ctab ctab_info hi2d poly vect CtoF77coords
+	      imag imag1 ctab ctab_info hi2d poly vect CtoF77coords
 );
 
 use PDL::Core qw/:Func :Internal/;    # Grab the Core names
@@ -1290,17 +1353,23 @@ sub points {
 
 # display an image using pgimag()/pggray() as appropriate
 
+sub imag1 {
+  ($in,$opt)=_extract_hash(@_);
+  barf 'Usage: im ( $image, [$min, $max, $transform] )' if $#$in<0 || $#in>3;
+  $opt->{'PIX'}=1 unless defined $opt{'PIX'};
+  imag (@$in,$opt);
+}
+
 sub imag {
   ($in, $opt)=_extract_hash(@_);
 
-  # There is little use for options here, but I could add support
-  # for a contoured overlay.
 
   barf 'Usage: imag ( $image,  [$min, $max, $transform] )' if $#$in<0 || $#$in>3;
   my ($image,$min,$max,$tr) = @$in;
   checkarg($image,2);
   my($nx,$ny) = $image->dims;
 
+  my($pix,$pitch,$unit,$scale);
   my $itf = 0;
 
   # Parse for options input instead of calling convention
@@ -1327,13 +1396,86 @@ sub imag {
   }
   $tr = CtoF77coords($tr);
 
-  initenv(
-    at($tr,0) + 0.5 * $tr->slice('1:2')->sum,
-    at($tr,0) + ($nx + 0.5) * $tr->slice('1:2')->sum,
-    at($tr,3) + 0.5 * $tr->slice('4:5')->sum,
-    at($tr,3) + ($ny + 0.5) * $tr->slice('4:5')->sum,
-    $opt
-  ) unless $hold;
+  ##############################
+  # Set up coordinate transformation in the output window.
+  
+  if (!$hold) {
+    #########
+    # Parse out scaling options - this is pretty long because
+    # the defaults for each value change based on the others.
+    # (e.g. specifying "SCALE" and no unit gives pixels; but
+    # specifying "PITCH" and no unit gives dpi).
+    #
+    local $_;
+    my ($pix,$pitch,$unit);
+    
+    if($opt->{'SCALE'}) {
+      ($pix,$pitch,$unit)=(1,1.0/$opt->{'SCALE'},3);
+    }
+    if($opt->{'PITCH'}) {
+      ($pix,$pitch,$unit) = (1,$opt->{'PITCH'},1);
+    }
+    if(defined ($_ = $opt->{'UNIT'})) {
+      undef $unit;
+      if(m/^d/ && $_ <= 4) { # Numeric data type spec
+	$unit = $_;
+      } else { 
+	local(@c) = ('n','i','m','p');
+	local($i);
+	for($i=0;defined($c=shift(@c));$i++) {
+	  m/^$c/ || next;
+	  $unit=$i; 
+	  last;
+	}
+      }
+      barf ('If you specify UNIT, it has to be one of (normal,inches,millimeters,pixels)!') unless defined($unit);
+    }
+
+    $pix = $opt->{'PIX'} if defined $opt->{'PIX'};
+    
+    ##############################
+    ## Do the initial scaling setup.  If $pix is defined, then
+    ## handle the scaling locally, else use initenv.
+    ## [ The PIX, SCALE, and UNIT options could in principle be fed to
+    ## initenv instead of doing it here... ]
+    
+    if(defined $pix) {
+	initdev;
+	my ( $x0,$x1,$y0,$y1 );
+	
+	if(!defined($pitch)) {
+	    ## Set scaling parameters automagically.
+	    
+	    pgqvsz(1,$x0,$x1,$y0,$y1);
+	    print "x0=$x0, x1=$x1, y0=$y0, y1=$y1n" if $PDL::verbose;
+	    ($unit,$pitch) = (1, max(pdl( $pix * $nx / ($x1-$x0)  , 
+					  $ny / ($y1-$y0)   )));
+	    print "imag: defined pitch & unit automagically\n" if $PDL::verbose;
+	}
+	
+	print "imag: unit='$unit', pitch='$pitch'\n" if $PDL::verbose;
+	
+	my($col); pgqci($col); pgsci($AXISCOLOUR);
+	pgpage;
+	pgvstd;  ## Change this to use the margins for display!
+	
+	## Set the window to the correct number of pixels for the 
+	## viewport size and the specified $pitch.
+	pgqvsz($unit,$x0,$x1,$y0,$y1); 
+	pgswin(0,($x1-$x0)*$pitch/$pix,0,($y1-$y0)*$pitch);
+	
+	pgsci($col);
+    } else {
+	initenv(
+		at($tr,0) + 0.5 * $tr->slice('1:2')->sum,
+		at($tr,0) + ($nx + 0.5) * $tr->slice('1:2')->sum,
+		at($tr,3) + 0.5 * $tr->slice('4:5')->sum,
+		at($tr,3) + ($ny + 0.5) * $tr->slice('4:5')->sum,
+		$opt
+		);
+    }
+  } # if ! hold
+
   print "Displaying $nx x $ny image from $min to $max ...\n" if $PDL::verbose;
 
   pgsitf( $itf );
@@ -1354,7 +1496,20 @@ sub imag {
 sub ctab {
   ($in, $opt)=_extract_hash(@_);
 
-  # First indirect arg list through %CTA
+  # No arguments -- print list of tables
+  if(scalar(@$in) == 0) {
+    print "Available 'standard' color tables are:\n",join(",",sort keys %CTAB)
+      ,"\n";
+    return;
+  }
+  # No arguments -- print list of tables
+  if(scalar(@$in) == 0) {
+    print "Available 'standard' color tables are:\n",join(",",sort keys %CTAB)
+      ,"\n";
+    return;
+  }
+
+  # First indirect arg list through %CTAB
   my(@arg) = @$in;
   if ($#arg>=0 && !ref($arg[0])) { # First arg is a name not an object
     # if first arg is undef or empty string, means use last CTAB.

@@ -7,9 +7,9 @@ PDL::Graphics::IIS - Display PDL images on IIS devices (saoimage/ximtool)
 
 =head1 SYNOPSIS
 
-  use PDL::Graphics::IIS;
-  saoimage ( -geometry => '800x800' );
-  iis rvals(100,100);
+ use PDL::Graphics::IIS;
+ saoimage ( -geometry => '800x800' );
+ iis rvals(100,100);
 
 =head1 DESCRIPTION
 
@@ -22,18 +22,19 @@ These programs should be familiar to astronomer's - they are used by
 the common IRAF system. The programs and their HTML documentation
 can be obtained from the following URLs:
 
-SAOimage: http://tdc-www.harvard.edu/software/saoimage.html
-Ximtool:  http://iraf.noao.edu/iraf/web/projects/x11iraf/x11iraf.html
+ SAOimage: http://tdc-www.harvard.edu/software/saoimage.html
+ Ximtool:  http://iraf.noao.edu/iraf/web/projects/x11iraf/x11iraf.html
 
 Non-astronomer's may find they quite nifty for displaying 2D data.
 
-The Perl variable $stdimage is exported from the module and controls
+The Perl variable C<$stdimage> is exported from the module and controls
 the frame buffer configuration currently in use. The default value
-is 'imt1024' which specifies a 1024x1024 frame buffer. Other
-values supported by the module are: imt512,imt800,imt1024,imt1600,imt2048,
-and imt4096.
+is C<imt1024> which specifies a C<1024x1024> frame buffer. Other
+values supported by the module are:
+ 
+ imt512, imt800, imt1024, imt1600, imt2048, and imt4096.
 
-If you have a $HOME/.imtoolrc you can use it to specify other frame
+If you have a F<$HOME/.imtoolrc> you can use it to specify other frame
 buffer names and configurations in exactly the same way you can in
 IRAF. Here is a sample file:
 
@@ -53,9 +54,9 @@ IRAF. Here is a sample file:
 
 (Note: some versions of SAOimage may not even work if this file is not
 present. If you get funny error messages about 'imtoolrc' try copying
-the above to $HOME/.imtoolrc or /usr/local/lib/imtoolrc)
+the above to F<$HOME/.imtoolrc> or F</usr/local/lib/imtoolrc>)
 
-The Perl variable $iisframe is also exported from the module and controls
+The Perl variable C<$iisframe> is also exported from the module and controls
 which display frame number to use in programs such as Ximtool which supports
 multiple frames. This allows you to do useful things such as blink between
 images.
@@ -101,23 +102,27 @@ Displays an image on a IIS device (e.g. SAOimage/Ximtool)
 
 =for usage
 
-   iis $image, [ { MIN => $min, MAX => $max,
-                   TITLE => 'pretty picture' } ]
-   iis $image, [$min,$max]
+ iis $image, [ { MIN => $min, MAX => $max,
+                 TITLE => 'pretty picture',
+                 FRAME => 2 } ]
+ iis $image, [$min,$max]
 
 =for sig
 
-   iis(image(m,n),[\%options]) or iis(image(m,n),[min(),max()])
+ (image(m,n),[\%options]) or (image(m,n),[min(),max()])
 
-Displays image on a IIS device. If min() or max() are omitted they
+Displays image on a IIS device. If C<min()> or C<max()> are omitted they
 are autoscaled. A good demonstration of PDL threading can be had
-by giving iis() a data *cube* - iis() will be repeatedly called
+by giving C<iis()> a data *cube* - C<iis()> will be repeatedly called
 for each plane of the cube resulting in a poor man's movie!
 
-If supplied, TITLE is used to label the frame, if no title is
-supplied, either the OBJECT value stored in the image header or a
+If supplied, C<TITLE> is used to label the frame, if no title is
+supplied, either the C<OBJECT> value stored in the image header or a
 default string is used (the title is restricted to a maximum
-length of 32 characters).
+length of 32 characters). 
+
+To specify which frame to draw to, either use
+the package variable C<$iisframe>, or the C<FRAME> option.
 
 =cut
 
@@ -135,26 +140,30 @@ sub iis {
       $title =~ s/^'(.*)'$/$1/;
     }
 
+    my $frame = $iisframe;
     if ( $#_ == 1 ) { $min = $_[0]; $max = $_[1]; }
     elsif ( $#_ == 0 ) {
       barf $usage unless ref($_[0]) eq "HASH";
 
-      my $opt = new PDL::Options( { MIN => undef, MAX => undef, TITLE => $title } );
+      my $opt = new PDL::Options( { MIN => undef, MAX => undef, TITLE => $title, FRAME => $frame } );
       $opt->options( shift );
       my $options = $opt->current;
 
       $min   = $$options{MIN};
       $max   = $$options{MAX};
       $title = $$options{TITLE};
+      $iisframe = $$options{FRAME};
     }
 
     my($nx,$ny) = dims($image);
     fbconfig($stdimage) if $stdimage ne $last_stdimage;
     $min = $image->min unless defined $min;
     $max = $image->max unless defined $max;
-    print "Displaying $nx x $ny image from $min to $max ...\n" if $PDL::verbose;
-    &PDL::_iis_int($image,$min,$max,$title);
-1;}
+    print "Displaying $nx x $ny image in frame $iisframe from $min to $max ...\n" if $PDL::verbose;
+    PDL::_iis($image,$min,$max,$title);
+    $iisframe = $frame; # restore value
+    1;
+}
 
 =head2 iiscur
 
@@ -167,7 +176,7 @@ Return cursor position from an IIS device (e.g. SAOimage/Ximtool)
  ($x,$y) = iiscur($ch)
 
 This function puts up an interactive cursor on the IIS device and returns
-the ($x,$y) position and the character typed ($ch)
+the C<($x,$y)> position and the character typed (C<$ch>)
 by the user.
 
 =cut
@@ -187,14 +196,15 @@ Draws a circle on a IIS device (e.g. SAOimage/Ximtool)
 
 =for sig
 
- Signature: iiscirc(x(),y(),radius(),colour())
+ (x(),y(),radius(),colour())
 
 =for usage
 
-  iiscirc $x, $y, [$radius, $colour]
+ iiscirc $x, $y, [$radius, $colour]
 
 Draws circles on the IIS device with specied points and colours. Because
-this module uses PDL::PP threading you can supply lists of points via
+this module uses 
+L<PDL::PP|PDL::PP> threading you can supply lists of points via
 1D arrays, etc.
 
 An amusing PDL idiom is:
@@ -203,23 +213,23 @@ An amusing PDL idiom is:
 
 Note the colours are the same as IRAF, viz:
 
-            201 = cursor color (white)
-            202 = black
-            203 = white
-            204 = red
-            205 = green
-            206 = blue
-            207 = yellow
-            208 = cyan
-            209 = magenta
-            210 = coral
-            211 = maroon
-            212 = orange
-            213 = khaki
-            214 = orchid
-            215 = turquoise
-            216 = violet
-            217 = wheat
+ 201 = cursor color (white)
+ 202 = black
+ 203 = white
+ 204 = red
+ 205 = green
+ 206 = blue
+ 207 = yellow
+ 208 = cyan
+ 209 = magenta
+ 210 = coral
+ 211 = maroon
+ 212 = orange
+ 213 = khaki
+ 214 = orchid
+ 215 = turquoise
+ 216 = violet
+ 217 = wheat
 
 =cut
 
@@ -229,8 +239,9 @@ sub iiscirc {
    fbconfig($stdimage) if $stdimage ne $last_stdimage;
    $radius = 10 unless defined $radius;
    $colour = 204 unless defined $colour;
-   &PDL::_iiscirc_int($x, $y, $radius, $colour);
-1;}
+   PDL::_iiscirc($x, $y, $radius, $colour);
+   1;
+}
 
 =head2 saoimage
 
@@ -272,8 +283,7 @@ Starts the Ximtool external program
 
 =for usage
 
-  ximtool[(command line options)]
-
+ ximtool[(command line options)]
 
 Starts up the Ximtool external program. Default FIFO devices are chosen
 so as to be compatible with other IIS module functions. If no suitable
@@ -285,7 +295,6 @@ e.g.
 
  perldl> ximtool
  perldl> ximtool (-maxColors => 64)
-
 
 =cut
 
@@ -443,11 +452,10 @@ EOD
 
 pp_bless('PDL::Graphics::IIS');
 
-pp_def('iis',
-        PMCode=>'',
-	Doc => undef,
+pp_def('_iis',
         Pars => 'image(m,n); min(); max();',
         OtherPars => 'char *perl_title',
+	Doc  => undef,
         Code => '
 
    int   frame = (int)SvIV( perl_get_sv("iisframe", FALSE) );
@@ -595,10 +603,9 @@ pp_def('iis',
 
 '); # End of iis_c pp_def
 
-pp_def('iiscirc',
+pp_def( '_iiscirc',
         Pars => 'x(); y(); r(); colour();',
-        PMCode=>'',
-	Doc=>undef,
+	Doc  => undef,
         Code => '
 
    int   frame = (int)SvIV( perl_get_sv("iisframe", FALSE) );
@@ -637,7 +644,6 @@ to redistribute this software / documentation under certain
 conditions. For details, see the file COPYING in the PDL
 distribution. If this file is separated from the PDL distribution,
 the copyright notice should be included in the file.
-
 
 =cut
 EOD
