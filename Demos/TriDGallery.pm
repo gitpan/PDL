@@ -70,6 +70,20 @@ use PDL; use PDL::Graphics::TriD;$a=zeroes 300,300;$r=$a->xlinvals(-1.5,
 # [press 'q' in the graphics window when done]
 |;
 
+actnw q|
+# Color Mandelbrot anim (nokeeptwiddling3d removed -> fits) [Tjl]
+
+use PDL; use PDL::Graphics::TriD;
+nokeeptwiddling3d();
+$a=zeroes 300,300;$r=$a->xlinvals(-1.5,
+0.5);$i=$a->ylinvals(-1,1);$t=$r;$u=$i;for(1..30){$q=$r**2-$i**2+$t;$h=2
+*$r*$i+$u;$d=$r**2+$i**2;$a=lclip($a,$_*($d>2.0)*($a==0));($r,$i)=map{$_
+->clip(-5,5)}$q,$h;imagrgb[($a==0)*($r/2+0.75),($a==0)*($i+1)/2,$a/30]}
+
+# [press 'q' in the graphics window when done]
+|;
+
+
 
 actnw q|
 # Torus... (barrel) [Tjl]
@@ -105,6 +119,19 @@ comment q|
         Now it's up to you to submit even better TriD M4LSs.
 
 |;
+
+}
+
+# Neat, but too big variation of color mandelbrot
+if(0) {
+
+use PDL; use PDL::Graphics::TriD;
+nokeeptwiddling3d();
+sub f {return abs(sin($_[0]*30))}
+$a=zeroes 300,300;$r=$a->xlinvals(-1.5,
+0.5);$i=$a->ylinvals(-1,1);$t=$r;$u=$i;for(1..30){$q=$r**2-$i**2+$t;$h=2
+*$r*$i+$u;$d=$r**2+$i**2;$a=lclip($a,$_*($d>2.0)*($a==0));($r,$i)=map{$_
+->clip(-5,5)}$q,$h;imagrgb[f(($a==0)*($r/2+0.75)),f(($a==0)*($i+1)/2),$a/30]}
 
 }
 

@@ -48,12 +48,10 @@ int pdl_howbig (int datatype) {
     }
 }
 
-/* Note this is no longer called - will leave
-in for now until we are sure we are happy
-with the datatype conversion - KGB */
+/* Check minimum datatype required to represent number */
 
-int pdl_whichdatatype (double nv) {
 #define TESTTYPE(b,a) {a foo = nv; if(nv == foo) return b;}
+int pdl_whichdatatype (double nv) {
 	TESTTYPE(PDL_B,PDL_Byte)
 	TESTTYPE(PDL_S,PDL_Short)
 	TESTTYPE(PDL_US,PDL_Ushort)
@@ -64,6 +62,14 @@ int pdl_whichdatatype (double nv) {
 		nv);
 }
 
+/* Check minimum, at least float, datatype required to represent number */
+
+int pdl_whichdatatype_double (double nv) {
+	TESTTYPE(PDL_F,PDL_Float)
+	TESTTYPE(PDL_D,PDL_Double)
+	croak("Something's gone wrong: %lf cannot be converted by whichdatatype_double",
+		nv);
+}
 /* Make a scratch data existence for a pdl */
 
 void pdl_makescratchhash(pdl *ret,double data, int datatype) {
@@ -121,15 +127,16 @@ pdl* SvPDLV ( SV* sv ) {
 
 /* Scratch hash for the pdl :( - slow but safest. */
 
-       
        /* Figure datatype to use */
-
-       if ( ((SvIOK(sv) && !SvNOK(sv))) || !SvNIOK(sv) )  /* Int */
-          datatype = PDL_L;
-       else /* Double */
-          datatype = PDL_D;
        
-       data = SvNV(sv);
+       if ( !SvIOK(sv) && SvNOK(sv) && SvNIOK(sv)  )  {/* Perl Double (e.g. 2.0) */
+          data = SvNV(sv);
+          datatype = pdl_whichdatatype_double(data);
+	  }
+       else { /* Perl Int (e.g. 2) */
+          data = SvNV(sv);
+          datatype = pdl_whichdatatype(data);
+       }
        pdl_makescratchhash(ret,data,datatype);
 
        return ret;

@@ -8,7 +8,7 @@
 package PDL::Graphics::TriD::GoBoard;
 @ISA=qw/PDL::Graphics::TriD::Object/;
 use PDL::Graphics::OpenGL;
-use PDL;
+use PDL::Lite;
 
 sub new {
 	my($type,$opts) = @_;

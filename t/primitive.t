@@ -15,6 +15,11 @@ sub ok {
 
 sub approx {
 	my($a,$b) = @_;
+	print "APPROX: $a $b\n";
+	if((join ',',$a->dims) ne (join ',',$b->dims)) {
+		print "UNEQDIM\n";
+		return 0;
+	}
 	my $c = abs($a-$b);
 	my $d = max($c);
 	if($d >= 0.01) {
@@ -32,11 +37,11 @@ ok(2,approx($a->sumover(), PDL->pdl([12, 6.5])));
 ok(3,approx($a->prodover(), PDL->pdl([60, 9])));
 
 $b = PDL->pdl(4,3,1,0,0,0,0,5,2,0,3,6);
-# print "B: $b\n";
+print "B: $b\n";
 $c = ($b->xvals) + 10;
 # print "C: $c\n";
 
-# print "BW: ", $b->where, "\n";
+print "BW: ", $b->where, "\n";
 
 ok(4,approx($b->where($b>4), PDL->pdl(5,6)));
 ok(5,approx($b->which, PDL->pdl(0,1,2,7,8,10,11)));

@@ -78,7 +78,8 @@ sub get_copy {
 	my($this,$from,$to) = @_;
 	my ($prev,$close);
 	if($#{$this->{Chain}} >= 0) {
-		return "($to) = strdup($from);"
+		# strdup loses portability :(
+		return "($to) = malloc(strlen($from)+1); strcpy($to,$from);"
 		 if $this->{Base} =~ /^\s*char\s*$/;
                 return "($to) = newSVsv($from);"
                  if $this->{Base} =~ /^\s*SV\s*$/;

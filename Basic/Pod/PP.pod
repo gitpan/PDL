@@ -1363,6 +1363,10 @@ L<PDL::Internals>
 
 L<perlxs>, L<perlxstut>
 
+=head1 CURRENTLY UNDOCUMENTED
+
+RedoDimsCode, $RESIZE()
+
 =head1 BUGS
 
 PDL::PP is still, even in its rewritten form, too complicated. 

@@ -1,5 +1,5 @@
-*DECK RS
-      SUBROUTINE RS (NM, N, A, W, MATZ, Z, FV1, FV2, IERR)
+*DECK RSFOO
+      SUBROUTINE RSFOO (NM, N, A, W, MATZ, Z, FV1, FV2, IERR)
 C***BEGIN PROLOGUE  RS
 C***PURPOSE  Compute the eigenvalues and, optionally, the eigenvectors
 C            of a real symmetric matrix.

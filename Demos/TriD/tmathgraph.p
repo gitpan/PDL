@@ -2,8 +2,7 @@ use blib;
 use PDL;
 use PDL::Graphics::TriD;
 use PDL::Graphics::TriD::Graph;
-# use PDL::Graphics::TriD::MathGraph;
-require "TriD/MathGraph.pm";
+use PDL::Graphics::TriD::MathGraph;
 
 $g = PDL::Graphics::TriD::get_new_graph();
 $g->default_axes();
@@ -39,8 +38,8 @@ $g->bind_default("foo2");
 
 $g->scalethings();
 
-PDL::Graphics::TriD::keeptwiddling(0);
-PDL::Graphics::TriD::twiddle_current();
+nokeeptwiddling3d();
+twiddle3d();
 while(1) {
 	$e->step();
 	if(++$ind%2 == 0) {
@@ -48,7 +47,7 @@ while(1) {
 		$lin->data_changed();
 		$g->scalethings() if (($ind % 200) == 0 or 1);
 		print "C: $c\n" if $verbose;
-		PDL::Graphics::TriD::twiddle_current();
+		twiddle3d();
 	}
 
 }

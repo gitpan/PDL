@@ -7,7 +7,7 @@ use strict;
 package PDL::PP::Code;
 use Carp;
 
-sub get_pdls {my($this) = @_; return $this->{ParNames};}
+sub get_pdls {my($this) = @_; return ($this->{ParNames},$this->{ParObjs});}
 
 # Do the appropriate substitutions in the code.
 sub new { my($type,$code,$parnames,$parobjs,$indobjs,$generictypes,
@@ -384,6 +384,7 @@ sub new { my($type,$str,$parent) = @_;
 	elsif($pdl =~ /^P$/) {new PDL::PP::PointerAccess($pdl,$inds);}
 	elsif($pdl =~ /^PP$/) {new PDL::PP::PhysPointerAccess($pdl,$inds);}
         elsif($pdl =~ /^SIZE$/) {new PDL::PP::SizeAccess($pdl,$inds);}
+        elsif($pdl =~ /^RESIZE$/) {new PDL::PP::ReSizeAccess($pdl,$inds);}
         elsif($pdl =~ /^GENERIC$/) {new PDL::PP::GentypeAccess($pdl,$inds);}
 	elsif(!defined $parent->{ParObjs}{$pdl}) {new PDL::PP::OtherAccess($pdl,$inds);}
 	else {
@@ -480,6 +481,42 @@ sub get_str {my($this,$parent,$context) = @_;
 	  unless defined($parent->{IndObjs}{$this->[0]});
 	$parent->{IndObjs}{$this->[0]}->get_size();
 }
+
+###########################
+# 
+# Encapsulate a ReSizeAccess
+
+package PDL::PP::ReSizeAccess;
+use Carp;
+
+sub new { my($type,$pdl,$inds) = @_; bless [$inds],$type; }
+
+sub get_str {my($this,$parent,$context) = @_;
+	$this->[0] =~ /^([^,]+),([^,]+)$/ or 
+		croak "Can't interpret resize str $this->[0]";
+	croak "can't RESIZE undefined dimension $1"
+	  unless defined($parent->{IndObjs}{$1});
+
+	my $s = $parent->{IndObjs}{$1}->get_size();
+
+# XXX NOTE: All piddles must be output piddles, there must not be
+# a loop over this var (at all!) etc. Should check for these,
+# this is why not yet documented.
+# FURTHER NOTE: RESIZE DOESN'T COPY DATA PROPERLY!
+
+	my($ord,$pdls) = $parent->get_pdls();
+	my @p;
+
+	for(@$ord) {
+		push @p, $_
+			if $pdls->{$_}->has_dim($1);
+	}
+	print "RESIZEACC: $1 $2, (",(join ',',@p),")\n";
+	warn "RESIZE USED: DO YOU KNOW WHAT YOU ARE DOING???\n";
+
+	return "$s = $2; ".(join '',map {$pdls->{$_}->do_resize($1,$2)} @p);
+}
+
 
 ###########################
 # 

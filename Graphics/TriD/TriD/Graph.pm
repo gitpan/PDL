@@ -1,7 +1,7 @@
 
 package PDL::Graphics::TriD::Graph;
 @ISA=qw/PDL::Graphics::TriD::Object/;
-use PDL;
+use PDL::LiteF; # XXX F needed?
 
 sub new {
 	my($type) = @_;

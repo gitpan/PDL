@@ -117,3 +117,29 @@ this condition.
 
 Also, it might be worth a try to get a different 'make' - gmake seems
 to work well.
+
+
+Q: What does 
+> Converting input file
+> Doc/mkhtmldoc.pl: /usr/lib/perl5/site_perl/PDL/PP.pod: cannot resolve
+> L<PDL::Indexing> in paragraph 8: no such page 'PDL/Indexing'
+> Doc/mkhtmldoc.pl: /usr/lib/perl5/site_perl/PDL/PP.pod: cannot resolve
+> L<perlxs> in paragraph 9: no such page 'perlxs'
+> Doc/mkhtmldoc.pl: /usr/lib/perl5/site_perl/PDL/PP.pod: cannot resolve
+> L<PDL::Indexing> in paragraph 11: no such page 'PDL/Indexing'
+>
+> [....]
+>
+> loading directory cache
+> Converting input file
+> Doc/mkhtmldoc.pl: /usr/lib/perl5/site_perl/PDL/Indexing.pod: cannot
+> resolve L<PDL> in paragraph 4: no such page 'PDL'
+> Doc/mkhtmldoc.pl: /usr/lib/perl5/site_perl/PDL/Indexing.pod: cannot
+> resolve L<PDL::FAQ> in paragraph 6: no such page 'PDL/FAQ'
+> Doc/mkhtmldoc.pl: /usr/lib/perl5/site_perl/PDL/Indexing.pod: cannot
+> resolve L<PDL::Internals> in paragraph 35: no such page 'PDL/Internals'
+mean?
+
+A: the html documentation is experimental - nothing is wrong
+with your system. 
+

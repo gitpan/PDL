@@ -1,7 +1,7 @@
 
 package PDL::Graphics::TriD::Surface;
 use PDL::Graphics::OpenGL;
-use PDL;
+use PDL::Lite;
 
 sub new {
 	my($nvertices,$nfaces,$nvertpface) = @_;

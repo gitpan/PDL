@@ -25,6 +25,10 @@ sub PDL::Graphics::TriD::Material::togl{
   glMaterialfv(&GL_FRONT_AND_BACK,&GL_DIFFUSE,$diff);
 }
 
+sub PDL::Graphics::TriD::Object::cannot_mklist {
+	return 0;
+}
+
 sub PDL::Graphics::TriD::Object::gl_update_list {
 	my($this) = @_;
 	if($this->{List}) {
@@ -35,7 +39,9 @@ sub PDL::Graphics::TriD::Object::gl_update_list {
 	print "GENLIST $lno\n" if $PDL::Graphics::TriD::verbose;
 	glNewList($lno,GL_COMPILE);
 	for(@{$this->{Objects}}) {
-		$_->togl();
+		if(!$_->cannot_mklist()) {
+			$_->togl();
+		}
 	}
 	print "EGENLIST $lno\n" if $PDL::Graphics::TriD::verbose;
 #	pdltotrianglemesh($pdl, 0, 1, 0, ($pdl->{Dims}[1]-1)*$mult);
@@ -52,6 +58,11 @@ sub PDL::Graphics::TriD::Object::gl_call_list {
 		$this->gl_update_list();
 	}
 	glCallList($this->{List});
+	for(@{$this->{Objects}}) {
+		if($_->cannot_mklist()) {
+			$_->togl();
+		}
+	}
 }
 
 sub PDL::Graphics::TriD::Object::togl {
@@ -201,7 +212,7 @@ sub PDL::Graphics::TriD::Quaternion::togl {my($this) = @_;
 		# die "Unnormalized Quaternion!\n"; 
 		$this->normalize_this();
 	}
-	glRotatef(acos($this->[0])/3.14*360, @{$this}[1..3]);
+	glRotatef(acos($this->[0])/3.14*180, @{$this}[1..3]);
 }
 
 sub PDL::Graphics::TriD::GObject::togl {
@@ -314,22 +325,26 @@ sub PDL::Graphics::TriD::SLattice_S::gdraw {
 	  $this->{Normals} = $this->smoothn($points)
 	    unless defined($this->{Normals});
 	  my $n = $this->{Normals};
-	  PDL::gl_triangles_wn(
+	  my $f = (!$this->{Options}{Material} ? 
+	  		\&PDL::gl_triangles_wn : \&PDL::gl_triangles_wn_mat);
+	  &$f(
 			       (map {$points->slice($_)} @sls1),
 			       (map {$n->slice($_)} @sls1),
 			       (map {$this->{Colors}->slice($_)} @sls1)
 			      );
-	  PDL::gl_triangles_wn(
+	  &$f(
 			       (map {$points->slice($_)} @sls2),
 			       (map {$n->slice($_)} @sls2),
 			       (map {$this->{Colors}->slice($_)} @sls2)
 			      );
 	} else {
-	  PDL::gl_triangles_n(
+	  my $f = (!$this->{Options}{Material} ? 
+	  		\&PDL::gl_triangles_n : \&PDL::gl_triangles_n_mat);
+	  &$f(
 			      (map {$points->slice($_)} @sls1),
 			      (map {$this->{Colors}->slice($_)} @sls1)
 			     );
-	  PDL::gl_triangles_n(
+	  &$f(
 			      (map {$points->slice($_)} @sls2),
 			      (map {$this->{Colors}->slice($_)} @sls2)
 			     );
@@ -432,7 +447,8 @@ sub new {my($type) = @_;
 			],
 		mask => (KeyPressMask | ButtonPressMask |
 			ButtonMotionMask | ButtonReleaseMask |
-			ExposureMask | StructureNotifyMask),
+			ExposureMask | StructureNotifyMask |
+			PointerMotionMask),
 		width => $w,height => $h,
 		"x" => $x);
 
@@ -451,7 +467,7 @@ sub new {my($type) = @_;
 	# Will this bring us trouble?
 #	if(defined *PDL::Graphics::TriD::GL::Window::glPolygonOffsetEXT{CODE}) {
 		glEnable(&GL_POLYGON_OFFSET_EXT);
-		glPolygonOffsetEXT(1,0.00002);
+		glPolygonOffsetEXT(0.0000000000001,0.000002);
 #	}
 
 	my $this = bless {
@@ -534,7 +550,7 @@ sub do_perspective {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 #	glOrtho (-50.0, 50.0, -50.0,50.0,-1.0,1.0);
-	gluPerspective(40.0, $this->{AspectRatio} , 0.1, 20.0);
+	gluPerspective(40.0, $this->{AspectRatio} , 0.1, 200000.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity ();
 #	glTranslatef(0,0,-3);

@@ -760,10 +760,10 @@ package PDL::Graphics::TriD::Material;
 sub new {
   my ($type,%ops) = @_;
   my $this = bless {}, $type;
-  for (['Shine',20],
-       ['Specular',[1,1,0,0]],
-       ['Ambient',[0,1,1,0]],
-       ['Diffuse',[1,0,1,0]],
+  for (['Shine',40],
+       ['Specular',[1,1,0.3,0]],
+       ['Ambient',[0.3,1,1,0]],
+       ['Diffuse',[1,0.3,1,0]],
        ['Emissive',[0,0,0]]) {
     if (!defined $ops{$_->[0]}) {
       $this->{$_->[0]} = $_->[1];

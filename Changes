@@ -1,5 +1,22 @@
 (!!! = possible source of incompatibilities)
 
+1.9903 (2.0 try 1)
+Tjl:
+ - PDL::Lib::FFT -> PDL::FFT (Robert Schwebel)
+ - MathGraph stuff (same)
+ - tiny TriD tweaks for VRML::Browser
+ - strdup -> malloc(strlen+1)+strcpy
+ - rename 'rs'
+Karl:
+ - (finally applied) pdlcore.c datatype patch
+Jarle:
+ - minmax + which_two
+ - one2nd, whichND
+Robin:
+ - PGPLOT fixes
+Achim:
+ - Install fixes
+
 1.9902
 Tjl:
  - fix pdlcore.c to work with MAGIC hashes, to enable really

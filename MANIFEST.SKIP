@@ -102,3 +102,4 @@ so_locations
 ^tbyte\.tif$
 ^tushort\.tif$
 ^perl$
+^Basic/Core/Config\.pm

@@ -10,7 +10,7 @@
 package PDL::Graphics::TriD::Image;
 @ISA=qw/PDL::Graphics::TriD::Object/;
 use PDL::Graphics::OpenGL;
-use PDL;
+use PDL::Lite;
 
 my $defaultvert = PDL->pdl([
 	[0,0,0],

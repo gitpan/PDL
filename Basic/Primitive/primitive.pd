@@ -214,7 +214,43 @@ EOD
 
 } # for $op
 	  
+pp_addpm(<<'EOD'
 
+=head2 minmax
+
+=for ref
+
+Returns piddle with minimum, maximum of a piddle.
+
+=for usage
+
+ ($mn, $mx) = minmax($pdl);
+
+ Return $mn as minimum, $mx as maximum, $mn_ind as the index of minimum and 
+ $mx_ind as the index of the maximum.
+
+=for example
+
+ perldl> $x = pdl [1,-2,3,5,0]
+
+ perldl> ($min, $max) = minmax($x);
+
+ perldl> p "$min $max\n";
+
+
+=cut
+
+*minmax = \&PDL::minmax;
+sub PDL::minmax {
+  my ($x)=@_; my $tmp;
+  return minmaximum($x->clump(-1));
+}
+
+EOD
+);
+
+pp_add_exported('', 'minmax');
+#pp_add_exported('', 'minmax_ind');
 
 
 pp_def('qsort',
@@ -460,6 +496,44 @@ defpdl(
 }
 
 
+
+pp_addpm(<<'EOD'
+
+=cut
+=head2 minmaximum
+
+=for ref
+
+ Find minimum and maximum and their indices for a given piddle;
+
+=for usage
+   
+        perldl> $a=pdl [[-2,3,4],[1,0,3]]
+
+	perldl> ($min, $max, $min_ind, $max_ind)=minmaximum($a)
+ 
+        perldl> p $min, $max, $min_ind, $max_ind
+        [-2 0] [4 3] [0 1] [2 2]
+
+        See also minmax, which clumps the piddle together.
+
+=cut
+EOD
+);
+
+pp_def( 'minmaximum',
+	Pars => 'a(n); [o]cmin(); [o] cmax(); int [o]cmin_ind(); int [o]cmax_ind();',
+	Code => '$GENERIC() curmin, curmax;
+                 int curmin_ind, curmax_ind;
+	 loop(n) %{
+	 	if (!n || ($a() < curmin)) {curmin = $a(); curmin_ind = n;}; 
+	 	if (!n || ($a() > curmax)) {curmax = $a(); curmax_ind = n;}; 
+	 %}
+	 $cmin() = curmin;
+         $cmax() = curmax;
+	 $cmin_ind() = curmin_ind;
+         $cmax_ind() = curmax_ind;' 
+	);
 
 
 for (['hclip','>'],['lclip','<']) {
@@ -772,17 +846,129 @@ extrapolation and issues a warning upon completion.
 =cut
 EOD
 
+pp_add_exported("", one2nd);
+pp_addpm(<<'EOD');
 
-pp_def('which',
-#	GenericTypes => [B], # limit to one compilation
-	Pars => 'mask(n); int [o] inds(m)',
-	Code => 'int dm=0;
-		 loop(n) %{
+=head2 one2nd
+
+=for ref
+
+Converts a one dimensional index piddle to a set of ND coordinates
+
+=for usage
+
+  @coords=one2nd($a, $indices)
+
+returns an array of piddles containing the ND indexes corresponding to 
+the one dimensional list indices. The indices are assumed to correspond
+to array $a clumped using clump(-1). This routine is used in whichND, 
+but is useful on its own occasionally.
+
+=for example
+ 
+ perldl> $a=pdl [[[1,2],[-1,1]], [[0,-3],[3,2]]]; $c=$a->clump(-1)
+  
+ perldl> $maxind=maximum_ind($c); p $maxind;
+ 6
+ perldl> print one2nd($a, maximum_ind($c))
+ 0 1 1
+ perldl> p $a->at(0,1,1)
+ 3
+
+=cut
+
+
+*one2nd = \&PDL::one2nd;
+sub PDL::one2nd {
+  barf "Usage: one2nd $array $indices\n" if $#_ != 1;
+  my ($a, $ind)=@_;
+  my @dimension=$a->dims;
+  my(@index);
+  my $count=0;
+  foreach (@dimension) {
+    $index[$count++]=$ind % $_;
+    $ind=long($ind/$_);
+  }
+  return @index;
+}
+
+
+EOD
+
+pp_addpm(<<'EOD'
+=head2 which
+
+=for ref
+
+Returns piddle of indices of non-zero values.
+
+=for usage
+
+ $i = which($mask);
+
+returns a pdl with indices for all those elements that are
+nonzero in the mask. Note that mask really has to be 1-D (use clump(-1) 
+if you need to work with ND-images) 
+
+If you want to return both the indices of non-zero values and the 
+complement, use the function which_both.
+
+
+=for example
+
+ perldl> $x = sequence(10); p $x
+ [0 1 2 3 4 5 6 7 8 9]
+ perldl> $indx = which($x>6); p $indx
+ [7 8 9]
+
+=cut
+
+=head2 which_both
+
+=for ref
+
+Returns piddle of indices of non-zero values and their complement
+
+=for usage
+
+ ($i, $c_i) = which_both($mask);
+
+This works just as which, but the complement of $i will be in $c_i.
+
+=for example
+
+ perldl> $x = sequence(10); p $x
+ [0 1 2 3 4 5 6 7 8 9]
+ perldl> ($small, $big) = which_both ($x >= 5); p "$small\n $big"
+ [5 6 7 8 9]
+ [0 1 2 3 4]
+
+=cut
+
+  
+EOD
+);
+
+for ({Name=>'which',
+      Pars => 'mask(n); int [o] inds(m);',
+      Variables => 'int dm=0;',
+      Elseclause => "",
+      Autosize => '$PRIV(__m_size) = sum;'},
+     {Name => 'which_both',
+      Pars => 'mask(n); int [o] inds(m); int [o]notinds(q)',
+      Variables => 'int dm=0; int dm2=0;',
+      Elseclause => "else { \n          \$notinds(q => dm2)=n; \n           dm2++;\n     }",
+      Autosize => '$PRIV(__m_size) = sum;'."\n".'  	  $PRIV(__q_size) = dpdl->dims[0]-sum;'})
+{
+pp_def($_->{Name},
+	Pars => $_->{Pars},
+	Code => $_->{Variables} . 
+                 'loop(n) %{
 			if ($mask()) {
 				$inds(m => dm) = n;
 				dm++;
-			}
-		 %}',
+			}'.$_->{Elseclause} . "\n".  		
+		' %}',
 #		the next one is currently a dirty hack
 #               this will probably break once dataflow is enabled again
 #               *unless* we have made sure that mask is physical by now!!!
@@ -802,33 +988,10 @@ pp_def('which',
 		       if ( *(m_datap+inc*i+offs)) sum++;
 		}
 
-		$SIZE(m) = sum;
+		'.$_->{Autosize} . '
 		/* printf("RedoDimsCode: setting dim m to %ld\n",sum); */'
-,Doc=><<'EOD');
-=for ref
-
-Returns piddle of indices of non-zero values
-
-=for usage
-
- $i = which($mask);
-
-returns a pdl with indices for all those elements that are
-nonzero in the mask. Note that mask really hast to be 1-D.
-
-See the function C<where> for an interesting multidimensional 
-version.
-
-=for example
-
- perldl> $x = sequence(10); p $x
- [0 1 2 3 4 5 6 7 8 9]
- perldl> $indx = which($x>6); p $indx
- [7 8 9]
-
-
-=cut
-EOD
+);
+}
 
 pp_addpm(<<'EOD'
 =head2 where
@@ -1064,6 +1227,44 @@ sub PDL::stats {
     return ($mean,$rms,$median,$min,$max);
 }
 EOD
+
+pp_addpm(<<'EOD'
+=head2 whichND
+
+=for ref
+
+Returns the coordinates for non-zero values
+
+=for usage
+
+   @coords=whichND($mask);
+
+returns an array of piddles containing the coordinates of the elements
+that are non-zero in $mask.
+
+=for example
+
+   perldl> $a=sequence(10,10,3,4)
+   
+   perldl> ($x, $y, $z, $w)=whichND($a == 203); p $x, $y, $z, $w)
+   [3] [0] [2] [0]
+   perldl> print $a->at($x,$y,$z,$w)
+   203
+=cut
+
+*whichND = \&PDL::whichND;
+sub PDL::whichND {
+  my $mask = shift;
+  my $ind=which($mask->clump(-1));
+
+  return one2nd($mask, $ind);
+  
+}
+
+EOD
+);
+
+pp_add_exported("", whichND);
 
 pp_def('fibonacci',
         Pars => '[o]x(n);',

@@ -15,6 +15,23 @@ sub new {
 	return $this;
 }
 
+sub new_vrmlrot {
+	my($type,$x,$y,$z,$a) = @_;
+	my $l = sqrt($x**2+$y**2+$z**2);
+	my $this = bless [cos($a),map {sin($a)*$_/$l} $x,$y,$z],$type;
+	$this->normalize_this();
+	return $this;
+}
+
+sub to_vrmlrot {
+	my($this) = @_;
+	my $d = POSIX::acos($a);
+	if(abs($d) > 0.0000001) {
+		return [0,0,1,0];
+	}
+	return [@{$this}[1..3],POSIX::acos($a)];
+}
+
 # Yuck
 sub multiply {
 	my($this,$with) = @_;
@@ -35,6 +52,20 @@ sub multiply {
 			$this->[2] * $with->[1] +
 			$this->[0] * $with->[3] +
 			$this->[3] * $with->[0],
+	);
+}
+
+sub multiply_scalar {
+	my($this,$scalar) = @_;
+	my $ang = POSIX::acos($this->[0]);
+	my $d = sin($ang);
+	if(abs($d) > 0.0000001) {
+		return new PDL::Graphics::TriD::Quaternion(1,0,0,0);
+	}
+	$ang *= $scalar;
+	my $d2 = sin($ang);
+	return new PDL::Graphics::TriD::Quaternion(
+		cos($d2), map {$_*$d2/$d} @{$this}[1..3]
 	);
 }
 

@@ -305,6 +305,7 @@ print <<'END';
 		gluOrtho2D
 		gluPerspective
 		gluLookAt
+		glupPickMatrix
 
 		glpRasterFont
 		glpPrintString

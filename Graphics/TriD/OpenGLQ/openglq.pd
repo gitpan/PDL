@@ -72,6 +72,13 @@ sub COLOR{ "
 				."
 			);
 	" };
+sub ADCOLOR{ "
+			{
+			GLfloat ad[4] = {".TRI('$colors',$_[0]).",1.0};
+			glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,
+				ad);
+			}
+	" };
 sub VERTEX{ "
 			glVertex3f(
 				".  TRI('$coords',$_[0])
@@ -147,6 +154,12 @@ pp_def(
 	@internal
 );
 
+for $m (
+{Suf => '_mat',
+ Func => \&ADCOLOR},
+{Suf => '',
+ Func => \&COLOR},
+) {
 for(
 {Name => 'gl_triangles',
  NormalCode => ''},
@@ -172,7 +185,7 @@ for(
 # This may be suboptimal but should still be fast enough..
 # We only do triangles with this.
 pp_def(
-	$_->{Name},
+	$_->{Name}.$m->{Suf},
 	GenericTypes => [F,D],
 	Pars => 'coordsa(tri=3); coordsb(tri);
 		 coordsc(tri);'.
@@ -185,16 +198,17 @@ pp_def(
 		glBegin(GL_TRIANGLES);
 		threadloop %{'.
 			$_->{NormalCode}
-			.COLOR("a").VERTEX("a").
+			.&{$m->{Func}}("a").VERTEX("a").
 			$_->{NormalCodeB}
-	  		.COLOR("b").VERTEX("b").
+	  		.&{$m->{Func}}("b").VERTEX("b").
 			$_->{NormalCodeC}
-			.COLOR("c").VERTEX("c").'
+			.&{$m->{Func}}("c").VERTEX("c").'
 		%}
 		glEnd();
 		',
 		@internal
 );
+}
 }
 
 pp_def('gl_arrows',

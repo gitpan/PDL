@@ -398,12 +398,21 @@ sub cont {
     if (defined($tr)) {
        checkarg($tr,1);
        barf '$transform incorrect' if nelem($tr)!=6;
+       unless ($hold) { # Calculate `correct' boundaries from $tr
+	   my (@tr) = list $tr; my (@lims);
+	   @lims = ($tr[0],$tr[0],$tr[3],$tr[3]);
+	   $lims[$tr[1]>0]     += $tr[1]*($nx-1);
+	   $lims[$tr[2]>0]     += $tr[2]*($ny-1);
+	   $lims[2+($tr[4]>0)] += $tr[4]*($nx-1);
+	   $lims[2+($tr[5]>0)] += $tr[5]*($ny-1);
+	   initenv(@lims);
+       }
     }else{
        $tr = float [0,1,0, 0,0,1];
+       initenv(0,$nx-1,0,$ny-1) unless $hold;
     }
     $tr = CtoF77coords($tr);
         
-    initenv( 0,$nx-1, 0, $ny-1 ) unless $hold;
     print "Contouring $nx x $ny image from ",min($contours), " to ",
            max($contours), " in ",nelem($contours)," steps\n" if $PDL::verbose;
     
@@ -487,7 +496,7 @@ sub points {
 # display an image using pgimag()/pggray() as appropriate
 
 sub imag {
-    barf 'Usage: imag ( $image,  [$min, $max, $transform] )' if $#_<0 || $#_>2;
+    barf 'Usage: imag ( $image,  [$min, $max, $transform] )' if $#_<0 || $#_>3;
     my ($image,$min,$max,$tr) = @_;
     checkarg($image,2);
     my($nx,$ny) = $image->dims;
@@ -497,12 +506,23 @@ sub imag {
     if (defined($tr)) {
        checkarg($tr,1);
        barf '$transform incorrect' if nelem($tr)!=6;
+       unless ($hold) { # Calculate `correct' boundaries from $tr
+	   my (@tr) = list $tr; my (@lims);
+	   my ($cx) = 0.5*(abs($tr[1])+abs($tr[2]));
+	   my ($cy) = 0.5*(abs($tr[4])+abs($tr[5]));
+	   @lims = ($tr[0]-$cx,$tr[0]+$cx,$tr[3]-$cy,$tr[3]+$cy);
+	   $lims[$tr[1]>0]      += $tr[1]*($nx-1);
+	   $lims[$tr[2]>0]      += $tr[2]*($ny-1);
+	   $lims[2+($tr[4]>0)]  += $tr[4]*($nx-1);
+	   $lims[2+($tr[5]>0)]  += $tr[5]*($ny-1);
+	   initenv(@lims);
+       }
     }else{
-       $tr = float [0,1,0, 0,0,1];
+       $tr = float [0,1,0,0,0,1];
+       initenv(-0.5,$nx-0.5,-0.5,$ny-0.5) unless $hold;
     }
     $tr = CtoF77coords($tr);
 
-    initenv( -0.5,$nx-0.5, -0.5, $ny-0.5  ) unless $hold;
     print "Displaying $nx x $ny image from $min to $max ...\n" if $PDL::verbose;
 
     pgqcir($i1, $i2);          # Colour range - if too small use pggray dither algorithm
@@ -623,12 +643,22 @@ sub vect {
     if (defined($tr)) {
        checkarg($tr,1);
        barf '$transform incorrect' if nelem($tr)!=6;
+       unless ($hold) { # Calculate `correct' boundaries from $tr
+	   my (@tr) = list $tr; my (@lims);
+	   @lims = ($tr[0],$tr[0],$tr[3],$tr[3]);
+	   $lims[$tr[1]>0]     += $tr[1]*($nx-1);
+	   $lims[$tr[2]>0]     += $tr[2]*($ny-1);
+	   $lims[2+($tr[4]>0)] += $tr[4]*($nx-1);
+	   $lims[2+($tr[5]>0)] += $tr[5]*($ny-1);
+	   initenv(@lims);
+       }
     }else{
-       $tr = float [0,1,0, 0,0,1];
+       $tr = float [0,1,0,0,0,1];
+       initenv(0,$nx-1,0,$ny-1) unless $hold;
     }
+
     $tr = CtoF77coords($tr);
         
-    initenv( 0, $nx-1, 0, $ny-1  ) unless $hold;
     print "Vectoring $nx x $ny images ...\n" if $PDL::verbose;
     
     pgvect( $a->get_dataref, $b->get_dataref, $nx,$ny,1,$nx,1,$ny, $scale, $pos, 

@@ -77,6 +77,7 @@ void pdl_resize_defaultincs ( pdl *it );     /* Make incs out of dims */
 void pdl_unpackarray ( HV* hash, char *key, int *dims, int ndims );
 void pdl_print(pdl *it);
 void pdl_dump(pdl *it);
+void pdl_allocdata(pdl *it);
 
 int *pdl_get_threadoffsp(pdl_thread *thread); /* For pthreading */
 void pdl_thread_copy(pdl_thread *from,pdl_thread *to);
@@ -224,7 +225,7 @@ void (*make_physical)(pdl *it);
 void (*make_physdims)(pdl *it);
 void (*pdl_barf) (const char* pat,...); /* Not plain 'barf' as this
                                   is a macro - KGB */
-
+void (*allocdata) (pdl *it);
 };
 
 typedef struct Core Core;

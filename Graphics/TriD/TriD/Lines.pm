@@ -2,7 +2,7 @@
 package PDL::Graphics::TriD::LinesFOOOLD;
 @ISA=qw/PDL::Graphics::TriD::Object/;
 use PDL::Graphics::OpenGL;
-use PDL;
+use PDL::Lite;
 
 sub new {
 	my($type,$x,$y,$z,$color) = @_;

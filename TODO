@@ -27,6 +27,8 @@ Missing Features:
 
 * qsortind
 
+* PDL::IO::Pic should barf when converter not available
+
 "#" = should work now.
 
 **** Quick: SV * must be allowed for OtherPars.

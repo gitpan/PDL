@@ -89,7 +89,7 @@ sub r_type {return "SURF2D";}
 
 sub get_valid_options { return {UseDefcols => 0,Lines => 1}; }
 
-# colors associated with vertices
+# colors associated with vertices, smooth
 package PDL::Graphics::TriD::SLattice;
 @ISA=qw/PDL::Graphics::TriD::GObject_Lattice/;
 
@@ -112,7 +112,8 @@ sub cdummies { return $_[1]->dummy(1,$_[2]->getdim(2))
 			-> dummy(1,$_[2]->getdim(1)); }
 
 
-sub get_valid_options { return {UseDefcols => 0,Lines => 1, Smooth => 0}; }
+sub get_valid_options { return {UseDefcols => 0,Lines => 1, Smooth => 0,
+	Material => 0}; }
 
 # calculate smooth normals
 sub smoothn {

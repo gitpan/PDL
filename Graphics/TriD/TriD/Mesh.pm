@@ -22,7 +22,7 @@
 
 package PDL::Graphics::TriD::Mesh;
 use PDL::Graphics::OpenGL;
-use PDL;
+use PDL::LiteF;
 @ISA=qw/PDL::Graphics::TriD::Object/;
 
 # For now, x and y coordinates = values.

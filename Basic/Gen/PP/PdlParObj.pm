@@ -301,6 +301,27 @@ sub do_access {
 	return "$text /* ACCESS($access) */";
 }
 
+sub has_dim {
+	my($this,$ind) = @_;
+	my $h = 0;
+	for(@{$this->{IndObjs}}) {
+		$h++ if $_->name eq $ind;
+	}
+	return $h;
+}
+
+sub do_resize {
+	my($this,$ind,$size) = @_;
+	my @c;my $index = 0;
+	for(@{$this->{IndObjs}}) {
+		push @c,$index if $_->name eq $ind; $index ++;
+	}
+	my $pdl = $this->get_nname;
+	return (join '',map {"$pdl->dims[$_] = $size;\n"} @c).
+		"PDL->resize_defaultincs($pdl);PDL->allocdata($pdl);".
+		$this->get_xsdatapdecl(undef,1);
+}
+
 sub do_pointeraccess {
 	my($this) = @_;
 	return $this->{Name}."_datap";
@@ -334,14 +355,16 @@ sub do_indterm { my($this,$pdl,$ind,$subst,$context) = @_;
 	return "(".($this->get_incname($ind))."*". $index .")";
 }
 
-sub get_xsdatapdecl { my($this,$genlooptype) = @_;
+sub get_xsdatapdecl { my($this,$genlooptype,$asgnonly) = @_;
 	my $type; my $pdl = $this->get_nname; my $flag = $this->get_nnflag;
 		      my $name = $this->{Name};
-	$type = $this->ctype($genlooptype);
+	$type = $this->ctype($genlooptype) if defined $genlooptype;
+	my $declini = ($asgnonly ? "" : "\t$type *");
+	my $cast = ($type ? "($type *)" : "");
 # ThreadLoop does this for us.
-#	return "\t$type *${name}_datap = (($type *)((${_})->data)) + (${_})->offs;\n";
-	return "\t$type *${name}_datap = (($type *)(PDL_REPRP_TRANS($pdl,$flag)));
-		$type *${name}_physdatap = (($type *)($pdl->data));
+#	return "$declini ${name}_datap = ($cast((${_})->data)) + (${_})->offs;\n";
+	return "$declini ${name}_datap = ($cast(PDL_REPRP_TRANS($pdl,$flag)));
+		$declini ${name}_physdatap = ($cast($pdl->data));
 	\n";
 }
 

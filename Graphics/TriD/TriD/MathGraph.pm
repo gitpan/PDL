@@ -4,7 +4,7 @@ PDL::Graphics::TriD::MathGraph -- Mathematical Graph objects for PDL
 
 =head1 SYNOPSIS
 
-see the file Graphics/TriD/tmathgraph.p in the PDL distribution.
+see the file Demos/TriD/tmathgraph.p in the PDL distribution.
 
 =head1 WARNING
 
@@ -67,8 +67,7 @@ sub get_valid_options {
 }
 
 package PDL::GraphEvolverOLD;
-use PDL;
-use PDL::Primitive ":Func";
+use PDL::LiteF;
 
 sub new {
 	my($type,$nnodes) = @_;
@@ -122,8 +121,7 @@ sub step {
 sub getcoords {return $_[0]{Coords}}
 
 package PDL::GraphEvolver;
-use PDL;
-use PDL::Primitive ":Func";
+use PDL::Lite;
 use PDL::Graphics::TriD::Rout ":Func";
 
 sub new {

@@ -485,6 +485,7 @@ BOOT:
    PDL.make_physical = pdl_make_physical;
    PDL.make_physdims = pdl_make_physdims;
    PDL.pdl_barf      = pdl_barf;
+   PDL.allocdata      = pdl_allocdata;
    
    /* 
       "Publish" pointer to this structure in perl variable for use

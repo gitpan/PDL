@@ -2,7 +2,7 @@
 # 
 # Should be called like
 # 
-#    perl mkhtmldoc.pl FULLPATH_TO_SOURCE FULLPATH_TO_HTMLDIR
+#    perl mkhtmldoc.pl [FULLPATH_TO_SOURCE] [FULLPATH_TO_HTMLDIR]
 # 
 # for example
 # 
@@ -36,24 +36,36 @@ sub mkdir_p ($$$) {
    $back = getcwd; 
 
    $startdir = $ARGV[0];
+
+   unless (defined $startdir) {
+	require PDL;
+	($startdir = $INC{'PDL.pm'}) =~ s/\.pm$//i;
+	umask 0022;
+   }
    die "couldn't find directory '$startdir'" unless -d $startdir;
    chdir $startdir or die "can't change to $startdir";
    $startdir = getcwd; # Hack to get absolute pathname
    chdir $back;
 
    $htmldir = $ARGV[1];
+   unless (defined $htmldir) {
+	$htmldir = "$startdir/HtmlDocs";
+   }
+
    mkdir_p $htmldir, 0777, $htmldir;
    chdir $htmldir or die "can't change to $htmldir";
    $htmldir = getcwd; # Hack to get absolute pathname
    chdir $back;
-			 
+
+   print "Put HTML $htmldir\n";
    print "Scanning $startdir ... \n\n";
    $sub = sub { if (($File::Find::name =~ /[.]pm$/ &&
 			$File::Find::name !~ /PP.pm/ &&
 			$File::Find::dir !~ m#/PP|/Gen#) or
 			  $File::Find::name =~ /[.]pod$/)  {
 		       my $outdir = $File::Find::dir;
-		       $outdir =~ s/^$startdir/$htmldir/;
+		       my $re = "\Q$startdir\E";  # ach: '+' in $outdir here!
+		       $outdir =~ s/$re/$htmldir/;
 		       mkdir_p $outdir, 0777, $outdir; 
 		       my $file = $File::Find::name;
 		       my $outfile = "$outdir/".basename($file);

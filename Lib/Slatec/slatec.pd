@@ -114,6 +114,7 @@ sub defslatec {
 
 	print "Pars: ",(join ';',@ppars),"\n";
 
+
 	pp_def($pname,
 		Pars => (join ';',@ppars),
 		OtherPars => '',
@@ -272,7 +273,7 @@ defslatec(
 	
 
 defslatec(
-	'rs', {S => rs},
+	'rs', {S => rsfoo},
 	'MDim		lda;
 	 Dim		n;
 	 Mat		a	(n,n);

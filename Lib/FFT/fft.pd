@@ -2,7 +2,7 @@
 pp_addpm({At=>Top},<<'EOD');
 =head1 NAME
 
-PDL::Lib::FFT - FFTs for PDL
+PDL::FFT - FFTs for PDL
 
 =head1 DESCRIPTION
 
