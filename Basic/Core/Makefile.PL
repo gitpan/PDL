@@ -63,7 +63,7 @@ WriteMakefile(
   'PM'          => {
   		(map {($_,'$(INST_LIBDIR)/'.$_)} (
 			qw/Core.pm Basic.pm Version.pm Types.pm
-						  Dbg.pm Exporter.pm Config.pm/
+						  Dbg.pm Exporter.pm Config.pm Char.pm/
 		)),
   		(map {($_,'$(INST_LIBDIR)/Core/'.$_)} (
 			qw/Dev.pm typemap.pdl pdl.h pdlcore.h pdlmagic.h pdlsimple.h
@@ -77,7 +77,7 @@ WriteMakefile(
                    'pdlconv$(OBJ_EXT) pdlsections$(OBJ_EXT) '.
                    'pdlstats$(OBJ_EXT) pdlmoremaths$(OBJ_EXT) pdlbasicops.c '.
                    'pdlconv.c pdlsections.c pdlstats.c pdlmoremaths.c '.
-		   'pdl.h pdlsimple.h Types.pm'},
+		   'pdl.h pdlsimple.h Types.pm Version.pm'},
 );
 
 # Extra targets to build

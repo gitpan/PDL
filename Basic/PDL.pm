@@ -21,13 +21,12 @@ issue.
    use PDL::Slices;
    use PDL::Version;
    use PDL::IO::Misc;
-   use PDL::Graphics::PGPLOT;
 
 =cut
 
 
 # set the version: 
-$PDL::VERSION = '2.003';
+$PDL::VERSION = '2.004';
 
 # Main loader of standard PDL package
 
@@ -49,7 +48,6 @@ use PDL::Slices;
 # Load these for TPJ compatibility
 
 use PDL::IO::Misc;          # Misc IO (Ascii/FITS)
-use PDL::Graphics::PGPLOT;  # PGPLOT graphics
 
 EOD
 

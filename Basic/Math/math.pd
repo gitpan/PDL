@@ -49,6 +49,9 @@ doco( 'pow',"Synonym for `**'");
 doco ('erf',"The error function");
 doco ('erfc',"The complement of the error function");
 doco ('erfi',"The inverse of the error function");
+doco ('ndtri',"The value for which the area under the
+Gaussian probability density function (integrated from
+minus infinity) is equal to the argument (cf erfi)");
 
 doco(qw/bessj0 bessj1 bessy0 bessy1 bessjn bessyn/, <<'EOD');
 
@@ -92,6 +95,15 @@ EOD
 pp_addhdr('
 #include <math.h>
 #include "protos.h"
+/* Change names when fixing glibc-2.1 bug */
+#ifdef MY_FIXY0
+#define y0(a) fixy0(a)
+extern double fixy0(double a);
+#endif
+#ifdef MY_FIXYN
+#define yn(a,b) fixyn(a,b)
+extern double fixyn(int a, double b);
+#endif
 ');
 if ($^O =~ /MSWin/) {
 # _finite in VC++ 4.0
@@ -190,6 +202,15 @@ pp_def("erfi",
 	GenericTypes => [F,D],
 	Pars => 'a(); [o]b()',
 	Doc => $doco{"erfi"},
+	Code => '
+		extern double ndtri(double), SQRTH;
+		$b() = SQRTH*ndtri((1+(double)$a())/2);
+');
+
+pp_def("ndtri",
+	GenericTypes => [F,D],
+	Pars => 'a(); [o]b()',
+	Doc => $doco{"ndtri"},
 	Code => '
 		extern double ndtri(double);
 		$b() = ndtri((double)$a());

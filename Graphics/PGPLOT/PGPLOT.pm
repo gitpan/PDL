@@ -21,31 +21,31 @@ PDL::Graphics::PGPLOT is an interface to the PGPLOT graphical libraries.
 
 Current display commands:
 
-   imag         -  Display an image (uses pgimag()/pggray() as appropriate)
-   ctab         -  Load an image colour table
-   line         -  Plot vector as connected points
-   points       -  Plot vector as points
-   errb         -  Plot error bars
-   cont         -  Display image as contour map
-   bin          -  Plot vector as histogram ( e.g. C<bin(hist($data))> )
-   hi2d         -  Plot image as 2d histogram (not very good IMHO...)
-   poly         -  Draw a polygon
-   vect         -  Display 2 images as a vector field
+  imag       -  Display an image (uses pgimag()/pggray() as appropriate)
+  ctab       -  Load an image colour table
+  line       -  Plot vector as connected points
+  points     -  Plot vector as points
+  errb       -  Plot error bars
+  cont       -  Display image as contour map
+  bin        -  Plot vector as histogram (e.g. bin(hist($data)) )
+  hi2d       -  Plot image as 2d histogram (not very good IMHO...)
+  poly       -  Draw a polygon
+  vect       -  Display 2 images as a vector field
 
 Device manipulation commands:
 
-   hold         -  Hold current plot window range - allows overlays etc.
-   release      -  Release back to autoscaling of new plot window for each 
-                   command
-   rel          -  short alias for 'release'
-   env          -  Define a plot window, put on 'hold'
-   dev          -  Explicitly set a new PGPLOT graphics device
+  hold       -  Hold current plot window range - allows overlays etc.
+  release    -  Release back to autoscaling of new plot window for each 
+                command
+  rel        -  short alias for 'release'
+  env        -  Define a plot window, put on 'hold'
+  dev        -  Explicitly set a new PGPLOT graphics device
 
 The actual PGPLOT module is loaded only when the first of these
 commands is executed.
 
-Notes: $transform for image/cont etc. is used in the same way as the
-TR() array in the underlying PGPLOT FORTRAN routine but is, fortunately,
+Notes: C<$transform> for image/cont etc. is used in the same way as the
+C<TR()> array in the underlying PGPLOT FORTRAN routine but is, fortunately,
 zero-offset.
 
 For completeness: The transformation array connect the pixel index to a
@@ -61,22 +61,23 @@ C<get_dataref>
 to get the reference to the values. Before passing to pgplot routines
 however, the data are checked to see if they are in accordance with the
 format (typically dimensionality) required by the PGPLOT routines.
-This is done using the routine C<checkarg> (internal to PGPLOT.) This routine
+This is done using the routine C<checkarg> (internal to PGPLOT). This routine
 checks the dimensionality of the input data. If there are superfluous
 dimensions of size 1 they will be trimmed away until the dimensionality
 is correct. Example:
 
-  Assume a piddle with dimensions (1,100,1,1) is passed to C<line>, which
-  expects its inputs to be vectors. C<checkarg> will then return a piddle
-  with dimensions (100). If instead the same piddle was passed to C<imag>,
-  which requires 2D piddles as output, C<checkarg> would return a piddle
-  with dimensionality (100, 1) (Dimensions are removed from the I<start>)
+Assume a piddle with dimensions (1,100,1,1) is passed to C<line>, which
+expects its inputs to be vectors. C<checkarg> will then return a piddle
+with dimensions (100). If instead the same piddle was passed to C<imag>,
+which requires 2D piddles as output, C<checkarg> would return a piddle
+with dimensionality (100, 1) (Dimensions are removed from the I<start>)
 
 Thus, if you want to provide support for another PGPLOT function, the
 structure currently look like this (there are plans to use the Options
 package to simplify the options parsing):
 
-  ($arg, $opt)=_extract_hash(@_); # Extract the hash(es) on the commandline
+  # Extract the hash(es) on the commandline
+  ($arg, $opt)=_extract_hash(@_); 
   <Check the number of input parameters>
   <deal with $arg>
   checkarg($x, 3); # For a hypothetical 3D routine.
@@ -97,8 +98,9 @@ say, with pgslw() are preserved.
 =head2 Alphabetical listing of standard options
 
 The following options are always parsed. Whether they have any importance
-depend on the routine invoked - line style is irrelevant for imag and so
-on.  This is indicated in the help text for the commands below.
+depend on the routine invoked - e.g. line style is irrelevant for C<imag>, 
+or the C<justify> option is irrelevant if the display is on 'hold'.
+This is indicated in the help text for the commands below.
 
 The options are not case sensitive and will match for unique substrings,
 but this is not encouraged as obscure options might invalidate what
@@ -146,13 +148,38 @@ wants to plot the same arrow with several sizes.
 
    $opt = {ARROWSIZE => 2.5};
 
+=item axis
+
+Set the axis value (see L</env>).
+It can either be specified as a number, or by one of the following names:
+
+ EMPTY  (-2) draw no box, axes or labels
+ BOX    (-1) draw box only
+ NORMAL (0)  draw box and label it with coordinates
+ AXES   (1)  same as NORMAL, but also draw (X=0,Y=0) axes
+ GRID   (2)  same as AXES, but also draw grid lines
+ LOGX   (10) draw box and label X-axis logarithmically
+ LOGY   (20) draw box and label Y-axis logarithmically
+ LOGXY  (30) draw box and label both axes logarithmically
+
+=item border
+
+Normally the limits are
+chosen so that the plot just fits; with this option you can increase
+(or decrease) the limits by either a relative 
+(ie a fraction of the original axis width) or an absolute amount.
+Either specify a hash array, where the keys are C<TYPE> (set to 
+'relative' or 'absolute') and C<VALUE> (the amount to change the limits
+by), or set to 1, which is equivalent to
+C<BORDER =E<gt> { TYPE =E<gt> 'rel', VALUE =E<gt> 0.05 }>.
+
 =item charsize
 
 Set the character/symbol size as a multiple of the standard size.
 
    $opt = {CHARSIZE => 1.5}
 
-=item colour
+=item colour (or color)
 
 Set the colour to be used for the subsequent plotting. This can be
 specified as a number, and the most used colours can also be specified
@@ -165,10 +192,10 @@ the default colour map):
 
 =item filltype
 
-Set the fill type to be used for pgpoly/pgrect/pgcirc. The fill
-can either be specified using numbers or name, according to the following
-table, where the recognised name is shown in capitals - it is case-
-insensitive, but the whole name must be specified.
+Set the fill type to be used by L<poly|/poly>. 
+The fill can either be specified using numbers or name, according to the 
+following table, where the recognised name is shown in capitals - it is 
+case-insensitive, but the whole name must be specified.
 
    1 - SOLID
    2 - OUTLINE
@@ -189,7 +216,7 @@ the PGPLOT numbering or name as follows (name in capitals):
    4 - SCRIPT
 
 (Note that in a string, the font can be changed using the escape sequences
- \fn, \fr, \fi and \fs respectively)
+C<\fn>, C<\fr>, C<\fi> and C<\fs> respectively)
 
    $opt = {FONT => 'ROMAN'};
 
@@ -205,9 +232,9 @@ Set the hatching to be used if either fillstyle 3 or 4 is selected
 arrows.  The arguments for the hatching is either given using a hash
 with the key ANGLE to set the angle that the hatch lines will make
 with the horizontal, SEPARATION to set the spacing of the hatch lines
-in units of 1% of min(height, width) of the view surface, and PHASE to
+in units of 1% of C<min(height, width)> of the view surface, and PHASE to
 set the offset the hatching. Alternatively this can be specified as a
-1x3 piddle $hatch=pdl[$angle, $sep, $phase].
+1x3 piddle C<$hatch=pdl[$angle, $sep, $phase]>.
 
    $opt = {FILLTYPE => 'HATCHED', 
            HATCHING => {ANGLE=>30, SEPARATION=>4}};
@@ -216,8 +243,13 @@ Can also be specified as
 
    $opt = {FILL=> 'HATCHED', HATCH => pdl [30,4,0.0]};
 
-See also the documentation for poly for another example of hatching.
+For another example of hatching, see L</poly>.
 
+=item justify
+
+A boolean value which, if true, causes both axes to drawn
+to the same scale; see
+the PGPLOT C<pgenv()> command for more information.
 
 =item linestyle
 
@@ -253,39 +285,65 @@ Open PGPLOT graphics device
 
   Usage: dev $device, [$nx,$ny];
 
-$device is a PGPLOT graphics device such as "/xserve" or "/ps",
+C<$device> is a PGPLOT graphics device such as "/xserve" or "/ps",
 if omitted defaults to last used device (or value of env
 var PGPLOT_DEV if first time).
-$nx, $ny specify sub-panelling.
+C<$nx>, C<$ny> specify sub-panelling.
+
+=head2 env
+
+=for ref
+
+Define a plot window, and put graphics on 'hold'
+
+=for usage
+
+  Usage: env $xmin, $xmax, $ymin, $ymax, [$justify, $axis];
+         env $xmin, $xmax, $ymin, $ymax, [$options];
+
+C<$xmin>, C<$xmax>, C<$ymin>, C<$ymax> are the plot boundaries.  
+C<$justify> is a boolean value (default is 0);
+if true the axes scales will be the same (see L</justify>).
+C<$axis> describes how the axes should be drawn (see
+L</axis>) and defaults to 0.
+
+If the second form is used, $justify and $axis can be set in the options
+hash, for example:
+
+  env 0, 100, 0, 50, {JUSTIFY => 1, AXIS => 'GRID', CHARSIZE => 0.7};
 
 =head2 imag
 
 =for ref
 
-Display an image (uses pgimag()/pggray() as appropriate)
+Display an image (uses C<pgimag()>/C<pggray()> as appropriate)
 
 =for usage
 
   Usage: imag ( $image,  [$min, $max, $transform], [$opt] )
 
-Notes: $transform for image/cont etc. is used in the same way as the
-TR() array in the underlying PGPLOT FORTRAN routine but is, fortunately,
-zero-offset.
+Notes: C<$transform> for image/cont etc. is used in the same way as the
+C<TR()> array in the underlying PGPLOT FORTRAN routine but is, 
+fortunately, zero-offset.
 
 Options recognised:
 
+       ITF - the image transfer function applied to the pixel values. It
+             may be one of 'LINEAR', 'LOG', 'SQRT' (lower case is 
+             acceptable). It defaults to 'LINEAR'.
       MIN  - Sets the minimum value to be used for calculation of the
              display stretch
       MAX  - Sets the maximum value for the same
  TRANSFORM - The transform 'matrix' as a 6x1 vector for display
 
-  None of the standard options are relevant here
+    The following standard options influence this command:
+    AXIS, BORDER, JUSTIFY
 
 =head2 ctab
 
 =for ref
 
-Load an image colour table
+Load an image colour table. 
 
 Usage:
 
@@ -294,6 +352,10 @@ Usage:
    ctab ( $name, [$contrast, $brightness] ) # Builtin col table
    ctab ( $ctab, [$contrast, $brightness] ) # $ctab is Nx4 array
    ctab ( $levels, $red, $green, $blue, [$contrast, $brightness] )
+   ctab ( '', $contrast, $brightness ) # use last color table
+
+Note: See L<PDL::Graphics::LUT> for access to a large
+number of colour tables.
 
 Options recognised:
 
@@ -305,6 +367,12 @@ Options recognised:
 
 Plot vector as connected points
 
+If the 'MISSING' option is specified, those points in the $y vector
+which are equal to the MISSING value are not plotted, but are skipped
+over.  This allows one to quickly draw multiple lines with one call to
+'line', for example to draw coastlines for maps.
+
+
 =for usage
 
  Usage: line ( [$x,] $y, [$opt] )
@@ -312,13 +380,14 @@ Plot vector as connected points
  Options recognised:
 
     The following standard options influence this command:
-    COLO(U)R, LINESTYLE, LINEWIDTH
+    AXIS, BORDER, COLO(U)R, JUSTIFY, LINESTYLE, LINEWIDTH, MISSING
 
 =for example
 
  $x = sequence(10)/10.;
  $y = sin($x)**2;
- line $x, $y, {COLOR => 'RED', LINESTYLE=>3}; # Draw a red dot-dashed line
+ # Draw a red dot-dashed line
+ line $x, $y, {COLOR => 'RED', LINESTYLE=>3}; 
 
 =head2 points
 
@@ -342,10 +411,10 @@ Plot vector as points
               4 - CIRCLE   5 - CROSS   7 - TRIANGLE 8 - EARTH
               9 - SUN     11 - DIAMOND 12- STAR
 
-    PLOTLINE - If this is >0 a line will be drawn through the points.
+  PLOTLINE - If this is >0 a line will be drawn through the points.
 
     The following standard options influence this command:
-    CHARSIZE, COLOUR, LINESTYLE, LINEWIDTH
+    AXIS, BORDER, CHARSIZE, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
 
 =for example
 
@@ -357,7 +426,7 @@ Plot vector as points
 
 =for ref
 
-Plot error bars (using pgerrb())
+Plot error bars (using C<pgerrb()>)
 
 Usage:
 
@@ -375,7 +444,7 @@ Usage:
            as name or number - see documentation for 'points'
 
     The following standard options influence this command:
-    CHARSIZE, COLOUR, LINESTYLE, LINEWIDTH
+    AXIS, BORDER, CHARSIZE, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
 
 =for example
 
@@ -394,9 +463,9 @@ Display image as contour map
 
  Usage: cont ( $image,  [$contours, $transform, $misval], [$opt] )
 
-Notes: $transform for image/cont etc. is used in the same way as the
-TR() array in the underlying PGPLOT FORTRAN routine but is, fortunately,
-zero-offset.
+Notes: C<$transform> for image/cont etc. is used in the same way as the
+C<TR()> array in the underlying PGPLOT FORTRAN routine but is, 
+fortunately, zero-offset.
 
  Options recognised:
 
@@ -415,17 +484,17 @@ zero-offset.
    TRANSFORM - The pixel-to-world coordinate transform vector
 
     The following standard options influence this command:
-    COLOUR, LINESTYLE, LINEWIDTH
+    AXIS, BORDER, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
 
 =for example
 
    $x=sequence(10,10);
    $ncont = 4;
    $labels= ['COLD', 'COLDER', 'FREEZING', 'NORWAY']
+   # This will give four blue contour lines labelled in red.
    cont $x, {NCONT => $ncont, LABELS => $labels, LABELCOLOR => RED,
              COLOR => BLUE}
 
-   # This will give four blue contour lines labelled in red.
 
 =head2 bin
 
@@ -439,8 +508,12 @@ Plot vector as histogram ( e.g. C<bin(hist($data))> )
 
  Options recognised:
 
+    CENTRE - if true, the x values denote the centre of the bin 
+             otherwise they give the lower-edge (in x) of the bin
+    CENTER - as CENTRE
+
     The following standard options influence this command:
-    COLOUR, LINESTYLE, LINEWIDTH
+    AXIS, BORDER, COLOUR, JUSTIFY, LINESTYLE, LINEWIDTH
 
 
 =head2 hi2d
@@ -459,12 +532,13 @@ Plot image as 2d histogram (not very good IMHO...)
                                                <0 to the left.
        BIAS - The bias to shift each array slice up by.
 
-    None of the standard options influence this command.
+    The following standard options influence this command:
+    AXIS, BORDER, JUSTIFY
 
- Note that meddling with the ioffset and bias often will require you to
- change the default plot range somewhat. It is also worth noting that if
- you have TriD working you will probably be better off using mesh3d or
- a similar command - see 'help TriD'
+Note that meddling with the ioffset and bias often will require you to
+change the default plot range somewhat. It is also worth noting that if
+you have TriD working you will probably be better off using C<mesh3d> or
+a similar command - see C<help TriD>.
 
 =for example
 
@@ -480,12 +554,13 @@ Draw a polygon
 
 =for usage
 
-Usage: poly ( $x, $y )
+   Usage: poly ( $x, $y )
 
  Options recognised:
 
     The following standard options influence this command:
-    COLOUR, LINESTYLE, LINEWIDTH, FILLTYPE, HATCHING
+    AXIS, BORDER, COLOUR, FILLTYPE, HATCHING, JUSTIFY, LINESTYLE, 
+    LINEWIDTH
 
 =for example
 
@@ -508,12 +583,12 @@ Display 2 images as a vector field
 
    Usage: vect ( $a, $b, [$scale, $pos, $transform, $misval] )
 
-Notes: $transform for image/cont etc. is used in the same way as the
-TR() array in the underlying PGPLOT FORTRAN routine but is, fortunately,
-zero-offset.
+Notes: C<$transform> for image/cont etc. is used in the same way as the
+C<TR()> array in the underlying PGPLOT FORTRAN routine but is, 
+fortunately, zero-offset.
 
-This routine will plot a vector field. $a is the horizontal component
-and $b the vertical component.
+This routine will plot a vector field. C<$a> is the horizontal component
+and C<$b> the vertical component.
 
  Options recognised:
 
@@ -526,7 +601,8 @@ TRANSFORM - The pixel-to-world coordinate transform vector
   MISSING - Elements with this value are ignored.
 
     The following standard options influence this command:
-    ARROW, ARROWSIZE, CHARSIZE, COLOUR, LINESTYLE, LINEWIDTH
+    ARROW, ARROWSIZE, AXIS, BORDER, CHARSIZE, COLOUR, JUSTIFY, 
+    LINESTYLE, LINEWIDTH
 
 =for example
 
@@ -559,7 +635,7 @@ package PDL::Graphics::PGPLOT;
 # Just a plain function exporting package
 
 @EXPORT = qw( dev hold release rel env bin cont errb line points
-                 imag image ctab hi2d poly vect CtoF77coords
+	      imag image ctab ctab_info hi2d poly vect CtoF77coords
 );
 
 use PDL::Core qw/:Func :Internal/;    # Grab the Core names
@@ -569,10 +645,15 @@ use PDL::Types;
 use SelfLoader;
 use Exporter;
 use PDL::Dbg;
+use PGPLOT;
 
 use vars qw($AXISCOLOUR $SYMBOL $ERRTERM $HARD_LW $HARD_CH $HARD_FONT);
 
-@ISA = qw( Exporter SelfLoader );
+require DynaLoader;
+
+@ISA = qw( Exporter SelfLoader DynaLoader );
+
+bootstrap PDL::Graphics::PGPLOT;
 
 *rel = *release; # Alias
 *image = *imag;
@@ -583,12 +664,14 @@ use vars qw($AXISCOLOUR $SYMBOL $ERRTERM $HARD_LW $HARD_CH $HARD_FONT);
 
 $AXISCOLOUR = 3;   # Axis colour
 $SYMBOL     = 17;  # Plot symbol for points
+$COLOUR     = 5;   # Colour for plots
 $ERRTERM    = 1;   # Size of error bar terminators
 $HARD_LW    = 4;   # Line width for hardcopy devices
 $HARD_CH    = 1.4; # Character height for hardcopy devices
 $HARD_FONT  = 2;   # Font for hardcopy devices
 
 # Standard colour tables (args to ctab())
+# see also PDL::Graphics::LUT
 
 %CTAB = ();
 $CTAB{Grey}    = [ pdl([0,1],[0,1],[0,1],[0,1]) ];
@@ -596,6 +679,7 @@ $CTAB{Igrey}   = [ pdl([0,1],[1,0],[1,0],[1,0]) ];
 $CTAB{Fire}    = [ pdl([0,0.33,0.66,1],[0,1,1,1],[0,0,1,1],[0,0,0,1]) ];
 $CTAB{Gray}    = $CTAB{Grey};  # Alias
 $CTAB{Igray}   = $CTAB{Igrey}; # Alias
+$CTAB        = undef;         # last CTAB used
 $DEV  = $ENV{"PGPLOT_DEV"} if defined $ENV{"PGPLOT_DEV"};
 $DEV  = "?" if !defined($DEV) || $DEV eq ""; # Safe default
 
@@ -609,41 +693,26 @@ $DEV  = "?" if !defined($DEV) || $DEV eq ""; # Safe default
 %SYMBOLS=(SQUARE=>0, DOT=>1, PLUS=>2, ASTERISK=>3, CIRCLE=>4, CROSS=>5,
 	 TRIANGLE=>7, EARTH=>8, SUN=>9, DIAMOND=>11, STAR=>12);
 
+%ITF = ( LINEAR => 0, LOG => 1, SQRT => 2 );
 
-BEGIN { $pgplot_loaded = 0 }
+# valid values for axis parameter (eg env())
+%_axis = 
+    ( -2 => -2, EMPTY => -2, -1 => -1, BOX => -1,
+      0 => 0, NORMAL => 0, 1 => 1, AXES => 1, 2 => 2, GRID => 2,
+      10 => 10, LOGX => 10, 20 => 20, LOGY => 20, 30 => 30, LOGXY => 30 );
+
+# corresponding values for calls to pgbox()
+%_pgbox =
+    ( -2 => '', -1 => 'BC', 0 => 'BCNST', 1 => 'ABCNST', 2 => 'ABCGNST',
+      10 => [ 'BCLNST', 'BCNST' ], 20 => [ 'BCNST', 'BCLNST' ], 
+      30 => [ 'BCLNST', 'BCLNST' ] );
 
 END { # Destructor to close plot when perl exits
-     if ($pgplot_loaded) {
-        my ($state,$len);
-        pgqinf('STATE',$state,$len);
-        pgend() if $state eq "OPEN";
-     }
+  my ($state,$len);
+  pgqinf('STATE',$state,$len);
+  pgend() if $state eq "OPEN";
 }
 
-# Load PGPLOT only on demand
-
-local $^W=0;  # Do it this way to suppress spurious warnings
-eval << 'EOD';
-sub AUTOLOAD {
-   eval << 'EOC' unless $pgplot_loaded;
-   use PGPLOT; $pgplot_loaded=1;   # For me
-   my $i=0; my $pkg;
-   do { $pkg = (caller($i++))[0]; } until $pkg ne "PDL::Graphics::PGPLOT";
-   eval "{ package $pkg; use PGPLOT; }";  # For caller
-   print "Loaded PGPLOT\n" if $PDL::verbose;
-EOC
-   barf "Need PGPLOT v2.0 or higher" if $PGPLOT::VERSION<2;
-   $SelfLoader::AUTOLOAD = $AUTOLOAD;
-   goto &SelfLoader::AUTOLOAD;
-}
-EOD
-
-1;# Exit with OK status
-
-
-__DATA__
-
-# SelfLoaded functions
 
 ############ Local functions #################
 
@@ -674,7 +743,7 @@ sub pgdefaults{    # Set up defaults
        pgslw($HARD_LW); pgsch($HARD_CH);
        pgscf($HARD_FONT);
     }
-    pgsci(5); pgask(0);
+    pgsci($COLOUR); pgask(0);
 }
 
 sub initdev{  # Ensure a device is open
@@ -683,18 +752,80 @@ sub initdev{  # Ensure a device is open
      dev() if ($state eq "CLOSED");
 1;}
 
+# initenv( $xmin, $xmax, $ymin, $ymax, $just, $axis )
+# initenv( $xmin, $xmax, $ymin, $ymax, $just )
+# initenv( $xmin, $xmax, $ymin, $ymax, \%opt )
+#
+# \%opt can be supplied but not be defined
+# we parse the JUSTIFY, AXIS, and BORDER options here,
+# rather than have a multitude of checks below
+#
 sub initenv{ # Default box
     my ($col); initdev(); pgqci($col); pgsci($AXISCOLOUR);
-    pgenv(@_,0,0); pgsci($col);
-    @last = (@_,0,0);
+    my @opts = @_; 
+    my $hashref = undef;
+    if ( ref($opts[4]) eq "HASH" ) {
+	# parse options
+	$hashref = $opts[4];
+
+	$opts[5] = 0; # axis
+	$opts[4] = 0; # justify
+	while (my ($key, $val) = each %{$hashref}) {
+	    $key = uc($key);
+	    if    ($key =~ m/^JUST/) { $opts[4] = $val; } # JUSTIFY
+	    elsif ($key =~ m/^AXIS/) { $opts[5] = $val; } # AXIS
+	    elsif ($key =~ m/^BORD/ and $val != 0 ) {
+		my $type  = "REL";
+		my $delta = 0.05;
+		if ( ref($val) eq "HASH" ) {
+		    while (my ($bkey, $bval) = each %{$val}) {
+			$bkey = uc($bkey);
+			if    ($bkey =~ m/^TYP/) { $type = uc $bval; }
+			elsif ($bkey =~ m/^VAL/) { $delta = $bval; }
+		    } # while: (bkey,bval)
+		} # if: ref($val) eq "HASH"
+
+		if ( $type =~ m/^REL/ ) {
+		    my $sep = ( $opts[1] - $opts[0] ) * $delta;
+		    $opts[0] -= $sep; $opts[1] += $sep;
+		    $sep = ( $opts[3] - $opts[2] ) * $delta;
+		    $opts[2] -= $sep; $opts[3] += $sep;
+		} elsif ( $type =~ m/^ABS/ ) {
+		    $opts[0] -= $delta; $opts[1] += $delta;
+		    $opts[2] -= $delta; $opts[3] += $delta;
+		} else {
+		    print "Warning: unknown BORDER/TYPE option '$type'.\n";
+		}
+	    } # if: ... $key
+	} # while: (key,val)
+    } elsif ( $#opts == 4 ) {
+	$opts[4] = 0 unless defined $opts[4]; # \%opt supplied but not defined
+	$opts[5] = 0;
+    }
+    # ensure we have a numeric value for the axis option
+    my $axopt = $opts[5];
+    $opts[5] = $_axis{ uc($axopt) };
+    barf "Unknown axis option '$axopt'." unless defined($opts[5]);
+
+    pgenv(@opts); 
+    pgsci($col);
+    @last = (@opts);
 1;}
 
 sub redraw_axes {
     pgqci($col); pgsci($AXISCOLOUR);
-    pgbox('BCNST',0,0,'BCNST',0,0) unless $hold;
+    my $axval = $last[5]; $axval = 0 unless defined $axval; # safety check
+    $labs = $_pgbox{$axval};
+    barf "Unknown axis value '$axval'." unless defined $labs;
+    unless ( $hold ) {
+	if ( ref($labs) ) {
+	    pgbox($$labs[0],0,0,$$labs[1],0,0);
+	} else {
+	    pgbox($labs,0,0,$labs,0,0);
+	}
+    }
     pgsci($col);
 }
-
 
 sub CtoF77coords{  # convert a transform array from zero-offset to unit-offset images
     my $tr = pdl(shift); # Copy
@@ -841,17 +972,14 @@ sub release { $hold=0; print "Graphics RELEASED\n" if $PDL::verbose;};
 # set the envelope for plots and put auto-axes on hold
 
 sub env {
-    barf 'Usage: env ( $xmin, $xmax, $ymin, $ymax, [$just, $axis] )'
+    barf "Usage: env ( $xmin, $xmax, $ymin, $ymax, [$just, $axis] )"
        if ($#_==-1 && !defined(@last)) || ($#_>=0 && $#_<=2) || $#_>5;
     my(@args);
     @args = $#_==-1 ? @last : @_;         # No args - use previous
     $args[4] = 0 unless defined $args[4]; # $just
     $args[5] = 0 unless defined $args[5]; # $axis
     initdev();
-    pgqci($col); pgsci($AXISCOLOUR);
-    pgenv(@args);
-    @last = @args;
-    pgsci($col);
+    initenv( @args );
     hold;
 1;}
 
@@ -859,7 +987,7 @@ sub env {
 # Plot a histogram with pgbin()
 
 sub bin {
-  ($in, $opt)=_extract_hash(@_);
+    ($in, $opt)=_extract_hash(@_);
     barf 'Usage: bin ( [$x,] $data, [$options] )' if $#$in<0 || $#$in>2;
     my ($x, $data)=@$in;
 
@@ -872,12 +1000,22 @@ sub bin {
        $data = $x; $x = float(sequence($n));
      }
 
-    my ($xmin, $xmax)=minmax($x); my ($ymin, $ymax)=minmax($data);
-    initenv( $xmin, $xmax, $ymin, $ymax ) unless $hold;
+    unless ( $hold ) {
+	my ($xmin, $xmax)=minmax($x); my ($ymin, $ymax)=minmax($data);
+	initenv( $xmin, $xmax, $ymin, $ymax, $opt );
+    }
     save_status();
+
+    # look for specific options
+    my $centre = 1;
+    while (my ($key, $val) = each %{$opt}) {
+	$key = uc($key); 
+	if ($key =~ m/^CENT/) { $centre = $val ? 1 : 0; } # CENT(RE|ER)
+    }
+
     # Let's also parse the options if any.
-    standard_options_parser($opt);
-    pgbin($n, $x->get_dataref, $data->get_dataref, 1);
+    standard_options_parser($opt); 
+    pgbin($n, $x->get_dataref, $data->get_dataref, $centre);
     restore_status();
 1;}
 
@@ -893,7 +1031,8 @@ sub cont {
   my($nx,$ny) = $image->dims;
   my ($ncont)=9; # The number of contours by default
 
-  initenv( 0,$nx-1, 0, $ny-1 ) unless $hold;
+  initenv( 0,$nx-1, 0, $ny-1, $opt ) unless ( $hold );
+
   my($minim, $maxim)=minmax($image);
 
   # First save the present status
@@ -903,7 +1042,8 @@ sub cont {
   my ($labelcolour);
   pgqci($labelcolour); # Default let the labels have the chosen colour.
   # Parse the options particular to this routine
-  my ($labels, $usepgcont);
+  my ($labels);
+  my $usepgcont = 0;
   while (($key, $value)=each %$opt) {
   SWITCH: {
       if ($key =~ m/^CON/i) {$contours=$value; last SWITCH;}
@@ -997,8 +1137,11 @@ EOD
   }
   my $x = $#t==1 ? float(sequence($n)) : $t[0];
   my $y = $#t==1 ? $t[0] : $t[1];
-  my ($xmin, $xmax)=minmax($x); my ($ymin, $ymax)=minmax($y);
-  initenv( $xmin, $xmax, $ymin, $ymax ) unless $hold;
+  
+  unless( $hold ) {
+      my ($xmin, $xmax)=minmax($x); my ($ymin, $ymax)=minmax($y);
+      initenv( $xmin, $xmax, $ymin, $ymax, $opt );
+  }
   save_status();
   # Let us parse the options if any.
   my $term=$ERRTERM;
@@ -1060,12 +1203,30 @@ sub line {
     $y = $x; $x = float(sequence($n));
   }
 
+  unless ( $hold ) {
 
-  my ($xmin, $xmax)=minmax($x); my ($ymin, $ymax)=minmax($y);
-  initenv( $xmin, $xmax, $ymin, $ymax ) unless $hold;
+    # Make sure the missing value is used as the min or max value
+    my ($ymin, $ymax, $xmin, $xmax);
+    if (exists $$opt{MISSING}) {
+      ($ymin, $ymax)=minmax($y->where($y != $$opt{MISSING}));
+      ($xmin, $xmax)=minmax($x->where($x != $$opt{MISSING}));
+    } else {
+      ($ymin, $ymax)=minmax($y);
+      ($xmin, $xmax)=minmax($x); 
+    }
+
+    initenv( $xmin, $xmax, $ymin, $ymax, $opt );
+  }
   save_status();
   standard_options_parser($opt);
-  pgline($n, $x->get_dataref, $y->get_dataref);
+
+  # If there is a missing value specified, use pggapline
+  # to break the line around missing values.
+  if (exists $$opt{MISSING}) {
+    pggapline ($n, $$opt{MISSING}, $x->get_dataref, $y->get_dataref);
+  } else {
+    pgline($n, $x->get_dataref, $y->get_dataref);
+  }
   restore_status();
 1;}
 
@@ -1087,11 +1248,13 @@ sub points {
   #
   # Save some time for large datasets.
   #
-  my $plot_line=0;
-  my ($xmin, $xmax)=minmax($x); my ($ymin, $ymax)=minmax($y);
-  initenv( $xmin, $xmax, $ymin, $ymax ) unless $hold;
+  unless ( $hold ) {
+      my ($xmin, $xmax)=minmax($x); my ($ymin, $ymax)=minmax($y);
+      initenv( $xmin, $xmax, $ymin, $ymax, $opt );
+  }
   save_status();
 
+  my $plot_line=0;
 
   standard_options_parser($opt);
   # Additional functionality for points..
@@ -1138,11 +1301,19 @@ sub imag {
   checkarg($image,2);
   my($nx,$ny) = $image->dims;
 
+  my $itf = 0;
+
   # Parse for options input instead of calling convention
   while (my ($key, $val) = each %{$opt}) {
-    if ($key =~ m/^TRAN/i) {$tr=$val;}
-    elsif ($key =~ m/^MIN/i) { $min=$val;}
-    elsif ($key =~ m/^MAX/i) {$max=$val};
+      $key = uc($key);
+    if ($key =~ m/^TRAN/) {$tr=$val;}
+    elsif ($key =~ m/^MIN/) { $min=$val;}
+    elsif ($key =~ m/^MAX/) {$max=$val;}
+    elsif ($key =~ m/ITF/ ) {
+      defined( $itf = $ITF{uc $val} )
+      or barf ( "illegal ITF value `$val'. use one of: " .
+                join(',', keys %ITF) );
+    }
   }
 
   $min = min($image) unless defined $min;
@@ -1161,9 +1332,11 @@ sub imag {
     at($tr,0) + ($nx + 0.5) * $tr->slice('1:2')->sum,
     at($tr,3) + 0.5 * $tr->slice('4:5')->sum,
     at($tr,3) + ($ny + 0.5) * $tr->slice('4:5')->sum,
+    $opt
   ) unless $hold;
   print "Displaying $nx x $ny image from $min to $max ...\n" if $PDL::verbose;
 
+  pgsitf( $itf );
   pgqcir($i1, $i2);          # Colour range - if too small use pggray dither algorithm
   pgqinf('TYPE',$dev,$len);  # Device (/ps buggy - force pggray)
   if ($i2-$i1<16 || $dev =~ /^v?ps$/i) {
@@ -1184,9 +1357,21 @@ sub ctab {
   # First indirect arg list through %CTA
   my(@arg) = @$in;
   if ($#arg>=0 && !ref($arg[0])) { # First arg is a name not an object
-    my $name = ucfirst(lc(shift @arg)); # My convention is $CTAB{Grey} etc...
-    barf "$name is not a standard colour table" unless defined $CTAB{$name};
-    unshift @arg, @{$CTAB{$name}};
+    # if first arg is undef or empty string, means use last CTAB.
+    # preload with Grey if no prior CTAB
+    $arg[0] = 'Grey' unless $arg[0] || $CTAB;
+
+    # now check if we're using the last one specified
+    if ( ! $arg[0] ) {
+      shift @arg;
+      unshift @arg, @{$CTAB->{ctab}};
+      $brightness = $CTAB->{brightness};
+      $contrast = $CTAB->{contrast};
+    } else {
+      my $name = ucfirst(lc(shift @arg)); # My convention is $CTAB{Grey} etc...
+      barf "$name is not a standard colour table" unless defined $CTAB{$name};
+      unshift @arg, @{$CTAB{$name}};
+    }
   }
 
 
@@ -1231,10 +1416,24 @@ EOD
   $contrast   = 1   unless defined $contrast;
   $brightness = 0.5 unless defined $brightness;
   initdev();
+
   pgctab( $levels->get_dataref, $red->get_dataref, $green->get_dataref,
 	  $blue->get_dataref, $n, $contrast, $brightness );
-  $CTAB = 1; # Loaded
+  $CTAB = { ctab => [ $levels, $red, $green, $blue ],
+          brightness => $brightness,
+          contrast => $contrast
+        }; # Loaded
   1;}
+
+# get information on last CTAB load
+sub ctab_info {
+  ($in, $opt)=_extract_hash(@_);
+  barf 'Usage: ctab_info( )' if $#$in> -1;
+
+  return () unless $CTAB;
+  return @{$CTAB->{ctab}}, $CTAB->{contrast}, $CTAB->{brightness};
+}
+
 
 # display an image using pghi2d()
 
@@ -1253,15 +1452,16 @@ sub hi2d {
 
   # Parse for options input instead of calling convention
   while (my ($key, $val) = each %{$opt}) {
-    if ($key =~ m/^IOF/i) {$ioff=$val;}
-    elsif ($key =~ m/^BIAS/i) {$bias=$val;}
+      $key = uc($key);
+    if ($key =~ m/^IOF/) {$ioff=$val;}
+    elsif ($key =~ m/^BIAS/) {$bias=$val;}
   }
 
   $ioff = 1 unless defined $ioff;
   $bias = 5*max($image)/$ny unless defined $bias;
   $work = float(zeroes($nx));
 
-  initenv( 0 ,2*($nx-1), 0, 10*max($image)  ) unless $hold;
+  initenv( 0 ,2*($nx-1), 0, 10*max($image), $opt ) unless $hold;
   pghi2d($image->get_dataref, $nx, $ny, 1,$nx,1,$ny, $x->get_dataref, $ioff,
 	 $bias, 1, $work->get_dataref);
   1;}
@@ -1275,11 +1475,14 @@ sub poly {
   my($x,$y) = @$in;
   checkarg($x,1);
   checkarg($y,1);
-  my $n = nelem($x);
-  my ($xmin, $xmax)=minmax($x); my ($ymin, $ymax)=minmax($y);
-  initenv( $xmin, $xmax, $ymin, $ymax) unless $hold;
+
+  unless ( $hold ) {
+      my ($xmin, $xmax)=minmax($x); my ($ymin, $ymax)=minmax($y);
+      initenv( $xmin, $xmax, $ymin, $ymax, $opt );
+  }
   save_status();
   standard_options_parser($opt);
+  my $n = nelem($x);
   pgpoly($n, $x->get_dataref, $y->get_dataref);
   restore_status();
 1;}
@@ -1298,10 +1501,11 @@ sub vect {
 
   # Parse for options input instead of calling convention
   while (my ($key, $val) = each %{$opt}) {
-    if ($key =~ m/^SCAL/i) {$scale=$val;}
-    elsif ($key =~ m/^POS/i) {$pos=$val;}
-    elsif ($key =~ m/^TR/i) {$tr=$val;}
-    elsif ($key =~ m/^MIS/i) {$misval=$val;}
+      $key = uc($key);
+    if ($key =~ m/^SCAL/) {$scale=$val;}
+    elsif ($key =~ m/^POS/) {$pos=$val;}
+    elsif ($key =~ m/^TR/) {$tr=$val;}
+    elsif ($key =~ m/^MIS/) {$misval=$val;}
   }
 
 
@@ -1316,7 +1520,7 @@ sub vect {
   }
   $tr = CtoF77coords($tr);
 
-  initenv( 0, $nx-1, 0, $ny-1  ) unless $hold;
+  initenv( 0, $nx-1, 0, $ny-1, $opt ) unless $hold;
   print "Vectoring $nx x $ny images ...\n" if $PDL::verbose;
 
   save_status();
@@ -1326,6 +1530,6 @@ sub vect {
   restore_status();
   1;}
 
-1;# Exit with OK status
 
+1;# Exit with OK status
 

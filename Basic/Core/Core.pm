@@ -337,12 +337,24 @@ BEGIN {
 @PDL::ufuncs2 = qw( ! ~ NOTHING );
 @PDL::ufuncs2f = qw( log exp );
 @PDL::bifuncs = ("pow",["pow","**"],"atan2",["MODULO","%"],["SPACESHIP","<=>"]);
+
+%PDL::bop_sbclasschk = map {my $op = $_;
+     	    ($op => sub {my $foo; # print "OP: $op\n";
+			 ref $_[1] && (ref $_[1] ne __PACKAGE__) 
+			   && defined ($foo = overload::Method($_[1],$op)) ?
+			     &$foo($_[1],$_[0],!$_[2]) :
+			       ($foo = $_[0]->null(),
+				PDL::_my_biop1_int(&PDL::Core::rswap,$foo,$op),
+				$foo)})}
+  @PDL::biops1;
+
 };
 
    use overload (
      (map {my $op = $_;
      	    ($op => sub {my $foo = $_[0]->null(); # print "OP: $op\n";
-     		       PDL::Ops::my_biop1(&PDL::Core::rswap,$foo,$op); $foo;},
+			 PDL::_my_biop1_int(&PDL::Core::rswap,$foo,$op); $foo
+			  },
 	    "$op=" => sub {PDL::Ops::my_biop1(&PDL::Core::rswapass,$op);
 	    	          return $_[0];})} @PDL::biops1),
      (map {my $op = $_;
@@ -1123,6 +1135,28 @@ operate array element by array element like C<log10>).
 sub PDL::inplace {
     my $pdl = PDL->topdl(shift); $pdl->set_inplace(1); return $pdl;
 }
+
+=head2 hdrcpy
+
+=for ref
+
+switch on/off/examine automatic header copying
+
+=for example
+
+  print "hdrs will be copied" if $a->hdrcpy;
+  $a->hdrcpy(1);       # switch on hdr copying
+  $b = $a->sumover;    # and $b will inherit $a's hdr
+  $a->hdrcpy(0);       # and now make $a non-infectious again
+
+Normally, the optional header of a piddle is not copied
+automatically in pdl operations. Switching on the hdrcpy
+flag using the C<hdrcpy> method will enable automatic hdr
+copying. Note that copying is B<by reference> for efficiency
+reasons. C<hdrcpy> without an argument just returns the
+current setting of the flag.
+
+=cut
 
 # Copy if not inplace
 
@@ -2034,7 +2068,7 @@ sub str2D{
 ########## Docs for functions in Core.xs ##################
 # Pod docs for functions that are imported from Core.xs and are
 #  not documented elsewhere. Currently this is not a complete
-#  list. There are others like sethdr, etc.
+#  list. There are others.
 
 =head2 gethdr
 
@@ -2049,14 +2083,15 @@ Retrieve header information from a piddle
  
    print "Number of pixels in the X-direction=$$h{NAXIS1}\n";
 
-The gethdr function retrieves whatever header information is contained
-within a piddle. The header can be set with sethdr and is always a 
+The C<gethdr> function retrieves whatever header information is contained
+within a piddle. The header can be set with L<sethdr|/sethdr> and is always a 
 hash reference and has to be dereferenced for access to the value. 
 
 It is important to realise that you are free to insert whatever hash
 reference you want in the header, so you can use it to record important
 information about your piddle, and that it is not automatically copied
 when you copy the piddle. 
+See L<hdrcpy|/hdrcpy> to enable automatic header copying.
 
 For instance a wrapper around rcols that allows your piddle to remember
 the file it was read from and the columns could be easily written 
@@ -2073,10 +2108,29 @@ exercise for the reader)
      foreach (@piddles) { $_->sethdr($header); } 
      return @piddles;
   }
-     
 
+=head2 sethdr
 
+=for ref
 
+Set header information of a piddle
+
+=for example
+
+   $pdl=rfits('file.fits');
+   $h=$pdl->gethdr;
+   # add a FILENAME field to the header
+   $$h{FILENAME} = 'file.fits';
+   $pdl->sethdr( $h );
+
+The C<sethdr> function sets the header information for a piddle.
+Normally you would get the current header information with
+C<gethdr>, add/change/remove fields, then apply those changes with
+C<sethdr>.
+
+The C<sethdr> function must be given a hash reference.
+For further information on the header, see L<gethdr|/gethdr> and
+L<hdrcpy|/hdrcpy>.
 
 =head1 AUTHOR
 

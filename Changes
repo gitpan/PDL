@@ -1,4 +1,136 @@
 (!!! = possible source of incompatibilities)
+2.004
+John Cerney (3/16/00)
+	- Added -lm to the Lib/Image2D/Makefile.PL suggested by Doug Burke
+	  to fix a compile problem on Solaris 2.7.
+John Cerney (3/15/00)
+	- Added Christian Pellegrin's bilinear and image scaling patch.
+          with cleaned up docs and test cases.
+	- Update Version to 2.004
+Doug Hunt (3/8/00)
+        - Added 'use PDL::Graphics::PGPLOT' to Demos/PGPLOT_demo.pm.  Now it works.
+          This bug was introduced in my 3/2 and 3/3/00 changes.
+
+John Cerney (3/5/00)
+	- Modified Basic/Complex/Complex.pd to not generate warning messages
+          when re-defining the PDL overloaded operator subs.
+Doug Burke
+        - IO::Misc - default type for DEFTYPE (rcols option) is now definable 
+          using the $PDL::IO::Misc::deftype variable.
+
+Doug Hunt (3/3/00)
+        - Removed PDL::Graphics::PGPLOT from PDL.pm.  This had been causing
+          troubles due to the previous change which took away autoloading
+          in PGPLOT.  
+
+Doug Hunt (3/2/00)
+        - Updated Graphics/IO/PGPLOT, adding a typemap and a PGPLOT.xs file.
+          This change added capability to PDL::Graphics::PGPLOT::line, allowing
+          one to use the 'MISSING' option.  When this option is specified, 'line'
+          will draw many disconnected polylines (delimited by the value specified
+          as 'MISSING') instead of just one.  This is useful in drawing maps with
+          line.
+
+Marc Lehmann
+	- Patch to Basic/Core/Dev.pm fix Parallel build bug. (Ref PDL-Porters Messages
+	  dated 1/8/00 and 1/5/00.)
+        - Small Patch to Graphics/Karma/karma.pd. Change 'na' to 'PL_na';
+          (PDL-P msg 1/15/00)
+
+Robin Williams:
+	- Patch to Graphics/TriD/OpenGL/generate.p to get 
+          OpenGL working on OSF (it crunched because
+          perlxs interprets the #ifs as comments 
+          if they're indented).
+
+Karl Glazebrook:
+	- Patch to Perldl.PL to improve readlines handling:
+	   - tells you which module it is using
+           - correctly informs whether editing is available or not
+
+John Cerney
+	- Documentation fix for FlexRaw.pm (Based on change submitted
+          by Francois Primeau.)
+	- Updated Makefile in FFTW to correct a build problem that occurs
+	  when both single and double FFTW libs are present. (suggested
+	  by Diab Jurius).
+	- Updated TriD Makefile to find openGL libs specified in the 
+	  perldl.conf file.
+	- Updated Graphics/TriD/OpenGL/generate.p to include patch by
+	  Diab Jerius (ref PDL-Porters message dated 11/9/99). 
+	  This fixes compilation problems with native openGL on solaris.
+	  Note: Patch to Graphics/TriD/TriD/GL.pm was not applied. (Risk
+	  of breaking GL on other platforms)
+
+CS
+	- added function 'det' to PDL::Slatec -> calculate determinant
+
+Doug Burke
+        - Graphics::LUT - added several intensity ramps, instead of just
+          using a linear scale.
+        - internal changes to Graphics::LUT - now stores data in external
+          FITS files rather than within the module to improve speed and 
+          reduce use of disk-space. 
+        - first attempt at improving installation of OpenGL stuff
+        - Graphics/IIS/iis.pd: minor change (re Christian's PP changes)
+        - Graphics/PGPLOT/PGPLOT.pm: add CENTRE option [bin()], doc update
+        - minor code cleanup for IO/NDF/NDF.pm and IO/Misc/misc.pd
+        - added docs for sethdr to Basic/Core/Core.pm
+
+Marc Lehmann
+	- small changes to complex.pd: remove bogus Cneg, streamline docs.
+
+Doug Burke
+        - added TYPES/DEFTYPE options to PDL::IO::Misc::rcols()
+          to specify the type of the piddles
+          NOTE: (!!!)
+            different from patch to 2.003 sent to perldl list 
+            (http://www.xray.mpe.mpg.de/mailing-lists/perldl/2000-01/msg00037.html),
+            as you now specify the types directly, rather than as strings.
+        - added HEADER option to PDL::IO::Misc::wcols()
+        - added BORDER option to PDL::Graphics::PGPLOT
+        - added examples of new PGPLOT options to 'demo pgplot'
+        - added t/lut.t to test PDL::Graphics::LUT, and
+          added tests of options in rcols() to t/misc.t
+        - minor doc update for PDL::Primitive - example for whichND()
+          now works
+
+CS
+	- introduced switch for automatic hdr copying, off by default
+	- PP: added pp_addbegin, pp_beginwrap and pp_setversion
+		pp_addxs now adds to the current module's namespace by default,
+		!not! to PDL anymore (patch by Marc Lehmann)
+		pp_addisa now really works as advertised (i.e. adds to
+		@ISA and doesn't split on whitespace anymore)
+	- misc.pd: bswap functions work always inplace, remove
+	  [o] from sigs
+	- added PDL::Complex to the dist (first try of a derived class),
+	  does remarkly many things already but needs some testing,
+	  donated by Marc Lehmann
+
+Doug Hunt
+        - added PDL::Char, a subtype of PDL which allows manipulation
+          of byte type PDLs as N dimensional arrays of fixed length
+          strings
+
+Doug Burke
+        - added AXIS option to PDL::Graphics::PGPLOT + doc changes
+        - added PDL::LUT module to provide colour tables - useful for
+          PGPLOT's ctab() function (note: plan, in near future, to
+          change to a binary format to reduce size of this module)
+
+CS
+	- Levenberg-Marquardt fitting module
+	- added required additional slatec functions + some docs
+	- some handy bits for PDL::Options function interface
+	- bool.t didn't make it into 2.002 (touch problem?)
+	- fftw.t test shouldn't rely on another module
+	- PDL::Doc: support input from more than one file
+	- Slatec/Makefile.PL: #include "g2c.h" seems unneccesary (and
+		leeds to trouble on my debian 2.1 system)
+	- PGPLOT patch from pdl-porters
+	- Robin's Basic/Math patches
+
 2.003
 Christian Pellegrin
 	- Patch to add an interface to the GSL
@@ -10,8 +142,8 @@ Christian Pellegrin
 
 Christian Soller
 	- Patch to add 'any' and 'all' functions to use for comparison
-          operations. (e.g. This enables things like ($pdl->any == 3.2)
-           or $pdl->all > 0 )
+          operations. (e.g. This enables things like any($pdl == 3.2)
+           or all($pdl > 0) )
 	- Patch to picnorgb test to fix greyscale and rgb 
           generation on some platforms.
 	- Misc Patch: Make Image.pm return 1. 

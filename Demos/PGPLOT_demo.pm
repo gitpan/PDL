@@ -1,5 +1,6 @@
 package PDL::Demos::PGPLOT_demo;
 use PDL;
+use PDL::Graphics::PGPLOT;
 
 PDL::Demos::Routines->import();
 sub comment($);
@@ -95,6 +96,24 @@ act q|
 |;
 
 act q|
+  # PDL::Graphics::PGPLOT contains several colour tables,
+  # a more extensive collection can be found in 
+  # PDL::Graphics::LUT
+  #
+  # (note: the call to lut_names() can take a few seconds to execute)
+  #
+  use PDL::Graphics::LUT;
+  @names = lut_names();
+  print "Available tables: [ ", @names, " ]\n";
+
+  # use the first table
+  ctab( lut_data($names[0]) );
+  use PGPLOT;
+  pglabel "", "", "Colour table: $names[0]";
+
+|;
+
+act q|
     # To change plot specifics you can either use the specific PGPLOT
     # commands - recommended if you need lots of control over your
     # plot.
@@ -133,6 +152,16 @@ act q|
 
 act q|
   #
+  # More examples of changing the plot defaults
+  # 
+  $a = 1+sequence(10);
+  $b = $a*2;
+  $bord_opt = { TYPE => 'RELATIVE', VALUE => 0.1 };
+  line log10($a), $b, { AXIS => 'LOGX', BORDER => $bord_opt };
+|;
+
+act q|
+  #
   # We can also create vector maps of data
   # This requires one array for the horizontal component and
   # one for the vertical component
@@ -156,6 +185,34 @@ act q|
   $x=sequence(10)/5;
   poly $x, $x**2, {FILL=>HATCHED, COLOR=>BLUE};
 
+|;
+
+act q|
+  #
+  # the latest feature of PDL are complex numbers
+  # so let's play with a simple example
+  #
+  
+
+  use PDL::Complex;
+  $z50 = zeroes(50);
+  $c = $z50->xlinvals(0,7)+i*$z50->xlinvals(2,4);
+  line im sin $c; hold;      # the imaginary part
+  line re sin $c;            # real
+  line abs sin $c; release;  # and the modulus
+  
+|;
+
+act q|
+  #
+  # more complex numbers
+  #
+  
+  use PDL::Complex;
+  $c =  zeroes(300)->xlinvals(0,12)+i*zeroes(300)->xlinvals(2,10);
+  $sin = sin $c;
+  line $sin->im, $sin->re;   # look at the result in the complex plane
+  
 |;
 
 }

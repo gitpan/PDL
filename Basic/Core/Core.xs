@@ -154,6 +154,17 @@ iscontig(x)
     RETVAL
 
 int
+hdrcpy(x,mode=0)
+	pdl *x
+	int mode
+	CODE:
+	if (items>1) 
+	   { setflag(x->state,PDL_HDRCPY,mode); }
+	RETVAL = ((x->state & PDL_HDRCPY) > 0);
+	OUTPUT:
+	RETVAL
+
+int
 fflows(self)
 	pdl *self
 	CODE:
@@ -579,6 +590,10 @@ pdl_make_physical(self)
 
 
 void
+pdl_make_physvaffine(self)
+       pdl *self;
+
+void
 pdl_make_physdims(self)
 	pdl *self;
 
@@ -746,6 +761,7 @@ SV *
 gethdr(p)
 	pdl *p
 	CODE:
+		pdl_make_physdims(p);
 		if(p->hdrsv) {
 		   RETVAL = newRV( (SV*) SvRV((SV*)p->hdrsv) );
 		} else {

@@ -152,6 +152,7 @@ for(@types) {gettypes($_)}
 print "GLXContext	T_PTR\n";
 print "GLXFBConfig    T_PTR\n";
 print "Bool	T_INT\n";
+while ( my ($key, $val) = each %t ) {print "$key T_$val\n" };
 close TYPEMAP;
 
 sub getfuncs {
@@ -867,10 +868,10 @@ glPolygonOffsetEXT(factor,bias)
 	GLfloat bias
 	CODE:
 	{
-		#ifdef GL_EXT_polygon_offset
+#ifdef GL_EXT_polygon_offset
 			extern void glPolygonOffsetEXT(GLfloat factor, GLfloat units);
 			glPolygonOffsetEXT(factor,bias);
-		#endif
+#endif
 	}
 
 #
