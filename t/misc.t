@@ -75,7 +75,7 @@ ok( (sum($t->slice('0:4,:')) == -sum($t2->slice('5:-1,:')) ));
 
 $h = $t2->gethdr;
 
-ok($$h{'Foo'} eq 'foo' && $$h{'Bar'} == 42);
+ok($$h{'Foo'} eq "'foo       '" && $$h{'Bar'} == 42);
 
 unlink $file;
 

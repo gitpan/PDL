@@ -215,10 +215,10 @@ ok(28, $@ =~ /Negative slice cannot start or end above limit/);
 $a = sequence(10,4);
 ok(29, approx( $a->dice([1,2],[0,3])->sum , pdl(66) ) );
 
-# Test of ReorderDims:
+# Test of Reorder:
 $a = sequence(5,3,2);
 @newDimOrder = (2,1,0);
-$b = $a->reorderDims(@newDimOrder);
+$b = $a->reorder(@newDimOrder);
 
 ok(30, approx($b->average->average->sum , pdl(72.5) ) );
 

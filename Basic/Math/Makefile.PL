@@ -36,6 +36,7 @@ $libs = '-L/opt/SUNWspro/lib -lsunmath '.$libs
 $dir = $ENV{PWD}.'/Basic/Math';
 
 my $testfile = "pdl$$";
+my $HIDE = '>/dev/null 2>&1';
 foreach (@sfuncs) {
     open FILE,">/tmp/$testfile.c";
     print FILE <<"EOF";
@@ -45,7 +46,7 @@ main() {printf("%lg",$_());}
 EOF
     close FILE;
     push @need, $_ if 
-      system("$Config{cc} -I$dir -o /tmp/$testfile /tmp/$testfile.c $libs>/dev/null 2>&1")
+      system("$Config{cc} -I$dir -o /tmp/$testfile /tmp/$testfile.c $libs $HIDE")
       !=0;
 }
 
@@ -58,7 +59,7 @@ main() {printf("%lg",$_(1.));}
 EOF
     close FILE;
     push @need, $_ if 
-      system("$Config{cc} -I$dir -o /tmp/$testfile /tmp/$testfile.c $libs>/dev/null 2>&1")
+      system("$Config{cc} -I$dir -o /tmp/$testfile /tmp/$testfile.c $libs $HIDE")
       !=0;
 }
 
@@ -73,7 +74,7 @@ main() {printf("%lg",$_(1.));}
 EOF
     close FILE;
     push @need, $_  if 
-      system("$Config{cc} -I$dir -o /tmp/$testfile /tmp/$testfile.c $libs>/dev/null 2>&1")
+      system("$Config{cc} -I$dir -o /tmp/$testfile /tmp/$testfile.c $libs $HIDE")
       !=0;
 }
 foreach (@besbifuncs) {
@@ -85,7 +86,7 @@ main() {printf("%lg",$_(1.,1.));}
 EOF
     close FILE;
     push @need, $_ if 
-      system("$Config{cc} -I$dir -o /tmp/$testfile /tmp/$testfile.c $libs>/dev/null 2>&1")
+      system("$Config{cc} -I$dir -o /tmp/$testfile /tmp/$testfile.c $libs $HIDE")
       !=0;
 }
 unlink "/tmp/$testfile","/tmp/$testfile.c";
@@ -105,7 +106,7 @@ print "\n\n";
 for $func (@need) {
    die "File for function $func not found\n" if $FileToUse{$func} eq '';
    $file = $FileToUse{$func};
-   $hash{OBJECT} .= " $file\$(OBJ_EXT)" unless $seen{$file};
+   $hash{OBJECT} .= " $file\$(OBJ_EXT)" unless $seen{$file}++;
    $hash{DEFINE} .= ' -DMY_'.uc($func);
 }
 

@@ -205,6 +205,7 @@ IO/Pnm/converters/README
 IO/Pnm/converters/pnmtotiff.c
 IO/Pnm/converters/tifftopnm.c
 IO/Pnm/pnm.pd
+Known_problems
 Lib/CallExt/CallExt.pm
 Lib/CallExt/CallExt.xs
 Lib/CallExt/Makefile.PL

@@ -44,7 +44,19 @@ Suffix magic:
      $pdl = rfits('file.fits.gz'); # Automatically uncompress via gunzip pipe
      $pdl = rfits('file.fits.Z');  # Automatically uncompress via uncompress pipe
 
-FITS Headers stored in piddle and can be retrived with $a->gethdr
+FITS Headers stored in piddle and can be retrived with $a->gethdr.
+
+This header is a reference to a hash where the hash keys are the 
+keywords in the FITS header. It is important to note that for strings, 
+the surrounding quotes are kept to ensure that strings that look like
+numbers are kept as strings. This is also of importance if you create 
+your own header information and you want the value to be printed out 
+as a string.
+
+Comments in headers are stored as $$h{COMMENT}{<Keyword>} where $h is
+the header retrieved with $a->gethdr.
+History entries in the header are stored as $$h{HISTORY}, which is an
+anonymous array for each HISTORY entry in the header.
 
 =cut
 
@@ -67,7 +79,7 @@ sub PDL::rfits {
    my $foo={};       # To go in pdl
    $$foo{"BSCALE"}=1;
    $$foo{"BZERO"}=0;
-
+   my @history=();
    while( !eof(FITS)) {
       read(FITS,$line,80);
       barf "file $file is not in FITS-format:\n$line\n"
@@ -75,13 +87,20 @@ sub PDL::rfits {
       $nbytes += 80;
 
       $name = (split(' ',substr($line,0,8)))[0]; $rest=substr($line,8);
-      $$foo{$name} = "";
-      $$foo{$name}=$1 if $rest =~ m|^= +(.*\S) *$| ;
-      $$foo{$name}=$1 if $rest =~ m|^= +(.*\S) +/.*$| ;
-      $$foo{$name}=$1 if $rest =~ m|^= '(.*)' *$| ;
-      $$foo{$name}=$1 if $rest =~ m|^= '(.*)' +/.*$| ;
-      last if $name eq "END";
+      if ($name =~ m/^HISTORY/) {
+         push @history, $rest;
+      } else {
+         $$foo{$name} = "";
+         undef $comment;
+         $$foo{$name}=$1 if $rest =~ m|^= +(.*\S) *$| ;
+         $$foo{$name}=$1 if $rest =~ m|^= +(.*\S) +/(.*)$| ;
+         $$foo{$name}="'".$1."'" if $rest =~ m|^= '(.*)' *$| ;
+         $$foo{$name}="'".$1."'" if $rest =~ m|^= '(.*)' +/(.*)$| ;
+         $$foo{COMMENT}{$name} = $2 if defined($2);
+         last if $name eq "END";
+      }
    }
+   $$foo{"HISTORY"} = \@history if $#history >= 0;
    $nbytes %= 2880;
    my $bar; read(FITS,$bar, 2880-$nbytes) if $nbytes!=0; # Skip to end of card
 
@@ -260,7 +279,8 @@ sub PDL::wfits { # Write a PDL to a FITS format file
       wheader('BZERO');
    }
    wheader('BUNIT');
-   for $k (sort keys %hdr) { wheader($k) }
+   for $k (sort keys %hdr) { wheader($k) unless $k =~ m/HISTORY/}
+   wheader('HISTORY'); # Make sure that HISTORY entries come last.
    printf FITS "%-80s", "END"; $nbytes += 80;
    $nbytes %= 2880;
    print FITS " "x(2880-$nbytes) if $nbytes != 0; # Fill up HDU
@@ -310,24 +330,53 @@ sub PDL::wfits { # Write a PDL to a FITS format file
 sub wheader {     # Local utility routine of wfits()
    my $k = shift;
 
-   # Check that we are dealing with a scalar value in the header
-   # Need to make sure that the header does not include PDLs or
-   # other structures. Return unless $hdr{$k} is a scalar
-   return unless not ref($hdr{$k});
+   if ($k =~ m/HISTORY/) {
+      return unless ref($hdr{$k}) eq 'ARRAY';
+      foreach my $line (@{$hdr{$k}}) {
+         printf FITS "HISTORY %-72s", substr($line,0,72);
+       $nbytes += 80;
+      }
+      delete $hdr{$k};
+   } else {
+      # Check that we are dealing with a scalar value in the header
+      # Need to make sure that the header does not include PDLs or
+      # other structures. Return unless $hdr{$k} is a scalar
 
-   if ($hdr{$k} eq "") {
-      printf FITS "%-80s", substr($k,0,8);
-   }
-   else{
-      printf FITS "%-8s= ", substr($k,0,8);
-      if ($hdr{$k} =~ /^ *([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))? *$/) { # Number?
-         printf FITS "%-70s", substr($hdr{$k},0,70);
+      return unless not ref($hdr{$k});
+
+      if ($hdr{$k} eq "") {
+         printf FITS "%-80s", substr($k,0,8);
+      } else {
+         printf FITS "%-8s= ", substr($k,0,8);
+         if ($hdr{$k} =~ /^ *([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))? *$/) { # Number?
+         my $cl=60-((exists($hdr{COMMENT}{$k})) ? 2 : 0);
+         my $end=' ' x $cl;
+         $end =' /'.$hdr{COMMENT}{$k} if (exists($hdr{COMMENT}{$k}));
+         printf FITS "%20s%-50s", substr($hdr{$k},0,20),
+         substr($end, 0, 50);
+        } elsif ($hdr{$k} eq 'F' or $hdr{$k} eq 'T') {
+          # Logical flags ?
+          printf FITS "%20s", $hdr{$k};
+          my $end=' ' x 50;
+          $end =' /'.$hdr{COMMENT}{$k} if (exists($hdr{COMMENT}{$k}));
+          printf FITS "%-50s", $end;
+        }
+         else {
+         $hdr{$k}=$1 if ($hdr{$k}=~m/'(.*)'/); # Take off surrounding ''
+         my $sl=length($hdr{$k})+2;
+         $sl=10 if $sl < 10;
+         my $cl=68-$sl-(exists($hdr{COMMENT}{$k}) ? 2 : 0);
+         printf FITS "'%-$ {sl}s'", substr($hdr{$k},0,$sl);
+         if (exists($hdr{COMMENT}{$k})) {
+               printf FITS " /%-$ {cl}s", substr($hdr{COMMENT}{$k}, 0, $cl);
+           } else {
+             printf FITS "%-$ {cl}s", ' ' x $cl;
+            }
+         }
       }
-     else {
-         printf FITS "%-70s", "'".substr($hdr{$k},0,68)."'";
-      }
+      $nbytes += 80; delete $hdr{$k};
    }
-   $nbytes += 80; delete $hdr{$k};
+   delete $hdr{COMMENT}{$k};
 1;}
 
 # ***CROCK*** Internal routine to extend 1D PDL array by size $n - dirty hack
@@ -851,6 +900,65 @@ sub PDL::rasc {
   close FILE;
   return $pdl;
 }
+
+# ----------------------------------------------------------
+
+=head2 rcube
+
+=for ref
+
+Read list of files directly into a large data cube (for efficiency)
+
+=for usage
+
+ $cube = rcube \&reader_function, @files;
+
+=for example
+
+ $cube = rcube \&rfits, glob("*.fits");
+
+This IO function allows direct reading of files into a large data cube,
+Obviously one could use cat() but this is more memory efficient.
+
+The reading function (e.g. rfits, readfraw) (passed as a reference)
+and files are the arguments.
+
+The cube is created as the same X,Y dims and datatype as the first
+image specified. The Z dim is simply the number of images.
+
+=cut
+
+sub rcube {
+
+    my $reader = shift;
+
+    barf "Usage: blah" unless ref($reader) eq "CODE";
+
+    my $k=0;
+    my ($im,$cube,$tmp,$nx,$ny);
+    my $nz = scalar(@_);
+
+    for my $file (@_) {
+       print "Slice ($k) - reading file $file...\n" if $PDL::verbose;
+       $im = &$reader($file);
+       ($nx, $ny) = dims $im;
+       if ($k == 0) {
+          print "Creating $nx x $ny x $nz cube...\n" if $PDL::verbose;
+          $cube = $im->zeroes($im->type,$nx,$ny,$nz);
+        }
+        else {
+          barf "Dimensions do not match for file $file!\n" if
+             $im->getdim(0) != $nx or $im->getdim(1) != $ny ;
+
+       }
+       $tmp = $cube->slice(":,:,($k)");
+       $tmp .= $im;
+       $k++;
+      }
+
+      return $cube;
+}
+
 
 EOPM
 

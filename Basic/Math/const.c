@@ -42,8 +42,8 @@ double MAXNUM =  1.79769313486231570815E308;    /* 2**1024*(1-MACHEP) */
 #ifndef PI
 double PI     =  M_PI;
 #endif
-double PI02   =  M_PI/2;
-double PI04   =  M_PI/4;
+double PIO2   =  M_PI/2;
+double PIO4   =  M_PI/4;
 double THPIO4 =  0.75*M_PI;
 double TWOOPI =  2/M_PI;
 #else

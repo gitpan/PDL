@@ -324,7 +324,7 @@ EOD
 
 pp_addpm({At => Bot},<< 'EOD');
 
-=head2 reorderDims
+=head2 reorder
 
 =for ref
 
@@ -332,18 +332,18 @@ Re-orders the dimensions of a PDL based on the supplied list.
 
 Similar to the L<xchg> method, this method re-orders the dimensions
 of a PDL. While the L<xchg> method swaps the position of two dimensions,
-the reorderDims method can change the positions of many dimensions at
+the reorder method can change the positions of many dimensions at
 once.
 
 =for usage
 
 
- $reOrderedPDL = $pdl->reorderDims(5,4,3,2,1,0); # Completely reverse the 
+ $reOrderedPDL = $pdl->reorder(5,4,3,2,1,0); # Completely reverse the 
 						 # dimension order of a 6-Dim
 						 # array.
 
-The argument to reorderDims is an array representing where the current dimensions
-should go in the new array. In the above usage, the argument to reorderDims (5,4,3,2,1,0)
+The argument to reorder is an array representing where the current dimensions
+should go in the new array. In the above usage, the argument to reorder (5,4,3,2,1,0)
 indicates that the old dimensions ($pdl's dims) should be re-arranged to make the
 new pdl ($reOrderPDL) according to the following:
 
@@ -377,7 +377,7 @@ Example:
   ]
  ]
 
- perldl> p $a->reorderDims(2,1,0); # Reverse the order of the 3-D PDL
+ perldl> p $a->reorder(2,1,0); # Reverse the order of the 3-D PDL
 
  [
   [
@@ -408,14 +408,14 @@ Example:
  ]
 
 The above is a simple example that could be duplicated by calling
-$a->xchg(0,2), but it demonstrates the basic functionality of reorderDims.
+$a->xchg(0,2), but it demonstrates the basic functionality of reorder.
 
 As this is an index function, any modifications to the
 result PDL will change the parent.
 
 =cut
 
-sub PDL::reorderDims {
+sub PDL::reorder {
 
 	my ($pdl,@newDimOrder) = @_;
 	
@@ -443,7 +443,7 @@ sub PDL::reorderDims {
         my ($from,$to);  # from/to values for building individual exchanges
         for ($i=0; $i<$arrayMax; $i++) {
 		if($scratchOrder[$i] > $arrayMax or $scratchOrder[$i] < 0){
-			$pdl->barf("Error in reorderDims: Element $scratchOrder[$i] of newDimOrder array not a valid index (out of bounds).\n");
+			$pdl->barf("Error in reorder: Element $scratchOrder[$i] of newDimOrder array not a valid index (out of bounds).\n");
 			return;
 		}
 
