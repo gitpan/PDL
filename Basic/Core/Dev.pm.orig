@@ -14,19 +14,21 @@ use English; use Exporter; use DynaLoader;
 		 );
 
 # Installation locations
-# beware: whereami_any now appends the /Basic or /PDL directory as appropriate
 
-sub PDL_INCLUDE { '-I'.whereami_any().'/Core' };
-sub PDL_TYPEMAP { whereami_any().'/Core/typemap.pdl' };
+sub PDL_INCLUDE { '-I'.whereami().'/Basic/Core' };
+sub PDL_TYPEMAP { whereami().'/Basic/Core/typemap.pdl' };
+
+sub PDL_INST_INCLUDE { '-I'.whereami_inst().'/PDL/Core' };
+sub PDL_INST_TYPEMAP { whereami_inst().'/PDL/Core/typemap.pdl' };
 
 # Data types to C types mapping
 # get the map from Types.pm
 {
-eval('do "'.whereami_any().'/Core/Types.pm"');
+eval('do "'.whereami_any().'/Basic/Core/Types.pm"');
 if($@) {
   my $foo = $@;
   $@="";
-  do('require "'.whereami_any().'/Core/Types.pm"');
+  do('require "'.whereami_any().'/PDL/Core/Types.pm"');
   if($@) {
    die "can't find PDL::Types.pm: $foo and $@" unless $@ eq "";
   }
@@ -179,12 +181,12 @@ sub postamble {q~
 
 .SUFFIXES: .g
 .g.c:
-	$(PERL) -e 'require "~.whereami_any().q~/Core/Dev.pm"; \
+	$(PERL) -e 'require "~.whereami().q~/Basic/Core/Dev.pm"; \
 		PDL::Core::Dev->import();				\
 		genpp()' $<  > $@
 
 .g$(OBJ_EXT):
-	$(PERL) -e 'require "~.whereami_any().q~/Core/Dev.pm"; \
+	$(PERL) -e 'require "~.whereami().q~/Basic/Core/Dev.pm"; \
 		PDL::Core::Dev->import();				\
 		genpp()' $<  > $*.c
 	$(CCCMD) $(CCCDLFLAGS) -I$(PERL_INC) $(DEFINE) $*.c
@@ -193,7 +195,6 @@ sub postamble {q~
 
 # Return library locations
 
-# whereami_any returns appended 'Basic' or 'PDL' dir as appropriate
 sub whereami_any {
 	&whereami(1) or &whereami_inst(1) or 
           die "Unable to determine ANY directory path to PDL::Core::Dev module\n";
@@ -201,8 +202,7 @@ sub whereami_any {
 
 sub whereami {
    for $dir (@INC,qw|. .. ../.. ../../..|) {
-      return ($_[0] ? $dir . '/Basic' : $dir) 
-	if -e "$dir/Basic/Core/Dev.pm";
+      return $dir if -e "$dir/Basic/Core/Dev.pm";
    }
    die "Unable to determine UNINSTALLED directory path to PDL::Core::Dev module\n"
     if !$_[0];
@@ -210,8 +210,7 @@ sub whereami {
 
 sub whereami_inst {
    for $dir (@INC,map {$_."/blib"} qw|. .. ../.. ../../..|) {
-      return ($_[0] ? $dir . '/PDL' : $dir)
-	if -e "$dir/PDL/Core/Dev.pm";
+      return $dir if -e "$dir/PDL/Core/Dev.pm";
    }
    die "Unable to determine INSTALLED directory path to PDL::Core::Dev module\n"
     if !$_[0];
@@ -226,12 +225,11 @@ sub whereami_inst {
 # Later on, we shall provide another for use outside PDL.
 sub pdlpp_postamble_int {
 	join '',map { my($src,$pref,$mod) = @$_;
-	my $w = whereami_any();
-	$w =~ s%/((PDL)|(Basic))$%%;  # remove the trailing subdir
+	my $w = whereami();
 qq|
 
 $pref.xs $pref.pm: $src $w/Basic/Gen/pm_to_blib
-	\$(PERL) -I$w/blib/lib -I$w/blib/arch '-MPDL::PP qw/$mod $mod $pref/' $src
+	\$(PERL) -I../../blib/lib -I../../blib/arch '-MPDL::PP qw/$mod $mod $pref/' $src
 
 |
 	} (@_) 
@@ -242,12 +240,11 @@ $pref.xs $pref.pm: $src $w/Basic/Gen/pm_to_blib
 # Later on, we shall provide another for use outside PDL.
 sub pdlpp_postamble {
 	join '',map { my($src,$pref,$mod) = @$_;
-	my $w = whereami_any();
-	$w =~ s%/((PDL)|(Basic))$%%;  # remove the trailing subdir
+	my $w = whereami_inst();
 qq|
 
 $pref.xs $pref.pm: $src 
-	\$(PERL) -I$w/blib/lib -I$w/blib/arch '-MPDL::PP qw/$mod $mod $pref/' $src
+	\$(PERL) -I$w '-MPDL::PP qw/$mod $mod $pref/' $src
 
 |
 	} (@_) 

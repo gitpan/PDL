@@ -300,6 +300,8 @@ struct pdl {
 /* Data types/sizes [must be in order of complexity] */
 
 enum pdl_datatypes { PDL_B, PDL_S, PDL_US, PDL_L, PDL_F, PDL_D };
+/* For ease */
+#define PDL_U PDL_US
 
 #define DECL_RECURSE_GUARD static int __nrec=0;
 #define START_RECURSE_GUARD __nrec++; if(__nrec > 100) {die("PerlDL:Internal Error:Recursion exceeded\n");}

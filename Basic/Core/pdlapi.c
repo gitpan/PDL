@@ -154,12 +154,15 @@ void pdl__free(pdl *it) {
 	free(p1);
 	p1 = p2;
     }
-    
 /* Free the phys representation */
 /* XXX MEMLEAK */
 /*    it->vtable->freetrans(it,it->trans); */
-    if(it->datasv) 
+    if(it->datasv) {
 	    SvREFCNT_dec(it->datasv);
+	    it->data=0;
+    } else if(it->data) {
+    	    warn("Warning: special data without datasv is not freed currently!!");
+    }
     free(it); 
 #endif
 }
@@ -242,8 +245,9 @@ void pdl_destroy(pdl *it) {
     pdl__destroy_childtranses(it,1);
 
     if(it->trans) {
-        /* Because there might be other children, must ensure */
-    	pdl_destroytransform(it->trans,1);
+        /* Ensure only if there are other children! */
+    	pdl_destroytransform(it->trans,(it->trans->vtable->npdls 
+	  			        - it->trans->vtable->nparents > 1));
     }
 
 /* Here, this is a child but has no children */
@@ -561,7 +565,7 @@ void pdl_make_physdims(pdl *it) {
 		pdl_make_physdims(it->trans->pdls[i]);
 	}
 	it->trans->vtable->redodims(it->trans);
-	pdl_allocdata(it);
+/*	pdl_allocdata(it); */
 	PDLDEBUG_f(printf("Make_physdims_exit %d\n",it));
 }
 
@@ -879,7 +883,17 @@ void pdl__ensure_trans(pdl_trans *trans,int what)
 	flag |= what;
 	PDL_TR_CHKMAGIC(trans);
 	for(j=0; j<trans->vtable->nparents; j++) {
-		pdl_make_physical(trans->pdls[j]);
+#ifndef DONT_OPTIMIZE
+#ifndef DONT_VAFFINE
+		if(trans->vtable->per_pdl_flags[j] &
+		    PDL_TPDL_VAFFINE_OK) {
+			par_pvaf++;
+			pdl_make_physvaffine(trans->pdls[j]);
+		} else {
+#endif
+#endif
+			pdl_make_physical(trans->pdls[j]);
+		}
 	}
 	for(; j<trans->vtable->npdls; j++) {
 		if(trans->pdls[j]->trans != trans) {
@@ -1041,6 +1055,7 @@ void pdl_make_physvaffine(pdl *it)
 	int newinc;
 	int ninced;
 	int flag;
+	int incsign;
 	pdl_make_physdims(it);
 	if(!it->trans) {
 		pdl_make_physical(it);
@@ -1066,6 +1081,8 @@ void pdl_make_physvaffine(pdl *it)
 		parent = t->pdls[0];
 		for(i=0; i<it->ndims; i++) {
 			inc = it->vafftrans->incs[i];
+			incsign = (inc >= 0 ? 1:-1);
+			inc= abs(inc);
 			newinc = 0;
 			for(j=current->ndims-1; j>=0; j--) {
 				if(inc >= current->dimincs[j]) {
@@ -1088,7 +1105,7 @@ void pdl_make_physvaffine(pdl *it)
 					inc %= current->dimincs[j];
 				}
 			}
-			incsleft[i] = newinc;
+			incsleft[i] = incsign*newinc;
 		}
 		if(flag) break;
 		for(i=0; i<it->ndims; i++) {
@@ -1096,6 +1113,8 @@ void pdl_make_physvaffine(pdl *it)
 		}
 		{
 			inc = it->vafftrans->offs;
+			incsign = (inc >= 0 ? 1:-1);
+			inc= abs(inc);
 			newinc = 0;
 			for(j=current->ndims-1; j>=0; j--) {
 				if(inc >= current->dimincs[j]) {
@@ -1118,7 +1137,7 @@ void pdl_make_physvaffine(pdl *it)
 					inc %= current->dimincs[j];
 				}
 			}
-			it->vafftrans->offs = newinc;
+			it->vafftrans->offs = incsign*newinc;
 			it->vafftrans->offs += at->offs;
 		}
 		t = parent->trans;

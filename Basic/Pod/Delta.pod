@@ -1,0 +1,65 @@
+=head1 NAME
+
+pdldelta - PDL changes between V1.0 and V2.0
+
+
+=head1 DESCRIPTION
+
+This file is an attempt to list the major user-visible changes
+between PDL versions 1.0 and 2.0.
+
+
+=head1 Core Changes
+
+=head2 Piddles are not hashes any more: 
+
+    $a = zeroes 10,10;
+    $$a{FOO} = "bar"
+
+doesn't work. They are currently scalar references (to opaque
+C structures in finer terms) because of speed as well as
+syntactic issues. If you want to have a hash, use
+
+    $a->hdr()
+
+which returns a reference to an anonymous hash. (XXX)
+
+
+=head1 Documentation Changes
+
+Many of the base and library pods were updated.  These
+new pods are included in section 1 and section 3:
+
+=over 4
+
+=item L<pdldelta.1>
+
+This document.
+
+=item ...
+
+...
+
+=back 
+
+
+=head1 BUGS
+
+...
+
+ 
+=head1 SEE ALSO
+
+The F<Changes> file for exhaustive details on what changed.
+
+The F<INSTALL> file for how to build PDL.
+
+The F<README> file for general stuff.
+
+=head1 HISTORY
+
+pdldelta was inspired by L<perldelta>  man page in the perl
+5.004 distribution.
+
+
+

@@ -4,9 +4,14 @@
 
 */
 
+#include <unistd.h>
+#include <sys/mman.h>
+#include <fcntl.h>
+
 #include "EXTERN.h"   /* std perl include */
 #include "perl.h"     /* std perl include */
 #include "XSUB.h"     /* XSUB include */
+
 
 #include "pdl.h"      /* Data structure declarations */
 #include "pdlcore.h"  /* Core declarations */
@@ -77,6 +82,39 @@ pdl *
 pdl_hard_copy(src)
 	pdl *src;
 
+int
+set_data_by_mmap(it,fname,len,writable,shared,creat,mode,trunc)
+	pdl *it
+	char *fname
+	int len
+	int writable
+	int shared
+	int creat
+	int mode
+	int trunc
+	CODE:
+		int fd;
+		pdl_freedata(it);
+		fd = open(fname,(writable && shared ? O_RDWR : O_RDONLY)|
+			(creat ? O_CREAT : 0),mode);
+		if(fd < 0) {
+			croak("Error opening file");
+		}
+		if(trunc) {
+			ftruncate(fd,0);   /* Clear all previous data */
+			ftruncate(fd,len); /* And make it long enough */
+		}
+		it->data = mmap(0,len,PROT_READ | (writable ? 
+					PROT_WRITE : 0),
+				(shared ? MAP_SHARED : MAP_PRIVATE),
+				fd,0);
+		printf("PDL::MMap: mapped to %d\n",it->data);
+		if(!it->data)
+			croak("Error mmapping!");
+		it->state |= PDL_DONTTOUCHDATA | PDL_ALLOCATED;
+		RETVAL = 1;
+	OUTPUT:
+		RETVAL
 
 MODULE = PDL::Core     PACKAGE = PDL::Core
 
@@ -294,6 +332,9 @@ SV *
 get_dataref(self)
 	pdl *self
 	CODE:
+	if(self->state & PDL_DONTTOUCHDATA) {
+		croak("Trying to get dataref to magical (mmaped?) pdl");
+	}
 	pdl_make_physical(self); /* XXX IS THIS MEMLEAK WITHOUT MORTAL? */
 	RETVAL = (newRV(self->datasv));
 	OUTPUT:
@@ -311,6 +352,9 @@ int
 upd_data(self)
 	pdl *self
 	CODE:
+	if(self->state & PDL_DONTTOUCHDATA) {
+		croak("Trying to touch dataref of magical (mmaped?) pdl");
+	}
 	self->data = SvPV((SV*)self->datasv,na);
 	XSRETURN(0);
 

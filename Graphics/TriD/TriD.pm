@@ -47,6 +47,29 @@ use PDL::TriD::Mesh;
 use PDL::TriD::Lines;
 use PDL::TriD::Surface;
 use PDL::TriD::Control3D;
+
+# Then, see which display method are we using:
+
+BEGIN {
+	my $dev;
+	if(!defined ($dev = $::ENV{PDL_3D_DEVICE})) {
+		warn "Default PDL 3D device is OOGL: do you have Geomview installed?
+Set PDL_3D_DEVICE=OOGL in the future in order not to see this warning.";
+		$dev = "OOGL";
+	}
+	my $dv;
+# The following is just a sanity check.
+	for($dev) {
+		(/^OOGL$/  and $dv="PDL::TriD::OOGL") or
+		(/^GL$/  and $dv="PDL::TriD::GL") or
+		(die "Invalid PDL 3D device '$_' specified!");
+	}
+	my $mod = $dv;
+	$mod =~ s|::|//|g;
+	require "$mod.pm";
+	$dv->import;
+}
+
 require qw(Exporter);
 @ISA = qw/Exporter/;
 @EXPORT = qw/imag3d line3d/;

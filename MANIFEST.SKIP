@@ -34,6 +34,9 @@ testcallext\.c$
 ^Basic/GTest/GTest\.pm$
 ^Lib/Opt/Golden
 ^Lib/Slatec/slatec/.*\.[Pc]$
+^Lib/Slatec/Slatec.c
+^Lib/Slatec/Slatec.pm
+^Lib/Slatec/Slatec.xs
 ^Basic/OLD
 ^Gen
 MANIFEST\.bak$

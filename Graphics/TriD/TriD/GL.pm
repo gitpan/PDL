@@ -1,3 +1,11 @@
+#
+#
+# This file is currently *not supported*. 
+# 
+# If you want the pumpkin for this file, email pdl-porters.
+#
+
+
 package PDL::TriD::GL;
 
 $PDL::TriD::create_window_sub = sub {

@@ -18,7 +18,7 @@ sub approx {
 	$d < 0.01;
 }
 
-print "1..20\n";
+print "1..22\n";
 
 if(1) {
 
@@ -100,7 +100,7 @@ $b = zeroes(5,3,3);
 $c = $b->slice(":,:,1");
 
 ok(16,(join ',',$c->dims) eq "5,3,1");
-eval {$d = $c->slice(":,:,2"); print $d;};
+eval {my $d = $c->slice(":,:,2"); print $d;};
 
 print "ERROR WAS: '$@'\n";
 ok(17,$@ =~ /Slice cannot start or end/i);
@@ -158,8 +158,8 @@ $c = $b->slice("2:3");
 
 $d = $c->copy;
 
-$c->dump;
-$d->dump;
+# $c->dump;
+# $d->dump;
 
 $e = $c-$d;
 
@@ -168,9 +168,24 @@ print $e;
 print $c;
 print $d;
 
-$c->dump; $d->dump;
+# $c->dump; $d->dump;
 
 ok(20,(max(abs($e))) == 0);
 
 print "OUTOUTOUT!\n";
 
+use PDL::Dbg;
+
+
+$im = byte [[0,1,255],[0,0,0],[1,1,1]];
+($im1 = null) .= $im->dummy(0,3);
+# print("1..2\n");
+print $im1;
+print ($im2 = $im1->clump(2)->slice(':,0:2')->px);
+
+ok(21,!approx(ones(byte,9,3),$im2));
+
+# here we encounter the problem
+print ($im2 = $im1->clump(2)->slice(':,-1:0')->px);
+ok(22,!approx(ones(byte,9,3),$im2));
+                  

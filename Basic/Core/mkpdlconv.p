@@ -125,6 +125,10 @@ void pdl_converttype( pdl** aa, int targtype, Logical changePerl ) {
 
     if (changePerl) {   /* Grow data */
 
+      if(a->state & PDL_DONTTOUCHDATA) {
+	croak("Trying to convert of magical (mmaped?) pdl");
+      }
+
       if (diffsize) {
          b = a->data;                      /* pointer to old data */
          a->data     = pdl_malloc(nbytes); /* Space for changed data */

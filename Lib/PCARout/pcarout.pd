@@ -223,6 +223,42 @@ pp_def("vec2lu",
 	'
 );
 
+# Better to use this: less swapping if data = (chan,ndata)
+# pp_def("covar_jj"
+#
+# Assumes averaged data and lags arranged in increasing order.
+# lag = 5 -> 5 steps lagged behind!
+# Note: covariance matrix is not divided correctly.
+
+pp_def("nonorm_covar_lags",
+	Types => [F,D],
+	Pars => "dat(nchan,ndat); int lags(nlags);
+		 [o]covar(nchan,nlags,nchan,nlags);",
+	Code => '
+		int lag0,lagn; int nlags,ndat;
+		int di1,di2; int nlagsm1;
+		ndat = $PRIV(__ndat_size); nlags = $PRIV(__nlags_size);
+		lag0 = $lags(nlags=>0);
+		nlagsm1 = nlags-1;
+		lagn = $lags(nlags=>nlagsm1);
+		loop(ndat) %{
+			if(ndat < lagn) continue;
+			loop(nlags1,nlags2) %{
+				di1 = ndat - $lags(nlags=>nlags1);
+				di2 = ndat - $lags(nlags=>nlags2);
+				loop(nchan1,nchan2) %{
+					$covar(nlags0=>nlags1,
+						nlags1=>nlags2,
+						nchan0=>nchan1,
+						nchan1=>nchan2) +=
+					  $dat(nchan=>nchan1,ndat => di1) *
+					  $dat(nchan=>nchan2,ndat => di2);
+				%}
+			%}
+		%}
+	'
+);
+
 =head1 REFERENCES 
 
 Source for algorithms: 

@@ -17,6 +17,22 @@ use SelfLoader; use Carp;
 use vars qw($AXISCOLOUR $SYMBOL $ERRTERM $HARD_LW $HARD_CH $HARD_FONT);
 @ISA = qw( PDL::Exporter SelfLoader ); 
 
+############################################################################
+
+# Local fudge for nelem and sequence
+
+sub nelem{
+  my $pdl = shift;
+  my $n = 1;
+  my @dims = $pdl->dims;
+  for (@dims) {$n*=$_}
+  return $n;
+}
+
+sub sequence { 
+  my $n = shift;
+  return xvals(zeroes($n));
+}
 
 ############################################################################
 
@@ -38,7 +54,7 @@ $CTAB{Fire}    = [ pdl([0,0.33,0.66,1],[0,1,1,1],[0,0,1,1],[0,0,0,1]) ];
 $CTAB{Gray}    = $CTAB{Grey};  # Alias
 $CTAB{Igray}   = $CTAB{Igrey}; # Alias
 $DEV  = $ENV{"PGPLOT_DEV"} if defined $ENV{"PGPLOT_DEV"};
-$DEV  = "?" if !defined($DEV) || $DEV eq ""; # Safe default
+$DEV  = "?" if $DEV eq ""; # Safe default
 
 
 BEGIN { $pgplot_loaded = 0 }

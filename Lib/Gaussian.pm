@@ -79,6 +79,7 @@ it's hard to imagine a case when more is needed).
 Note that this does not mean that you can only have 1-dimensional
 gaussians. It just means that if you want to have a 6-dimensional
 gaussian, your xs must be structured like (6) and not (2,3).
+So clumping the dimensions should make things workable.
 
 Also, it limits you so that even if you have one variable, you need
 to have the '1' dimensions explicitly everywhere.
@@ -328,7 +329,7 @@ sub to_lcombgaussians {
 	$gauss->upd_covariance();
 }
 
-# (nvars,ndata), (ndata,@xdims)
+# (nvars,ndata), (xdims,ndata)
 sub fromweighteddata {
 	my($this,$data,$wt) = @_;
 }

@@ -659,39 +659,9 @@ Type conversions [e.g. float()] may cause hidden copying.
 
 =back
 
-=head2 Data Structure Guts
+=head2 Ensuring piddleness
 
-(For born fiddlers only.)
-
-The data structure for $a is implemented by a hash (associative array)
-which $a is a (blessed) reference too.
-
-PDL reserves for it's own use:
-
-   $$a{Data} ; # The DATA (byte list) - can be passed directly to F77/C
-               # subroutine as long as type matches. e.g. line() does a
-               # float() and then calls PGPLOT::pgline_r (bypassing packing)
-   
-   $$a{Datatype}; # Holds numeric data type, $PDL_F, $PDL_D, etc...
-   
-   $$a{Dims} ; # List reference holding dimensions. 
-               # E.g. @mydims = @{ $$a{Dims} };
-   
-   $$a{Hdr}  ; # Optional extra hash reference holding header, e.g.
-               # $airmass = $$a{Hdr}{'AIRMASS'}; %myhdr = %{ $$a{Hdr} };
-               # rfits() populates this from the FITS header.
-   
-   $$a{Inplace}; # Flag - inplace() sets this. Next time a copy is attempted
-                 # it does not occur and the flag is unset.
-
-   $$a{PDL};  # Pointer to cached C values of above. This allows
-              # C routines to get at the data FAST.
-
-Anything else stored in the structure will be copied to new objects
-(e.g. by $b = $a + 1) automatically as long as PDL knows how to copy it.
-[If it is a reference to another object PDL tries the ->copy method.]
-
-If your perl routine manipulates the data structure guts directly, 
+If you have written a simple function and 
 you don't want it to blow up in your face if you pass it a simple
 number rather than a PDL variable. Simply call the function 
 topdl() first to make it safe. e.g.:
@@ -711,70 +681,32 @@ the piddle after a fiddle').
 Finally there is no reason why the data structure should not
 contain another PDL variable!
 
+=head2 Inheritance
 
-=head2 Complete List of Exported Functions
+Because a PDL object is a reference to a scalar it is not possible to
+extent the PDL class via subclassing.   To circumvent this problem
+PerlDL has buildin support to extent the PDL class via the I<has-a>
+relation for blessed hashes.  You can get the I<HAS-A> behave like
+I<IS-A> simply in that you assign the C<PDL> object to the attribute
+named PDL and redefine the method initialize().
 
+    package FOO;
+  
+    @FOO::ISA = qw(PDL);
+    sub initialize {
+        my $class = shift;
+        my $self = {
+                creation_time => time(),  # necessary extension :-)
+                PDL => undef,             # used to store PDL object
+                };
+        bless $self, $class;
+    }
 
-Defined in PDL::Core
+All PDL constructor will call initialize() to make sure that your
+extentions are added by I<all> PDL constructors automaticly.   The
+C<PDL> attribute is used by perlDL to store the PDL object and
+all PDL methods use this attribute automaticly if they are called
+with a blessed hash reference instead of a PDL object (a blessed scalar).
  
-
- byte short ushort long float double convert   - Type Conversions
- 
- pdl          - Create/copy a pdl 
- topdl        - Coerce to pdl if scalar
- howbig       - Size of pdl datatype in bytes
- nelem        - Number of elements 
- dims         - Return list of dimensions, e.g. @mydims = dims($x);
- list         - Convert pdl to list - e.g. for (list $x) {..}
- listindices  - Return list of index values (1D) - e.g. for $i 
-                (listindices $x) {..}
- log10*       - Take log base 10
- min max sum  - Min/max/sum of pdl array
- zeroes/ones  - Create zero/one-filled pdl array
- sequence     - Create sequence-filled pdl array
- reshape      - reshape the dimensions of a pdl array
- sec          - subsection
- ins* / set   - insertion / setting
- at           - return pixel value at (x,y,z...)
- 
- axisvals* xvals* yvals* zvals* - Fill pdl with axis values
- 
- rvals        - Fill pdl with distance from it's center
- callext      - Call external C routine in dynamically loadable object
- convolve     - convolve image with kernel (real space)
- inplace      - Flag for inplace operation
- hist         - histogram of data 
- stats        - return mean + standard deviation
- transpose    - matrix transpose
-
-Defined in PDL::Examples
-
-This contains examples of how to add C functiions via XS
-including use of the generic preprocessor (.g files are
-automatically converted to .c files with code automatically
-generated for each datatype).
-
- fibonacci*    - Compute Fibonacci series (simple 1D example)
- cc8compt*     - Connected 8-component labelling (2D example)
-
-
-Defined in PDL::Io
-
-[See "Io" section above]
-
-Defined in PDL::Graphics::*
-
-[See "Graphics" section above]
-
-
-Footnotes:
-
-* = indicates C<inplace()> safe & useful with this function
-
-=head2 Complete List of PDL methods
-
-For convenience (the ->meth syntax looks more appropriate) some
-pdl routines are defined as methods:
-
-$pdl->flush    -  Update C cache from perl values
-
+Do remember that if you subclass a class that is subclassed from a piddle,
+you need to call SUPER::initialize.

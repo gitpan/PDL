@@ -274,7 +274,11 @@ $PDL::PP::deftbl =
 
  [[DefaultFlowCode],	[DefaultFlowCodeNS,NewXSSymTab,Name], "dousualsubsts"],
 
- [[NewXSFindDatatypeNS],	[ParNames,ParObjs,IgnoreTypesOf,NewXSSymTab],	
+ [[GenericTypes],	[],	sub {[B,S,U,L,F,D]}], 
+#  [[GenericTypes],	[],	sub {[F,D]}],
+
+ [[NewXSFindDatatypeNS],	[ParNames,ParObjs,IgnoreTypesOf,NewXSSymTab,
+				GenericTypes],	
  						"find_datatype"],
 
  [[NewXSFindDatatype],	[NewXSFindDatatypeNS,NewXSSymTab,Name],	
@@ -288,9 +292,6 @@ $PDL::PP::deftbl =
 
  [[NewXSStructInit1],	[ParNames,NewXSSymTab],	"CopyPDLPars"],
  [[NewXSSetTrans],	[ParNames,ParObjs,NewXSSymTab],	"makesettrans"],
-
- [[GenericTypes],	[],	sub {[B,S,U,L,F,D]}], 
-#  [[GenericTypes],	[],	sub {[F,D]}],
 
  [[ExtraGenericLoops],	[FTypes],	sub {return $_[0]}],
  [[ExtraGenericLoops],	[],	sub {return {}}],
@@ -518,8 +519,11 @@ sub coerce_types {
 		    }")} (@$parnames))
 }
 
+# First, finds the greatest datatype, then, if not supported, takes
+# the largest type supported by the function.
+# Not yet optimal.
 sub find_datatype {
-	my($parnames,$parobjs,$ignore,$newstab) = @_;
+	my($parnames,$parobjs,$ignore,$newstab,$gentypes) = @_;
 	"\$PRIV(__datatype) = 0;".
 	(join '', map {
 		($parobjs->{$_}->{FlagInt}) ? () :
@@ -535,7 +539,11 @@ sub find_datatype {
 		 	\$PRIV(__datatype) = $_->datatype;
 		  }
 		  ")
-	}(@$parnames))
+	}(@$parnames)).
+	(join '', map {
+		"if(\$PRIV(__datatype) == PDL_$_) {
+		 } else "
+	}(@$gentypes))."\$PRIV(__datatype) = PDL_$gentypes->[-1];";
 }
 
 sub make_incsizes {

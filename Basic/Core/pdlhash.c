@@ -5,6 +5,16 @@
 #include "pdl.h"      /* Data structure declarations */
 #include "pdlcore.h"  /* Core declarations */
 
+/* Free the data if possible; used by mmapper */
+void pdl_freedata (pdl *a) {
+	if(a->datasv) {
+		SvREFCNT_dec(a->datasv);
+		a->datasv=0;
+		a->data=0;
+	} else if(a->data) {
+		die("Trying to free data of untouchable (mmapped?) pdl");
+	}
+}
 
 /*  Utility to change the size of the data compt of a pdl */
 

@@ -120,6 +120,15 @@ pdl* SvPDLV ( SV* sv ) {
 
        return ret;
    }
+
+   if(SvTYPE(SvRV(sv)) == SVt_PVHV) {
+   	HV *hash = (HV*)SvRV(sv);
+	SV **svp = hv_fetch(hash,"PDL",3,0);
+	if(svp == NULL) {
+		croak("Hash given as a pdl - but not {PDL} key!");
+	}
+   	sv = *svp;
+   }
        
    if (SvTYPE(SvRV(sv)) != SVt_PVMG)
       croak("Error - argument is not a recognised data structure"); 

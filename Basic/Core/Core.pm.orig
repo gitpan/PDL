@@ -12,7 +12,7 @@ use PDL::Types;
 	      listindices set at flows
 	      callext convolve hist stats reshape );
 
-@EXPORT_STATIC = qw( pdl topdl zeroes ones );
+@EXPORT_STATIC = qw( pdl topdl zeroes ones sequence );
 
 use DynaLoader; use Carp;  
 @ISA    = qw( PDL::Exporter DynaLoader ); 
@@ -158,7 +158,7 @@ sub flows {
 sub PDL::new {         
    my $this = shift;
    return $this->copy if ref($this);
-   my $new = $this->initialize();
+   my $new = PDL::null();
    $new->set_datatype($PDL_D);
    my $value = (scalar(@_)>1 ? [@_] : shift);  # ref thyself
    $value = 0 if !defined($value);
@@ -276,7 +276,7 @@ sub alltopdl {
 # Flag pdl for in-place operations
 
 sub inplace {
-    my $pdl = topdl($PDL::name,shift); $pdl->set_inplace(1); return $pdl;
+    my $pdl = topdl($PDL::name,shift); $$pdl{Inplace}=1; return $pdl;
 }
 
 # Copy if not inplace
@@ -292,8 +292,6 @@ sub new_or_inplace {
 
 # Create zero filled array (function/inheritable constructor)
 
-*PDL::initialize = \&PDL::null;
-
 sub zeroes {
     my $class = shift; 
     my $nelems = 1; my @dims;
@@ -303,12 +301,12 @@ sub zeroes {
        croak "Dimensions must be positive" if $_<=0;
        $nelems *= $_; push @dims, $_ 
     }
-    my $pdl = $class->initialize();
+    my $pdl = PDL::null();
     $pdl->set_datatype($type);
     $pdl->setdims([@dims]);
     my $dref = $pdl->get_dataref();
-    $$dref  = "\0"x($nelems*howbig($PDL_D));
-    print "Dims: ",(join ',',@dims)," DLen: ",(length $$dref),"\n" if $PDL::verbose;
+    $$dref  = "\0"x($nelems*howbig($type));
+    print "Dims: ",(join ',',@dims)," DLen: ",(length $$dref),"\n";
     $pdl->upd_data();
     return $pdl;
 } 
@@ -360,8 +358,6 @@ for(
 }
 
 ##################### Printing ####################
-
-# New string routine
 
 $PDL::_STRINGIZING = 0;
 
@@ -664,6 +660,21 @@ sub export_fail {
    my $pkg = shift;
    @static = @_;    # Save static symbols list
    return ();       # Tell exporter still OK to export
+}
+
+
+if(0) {
+package PDL;
+
+sub TIEHASH {
+	shift;
+	my $p = PDL::null();
+	bless $$p;
+}
+
+sub FETCH {
+	my $p = shift; local $_ = shift;
+}
 }
 
 ;# Exit with OK status

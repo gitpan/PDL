@@ -8,12 +8,22 @@
 
    Karl Glazebrook, AAO, 2/Oct/1996. [kgb@aaoepp.aao.gov.au]
 
+"#" = should work now.
+
+SuperHyperCritical:
+----
+ * A test and a fix for $P() in vaffine.
+
+# * foo(zeroes(float,3))) and foo is defined only for byte doesn't work.
+
 Before 2.0:
 ----
 Ok, what's REALLY needed for 2.0:
 
-	- proper destruction of everything - 
-	  plug memory leaks. Purify, anyone?
+#	- hash AND scalar refs.
+
+#	- proper destruction of everything - 
+#	  plug memory leaks. Purify, anyone?
 
 	- Perl-level threading. it's not very difficult
 
@@ -35,15 +45,19 @@ Ok, what's REALLY needed for 2.0:
 Tidbits
 ----
 
+* PP: fix phys pointers
+
+* PP: OtherTypes
+
+* PP: Input pars => dims
+
 * copy .pd pod -> .pm for perlindex, Pod::Text etc.
 
 * clean .pd -> .c files
 
-* FileHandle -> IO::File
+### * FileHandle -> IO::File --- is this really supposed to be so?
 
 * ->setdims followed by ->set_datatype crashes
-
-* nvals
 
 * PDL::Trans objects, getting parents, etc.
 
@@ -86,16 +100,6 @@ System
 
 * Dataflow + persistence
 
-* ->px (prints dims etc. and returns the OBJECT: handy in
-  between a chain of ops: ->slice(..)->px->dummy()->px->...
-  for debugging, fast to insert and remove.
-
-* zeroes, ones.. for different datatypes by using PDL::Exporter
-  or by blessing PDL_F to a class. long, byte without args should
-  return the blessed thing.
-
-* Interface to mmap() ?
-
 * overload array lookup with tie(...) ? (Does not
   seem compatible with use of hv_fetch()) etc.
 
@@ -111,8 +115,6 @@ System
 
 IO
 ---
-
-* file mapping ?
 
 * DSA writer/header handling
 
@@ -130,8 +132,6 @@ Functions
 * FFT
 
 * Grow list -> (N+1) Dim
-
-* Transpose function
 
 * Matrix inverse (via following:)
 
@@ -158,3 +158,4 @@ Graphics
 
 * Nd plots
 
+* VRML interface

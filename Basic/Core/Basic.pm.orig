@@ -19,12 +19,11 @@ use Carp;
 sub sequence {
     croak 'Usage: $a = sequence($nx, $ny, $nz ...) or PDL->sequence(...)' 
     	if $#_<1;
-    my $class = shift; 
-    my $type = ref($_[0]) eq 'PDL::Type' ? (shift @_)  : double;
-    my @n = @_; my $n;
+    my $class = shift;  my @n = @_; my $n;
     my $nelem = 1; for $n (@n) { croak "Dims must be > 0\n" unless $n>0; $nelem *= $n}
-    $pdl = zeroes($type,$nelem); 
-    xvals($pdl->inplace); $pdl->setdims(\@_);
+    $pdl = zeroes($nelem); 
+    xvals(inplace($pdl)); $$pdl{Dims} = [@_];
+    $pdl->flush;
     return $pdl;
 } 
 

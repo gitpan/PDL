@@ -6,7 +6,6 @@ $SIG{__DIE__} = sub {die Carp::longmess(@_);};
 use PDL;
 use PDL::OO;
 use PDL::TriD;
-use PDL::TriD::GL; # Choose which display you want.
 
 # Calculate some random function
 
