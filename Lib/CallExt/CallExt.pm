@@ -93,7 +93,7 @@ This might be compiled (e.g. Linux):
 In general Perl knows how to do this, so you should be able to get
 away with:
 
- perl -MPDL::CallExt -e callext_cc file.c -o file.so
+ perl -MPDL::CallExt -e callext_cc file.c
  
 callext_cc() is a function defined in PDL::CallExt to generate the
 correct compilation flags for shared objects.
@@ -156,11 +156,39 @@ sub callext{
 
 # Compile external C program correctly
 
+#
+# callext_cc
+#
+# The old version of this routine was taking unstructured arguments and
+# happily passed this though the C compiler. Unfortunately, on platforms
+# like HP-UX, we need to make separate cc and ld runs in order to create the
+# shared objects.
+#
+# The signature of the function was therefore changed starting at PDL 2.0.
+# It is now:
+#
+#   ($src, $ccflags, $ldflags, $output)
+#
+# In its simplest invocation, it can be just $src, and the output will be
+# derived from the source file. Otherwise, $ccflags add extra C flags, $ldflags
+# adds extra ld flags, and $output specifies the final target output file name.
+# If left blank, it will be in the same directory where $src lied.
+#
 sub callext_cc {
-   my @args = @_>0 ? @_ : @ARGV;
-   my $cmd = "$Config{cc} $Config{lddlflags} -I$Config{installsitelib}/PDL @args";
-   print $cmd,"\n";
-   system $cmd;
+	my @args = @_>0 ? @_ : @ARGV;
+	my ($src, $ccflags, $ldflags, $output) = @args;
+	my $cc_obj;
+	($cc_obj = $src) =~ s/\.c$/.o/;
+	my $ld_obj = $output;
+	($ld_obj = $cc_obj) =~ s/\.o$/.$Config{dlext}/ unless defined $output;
+	my $cc_cmd = join(' ', map { $Config{$_} } qw(cc ccflags cccdlflags)) .
+		" -I$Config{installsitelib}/PDL $ccflags -c $src -o $cc_obj";
+	my $ld_cmd = 'LD_RUN_PATH="" '.
+		join(' ', map { $Config{$_} } qw(ld lddlflags)) .
+		" $ldflags -o $ld_obj $cc_obj";
+	my $cmd = "$cc_cmd; $ld_cmd";
+	print $cmd,"\n";
+	system $cmd;
 }
 
 =head1 AUTHORS

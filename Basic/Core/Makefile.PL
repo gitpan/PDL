@@ -42,12 +42,14 @@ my $conf = $PDL_CONFIG{WITH_POSIX_THREADS};
 if ((!defined($conf) or $conf)
 	 and $pthread_include and $pthread_library) {
 	print "\t==> Will build PDL with POSIX thread support. Gifts to TJL :-)\n";
+	$PDL_CONFIG{WITH_POSIX_THREADS} = 1;
 } elsif($conf) {
 	print "\t==> I couldn't find pthread support. However, you have
 \t    turned on the forcing option in PDL_CONFIG so I guess I gotta do it\n";
 } else {
 	print "\t==> PDL will be built without POSIX thread support. Shame on you.\n";
-	$pthread_define = ''
+	$pthread_define = '';
+	$PDL_CONFIG{WITH_POSIX_THREADS} = 0;
 }
 }
 
@@ -61,7 +63,7 @@ WriteMakefile(
   'PM'          => {
   		(map {($_,'$(INST_LIBDIR)/'.$_)} (
 			qw/Core.pm Basic.pm Version.pm Types.pm
-						  Dbg.pm Exporter.pm/
+						  Dbg.pm Exporter.pm Config.pm/
 		)),
   		(map {($_,'$(INST_LIBDIR)/Core/'.$_)} (
 			qw/Dev.pm typemap.pdl pdl.h pdlcore.h pdlmagic.h pdlsimple.h 

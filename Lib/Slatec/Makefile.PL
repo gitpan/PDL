@@ -42,6 +42,9 @@ BEGIN {
 
    if (!$compiler_available) {
       $msg = "\n   No f77 compiler found. Will skip PDL::Slatec on this system    \n";
+      $PDL_CONFIG{WITH_SLATEC} = 0;
+   } else {
+      $PDL_CONFIG{WITH_SLATEC} = 1;
    }
         
    skip:

@@ -27,7 +27,7 @@ sub approx {
 
 # Compile the code
 
-callext_cc("-IBasic/Core t/callext.c -o t/callext.so");
+callext_cc("t/callext.c", "-IBasic/Core", '', "t/callext.so");
 
 my $y = sequence(5,4)+2;  # Create PDL
 my $x = $y*20+100;        # Another

@@ -2,6 +2,7 @@
 # of the PDL::PP code.
 #
 # This is what makes the nice loops go around etc.
+use strict;
 
 package PDL::PP::Code;
 use Carp;
@@ -10,7 +11,15 @@ sub get_pdls {my($this) = @_; return $this->{ParNames};}
 
 # Do the appropriate substitutions in the code.
 sub new { my($type,$code,$parnames,$parobjs,$indobjs,$generictypes,
-	    $extrageneric,$havethreading) = @_;
+	    $extrageneric,$havethreading, $dont_add_thrloop) = @_;
+	if($::PP_VERBOSE) {
+		if($dont_add_thrloop) {
+			print "DONT_ADD_THRLOOP!\n";
+		}
+		print "EXTRAGEN: $extrageneric ",%$extrageneric,"\n";
+		print "ParNAMES: ",(join ',',@$parnames),"\n";
+		print "GENTYPES: ", @$generictypes, "\n";
+	}
 	my $sizeprivs = {};
 	my($this) = bless {
 		IndObjs => $indobjs,
@@ -73,7 +82,8 @@ sub new { my($type,$code,$parnames,$parobjs,$indobjs,$generictypes,
 	print "SIZEPRIVSX: ",(join ',',%$sizeprivs),"\n" if $::PP_VERBOSE;
 # Now, if there is no explicit threadlooping in the code,
 # enclose everything into it.
-	if(!$threadloops && $havethreading) {
+	if(!$threadloops && !$dont_add_thrloop && $havethreading) {
+		print "Adding threadloop...\n" if $::PP_VERBOSE;
 		my $nc = $coderef;
 		$coderef = new PDL::PP::ThreadLoop();
 		push @{$coderef},$nc;
@@ -160,7 +170,7 @@ sub get_str {my ($this,$parent,$context) = @_;
 # Encapsulate a loop
 
 package PDL::PP::Loop;
-@PDL::PP::Loop::ISA = PDL::PP::Block;
+@PDL::PP::Loop::ISA = "PDL::PP::Block";
 
 sub new { my($type,$args,$sizeprivs,$parent) = @_;
 	my $this = bless [$args],$type;
@@ -196,7 +206,7 @@ sub mypostlude { my($this,$parent,$context) = @_;
 # Encapsulate a generic type loop
 
 package PDL::PP::GenericLoop;
-@PDL::PP::GenericLoop::ISA = PDL::PP::Block;
+@PDL::PP::GenericLoop::ISA = "PDL::PP::Block";
 
 # Types: BSULFD, 
 sub new { my($type,$types,$name,$varnames,$whattype) = @_;
@@ -212,20 +222,22 @@ sub myprelude { my($this,$parent,$context) = @_;
 	"/* Start generic loop */\n".
 	(join '',map{
 		"#undef THISIS$this->[1]_$_\n#define THISIS$this->[1]_$_(a)\n"
-	}(B,S,U,L,F,D) ).
+	}(qw/B S U L F D/)).
 	"\tswitch($this->[3]) { case -42: /* Warning eater */ {1;\n";
 }
 
 sub myitem { my($this,$parent,$nth) = @_;
+#	print "GENERICITEM\n";
 	my $item = $this->[0]->[$nth];
 	if(!$item) {return "";}
 	$parent->{Gencurtype}->[-1] = $item->[1];
 	"\t} break; case $item->[0]: {\n".
 	(join '',map {
 		"#undef THISIS$this->[1]_$_\n#define THISIS$this->[1]_$_(a)\n";
-	} (B,S,U,L,F,D)).
+	}(qw/B S U L F D/)).
 	"#undef THISIS$this->[1]_$item->[3]\n#define THISIS$this->[1]_$item->[3](a) a\n".
 	(join '',map{
+		# print "DAPAT: '$_'\n";
 		$parent->{ParObjs}{$_}->get_xsdatapdecl($item->[1]);
 	} (@{$this->[2]})) ;
 }
@@ -249,7 +261,7 @@ sub new {
 
 package PDL::PP::SimpleThreadLoop;
 use Carp;
-@PDL::PP::SimpleThreadLoop::ISA = PDL::PP::Block;
+@PDL::PP::SimpleThreadLoop::ISA = "PDL::PP::Block";
 
 sub new { my($type) = @_; bless [],$type; }
 sub myoffs { return 0; }
@@ -282,7 +294,7 @@ sub mypostlude {my($this,$parent,$context) = @_;
 #
 package PDL::PP::ComplexThreadLoop;
 use Carp;
-@PDL::PP::ComplexThreadLoop::ISA = PDL::PP::Block;
+@PDL::PP::ComplexThreadLoop::ISA = "PDL::PP::Block";
 
 
 sub new { my($type) = @_; bless [],$type; }
@@ -342,7 +354,7 @@ sub mypostlude {my($this,$parent,$context) = @_;
 
 package PDL::PP::Types;
 use Carp;
-@PDL::PP::Types::ISA = PDL::PP::Block;
+@PDL::PP::Types::ISA = "PDL::PP::Block";
 
 sub new { my($type,$ts) = @_; 
 	$ts =~ /[BSULFD]+/ or confess "Invalid type access with '$ts'!";
@@ -366,7 +378,7 @@ use Carp;
 
 sub new { my($type,$str,$parent) = @_;
 	$str =~ /^\$([a-zA-Z_]+)\s*\(([^)]*)\)/ or
-		confess ("Access wrong: $access\n");
+		confess ("Access wrong: '$str'\n");
 	my($pdl,$inds) = ($1,$2);
 	if($pdl =~ /^T/) {new PDL::PP::MacroAccess($pdl,$inds);} 
 	elsif($pdl =~ /^P$/) {new PDL::PP::PointerAccess($pdl,$inds);}
@@ -519,30 +531,32 @@ sub print_xscoerce { my($this) = @_;
 }
 # XXX Should use PDL::Core::Dev;
 
+no strict 'vars';
+
 # STATIC!
 sub PDL::PP::get_generictyperecs { my($types) = @_;
 	my $foo;
 	return [map {$foo = $_;
 		( grep {/$foo->[0]/} (@$types) ) ? 
-		  [PDL_.($_->[0]eq"U"?"US":$_->[0]),$_->[1],$_->[2],$_->[0]] 
+		  ["PDL_".($_->[0]eq"U"?"US":$_->[0]),$_->[1],$_->[2],$_->[0]] 
 		  : ()
 	}
-	       ([B,"PDL_Byte",$PDL_B],
-		[S,"PDL_Short",$PDL_S],
-		[U,"PDL_Ushort",$PDL_US],
-		[L,"PDL_Long",$PDL_L],
-		[F,"PDL_Float",$PDL_F],
-		[D,"PDL_Double",$PDL_D])];
+	       (["B","PDL_Byte",$PDL_B],
+		["S","PDL_Short",$PDL_S],
+		["U","PDL_Ushort",$PDL_US],
+		["L","PDL_Long",$PDL_L],
+		["F","PDL_Float",$PDL_F],
+		["D","PDL_Double",$PDL_D])];
 }
 
 sub xxx_get_generictypes { my($this) = @_;
 	return [map {
-		$this->{Types} =~ /$_->[0]/ ? [PDL_.($_->[0]eq"U"?"US":$_->[0]),$_->[1],$_->[2],$_->[0]] : ()
+		$this->{Types} =~ /$_->[0]/ ? ["PDL_".($_->[0]eq"U"?"US":$_->[0]),$_->[1],$_->[2],$_->[0]] : ()
 	}
-	       ([B,"PDL_Byte",$PDL_B],
-		[S,"PDL_Short",$PDL_S],
-		[U,"PDL_Ushort",$PDL_US],
-		[L,"PDL_Long",$PDL_L],
-		[F,"PDL_Float",$PDL_F],
-		[D,"PDL_Double",$PDL_D])];
+	       (["B","PDL_Byte",$PDL_B],
+		["S","PDL_Short",$PDL_S],
+		["U","PDL_Ushort",$PDL_US],
+		["L","PDL_Long",$PDL_L],
+		["F","PDL_Float",$PDL_F],
+		["D","PDL_Double",$PDL_D])];
 }

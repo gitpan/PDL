@@ -135,11 +135,22 @@ pdl* SvPDLV ( SV* sv ) {
        return ret;
    }
 
+#undef FOODEB
+#ifdef FOODEB
+	printf("SvPDLV\n");
+	printf("SV: %d\n",sv);
+	printf("SvRV: %d\n",SvRV(sv));
+	printf("SvTYPE: %d\n",SvTYPE(SvRV(sv)));
+#endif
+
    if(SvTYPE(SvRV(sv)) == SVt_PVHV) {
    	HV *hash = (HV*)SvRV(sv);
 	SV **svp = hv_fetch(hash,"PDL",3,0);
 	if(svp == NULL) {
 		croak("Hash given as a pdl - but not {PDL} key!");
+	}
+	if(*svp == NULL) {
+		croak("Hash given as a pdl - but not {PDL} key (*svp)!");
 	}
 	
 	/* This is the magic hook which checks to see if {PDL} 
@@ -169,7 +180,32 @@ pdl* SvPDLV ( SV* sv ) {
 	else {
    	   sv = *svp;
 	}
+#ifdef FOODEB
+	printf("SvPDLV2\n");
+	printf("SV2: %d\n",sv);
+	printf("SvTYPE2: %d\n",SvTYPE(sv));
+	printf("SvFLAGS2: %d\n",SvFLAGS(sv));
+	printf("SvANY: %d\n",SvANY(sv));
+#endif
+	if(SvGMAGICAL(sv)) {
+		mg_get(sv);
+	}
+#ifdef FOODEB
+	printf("SvPDLV3\n");
+	printf("SV3: %d\n",sv);
+	printf("SvTYPE3: %d\n",SvTYPE(sv));
+	printf("SvFLAGS3: %d\n",SvFLAGS(sv));
+	printf("SvANY: %d\n",SvANY(sv));
+#endif
+        if ( !SvROK(sv) ) {   /* Got something from a hash but not a ref */
+		croak("Hash given as pdl - but PDL key is not a ref!");
+        }
+#ifdef FOODEB
+	printf("SvRV2: %d\n",SvRV(sv));
+	printf("SvTYPE2: %d\n",SvTYPE(SvRV(sv)));
+#endif
    }
+
           
    if (SvTYPE(SvRV(sv)) != SVt_PVMG)
       croak("Error - argument is not a recognised data structure"); 

@@ -514,6 +514,14 @@ MODULE = PDL::Core	PACKAGE = PDL	PREFIX = pdl_
 pdl *
 pdl_null(...)
 
+int
+isnull(self)
+	pdl *self;
+	CODE:
+		RETVAL= !!(self->state & PDL_NOMYDIMS);
+	OUTPUT:
+		RETVAL
+
 
 void
 pdl_make_physical(self)
@@ -642,12 +650,16 @@ setdims(x,dims)
 		for(i=0; i<ndims; i++) x->dims[i] = dims[i];
 		pdl_resize_defaultincs(x);
 		x->threadids[0] = ndims;
-
+ /* make null != dims = [0] */
+#ifndef ELIFJELFIJSEJIF
+		x->state &= ~PDL_NOMYDIMS;
+#else
 		   if(ndims == 1 && dims[0] == 0) {
 			x->state |= PDL_NOMYDIMS;
 		   } else {
 			x->state &= ~PDL_NOMYDIMS;
 		   }
+#endif
 		pdl_changed(x,PDL_PARENTDIMSCHANGED|PDL_PARENTDATACHANGED,0);
 	}
 
@@ -807,6 +819,8 @@ threadover(...)
 		nc += realdims[i];
 		pdl_make_physical(pdls[i]);
 		PDLDEBUG_f(pdl_dump(pdls[i]));
+		/* And make it nonnull, now that we've created it */
+		pdls[i]->state &= (~PDL_NOMYDIMS);
 	      }
 	    pdl_startthreadloop(&thr,NULL,NULL);
 	    for(i=0; i<npdls; i++) { /* will the SV*'s be properly freed? */

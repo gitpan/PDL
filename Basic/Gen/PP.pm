@@ -397,16 +397,18 @@ $PDL::PP::deftbl =
  [[PrivFreeCode],	[ParNames,ParObjs,DimObjs,PrivIsInc],	
  	"make_incsize_free"], # Frees thread.
  [[RedoDimsCode],       [],      sub {"/* none */"}],
- [[RedoDimsParsedCode], [RedoDimsCode], sub {print "RedoDimsCode = $_[0]\n" if $::PP_VERBOSE;
-				      return "/* no RedoDimsCode */"
-                                        if $_[0] =~ m|^/[*] none [*]/$|;
-				      @_}],
-# [[RedoDimsParsedCode], [RedoDimsCode,ParNames,ParObjs,DimObjs,
-#                         GenericTypes,ExtraGenericLoops,HaveThreading],	
-# 				sub { print "RedoDimsCode = $_[0]\n";
+
+# [[RedoDimsParsedCode], [RedoDimsCode], sub {print "RedoDimsCode = $_[0]\n" if $::PP_VERBOSE;
 #				      return "/* no RedoDimsCode */"
 #                                        if $_[0] =~ m|^/[*] none [*]/$|;
-#				      new PDL::PP::Code(@_)}],
+#				      @_}],
+
+ [[RedoDimsParsedCode], [RedoDimsCode,ParNames,ParObjs,DimObjs,
+                         GenericTypes,ExtraGenericLoops,HaveThreading],	
+ 				sub { # print "RedoDimsCode = $_[0]\n";
+				      return "/* no RedoDimsCode */"
+                                        if $_[0] =~ m|^/[*] none [*]/$|;
+				      new PDL::PP::Code(@_,1)}],
  [[RedoDims],	[ParNames,ParObjs,DimObjs,DimmedPars,RedoDimsParsedCode],	"make_redodims_thread"],
 
  [[Priv],	[],			"nothing"],
@@ -466,8 +468,17 @@ $PDL::PP::deftbl =
  [[StructDecl],		[ParNames,ParObjs, CompiledRepr,
                          PrivateRepr,StructName],		
 			 			"mkstruct"],
- [[RedoDimsSub],	[RedoDims,PrivNames,PrivObjs],
-					sub {subst_makecomp(PRIV,"$_[0] \$PRIV(__ddone) = 1;",@_[1,2])}],
+ [[RedoDimsSub],	[RedoDims,PrivNames,PrivObjs,_DimObjs],
+				sub {
+				 my $do = $_[3];
+				 my $r = subst_makecomp(PRIV,"$_[0] \$PRIV(__ddone) = 1;",@_[1,2]);
+				 $r->[1]{SIZE} = sub {
+					croak "can't get SIZE of undefined dimension $this->[0]"
+					  unless defined($do->{$_[0]});
+					return $do->{$_[0]}->get_size();
+				  };
+				 return $r;
+				 }],
  [[RedoDimsSubd],	[RedoDimsSub,NewXSSymTab,Name],	"dosubst"],
  [[RedoDimsFunc], 	[RedoDimsSubd,FHdrInfo,RedoDimsFuncName],	
  				sub {wrap_vfn(@_,"redodims")}],
@@ -708,8 +719,11 @@ sub make_redodims_thread {
 	$str .= join '',map {"__creating[$_] = 
 			(PDL_CR_SETDIMSCOND(__privtrans,\$PRIV(pdls[$_])))
 				&& ".($pobjs->{$pnames->[$_]}{FlagCreat}?1:0)." ;\n"} (0..$#$pnames);
-	$str .= join '',map {"if((!__creating[$_]) && \$PRIV(pdls[$_])->
-				  ndims == 1 && \$PRIV(pdls[$_])->dims[0] == 0)
+# - null != [0]
+#	$str .= join '',map {"if((!__creating[$_]) && \$PRIV(pdls[$_])-> ndims == 1 && \$PRIV(pdls[$_])->dims[0] == 0)
+#				   \$CROAK(\"CANNOT CREATE PARAMETER $pobjs->{$pnames->[$_]}{Name}\");
+#					"} (0..$#$pnames);
+	$str .= join '',map {"if((!__creating[$_]) && (\$PRIV(pdls[$_])->state & PDL_NOMYDIMS) && \$PRIV(pdls[$_])->trans == 0)
 				   \$CROAK(\"CANNOT CREATE PARAMETER $pobjs->{$pnames->[$_]}{Name}\");
 					"} (0..$#$pnames);
 	$str .= " {\n$pcode\n}\n";

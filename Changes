@@ -1,3 +1,38 @@
+(!!! = possible source of incompatibilities)
+
+1.9902
+Tjl:
+ - fix pdlcore.c to work with MAGIC hashes, to enable really
+   wild constructions to come
+ - twiddle with flexraw.t
+ - PP cleanup: let 'SIZE' be used in RedoDimsCode. (needs to be cleaned 
+   up from the other kind of access to this.. also need '$PDL(a)')
+ - null = just flag, so 0-dimensions are now allowed.
+ - allow which to take other types for mask as well... - required
+   cleaning PP to make RedoDimsCode be parsed just like Code, except
+   without threadloop. Seems to work nicely.
+   (I needed to take ($a == byte 5)->which for a large byte $a and
+   was horrified to find that my program grew to dozens of Mb)
+   !!! Note: possible incompatibility: before a floating value 0<v<1
+   would be interpreted as false, now true - but more logical this    
+   way.
+ - where to take multiple arguments before the mask,
+   to map them all through the mask.
+ - add 'isnull' to Core.xs
+ - Basic/Gen/PP/PDLCode.pm to 'use strict', just in case...
+ - add 'Config.pm' to help with tests
+    - flexraw.t to use this
+    - Makefile.PLs to set the results of the tests.
+    - Maybe add PDL::Config_user later to store original
+      config hash values from user.
+ - threadover to clear NOMYDIMS flag.
+Raphael:
+ - Callext fixes for hp-ux, required an interface change !!!
+TODO:
+ - patch integration
+ - Makefile.PL should check for f77, store information and other
+   places just use that, especially the tests..
+
 1.9901
 Christian:
   - new faq
@@ -58,7 +93,6 @@ Karl [via Gerald]
 
 1.98_00 [ was 1.98_01 originally ]
 
-(!!! = possible source of incompatibilities)
 
 Tjl:
 

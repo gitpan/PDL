@@ -21,6 +21,7 @@ BEGIN {
   if ($withkarma) {
   
      print "\n         Building Karma extension.  Turn off WITH_KARMA if there are problem\n\n";
+     $PDL_CONFIG{WITH_KARMA} = 1;
   }
   else{
     print "\n      Not building PDL::Graphics::Karma, turn on WITH_KARMA if this is incorrect\n\n";
@@ -38,6 +39,7 @@ realclean :
 	rm -rf Makefile Makefile.old
 \n";
     close(OUT);
+    $PDL_CONFIG{WITH_KARMA} = 0;
   }
   
   

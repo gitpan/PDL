@@ -774,8 +774,8 @@ EOD
 
 
 pp_def('which',
-	GenericTypes => [B], # limit to one compilation
-	Pars => 'int mask(n); int [o] inds(m)',
+#	GenericTypes => [B], # limit to one compilation
+	Pars => 'mask(n); int [o] inds(m)',
 	Code => 'int dm=0;
 		 loop(n) %{
 			if ($mask()) {
@@ -790,7 +790,7 @@ pp_def('which',
 		PDL_Long sum = 0;
 		/* not sure if this is necessary */
 		pdl * dpdl = $PRIV(pdls[0]);
-		PDL_Long *m_datap = ((PDL_Long *)(PDL_REPRP(dpdl)));
+		$GENERIC() *m_datap = (($GENERIC() *)(PDL_REPRP(dpdl)));
 		PDL_Long inc = PDL_REPRINC(dpdl,0);
 		PDL_Long offs = PDL_REPROFFS(dpdl);
 		int i;
@@ -802,7 +802,7 @@ pp_def('which',
 		       if ( *(m_datap+inc*i+offs)) sum++;
 		}
 
-		$PRIV(__m_size) = sum;
+		$SIZE(m) = sum;
 		/* printf("RedoDimsCode: setting dim m to %ld\n",sum); */'
 ,Doc=><<'EOD');
 =for ref
@@ -815,6 +815,9 @@ Returns piddle of indices of non-zero values
 
 returns a pdl with indices for all those elements that are
 nonzero in the mask. Note that mask really hast to be 1-D.
+
+See the function C<where> for an interesting multidimensional 
+version.
 
 =for example
 
@@ -842,12 +845,20 @@ Returns indices to non-zero values or those values from another piddle.
 Note: $i is always 1-D, even if $x is >1-D. The first argument
 (the values) and the second argument (the mask) currently have to have
 the same initial dimensions (or horrible things happen).
+
+It is also possible to use the same mask for several piddles with
+the same call:
+
+ ($i,$j,$k) = where($x,$y,$z, $x+5>0);
+
+There is also the following syntax, retained only for compatibility 
+with PDL versions <1.99. 
+This use is deprecated, and will be removed
+in the future.  Use C<which> instead.
  
  $i = where($x > 0);       # indices to $x, equivalent to 'which()'
 
-Note: the mask has to be 1-D. This use is deprecated, and will be removed
-in the future.
-Retained for compatibility with PDL versions <1.99. Use 'which' instead.
+Note: the mask has to be 1-D. See the documentation for C<which>
 
 =cut
 
@@ -861,7 +872,14 @@ sub PDL::where {
 		$mask = $_[1]->clump(-1) if $_[0]->getndims>1;
 		return $data->index($mask->which());
 	} else {
-		barf("PDL::where takes either 1 or 2 arguments");
+		if($_[-1]->getndims > 1) {
+			my $mask = $_[-1]->clump(-1)->which;
+			return map {$_->clump(-1)->index($mask)} 
+				@$_[0..$#$_-1];
+		} else {
+			my $mask = $_[-1]->which;
+			return map {$_->index($mask)} @$_[0..$#$_-1];
+		}
 	}
 }
 *where = \&PDL::where;

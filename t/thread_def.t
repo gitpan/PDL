@@ -9,6 +9,7 @@ sub ok {
 
 sub approx {
 	my($a,$b) = @_;
+	my($c,$d);
 	$c = abs($a-$b);
 	$d = max($c);
 	$d < 0.01;
@@ -58,6 +59,7 @@ $a = ones(2,3,4)*sequence(4)->slice('*,*,:');
 print $a;
 tassgn($a,($b=null));
 print "$b\n";
+$b->dump;
 ok(3,approx($b,6*sequence(4)));
 
 # test if setting named dim with '=' raises error

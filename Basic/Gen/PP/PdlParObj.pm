@@ -29,11 +29,14 @@ for (['Byte',$PDL_B],
 		      Val => $_->[1]  };
 }
 
-{package PDL;
- sub isnull {
-   my $this = shift;
-   return ($this->getndims==1 && $this->getdim(0)==0) ? 1:0 }
-}
+# null != [0]
+#  - in Core.
+
+#{package PDL;
+# sub isnull {
+#   my $this = shift;
+#   return ($this->getndims==1 && $this->getdim(0)==0) ? 1:0 }
+#}
 
 1;
 
