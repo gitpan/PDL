@@ -1,7 +1,0 @@
-Makefile
-Core.c
-Core.bs
-pdlconv.c
-pdlsections.c
-pdlstats.c
-pdlmoremaths.c
