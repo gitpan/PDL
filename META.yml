@@ -1,10 +1,11 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         PDL
-version:      2.4.2
+version:      2.4.3
 version_from: Basic/Core/Version.pm
 installdirs:  site
 requires:
+    Astro::FITS::Header:           0
     ExtUtils::F77:                 1.1
     File::Spec:                    0.6
     Filter::Util::Call:            0
