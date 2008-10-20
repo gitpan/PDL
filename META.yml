@@ -1,16 +1,18 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         PDL
-version:      2.4.3
-version_from: Basic/Core/Version.pm
-installdirs:  site
-requires:
+--- #YAML:1.0
+name:                PDL
+version:             2.4.3_01
+abstract:            Perl Data Language
+license:             ~
+author:              
+    - PerlDL Developers (perldl@jach.hawaii.edu)
+generated_by:        ExtUtils::MakeMaker version 6.44
+distribution_type:   module
+requires:     
     Astro::FITS::Header:           0
-    ExtUtils::F77:                 1.1
     File::Spec:                    0.6
     Filter::Util::Call:            0
     Inline:                        0.43
     Text::Balanced:                0
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+meta-spec:
+    url:     http://module-build.sourceforge.net/META-spec-v1.3.html
+    version: 1.3

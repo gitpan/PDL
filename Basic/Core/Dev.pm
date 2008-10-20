@@ -413,9 +413,6 @@ $pref\$(OBJ_EXT): $pref.c
 
 # This is the function to be used outside the PDL tree.
 sub pdlpp_postamble {
-      # This sub breaks dmake if called. Thankfully, so far, dmake has not needed this
-	# sub (even when it does get called) - so simply have it return nothing:
-	if($Config{make} eq 'dmake') {return ""}
 	join '',map { my($src,$pref,$mod) = @$_;
 	my $w = whereami_any();
 	$w =~ s%/((PDL)|(Basic))$%%;  # remove the trailing subdir
@@ -442,6 +439,7 @@ sub pdlpp_stdargs_int {
    $PDL::Config{MALLOCDBG}->{libs} : '';
  my $mallocinc = exists $PDL::Config{MALLOCDBG}->{include} ?
    $PDL::Config{MALLOCDBG}->{include} : '';
+my $libsarg = $libs || $malloclib ? "$libs $malloclib " : ''; # for Win32
  return (
  	%::PDL_OPTIONS,
 	 'NAME'  	=> $mod,
@@ -451,7 +449,7 @@ sub pdlpp_stdargs_int {
 	 PM 	=> {"$pref.pm" => "\$(INST_LIBDIR)/$pref.pm"},
 	 MAN3PODS => {"$pref.pm" => "\$(INST_MAN3DIR)/$mod.\$(MAN3EXT)"},
 	 'INC'          => &PDL_INCLUDE()." $inc $mallocinc",
-	 'LIBS'         => ["$libs $malloclib "],
+	 'LIBS'         => [$libsarg],
 	 'clean'        => {'FILES'  => "$pref.xs $pref.pm $pref\$(OBJ_EXT) $pref.c"},
  );
 }
@@ -650,8 +648,7 @@ sub trylink {
 
   my $tempd;
 
-  # Using dmake on Win32 requires special consideration.
-  if($Config{make} eq 'dmake') {$tempd = File::Spec->tmpdir()}
+  if($^O =~ /MSWin32/i) {$tempd = File::Spec->tmpdir()}
   else {
     $tempd = $PDL::Config{TEMPDIR} ||
     die "TEMPDIR not found in \%PDL::CONFIG";

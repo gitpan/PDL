@@ -135,6 +135,7 @@ push @PERLDL::AUTO, \&PDL::AutoLoader::reloader;
 
 sub AUTOLOAD {
     local @INC = @INC;
+    my @args = @_;
     $AUTOLOAD =~ /::([^:]*)$/;
     my $func = $1;
 
@@ -174,7 +175,8 @@ sub AUTOLOAD {
 	  }
 	  
 	  # Now go to the autoload function
-	  goto &$AUTOLOAD unless ($@ || !defined(&{$AUTOLOAD}));
+	  ##goto &$AUTOLOAD(@args) unless ($@ || !defined(&{$AUTOLOAD}));
+	  return &$AUTOLOAD(@args) unless ($@ || !defined(&{$AUTOLOAD}));
 
 	  die $s."\tWhile parsing file `$file':\n$@\n" if($@);
 	  die $s."\tFile `$file' doesn't \n\tdefine ${AUTOLOAD}().\n"
@@ -203,7 +205,7 @@ sub PDL::AutoLoader::autoloader_do {
     print "AutoLoader: NiceSlice enabled...\n" if($PDL::debug);
     
     if(open(AUTOLOAD_FILE,"<$file")) {
-      my($script) = &PDL::NiceSlice::perldlpp(join("",<AUTOLOAD_FILE>));
+      my($script) = &PDL::NiceSlice::perldlpp("PDL::NiceSlice", join("",<AUTOLOAD_FILE>));
       eval $script;
     }
   } else {
@@ -259,7 +261,7 @@ sub PDL::AutoLoader::expand_path {
     foreach $_(@PDLLIB) {
 	# Expand ~{name} and ~ conventions
 	s/^(\+?)~([a-zA-Z0-9]*)// && 
-	    ($_ = $1.((getpwnam($2 || getlogin))[7]).$_ );
+	    ($_ = $1.((getpwnam($2 || getlogin || getpwuid($<)))[7]).$_ );
 	
 	# If there's a leading '+', include all subdirs too.
 	push(@PDLLIB_EXPANDED,
