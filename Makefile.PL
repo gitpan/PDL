@@ -1,5 +1,7 @@
 # Build the whole PDL distribtuion
 
+use 5.006;      # explicitly require 5.6.x or above
+
 $::PP_VERBOSE = 0; # =1 makes PP waffle a lot
 
 use Config;
@@ -101,6 +103,14 @@ sub getpdl_config {
   # First read in distribution config file
   #
   require './perldl.conf';
+
+  # Add BAD_VAL tests if CPAN testers
+  #
+  if ($ENV{AUTOMATED_TESTING} == 1) {
+     print "Automated testing environment: enabling WITH_BADVAL and BADVAL_PER_PDL config options\n";
+     $PDL_CONFIG{WITH_BADVAL}    = 1;
+     $PDL_CONFIG{BADVAL_PER_PDL} = 1;
+  }
 
   # Save standard values
   #
