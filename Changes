@@ -1,3 +1,19 @@
+DCH 03-Nov-2008
+    Added code to XS for PDL::Graphics::PLplot::plParseOpts to 
+    avoid a segfault when it is called with no options.  Also added
+    test case to plplot.t.
+DCH 03-Nov-2008
+    Took out MY::test subroutine in top-level Makefile.PL.
+    This should restore the complete 'make test' functionality
+    which now works properly after Craig Deforest's fix of 
+    28-Oct-2008.
+CHM 01-Nov-2008
+    perldl.conf: changed default build options to enable bad
+    value support and updated the Release_Notes to advertise
+    the new capability.
+    Basic/PDL.pm: updated VERSION to 2.4.3_05 which will be
+    the official 2.4.4 release once the final updates are
+    complete.  Changes updated to reflect these changes.
 CHM 01-Nov-2008
     Updated Known_Problems and Release_Notes for PDL-2.4.4
     release to come.
