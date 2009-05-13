@@ -20,6 +20,7 @@ MANIFEST\.old
 ^pdldoc.db$
 ^patch
 \.cvsignore$
+^.git
 .*\.orig$
 ^test\.wis$
 .*\.rej$

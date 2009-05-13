@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 #
 #  PDL::Graphics::TriD::ButtonControl - This package simply defines 
-#  default event handler subroutines.      $Revision: 1.5 $  
+#  default event handler subroutines.      $Revision$  
 #
 #  James P. Edwards
 #  Instituto Nacional de Meteorologia

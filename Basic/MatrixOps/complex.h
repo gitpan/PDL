@@ -2,7 +2,7 @@
  *
  * (C) Copyright 2001 by NetGroup A/S. All rights reserved.
  *
- * $Log: complex.h,v $
+ * $Log$
  * Revision 1.1  2006/06/20 15:57:22  djburke
  * Hopefully a saner way to build Basic/MatrixOps
  *

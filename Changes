@@ -1,3 +1,43 @@
+CHM 29-Apr-2009
+    Fixed bug number 2784016 in t/pic_16bit.t reported via
+    rt.cpan.org.  I note that the Changes file might be replaced
+    by the log list from git commits at some point.
+CHM 23-Apr-2009
+    Fixed test 17 in t/plplot.t to use a magnitude difference test
+    rather than equality for the floating point quanitities.
+CHM 22-Apr-2009
+    Applied fix to t/autoload.t per the bug report sf bug #2339726
+    by zowie.
+CHM 22-Apr-2009
+    Fixed bug #2753869 in the interpolation part of the pctover()
+    routine in ufunc.pd.  The computation of pctover() and
+    oddpctover() were corrected to improve consistency and
+    agreement with other apps (e.g. MS Excel).
+    and fixed the calculations of the pctover() and oddpctover()
+CED 11-3-2009
+    mkhtmldoc.pl: suddenly stopped making docs, preventing me from 
+    executing "Make install".  Traced the problem down to a nonexistent
+    directory in the POD scan path (".../HtmlDocs/pdl/PDL"), which for
+    some reason is now crashing the POD builder stuff that came with 
+    my MacOS-standard Perl.  Since .../pdl/PDL seems like a silly place to 
+    look (the docs are build into just .../pdl), I dked out the "PDL" from
+    the pod path, fixing the problem.
+CED 10-3-2009
+    Fix problem with reorder() - formerly required that all dimensions
+    be set; now allows specification of a leading subset of dims in 
+    the target.  Additional dims are threaded over (i.e. ignored).
+SIS 25-2-2009
+    Amend Basic/Math/math.pd so that Math.xs contains a prototype for
+    the (distro version of) the rint function when (and only when) a
+    Microsoft Compiler is being used. (Rev 1.17 of math.pd)
+    This ifxes sourceforge bug 2630402.
+CHM 13-Nov-2008
+    PDL/Basic/PDL.pm: updated VERSION to 2.4.4cvs for
+    post release development.
+CHM 13-Nov-2008
+    PDL/Basic/PDL.pm: updated VERSION to 2.4.4 for release
+    Known_Problems: updated for release
+    This is PDL-2.4.4 as released to CPAN
 CHM 06-Nov-2008
     Basic/PDL.pm: changed version to 2.4.3_06 for quick
     check release of final Makefile.PL mods.

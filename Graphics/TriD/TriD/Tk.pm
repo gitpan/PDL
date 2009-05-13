@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 #
 #  PDL::Graphics::TriD::Tk - A Tk widget interface to the PDL::Graphics::TriD
-#  visualization package:  $Revision: 1.6 $  
+#  visualization package:  $Revision$  
 #
 #  James P. Edwards
 #  Instituto Nacional de Meteorologia
@@ -59,8 +59,8 @@ $PDL::Graphics::TriD::Tk::verbose=0;
 
 Tk::Widget->Construct('Tk');
 
-#$PDL::Graphics::TriD::Tk::VERSION = '$Revision: 1.6 $ ' ;
-#$PDL::Graphics::TriD::Tk::VERSION =~ s/\$Revision: 1.6 $\s*$/$1/;
+#$PDL::Graphics::TriD::Tk::VERSION = '$Revision$ ' ;
+#$PDL::Graphics::TriD::Tk::VERSION =~ s/\$Revision$\s*$/$1/;
 #sub Version {return $PDL::Graphics::TriD::Tk::VERSION;}
 
 =head1 FUNCTIONS
