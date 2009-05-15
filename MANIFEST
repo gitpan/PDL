@@ -658,6 +658,7 @@ t/basic.t
 t/bess.t
 t/bool.t
 t/callext.c
+t/callext.dll
 t/callext.t
 t/clump.t
 t/complex.t
@@ -703,6 +704,7 @@ t/interp.t
 t/interp_slatec.t
 t/interpol.t
 t/iotypes.t
+t/libcallext.dll.a
 t/limits_00.t
 t/limits_errb.t
 t/limits_keyspecs.t
