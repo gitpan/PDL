@@ -9,12 +9,12 @@ Please check the following files for further information
 
 INSTALL 		detailed installation instructions
 
+BUGS			how to make a bug report and where to send it
+
 Known_problems	 	check before you report compilation problems
 
-DEPENDENCIES		Other software that PDL relies on (and where
-			to get it)
-
-BUGS			how to make a bug report and where to send it
+DEPENDENCIES		Other software that PDL relies on
+                        (and where to get it)
 
 perldl.conf		PDL configuration options
 
@@ -93,7 +93,7 @@ The mailing list archives can be searched/read at
 If you need to post a problem report, please use the sourceforge.net
 bug tracker system following the guidance in the BUGS file:
 
-	http://sourceforge.net/bugs/?group_id=612
+	http://sourceforge.net/tracker/?group_id=612&atid=100612
 
 
 Notes
