@@ -335,6 +335,7 @@ Graphics/TriD/TriD/Window.pm
 Graphics/TriD/VRML/Makefile.PL
 Graphics/TriD/VRML/VRML.pm
 Graphics/TriD/VRML/VRML/Protos.pm
+gsl.pl
 INSTALL
 IO/Browser/browse.c
 IO/Browser/browser.pd
