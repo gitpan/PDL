@@ -411,8 +411,10 @@ my @podpms = map { $_.".pod", '$(INST_LIBDIR)/PDL/' . $_ .".pod"}
 	   'Astro::FITS::Header' => 0,
 	   'File::Spec'          => 0.6,
 	   'Filter::Util::Call'  => 0, # for PDL::NiceSlice
-	   'Text::Balanced'      => 0, # for PDL::NiceSlice
 	   'Inline'              => 0.43,
+	   'Text::Balanced'      => 0, # for PDL::NiceSlice
+           'Data::Dumper'        => 2.121, # for PDL::IO::Dumper
+           'Storable'            => 1.03,  # for PDL::IO::Storable
 	  );
 # push @prereq, ('ExtUtils::F77' => 1.10) unless $seen_f77conf;
 

@@ -1,3 +1,37 @@
+Release notes for PDL 2.4.4_07 ---------------------------
+
+General Notes:
+
+     *************************************
+     *                                   *
+     *   This is a development release   *
+     *                                   *
+     *************************************
+
+   The original, pre-CVS to git migration changes are listed in
+   Changes_CVS and Changes contains the output from git log --stat
+   since April 2009.
+
+   Data::Dumper v2.121 and Storable v1.03 are now explicit
+   prerequisites to the PDL build.  This should give better
+   diagnostics and makes clear that these modules are essential
+   to PDL IO functionality.
+
+   Continue minor fixes and cleanup to main PDL file tree.
+
+
+Summary of Changes:
+
+    Make Data::Dumper v 2.121 the minimum required
+
+    Avoid lvalue sub syntax requirements
+    
+    Rework storable test to use Test::More
+    
+    Fix t/autoload.t test when echo ~ gives ~
+    
+
+
 Release notes for PDL 2.4.4_06 ---------------------------
 
 General Notes:

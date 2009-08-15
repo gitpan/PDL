@@ -1,3 +1,175 @@
+commit 8e7bfa344e83c9d54e87dda430ee6c549a9b348f
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Aug 2 15:59:45 2009 -0400
+
+    Avoid lvalue sub syntax requirements
+    
+    For perl 5.6.x perls, we have occaisional test failures in PDL
+    due to lvalue sub errors.  This fixes a number of occurances where
+    we were using the lvalue syntax when we do not officially require
+    it---maybe we should.  In the meantime, this cleans up a number of
+    refs and updates the FAQ entry to be more correct.
+
+ Basic/MatrixOps/matrixops.pd |    3 ++-
+ Basic/Pod/FAQ.pod            |    7 +++----
+ Basic/Primitive/primitive.pd |    5 +++--
+ IO/FITS/FITS.pm              |    6 +++---
+ Lib/Transform/transform.pd   |    3 ++-
+ t/imagend.t                  |    9 ++++++++-
+ 6 files changed, 21 insertions(+), 12 deletions(-)
+
+commit 53e139899ae0571041d6d27d4feee7d1a9807b1b
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Aug 2 15:58:04 2009 -0400
+
+    Make Data::Dumper v 2.121 the minimum required
+    
+    The earlier 2.122 was too aggressive.  It appears that the
+    needed fix was in version 2.121.
+
+ DEPENDENCIES  |    2 +-
+ IO/Dumper.pm  |    2 +-
+ Makefile.PL   |    2 +-
+ Release_Notes |    2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+commit de06edf416963aa919a072aac17bc3b3a3d51fed
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 29 10:47:19 2009 -0400
+
+    Require Data::Dumper 2.122 in IO/Dumper.pm
+
+ IO/Dumper.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 7b0845e9d81cdc8dc579430d8c9de524330cd8ac
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 29 10:38:09 2009 -0400
+
+    Rework storable test to use Test::More
+    
+    Updated t/storable.t to check for Storable version 1.03
+    rather than 1.0 since the comments in PDL::IO::Storable
+    suggested that that was the version required.  While at
+    it, updated the test to use Test::More.
+
+ t/storable.t |   75 +++++++++++++++++++++++----------------------------------
+ 1 files changed, 30 insertions(+), 45 deletions(-)
+
+commit bac1dc64c30c94e2123712d09bb4185ef4d05b25
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Tue Jul 28 22:21:27 2009 -0400
+
+    Updated files with Data::Dumper info
+    
+    Updated DEPENDENCIES, Release_Notes, and cygwin/INSTALL with
+    information about the Data::Dumper prerequisite requirement.
+
+ DEPENDENCIES   |    4 ++++
+ Release_Notes  |   25 +++++++++++++++++++++++++
+ cygwin/INSTALL |   18 +++++++++++++-----
+ 3 files changed, 42 insertions(+), 5 deletions(-)
+
+commit 5110524ac155b55c07b2dc5d29230e995b4f6af1
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Tue Jul 28 21:23:29 2009 -0400
+
+    Fix t/autoload.t test when echo ~ gives ~
+    
+    On some systems, the shell returns '~' as the result of qx{echo ~}
+    which causes a spurious test failure.  In that case, check against
+    the original reference value of (getpwnam(getpwuid(\$<)))[7] .
+    This is more permissive but is a correct answer for tilde expansion
+    so works as a pass check.
+
+ t/autoload.t |   18 +++++++++++-------
+ 1 files changed, 11 insertions(+), 7 deletions(-)
+
+commit 475c8433fd2f0649138d0444ef34fa7ce091ad24
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 28 16:16:00 2009 -0400
+
+    Set minimum Data::Dumper version to 2.122
+    
+    This is the first version of Data::Dumper that looks
+    like it addresses the problem I found.  Since Data::Dumper
+    was "used" by PDL::IO::Dumper, it should have been listed
+    as a dependency for PDL.  Requiring this version prevents
+    testing with the broken ones.
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit b5c911482b026e02df11ecc074efff120a456bc5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 28 14:22:42 2009 -0400
+
+    Added Data::Dumper to the prerequisites
+    
+    We were using it to implement PDL::IO::Dumper so it should
+    have been listed.  By listing it, the automated testers
+    will report version numbers with failing test reports which
+    might help resolve the current FAILs with t/dumper.t
+
+ Makefile.PL |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit f4a569d1ec3301692516fbc5b0c3f839d84395c6
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Mon Jul 27 07:32:07 2009 -0400
+
+    Update $PDL::VERSION to 2.4.4_07git for devel
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 6eeca045e56faab5f8b0bc1c16110ea1ce8009ff
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Jul 26 21:40:09 2009 -0400
+
+    Update VERSION and readme files for release
+    
+    Updates to $PDL::VERSION, and top level user readme
+    type files for 2.4.4_06 developers release of PDL.
+
+ Basic/PDL.pm   |    2 +-
+ DEVELOPMENT    |   14 +++------
+ Known_problems |   16 ++++++++++-
+ MANIFEST.SKIP  |    2 +-
+ Release_Notes  |   86 +++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 5 files changed, 107 insertions(+), 13 deletions(-)
+
+commit dcdf90ac236996e945d04767ca48355608056757
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Jul 26 17:23:03 2009 -0400
+
+    Added Changes_CVS to the MANIFEST file
+    
+    Need to make sure this is generated correctly at some point.
+    Just use the existing one for now.
+
+ MANIFEST |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 100199514b1c9310a5f302984a939d9e70361d97
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Jul 26 17:16:23 2009 -0400
+
+    Add Changes to the .gitignore
+    
+    Telling git to ignore the Changes file for now since we'll
+    be automatically generating it from the output of a "git log --stat"
+    for each CPAN distribution.  Anyone who is doing actual development
+    with PDL can just use the git log command directly.  Any official or
+    developers release on CPAN will have a generated log file.
+    
+    For now, the old logs pre-git are now in Changes_CVS and the Changes
+    file will include git log since the changeover.  At some point, we
+    could deprecate the Changes_CVS file and just go to the git logs.
+
+ .gitignore |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
 commit 795ef9aa8a223049b14d7840b8fddc28cbb73147
 Author: Chris Marshall <marshallch@users.sourceforge.net>
 Date:   Sun Jul 26 17:09:49 2009 -0400
@@ -676,68 +848,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-commit 6048e3d6f082a3299d10b4920db41388f3762eb4
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Thu Apr 23 18:52:48 2009 -0400
-
-    Fixed test 17 in t/plplot.t
-    
-    Fixed test 17 in t/plplot.t to use a magnitude difference test
-    rather than equality for the floating point quanitities.
-
- Changes    |    3 +++
- t/plplot.t |    2 +-
- 2 files changed, 4 insertions(+), 1 deletions(-)
-
-commit 5a31fe28398581c840b652d6d42964a156270545
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Thu Apr 23 11:04:35 2009 -0400
-
-    Fix t/autoload.t per sf bug number 2339726
-    
-    Fixed test 3 of autoload.t per the SF.net bug #2339726
-    report by zowie.
-
- Changes      |    3 +++
- t/autoload.t |    2 +-
- 2 files changed, 4 insertions(+), 1 deletions(-)
-
-commit edb132bc9bdecd1d1f80a7675c23028d92e49896
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Thu Apr 23 11:00:21 2009 -0400
-
-    F bug #2753869 fixed with pctover()/oddpctover()
-    
-    This fixes SF bug #2753869 and also corrects the calculations
-    performed for both the pctover() and oddpctover() functions.
-    pctover() should now be consistent with NIST recommendations
-    and MS Excel.  oddpctover() should now be the basic textbook
-    implementation.
-
- Basic/Ufunc/ufunc.pd |   38 +++++++++++++++++++++++---------------
- Changes              |    6 ++++++
- t/ufunc.t            |   10 ++++++++--
- 3 files changed, 37 insertions(+), 17 deletions(-)
