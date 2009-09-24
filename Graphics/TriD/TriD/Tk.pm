@@ -49,7 +49,16 @@ package PDL::Graphics::TriD::Tk;
 use Tk;
 use PDL::Core;
 use PDL::Graphics::TriD;
-use PDL::Graphics::OpenGL;
+
+BEGIN {
+   if ( $PDL::Config{USE_POGL} ) {
+      eval 'use OpenGL 0.58_004 qw(:all)';
+      eval 'use PDL::Graphics::OpenGL::Perl::OpenGL';
+   } else {
+      eval 'use PDL::Graphics::OpenGL';
+   }
+}
+
 use strict;
 
 
@@ -218,7 +227,7 @@ sub AUTOLOAD {
   my $sub = $AUTOLOAD;
   # get subroutine name
 
-#  print "In AutoLoad $self $sub\n";
+  #print "In AutoLoad $self $sub\n";
   if(defined($self->{GLwin})){
     $sub =~ s/.*:://;
     return($self->{GLwin}->$sub(@args));

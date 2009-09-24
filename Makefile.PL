@@ -107,9 +107,10 @@ sub getpdl_config {
   # Add BAD_VAL tests if CPAN testers
   #
   if ($ENV{AUTOMATED_TESTING} == 1) {
-     print "Automated testing environment: enabling WITH_BADVAL and BADVAL_PER_PDL config options\n";
+     print "Automated testing environment: enabling WITH_BADVAL, BADVAL_PER_PDL, and USE_POGL config options\n";
      $PDL_CONFIG{WITH_BADVAL}    = 1;
      $PDL_CONFIG{BADVAL_PER_PDL} = 1;
+     $PDL_CONFIG{USE_POGL} = 1;
   }
 
   # Save standard values
@@ -409,12 +410,13 @@ my @podpms = map { $_.".pod", '$(INST_LIBDIR)/PDL/' . $_ .".pod"}
 
 @prereq = (
 	   'Astro::FITS::Header' => 0,
+           'Data::Dumper'        => 2.121,     # for PDL::IO::Dumper
 	   'File::Spec'          => 0.6,
-	   'Filter::Util::Call'  => 0, # for PDL::NiceSlice
+	   'Filter::Util::Call'  => 0,         # for PDL::NiceSlice
 	   'Inline'              => 0.43,
-	   'Text::Balanced'      => 0, # for PDL::NiceSlice
-           'Data::Dumper'        => 2.121, # for PDL::IO::Dumper
-           'Storable'            => 1.03,  # for PDL::IO::Storable
+           'OpenGL'              => 0.58004,   # for PDL::Graphics::TriD
+           'Storable'            => 1.03,      # for PDL::IO::Storable
+	   'Text::Balanced'      => 0,         # for PDL::NiceSlice
 	  );
 # push @prereq, ('ExtUtils::F77' => 1.10) unless $seen_f77conf;
 
@@ -596,7 +598,7 @@ return $text
 sub MY::processPL {
     ### This fix seems necessary with current versions of MM - otherwise it creates circular
     ### dependencies to "pm_to_blib" for .PL files (!) -- CED 9-July-2008
-    if(1) { ##  || $^O =~ /MSWin32/i && ($Config{make} eq 'dmake' || $Config{make} eq 'nmake')) {
+    if(1) { ##  || $^O =~ /MSWin32/i && ($Config{make} =~ /\bdmake/i || $Config{make} =~ /\bnmake/i)) {
 	my($self) = shift;
 	return "" unless $self->{PL_FILES};
 	my(@m, $plfile);
@@ -605,7 +607,7 @@ sub MY::processPL {
                          ?  $self->{PL_FILES}->{$plfile}
 	                 : [$self->{PL_FILES}->{$plfile}];
 	    my $target;
-	    if($Config{make} eq 'dmake') {
+	    if($Config{make} =~ /\bdmake/i) {
 		foreach $target (@$list) {
 		    push @m, "
 all :: $target
