@@ -1,7 +1,6 @@
 package PDL::Graphics::OpenGL::Perl::OpenGL;
 
-use OpenGL 0.58003 qw();
-use PDL::Graphics::OpenGL::Perl::OpenGL;
+use OpenGL 0.58005 qw();
 
 use warnings;
 use strict;
@@ -16,7 +15,7 @@ Version 0.01_07
 
 =cut
 
-our $VERSION = '0.01_07';
+our $VERSION = '0.01_08';
 
 
 =head1 SYNOPSIS
@@ -27,7 +26,7 @@ PDL::Graphics::OpenGL one. It also supports any
 miscellaneous OpenGL or GUI related functionality to
 support PDL::Graphics::TriD refactoring.
 
-You should be able to replace:
+You should eventually be able to replace:
 
     use PDL::Graphics::OpenGL
 by
@@ -49,7 +48,7 @@ interface and build environment matures
 
 =cut
 
-OpenGL::glpSetDebug(1);
+#OpenGL::glpSetDebug(1);
 
 *glpOpenWindow = \&OpenGL::glpOpenWindow;
 
@@ -70,10 +69,10 @@ my $debug;
 #
 #use fields qw/Display Window Context Options GL_Vendor GL_Version GL_Renderer/;
 
-=head2 new($class,$options)
+=head2 new($class,$options,[$window_type])
 
 Returns a new OpenGL object with attributes specified in the options
-field.  These attributes are:
+field, and of the 3d window type, if specified.  These attributes are:
 
 =for ref
 
@@ -83,10 +82,19 @@ field.  These attributes are:
   mask - the user interface mask (StructureNotifyMask)
   attributes - attributes to pass to glXChooseVisual
 
+Allowed 3d window types, case insensitive, are:
+
+=for ref
+
+  pdl-legacy-x11 - use deprecated PDL::PP OpenGL interface
+  x11  - use Perl OpenGL (POGL) bindings and X11 windows
+         (supports PDL::Graphics::TriD::Tk use)
+  glut - use Perl OpenGL bindings and GLUT windows (no Tk)
+
 =cut
 
 sub new {
-  my($class_or_hash,$options) = @_;
+  my($class_or_hash,$options,$window_type) = @_;
 
   my $isref = ref($class_or_hash);  
   my $p;
@@ -101,13 +109,22 @@ sub new {
     $p = $opt->options;
   }
 
-  my $self =  OpenGL::glpcOpenWindow(
-     $p->{x},$p->{y},$p->{width},$p->{height},
-     $p->{parent},$p->{mask}, $p->{steal}, @{$p->{attributes}});
+  # Use GLUT windows and event handling as the TriD default
+  # $window_type ||= 'glut';
+  $window_type ||= 'x11';       # use X11 default until glut code is ready
 
-	if(ref($self) ne 'HASH'){
-	  die "Could not create OpenGL window";
-   }
+  my $self;
+  if ( $window_type =~ /x11/i ) {       # X11 windows
+     print "Creating X11 OO window\n";
+     $self =  OpenGL::glpcOpenWindow(
+        $p->{x},$p->{y},$p->{width},$p->{height},
+        $p->{parent},$p->{mask}, $p->{steal}, @{$p->{attributes}});
+  } else {                              # GLUT or FreeGLUT windows
+     print "Creating GLUT OO window\n";
+  }
+  if(ref($self) ne 'HASH'){
+     die "Could not create OpenGL window";
+  }
 
 #  psuedo-hash style see note above  
 #  no strict 'refs';

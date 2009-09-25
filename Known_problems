@@ -19,8 +19,9 @@ PDL:
 
 
 - PDL::Graphics::TriD is in the process of being refactored.
-  This is the first CPAN developers release with support for
-  the Perl OpenGL module (POGL) rather than the PDL PP one.
+  As of CPAN developers release PDL-2.4.4_09, TriD is built
+  by default with the Perl OpenGL module bindings to OpenGL
+  et. al. rather than the PDL::PP legacy code.
 
   See http://mailman.jach.hawaii.edu/mailman/listinfo/perldl
   for more information.
@@ -45,6 +46,15 @@ PDL:
 - PDL configuration failures have come about because needed temp files
   are not creatable.  This appears to be a result of platform misconfiguration
   but we need data points to understand the issue.
+
+
+- Tests fail mysteriously if you have more than one PDL installation in
+  the @INC path and the PDL tree being tested is missing a module that
+  was built for the other PDL in the @INC path.  The test failures don't
+  appear to damage anything but you will get the failures.  This can
+  also occur if something you tried to build, failed to do so and then
+  the other PDL messes up the tests for a different reason---i.e. it
+  did not build.  Alway check the build and error logs.
 
 
 - 16bit image file IO fails in t/pic_16bit.t apparently due to an

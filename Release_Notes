@@ -1,3 +1,51 @@
+Release notes for PDL 2.4.4_11 ---------------------------
+
+General Notes:
+
+     *************************************
+     *                                   *
+     *   This is a development release   *
+     *                                   *
+     *************************************
+
+
+Summary of Changes:
+
+   Another developers release update for TriD refactoring...
+
+   Now has Perl OpenGL-0.58_005 or greater as a CPAN prerequisite for
+   testing the new TriD refactoring.  Due to to changes and testing
+   for TriD development, this release may be less stable than usual.
+
+   Use option USE_POGL in perldl.conf to toggle the legacy TriD
+   code versus the new OpenGL (POGL) based code.  Feedback from
+   different platforms encouraged!
+
+
+
+Release notes for PDL 2.4.4_11 ---------------------------
+
+General Notes:
+
+     *************************************
+     *                                   *
+     *   This is a development release   *
+     *                                   *
+     *************************************
+
+
+Summary of Changes:
+
+   Now has Perl OpenGL-0.58_004 or greater as a CPAN prerequisite for
+   testing the new TriD refactoring.  Due to to changes and testing
+   for TriD development, this release may be less stable than usual.
+
+   Use option USE_POGL in perldl.conf to toggle the legacy TriD
+   code versus the new OpenGL (POGL) based code.  Feedback from
+   different platforms encouraged!
+
+
+
 Release notes for PDL 2.4.4_09 ---------------------------
 
 General Notes:
