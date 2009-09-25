@@ -1,3 +1,33 @@
+commit 5f6a1190c91478b74dae7e54e6957d7f7f4babaa
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Thu Sep 24 20:37:56 2009 -0400
+
+    Fix perldl.conf defaults and VERSION to 2.4.4_10
+    
+    Need another developers release with the expected defaults
+    in perldl.conf for better test coverage.
+
+ Basic/PDL.pm |    2 +-
+ perldl.conf  |   14 +++++++-------
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+commit d0fa53907dbd0317dd99d4c2888fabd36487aa6d
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Sep 23 22:22:04 2009 -0400
+
+    Set VERSION to 2.4.4_09 and prep for CPAN release
+    
+    This is the first CPAN release offering the option of using
+    the new POGL code for TriD and USE_POGL is enabled by default
+    for testing coverage.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    4 ++--
+ MANIFEST       |    7 +++++++
+ Release_Notes  |    5 +++++
+ perldl.conf    |    4 ++--
+ 5 files changed, 17 insertions(+), 5 deletions(-)
+
 commit 3e8cccf159c866a45c5e17857d5fc85ec8d33bfa
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 20:56:30 2009 -0400
