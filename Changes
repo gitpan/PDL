@@ -1,32 +1,396 @@
-commit af36f59ef60d638abdf14b5c8a7f72e4ab2f0e86
+commit e0cf2d1917bb9482264b883410ebaf97d9007689
 Author: Chris Marshall <devel.chm.01@gmail.com>
-Date:   Fri Sep 25 17:32:33 2009 -0400
+Date:   Fri Oct 2 17:57:39 2009 -0400
 
-    Fix VERSION and POGL version require for release
+    Update VERSION to 2.4.4_122 for git push
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f5c68cca0528669a896c9a6054269c87d31c1a90
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 2 17:49:42 2009 -0400
+
+    Add a default glutDisplayFunc()
     
-    This PDL-2.4.4_11 release requires OpenGL-0.58_005 or higher.
+    This makes no difference on cygwin but maybe it will help with
+    the Mac OS X hang.  Also some minor code cleanup in GL.pm
 
- Basic/PDL.pm                      |    2 +-
- DEPENDENCIES                      |    2 +-
+ Graphics/TriD/POGL/OpenGL.pm |   29 +++++++++++++++--------------
+ Graphics/TriD/TriD/GL.pm     |   14 ++++++++------
+ 2 files changed, 23 insertions(+), 20 deletions(-)
+
+commit 53fda0cae73727da96e93a438217831b84e69125
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 2 15:40:01 2009 -0400
+
+    Fix error msg in Makefile.PL POGL version check
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ba70542ff5fd81bab61edbeb3e104ff71cfadab0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 2 15:29:37 2009 -0400
+
+    Fix typo in perldl.conf for POGL_VERSION
+    
+    Was missing a comma!
+
+ perldl.conf |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 1ee68d6bc728c8e1735d62e567117c3554667374
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 2 15:24:32 2009 -0400
+
+    Add POGL_VERSION option to perldl.conf
+    
+    This will be used to automate the correct use OpenGL version strings
+    for TriD compatibility with POGL.
+
+ perldl.conf |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit cedbc8e20495e091e491ddac89cb9d4c43e1c9e6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 2 15:20:08 2009 -0400
+
+    Make OpenGL 0.58_007 the required version
+    
+    git releasees pushed to the general repository for
+    testing have their versions incremented and PDL
+    has the associated POGL version updated if needed.
+    It is hoped that this will avoid the problem of
+    failures due to mismatch between PDL+POGL modules
+    being tested.
+
  Graphics/TriD/OpenGLQ/Makefile.PL |    2 +-
- Graphics/TriD/POGL/Makefile.PL    |    2 +-
  Graphics/TriD/POGL/OpenGL.pm      |    2 +-
- Graphics/TriD/TriD/GL.pm          |    8 +++---
+ Graphics/TriD/TriD/GL.pm          |    8 ++++----
  Graphics/TriD/TriD/GoBoard.pm     |    2 +-
  Graphics/TriD/TriD/GraphBox.pm    |    2 +-
  Graphics/TriD/TriD/Labels.pm      |    2 +-
  Graphics/TriD/TriD/Lines.pm       |    2 +-
  Graphics/TriD/TriD/MathGraph.pm   |    2 +-
  Graphics/TriD/TriD/Mesh.pm        |    2 +-
- Graphics/TriD/TriD/OOGL.pm        |    2 +-
  Graphics/TriD/TriD/Surface.pm     |    2 +-
  Graphics/TriD/TriD/Tk.pm          |    2 +-
- INSTALL                           |    2 +-
- Known_problems                    |   14 +++++++++-
- Makefile.PL                       |    6 ++--
- Release_Notes                     |   48 +++++++++++++++++++++++++++++++++++++
- t/opengl.t                        |    4 +-
- 20 files changed, 84 insertions(+), 26 deletions(-)
+ Makefile.PL                       |    2 +-
+ Release_Notes                     |   29 +++++++++++++++++++++++------
+ t/opengl.t                        |    4 ++--
+ 14 files changed, 40 insertions(+), 23 deletions(-)
+
+commit 96eaffbc596fc0764e4fdce913c4caae1ce7ffd9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 2 13:49:46 2009 -0400
+
+    Change VERSION to 2.4.4_121 for git devel
+    
+    Having confusion between git pushes being tested by other
+    users.  Will change VERSION numbers to hundreds and increment
+    for each push for testing to PDL git.
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f5185c95f40255ac83e116f33dff972220156aa7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 2 13:48:29 2009 -0400
+
+    Undo "Update version to 2.4.4_12_1 for development"
+    
+    This reverts commit 591a9cca7904515e65dc7d36f0a904a12ccb0fbc.
+    Two underscores is not allowed
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 66a117f64eabcabd9316d7471626a6ff9c6fb751
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 2 12:50:39 2009 -0400
+
+    Apply Stefan Evert's Mac OS X patch for PP typmaps
+    
+    Still having issues with typemap finding on some
+    platforms.  Need to have some cross checks here...
+
+ Basic/Gen/PP.pm |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 591a9cca7904515e65dc7d36f0a904a12ccb0fbc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 2 12:48:34 2009 -0400
+
+    Update version to 2.4.4_12_1 for development
+    
+    With the rapid releases, we need a unique identifier for
+    each git push to try.  See if adding one more digit rather
+    than git works.  The plan is to update the last digit for
+    each push to sf.net so there is a version "paper trail"
+    for reference and debugging.
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 12bd6606984e327377ffd7b63c0ac4da66b92ec9
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Thu Oct 1 22:50:17 2009 -0400
+
+    Edit to OpenGL::glutMainLoopEvent POGL/OpenGL.pm
+    
+    Fixed an unadorned glutMainLoopEvent() in PDL::Graphics::TriD::POGL/OpenGL.pm
+    by adding explicit OpenGL:: specifier.  Don't know if this will help the
+    hang problem seen in Mac OS X testing---but at least is now consistent.
+
+ Graphics/TriD/POGL/OpenGL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 784e320e4d82d6d3ba28a8cbcf879a94e163b9b4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 1 17:05:40 2009 -0400
+
+    Add better error handling for missing X11 fonts
+    
+    There was a mysterious failure when the X font used for PDL
+    axis labels did not exist.  This adds an eval {} to catch the
+    failure and a diagnostic message that suggests how to fix the
+    problem.
+    
+    N.B. The new TriD immplementation with GLUT does not have
+    this problem.
+
+ Graphics/TriD/TriD/GL.pm |   11 +++++++++--
+ 1 files changed, 9 insertions(+), 2 deletions(-)
+
+commit 58d35d3a38db67412b5dd65e8b97c85a01e9fcb4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 1 15:33:47 2009 -0400
+
+    Update README type files for coming releases.
+
+ DEPENDENCIES   |    2 +-
+ INSTALL        |    2 +-
+ Known_problems |   13 +++----------
+ README         |   16 ++++++++--------
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 5 files changed, 45 insertions(+), 20 deletions(-)
+
+commit a91bd84be17a692a121e50fff77a4871a06bc5fa
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Thu Oct 1 07:30:36 2009 -0400
+
+    Make fake XEvent parameters match existing protos
+    
+    This quiets some warning for folk with GLX and X11 but using
+    the GLUT inteface code.  Should not affect other platforms.
+
+ Graphics/TriD/POGL/OpenGL.pm |   54 +++++++++++++++++++++---------------------
+ 1 files changed, 27 insertions(+), 27 deletions(-)
+
+commit cce93c61ea25f6c755101c4e9fba3fc53e758968
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Sep 30 20:33:45 2009 -0400
+
+    Add unless OpenGL::done_glutInit to new
+    
+    This prevents illegal glutInit() re-initialization attempt.
+    NOTE: this is why a "safe" glutInit() and other GLUT functions
+    are on the TODO list.  While it may be ok from C, it is a pain
+    to have the perl process die as a result of calling glutInit()
+    twice.
+
+ Graphics/TriD/POGL/OpenGL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit fb5e6d05fe4c03262e69f03c9325679fd074dab8
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Sep 30 20:27:34 2009 -0400
+
+    Adding ButtonMotionMask and PointerMotionMask
+    
+    More #defines from X11 needed for the fake XEvent processing.
+
+ Graphics/TriD/POGL/OpenGL.pm |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit b9de52cc269c8cb2bd9fd8ff664630bdbc8e0e27
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Sep 30 19:15:21 2009 -0400
+
+    Add KeyPress* and KeyRelease* to GLUT defines
+
+ Graphics/TriD/POGL/OpenGL.pm |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit cab38844095e7f0ddbb2c17772ffded2d58e80b4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Sep 30 18:01:30 2009 -0400
+
+    Fix missing GLUT_DEPTH option on GLUT windows
+    
+    This resolved the visual artifacts for PDL+POGL and GLUT!
+
+ Graphics/TriD/POGL/OpenGL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 50c8136b2972bc42f4c4f7548c312e3b2d130b2a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Sep 30 17:40:11 2009 -0400
+
+    Fix missing GLX and X11 constanst for GLUT
+    
+    Need to define various GLX and X11 constants, even if X11 and
+    GLX are not being used in order to create the fake XEvent queue.
+    Added a few I missed and defined in OpenGL rather than
+    PDL::Graphics::OpenGL::Perl::OpenGL.
+
+ Graphics/TriD/POGL/OpenGL.pm |   36 +++++++++++++++++++++---------------
+ 1 files changed, 21 insertions(+), 15 deletions(-)
+
+commit 84e91525afb9f06dd6d949f00afd095a99a785eb
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Sep 30 15:55:28 2009 -0400
+
+    Finished fake XEvent stuff for GLUT
+    
+    Using cygwin and FreeGLUT with USE_POGL the perldl 3d and 3d2
+    now "work" in the sense of the basic keyboard controls and
+    mouse operations.  The rendering appears out of order for the
+    complex scenes using hold3d so some debugging is needed there.
+    
+    win32+freeglut should work
+    
+    macos+glut should work provided one edits the code replacing
+    calls to glutMainLoopEvent() by glutCheckLoop(), and calls to
+    glutCloseFunc() by glutWMCloseFunc().
+
+ Graphics/TriD/POGL/OpenGL.pm |   38 ++++++++++++++++++++++++++++++++------
+ Graphics/TriD/TriD/GL.pm     |    3 ++-
+ 2 files changed, 34 insertions(+), 7 deletions(-)
+
+commit c3ad8066292f7acf36e081ccc44d0cacc743e035
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Sep 30 11:47:34 2009 -0400
+
+    Fixed 'x11' window type with USE_POGL
+    
+    Had GLUT window support in but need to debug the XEvent
+    packet types for mouse motion and button presses to complete
+    the fake XEvent emulation.  This fixes the new code to work
+    with the 'x11' window type which had been broken by the new
+    GLUT functionality.  Also added another diagnostic test
+    program line3d.pl.
+
+ 3dtest.pl                    |    2 +-
+ Graphics/TriD/POGL/OpenGL.pm |   10 ++++++----
+ Graphics/TriD/TriD/GL.pm     |   35 +++++++++++++++++++++++++----------
+ line3d.pl                    |   19 +++++++++++++++++++
+ 4 files changed, 51 insertions(+), 15 deletions(-)
+
+commit 461eb0418856ba32c0a212d826962f64526d9efc
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Tue Sep 29 23:16:32 2009 -0400
+
+    Add Keyboard events and mouse/motion events
+    
+    This adds the rest of the GLUT callbacks required to implement
+    a fake XEvent processing stream for TriD window control.  The
+    hooks are there, now need to figure out what the actual events
+    being simulated should look like and do that.  The last step
+    will be to clean out any remaining GLX items and verify correct
+    operation.
+
+ Graphics/TriD/POGL/OpenGL.pm |   44 +++++++++++++++++++++++++++++++++++------
+ 1 files changed, 37 insertions(+), 7 deletions(-)
+
+commit 558ee2b0654c0947dcf1db564b82f2cc4733707c
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Tue Sep 29 23:13:52 2009 -0400
+
+    Changed glutPrintString to glutBitmapString
+    
+    This fixes a minor confusion between the names of glpPrintString()
+    and glutBitmapString() which do pretty much the same thing but the
+    names are not symmetric.  Now Labels on TriD work with GLUT.
+
+ Graphics/TriD/TriD/GL.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit c4f424eef02739652a94190d01d95a2c8c0e4d8e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Sep 29 18:37:08 2009 -0400
+
+    Added ConfigureNotify and CloseWindow to GLUT
+    
+    The implementation of the TriD refactoring to use
+    POGL OpenGL is complete.  This commits the fake XEvent
+    queue handling for resize events and clicking on the
+    window close widget (X in top right on windows).
+
+ Graphics/TriD/POGL/OpenGL.pm |   45 +++++++++++++++++++++++++++++++++++++----
+ 1 files changed, 40 insertions(+), 5 deletions(-)
+
+commit 9c0431ce27ecffa6fdc4d86feeb33d7cfc233315
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Sep 29 16:26:59 2009 +1000
+
+    Win32-specific fix to linking specs in Graphics/TriD/OpenGLQ/Makefile.PL
+    
+    Because the linking info for Win32 is containedin
+    'LDFROM', instead of the usual 'LIBS' we need to
+    insert the following:
+    
+    if($^O eq 'MSWin32') {
+     $hash{LDFROM} .= ' '. $OpenGL::Config->{LDFROM};
+     $hash{LDFROM} =~ s/\-lfreeglut//g;
+    }
+    
+    (The freeglut import library won't be locatable,
+    so therefore '-lfreeglut' needs to be removed.)
+
+ Graphics/TriD/OpenGLQ/Makefile.PL |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 720a15db7cf2ed7cdf62d8e6587d5bb8d711f385
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Sep 28 16:49:10 2009 -0400
+
+    Added GLUT support to OO window creation
+    
+    Partial work towards implementing a fake XEvent queue
+    for the twiddle loop handling.  Still need callback
+    support for the queue.
+
+ Graphics/TriD/POGL/OpenGL.pm |   26 +++++++++++++++++++-------
+ Graphics/TriD/TriD/GL.pm     |   27 +++++++++++++++++++++------
+ 2 files changed, 40 insertions(+), 13 deletions(-)
+
+commit 07c47775e2091b53854a07283769da1e4c42abb1
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sat Sep 26 18:15:13 2009 -0400
+
+    Set version to 2.4.4_12git for development
+    
+    Getting ready for a quick PDL-2.4.4_12 release if the build logic
+    fix checks out...
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ee8f439de83fda38b6ab41400362cd30e5a85109
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sat Sep 26 18:12:51 2009 -0400
+
+    Enable TriD builds when USE_POGL is enabled
+    
+    Otherwise, the TriD never gets built even though the OpenGL part
+    using POGL is.  Also change the WITH_3D default to undef for
+    Mac OS X and win32.
+
+ Graphics/Makefile.PL |    3 +++
+ perldl.conf          |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
 commit 43897e6eeeac4d458a2b60e8642b513be05a89ee
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -1424,172 +1788,3 @@ Date:   Wed Apr 29 18:44:35 2009 -0400
 
  t/pic_16bit.t |    4 ++--
  1 files changed, 2 insertions(+), 2 deletions(-)
-
-commit 6048e3d6f082a3299d10b4920db41388f3762eb4
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Thu Apr 23 18:52:48 2009 -0400
-
-    Fixed test 17 in t/plplot.t
-    
-    Fixed test 17 in t/plplot.t to use a magnitude difference test
-    rather than equality for the floating point quanitities.
-
- Changes    |    3 +++
- t/plplot.t |    2 +-
- 2 files changed, 4 insertions(+), 1 deletions(-)
-
-commit 5a31fe28398581c840b652d6d42964a156270545
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Thu Apr 23 11:04:35 2009 -0400
-
-    Fix t/autoload.t per sf bug number 2339726
-    
-    Fixed test 3 of autoload.t per the SF.net bug #2339726
-    report by zowie.
-
- Changes      |    3 +++
- t/autoload.t |    2 +-
- 2 files changed, 4 insertions(+), 1 deletions(-)
-
-commit edb132bc9bdecd1d1f80a7675c23028d92e49896
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Thu Apr 23 11:00:21 2009 -0400
-
-    F bug #2753869 fixed with pctover()/oddpctover()
-    
-    This fixes SF bug #2753869 and also corrects the calculations
-    performed for both the pctover() and oddpctover() functions.
-    pctover() should now be consistent with NIST recommendations
-    and MS Excel.  oddpctover() should now be the basic textbook
-    implementation.
-
- Basic/Ufunc/ufunc.pd |   38 +++++++++++++++++++++++---------------
- Changes              |    6 ++++++
- t/ufunc.t            |   10 ++++++++--
- 3 files changed, 37 insertions(+), 17 deletions(-)
-
-commit f33e5fe07b9a98fdc48931e5376ad36d9af0e33b
-Author: Tim Jenness <t.jenness@jach.hawaii.edu>
-Date:   Wed Nov 12 19:16:53 2008 -1000
-
-    Git not CVS so change the dev version string
-
- Basic/PDL.pm |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-commit fca2c8ac00777a942861e72809e3166451986418
-Author: Tim Jenness <t.jenness@jach.hawaii.edu>
-Date:   Wed Nov 12 19:16:53 2008 -1000
-
-    Use a single .gitignore files instead of multiple .cvsignore files
-
- .cvsignore                           |   27 ----
- .gitignore                           |  241 ++++++++++++++++++++++++++++++++++
- Basic/.cvsignore                     |    5 -
- Basic/Bad/.cvsignore                 |    9 --
- Basic/Complex/.cvsignore             |    9 --
- Basic/Core/.cvsignore                |   26 ----
- Basic/Gen/.cvsignore                 |   13 --
- Basic/Gen/Inline/.cvsignore          |   12 --
- Basic/Gen/PP/.cvsignore              |    4 -
- Basic/Math/.cvsignore                |   14 --
- Basic/MatrixOps/.cvsignore           |    9 --
- Basic/MatrixOps/ssl/.cvsignore       |    2 -
- Basic/Ops/.cvsignore                 |   14 --
- Basic/Pod/.cvsignore                 |    7 -
- Basic/Primitive/.cvsignore           |   14 --
- Basic/Slices/.cvsignore              |   14 --
- Basic/SourceFilter/.cvsignore        |    5 -
- Basic/Test/.cvsignore                |   18 ---
- Basic/Ufunc/.cvsignore               |   14 --
- Demos/.cvsignore                     |    7 -
- Doc/.cvsignore                       |    5 -
- Doc/Doc/.cvsignore                   |    4 -
- Doc/Pod/.cvsignore                   |    5 -
- Graphics/.cvsignore                  |    5 -
- Graphics/IIS/.cvsignore              |    9 --
- Graphics/Karma/.cvsignore            |   10 --
- Graphics/LUT/.cvsignore              |    5 -
- Graphics/LUT/ramps/.cvsignore        |    5 -
- Graphics/LUT/tables/.cvsignore       |    5 -
- Graphics/Limits/.cvsignore           |    5 -
- Graphics/PGPLOT/.cvsignore           |    5 -
- Graphics/PGPLOT/Window/.cvsignore    |    7 -
- Graphics/PLplot/.cvsignore           |   11 --
- Graphics/TriD/.cvsignore             |    5 -
- Graphics/TriD/OpenGL/.cvsignore      |   17 ---
- Graphics/TriD/OpenGLQ/.cvsignore     |    9 --
- Graphics/TriD/Rout/.cvsignore        |    9 --
- Graphics/TriD/VRML/.cvsignore        |    5 -
- IO/.cvsignore                        |    5 -
- IO/Browser/.cvsignore                |    9 --
- IO/FITS/.cvsignore                   |    5 -
- IO/FastRaw/.cvsignore                |    5 -
- IO/FlexRaw/.cvsignore                |    5 -
- IO/GD/.cvsignore                     |    8 -
- IO/HDF/.cvsignore                    |    4 -
- IO/HDF/SD/.cvsignore                 |    4 -
- IO/HDF/VS/.cvsignore                 |    4 -
- IO/Misc/.cvsignore                   |    9 --
- IO/NDF/.cvsignore                    |    6 -
- IO/Pnm/.cvsignore                    |    9 --
- IO/Storable/.cvsignore               |    9 --
- Lib/.cvsignore                       |    5 -
- Lib/CallExt/.cvsignore               |    7 -
- Lib/FFT/.cvsignore                   |    9 --
- Lib/FFTW/.cvsignore                  |   10 --
- Lib/Filter/.cvsignore                |    5 -
- Lib/Fit/.cvsignore                   |    5 -
- Lib/Fit/Gaussian/.cvsignore          |    9 --
- Lib/GIS/.cvsignore                   |    4 -
- Lib/GIS/Proj/.cvsignore              |    8 -
- Lib/GSL/.cvsignore                   |    5 -
- Lib/GSL/DIFF/.cvsignore              |    8 -
- Lib/GSL/INTEG/.cvsignore             |    8 -
- Lib/GSL/INTERP/.cvsignore            |    8 -
- Lib/GSL/MROOT/.cvsignore             |   10 --
- Lib/GSL/RNG/.cvsignore               |    9 --
- Lib/GSL/SF/.cvsignore                |    5 -
- Lib/GSL/SF/airy/.cvsignore           |    9 --
- Lib/GSL/SF/bessel/.cvsignore         |    9 --
- Lib/GSL/SF/clausen/.cvsignore        |    9 --
- Lib/GSL/SF/coulomb/.cvsignore        |    9 --
- Lib/GSL/SF/coupling/.cvsignore       |    9 --
- Lib/GSL/SF/dawson/.cvsignore         |    9 --
- Lib/GSL/SF/debye/.cvsignore          |    9 --
- Lib/GSL/SF/dilog/.cvsignore          |    9 --
- Lib/GSL/SF/elementary/.cvsignore     |    9 --
- Lib/GSL/SF/ellint/.cvsignore         |    9 --
- Lib/GSL/SF/elljac/.cvsignore         |    9 --
- Lib/GSL/SF/erf/.cvsignore            |    9 --
- Lib/GSL/SF/exp/.cvsignore            |    9 --
- Lib/GSL/SF/expint/.cvsignore         |    9 --
- Lib/GSL/SF/fermi_dirac/.cvsignore    |    9 --
- Lib/GSL/SF/gamma/.cvsignore          |    9 --
- Lib/GSL/SF/gegenbauer/.cvsignore     |    9 --
- Lib/GSL/SF/hyperg/.cvsignore         |    9 --
- Lib/GSL/SF/laguerre/.cvsignore       |    9 --
- Lib/GSL/SF/legendre/.cvsignore       |    9 --
- Lib/GSL/SF/log/.cvsignore            |    9 --
- Lib/GSL/SF/poly/.cvsignore           |    9 --
- Lib/GSL/SF/pow_int/.cvsignore        |    9 --
- Lib/GSL/SF/psi/.cvsignore            |    9 --
- Lib/GSL/SF/synchrotron/.cvsignore    |    9 --
- Lib/GSL/SF/transport/.cvsignore      |    9 --
- Lib/GSL/SF/trig/.cvsignore           |    9 --
- Lib/GSL/SF/zeta/.cvsignore           |    9 --
- Lib/Image2D/.cvsignore               |    9 --
- Lib/ImageND/.cvsignore               |    9 --
- Lib/ImageRGB/.cvsignore              |    9 --
- Lib/Minuit/.cvsignore                |    7 -
- Lib/Opt/.cvsignore                   |    5 -
- Lib/Opt/Simplex/.cvsignore           |    5 -
- Lib/RandVar/.cvsignore               |    5 -
- Lib/Slatec/.cvsignore                |   13 --
- Lib/Transform/.cvsignore             |    8 -
- Lib/Transform/Cartography/.cvsignore |    5 -
- Lib/Transform/Proj4/.cvsignore       |    8 -
- debian/.cvsignore                    |    3 -
- t/.cvsignore                         |    2 -
- 108 files changed, 241 insertions(+), 886 deletions(-)
-

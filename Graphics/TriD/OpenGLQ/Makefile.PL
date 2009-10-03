@@ -3,7 +3,7 @@ use ExtUtils::MakeMaker;
 
 BEGIN {
    if ( $PDL::Config{USE_POGL} ) {
-      use OpenGL 0.58_005 qw();
+      use OpenGL 0.58_007 qw();
       use OpenGL::Config;
    }
 }
@@ -17,6 +17,10 @@ if ( $PDL::Config{USE_POGL} ) {
    push @{$hash{LIBS}}, $OpenGL::Config->{LIBS};
    $hash{DEFINE} .= ' '.$OpenGL::Config->{DEFINE};
    $hash{INC} .= ' '.$OpenGL::Config->{INC};
+   if($^O eq 'MSWin32') {
+     $hash{LDFROM} .= ' '. $OpenGL::Config->{LDFROM};
+     $hash{LDFROM} =~ s/\-lfreeglut//g;
+   }
 } else {
    push @{$hash{LIBS}}, $PDL::Config{OPENGL_LIBS};
    $hash{DEFINE} .= ' '.$PDL::Config{OPENGL_DEFINE};

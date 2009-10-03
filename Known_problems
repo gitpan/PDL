@@ -1,5 +1,11 @@
-The following issues have been reported with this version of
-PDL:
+The following issues have been reported with this version of PDL:
+
+- Newly refactored PDL::Graphics::TriD appears to be working on
+  unix/linux systems, possibly ok on win32, and still being debugged
+  on mac os x.  By default, PDL will build with the new code
+  enabled.  Until the new implementation is stable, you will be
+  able to turn off USE_POGL to get the original, legacy implementation.
+
 
 - FFTW 3.2.2 is the current release version of the FFTW library
   but is not yet supported by PDL::FFTW.  You may install version
@@ -16,15 +22,6 @@ PDL:
 - Lvalue subroutine errors have been reported for perl 5.6.2
   installation on a linux 2.4 kernel system.  Perl versions 5.8
   and above are *really* recommended.
-
-
-- PDL::Graphics::TriD is in the process of being refactored.
-  As of CPAN developers release PDL-2.4.4_09, TriD is built
-  by default with the Perl OpenGL module bindings to OpenGL
-  et. al. rather than the PDL::PP legacy code.
-
-  See http://mailman.jach.hawaii.edu/mailman/listinfo/perldl
-  for more information.
 
 
 - Various make problems with build:
@@ -48,15 +45,6 @@ PDL:
   but we need data points to understand the issue.
 
 
-- Tests fail mysteriously if you have more than one PDL installation in
-  the @INC path and the PDL tree being tested is missing a module that
-  was built for the other PDL in the @INC path.  The test failures don't
-  appear to damage anything but you will get the failures.  This can
-  also occur if something you tried to build, failed to do so and then
-  the other PDL messes up the tests for a different reason---i.e. it
-  did not build.  Alway check the build and error logs.
-
-
 - 16bit image file IO fails in t/pic_16bit.t apparently due to an
   older version of NetPBM which does not support the raw 16bit formats.
 
@@ -64,6 +52,7 @@ PDL:
 - The following SourceForge bugs are outstanding at time of the 2.4.4
   point release:
 
+  2844280  demo 3d fails if PDL_3D_FONT missing  
   2780046    make does not make docs 
   2630369    PDL::FFT::fftconvolve - bad scaling?  
   2524068    Build breaks for PDL-2.4.4/Lib/Minuit (code not ISO C)  

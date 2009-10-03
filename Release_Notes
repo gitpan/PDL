@@ -1,4 +1,4 @@
-Release notes for PDL 2.4.4_11 ---------------------------
+Release notes for PDL 2.4.4_13 --------------------------
 
 General Notes:
 
@@ -11,19 +11,48 @@ General Notes:
 
 Summary of Changes:
 
-   Another developers release update for TriD refactoring...
+   To support development testing and unique identification for
+   clearer communication, the pushes to git will have their
+   version incremented in the last place after the _ along
+   with updates to the prerequisite version in the use OpenGL
+   statements.  If you cannot build PDL+POGL because of a
+   missing OpenGL release version and you have not seen an
+   announcement on the perldl mailing list of that developers
+   release, you'll need to obtain it from the corresponding
+   git repostory on sourceforge.
 
-   Now has Perl OpenGL-0.58_005 or greater as a CPAN prerequisite for
-   testing the new TriD refactoring.  Due to to changes and testing
-   for TriD development, this release may be less stable than usual.
+     There are two demo/test programs at the top PDL/ directory:
+     3dtest.pl and line3d.pl which you can use to exercise the
+     TriD module.  If those work ok for you, please feel free to
+     try a 'perl -Mblib perldl' followed by 'demo 3d'.
 
-   Use option USE_POGL in perldl.conf to toggle the legacy TriD
-   code versus the new OpenGL (POGL) based code.  Feedback from
-   different platforms encouraged!
+   Now has Perl OpenGL-0.58_007 or greater as a CPAN prerequisite
+   for testing the new TriD code using the Perl OpenGL module
+   (a.k.a. POGL) to provide the bindings to OpenGL, GLU, and GLUT,
+   in git only so far.
+
+   The current release includes a patch to fix a reported problem
+   locating the Mac OS X typemaps file.  Mac users, please report
+   if you have failures due to this change.
+
+   The code is believed to work on win32 systems, cygwin, and
+   linux with the FreeGLUT interface but testing has not yet
+   confirmed win32 fully.  Mac OS X debugging is underway to
+   resolve a GUI hang.  We're getting close but more tester
+   feedback is always helpful.
+
+   By default, USE_POGL is set in the perldl.conf file to enable
+   the new implementation.  Setting it to zero will enable the
+   legacy implementation.  If you have to do this to get TriD
+   working on a platform that already had it working, please let
+   the developers know via the perldl mailing list!
+
+   Once the correct operation of this release is confirmed, it is
+   expected to be released as the PDL-2.4.5 official release.
 
 
 
-Release notes for PDL 2.4.4_11 ---------------------------
+Release notes for PDL 2.4.4_121 --------------------------
 
 General Notes:
 
@@ -36,13 +65,39 @@ General Notes:
 
 Summary of Changes:
 
-   Now has Perl OpenGL-0.58_004 or greater as a CPAN prerequisite for
-   testing the new TriD refactoring.  Due to to changes and testing
-   for TriD development, this release may be less stable than usual.
+   To support development testing and unique identification for
+   clearer communication, the pushes to git will have their
+   version incremented in the last place after the _ along
+   with updates to the prerequisite version in the use OpenGL
+   statements.  If you cannot build PDL+POGL because of a
+   missing OpenGL release version and you have not seen an
+   announcement on the perldl mailing list of that developers
+   release, you'll need to obtain it from the corresponding
+   git repostory on sourceforge.
 
-   Use option USE_POGL in perldl.conf to toggle the legacy TriD
-   code versus the new OpenGL (POGL) based code.  Feedback from
-   different platforms encouraged!
+   Now has Perl OpenGL-0.58_007 or greater as a CPAN prerequisite
+   for testing the new TriD code using the Perl OpenGL module
+   (a.k.a. POGL) to provide the bindings to OpenGL, GLU, and GLUT,
+   in git only so far.
+
+   The current release includes a patch to fix a reported problem
+   locating the Mac OS X typemaps file.  Mac users, please report
+   if you have failures due to this change.
+
+   The code is believed to work on win32 systems, cygwin, and
+   linux with the FreeGLUT interface but testing has not yet
+   confirmed win32 fully.  Mac OS X debugging is underway to
+   resolve a GUI hang.  We're getting close but more tester
+   feedback is always helpful.
+
+   By default, USE_POGL is set in the perldl.conf file to enable
+   the new implementation.  Setting it to zero will enable the
+   legacy implementation.  If you have to do this to get TriD
+   working on a platform that already had it working, please let
+   the developers know via the perldl mailing list!
+
+   Once the correct operation of this release is confirmed, it is
+   expected to be released as the PDL-2.4.5 official release.
 
 
 

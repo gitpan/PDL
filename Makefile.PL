@@ -393,9 +393,9 @@ getpdl_config($pdl_conf_file);
 $seen_f77conf = check_f77conf($seen_f77conf);
 
 # Add check for POGL if USE_POGL is enabled
-eval 'use OpenGL 0.58_004 qw();';
+eval 'use OpenGL 0.58_007 qw();';
 if ($@) {
-   warn "DEPENDENCY ERROR: USE_POGL requires at least OpenGL-0.58_005!";
+   warn "DEPENDENCY ERROR: USE_POGL requires at least use OpenGL-0.58_007!";
    exit 0;
 }
 
@@ -421,7 +421,7 @@ my @podpms = map { $_.".pod", '$(INST_LIBDIR)/PDL/' . $_ .".pod"}
 	   'File::Spec'          => 0.6,
 	   'Filter::Util::Call'  => 0,         # for PDL::NiceSlice
 	   'Inline'              => 0.43,
-           'OpenGL'              => 0.58005,   # for PDL::Graphics::TriD
+           'OpenGL'              => 0.58004,   # for PDL::Graphics::TriD
            'Storable'            => 1.03,      # for PDL::IO::Storable
 	   'Text::Balanced'      => 0,         # for PDL::NiceSlice
 	  );

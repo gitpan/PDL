@@ -8,8 +8,9 @@
 
 
 BEGIN {
+   use PDL::Config;
    if ( $PDL::Config{USE_POGL} ) {
-      eval 'use OpenGL 0.58_005 qw(:all)';
+      eval 'use OpenGL 0.58_007 qw(:all)';
       eval 'use PDL::Graphics::OpenGL::Perl::OpenGL';
    } else {
       eval 'use PDL::Graphics::OpenGL';
@@ -203,6 +204,7 @@ sub PDL::Graphics::TriD::CylindricalEquidistantAxes::togl_axis {
 sub PDL::Graphics::TriD::EuclidAxes::togl_axis {
 	my($this,$graph) = @_;
 
+        print "togl_axis: got object type " . ref($this) . "\n";
 #	print "TOGLAX\n";
 	my $fontbase = $PDL::Graphics::TriD::GL::fontbase;
 #	print "TOGL EUCLID\n";
@@ -231,10 +233,14 @@ sub PDL::Graphics::TriD::EuclidAxes::togl_axis {
 		for(0..$ndiv) {
 			&glRasterPos3f(@coords);
                         if ( $PDL::Config{USE_POGL} ) {
-                           OpenGL::glpPrintString($fontbase, sprintf("%.3f",$nc));
-                        } else {
-                           PDL::Graphics::OpenGL::glpPrintString($fontbase, sprintf("%.3f",$nc));
-                        }
+                              if ( OpenGL::done_glutInit() ) {
+                                 OpenGL::glutBitmapString($fontbase, sprintf("%.3f",$nc));
+                              } else {
+                                 OpenGL::glpPrintString($fontbase, sprintf("%.3f",$nc));
+                              }
+                           } else {
+                              PDL::Graphics::OpenGL::glpPrintString($fontbase, sprintf("%.3f",$nc));
+                           }
 			glBegin(GL_LINES);
 			&glVertex3f(@coords0);
 			&glVertex3f(@coords);
@@ -247,11 +253,15 @@ sub PDL::Graphics::TriD::EuclidAxes::togl_axis {
 		$coords0[$dim] = 1.1;
 		&glRasterPos3f(@coords0);
                 if ( $PDL::Config{USE_POGL} ) {
-                   OpenGL::glpPrintString($fontbase, $this->{Names}[$dim]);
+                   if ( OpenGL::done_glutInit() ) {
+                      OpenGL::glutBitmapString($fontbase, $this->{Names}[$dim]);
+                   } else {
+                      OpenGL::glpPrintString($fontbase, $this->{Names}[$dim]);
+                   }
                 } else {
                    PDL::Graphics::OpenGL::glpPrintString($fontbase, $this->{Names}[$dim]);
                 }
-	}
+             }
 	glEnable(GL_LIGHTING);
 }
 
@@ -575,7 +585,7 @@ package PDL::Graphics::TriD::Window;
 
 BEGIN {
    if ( $PDL::Config{USE_POGL} ) {
-      eval 'use OpenGL 0.58_005 qw(:all)';
+      eval 'use OpenGL 0.58_007 qw(:all)';
       eval 'use PDL::Graphics::OpenGL::Perl::OpenGL';
    } else {
       eval 'use PDL::Graphics::OpenGL';
@@ -628,9 +638,20 @@ sub gdriver {
   glClearColor(0,0,0,1);
 
   print "gdriver: Calling glpRasterFont...\n" if($PDL::debug_trid);
-  my $lb =  $this->{_GLObject}->glpRasterFont(
-						($ENV{PDL_3D_FONT} or "5x8"),0,256);
-  $PDL::Graphics::TriD::GL::fontbase = $lb;
+  if ( $this->{_GLObject}->{window_type} eq 'glut' ) {
+     print STDERR "gdriver: window_type => 'glut' so not actually setting the rasterfont\n";
+     $PDL::Graphics::TriD::GL::fontbase = GLUT_BITMAP_8_BY_13;
+  } else {
+     # NOTE: glpRasterFont() will die() if the requested font cannot be found
+     #       The new POGL+GLUT TriD implementation uses the builtin GLUT defined
+     #       fonts and does not have this failure mode.
+     
+     my $lb =  eval { $this->{_GLObject}->glpRasterFont( ($ENV{PDL_3D_FONT} or "5x8"), 0, 256 ) };
+     if ( $@ ) {
+        die "glpRasterFont: unable to load font '%s', please set PDL_3D_FONT to an existing X11 font.";
+     }
+     $PDL::Graphics::TriD::GL::fontbase = $lb
+  }
   #	glDisable(GL_DITHER);
   glShadeModel (GL_FLAT);
   glEnable(GL_DEPTH_TEST);
@@ -710,8 +731,10 @@ sub twiddle {
 	 wpic($this->read_picture(),"PDL_$PDL::Graphics::TriD::offlineindex.jpg");
 	 return;
   }
-  if($getout and $dontshow) {
-	 if(!$this->{_GLObject}->XPending()) {return}
+  if ($getout and $dontshow) {
+	 if ( !$this->{_GLObject}->XPending() ) {
+            return;
+         }
   }
   if(!defined $getout) {
 	 $getout = not $PDL::Graphics::TriD::keeptwiddling;
@@ -723,10 +746,16 @@ sub twiddle {
 	 my $hap = 0;
 	 my $gotev = 0;
 
-	 if($this->{_GLObject}->XPending() or !$getout) {
-		@e = $this->{_GLObject}->glpXNextEvent();
-		$gotev=1;
-	 }
+         # Run a MainLoop event if GLUT windows
+         # this pumps the system allowing callbacks to populate
+         # the fake XEvent queue.
+         #
+         glutMainLoopEvent() if $this->{_GLObject}->{window_type} eq 'glut';
+
+         if ($this->{_GLObject}->XPending() or !$getout) {
+            @e = $this->{_GLObject}->glpXNextEvent();
+            $gotev=1;
+         }
    print "e= ".join(",",@e)."\n" if($PDL::Graphics::TriD::verbose);
 	
 	 if(@e){
@@ -820,7 +849,17 @@ sub display {
 
   }
 
-  $this->{_GLObject}->glXSwapBuffers();
+  if ( $PDL::Config{USE_POGL} ) {
+
+     if ( $this->{_GLObject}->{window_type} eq 'x11' ) {  # need to make method call
+        $this->{_GLObject}->glXSwapBuffers();
+     } else {
+        OpenGL::glutSwapBuffers();
+     }
+
+  } else {
+     $this->{_GLObject}->glXSwapBuffers();
+  }
 #  $this->{Angle}+= 3;
 }
 
@@ -849,7 +888,7 @@ package PDL::Graphics::TriD::EventHandler;
 
 BEGIN {
    if ( $PDL::Config{USE_POGL} ) {
-      eval 'use OpenGL 0.58_005 qw/ConfigureNotify MotionNotify ButtonPress ButtonRelease Button1Mask Button2Mask Button3Mask/';
+      eval 'use OpenGL 0.58_007 qw/ConfigureNotify MotionNotify ButtonPress ButtonRelease Button1Mask Button2Mask Button3Mask/';
       eval 'use PDL::Graphics::OpenGL::Perl::OpenGL';
    } else {
       eval 'use PDL::Graphics::OpenGL';
@@ -874,7 +913,8 @@ sub new {
 sub event {
   my($this,$type,@args) = @_;
 
-    print "EH: ",ref($this)," $type (",join(",",@args),")\n" if($PDL::Graphics::TriD::verbose);
+  # print "EH: ",ref($this)," $type (",join(",",@args),")\n" if($PDL::Graphics::TriD::verbose);
+    print "EH: ",ref($this)," $type (",join(",",@args),")\n";
   my $retval;
 
   if($type == MotionNotify) {
@@ -943,7 +983,7 @@ use fields qw/X0 Y0 W H Transformer EHandler Active ResizeCommands
 
 BEGIN {
    if ( $PDL::Config{USE_POGL} ) {
-      eval 'use OpenGL 0.58_005 qw(:all)';
+      eval 'use OpenGL 0.58_007 qw(:all)';
       eval 'use PDL::Graphics::OpenGL::Perl::OpenGL';
    } else {
       eval 'use PDL::Graphics::OpenGL';

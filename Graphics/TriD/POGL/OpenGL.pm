@@ -1,7 +1,40 @@
 package PDL::Graphics::OpenGL::Perl::OpenGL;
 
-use OpenGL 0.58005 qw();
+use OpenGL 0.58_007 qw();
 
+BEGIN {
+   eval 'OpenGL::ConfigureNotify()';
+   if ($@) {
+      # Set up some X11 and GLX constants for fake XEvent emulation
+      sub OpenGL::GLX_DOUBLEBUFFER    () { 5 };
+      sub OpenGL::GLX_RGBA            () { 4 };
+      sub OpenGL::GLX_RED_SIZE        () { 8 };
+      sub OpenGL::GLX_GREEN_SIZE      () { 9 };
+      sub OpenGL::GLX_BLUE_SIZE       () { 10 };
+      sub OpenGL::GLX_DEPTH_SIZE      () { 12 };
+      sub OpenGL::KeyPressMask        () { (1<<0 ) };
+      sub OpenGL::KeyReleaseMask      () { (1<<1 ) };
+      sub OpenGL::ButtonPressMask     () { (1<<2 ) };
+      sub OpenGL::ButtonReleaseMask   () { (1<<3 ) };
+      sub OpenGL::PointerMotionMask   () { (1<<6 ) };
+      sub OpenGL::Button1Mask         () { (1<<8 ) };
+      sub OpenGL::Button2Mask         () { (1<<9 ) };
+      sub OpenGL::Button3Mask         () { (1<<10) };
+      sub OpenGL::ButtonMotionMask    () { (1<<13) };
+      sub OpenGL::ExposureMask        () { (1<<15) };
+      sub OpenGL::StructureNotifyMask () { (1<<17) };
+      sub OpenGL::KeyPress            () { 2 };
+      sub OpenGL::KeyRelease          () { 3 };
+      sub OpenGL::ButtonPress         () { 4 };
+      sub OpenGL::ButtonRelease       () { 5 };
+      sub OpenGL::MotionNotify        () { 6 };
+      sub OpenGL::Expose              () { 12 };
+      sub OpenGL::GraphicsExpose      () { 13 };
+      sub OpenGL::NoExpose            () { 14 };
+      sub OpenGL::VisibilityNotify    () { 15 };
+      sub OpenGL::ConfigureNotify     () { 22 };
+   }
+}
 use warnings;
 use strict;
 
@@ -15,7 +48,7 @@ Version 0.01_07
 
 =cut
 
-our $VERSION = '0.01_08';
+our $VERSION = '0.01_09';
 
 
 =head1 SYNOPSIS
@@ -60,9 +93,11 @@ interface and build environment matures
 =cut
 
 package PDL::Graphics::OpenGL::OO;
+use PDL::Graphics::TriD::Window qw();
 use PDL::Options;
 use strict;
-my $debug;
+my $debug = 1;
+my (@fakeXEvents) = ();
 #
 # This is a list of all the fields of the opengl object and one could create a 
 # psuedo hash style object but I want to use multiple inheritence with Tk...
@@ -110,17 +145,32 @@ sub new {
   }
 
   # Use GLUT windows and event handling as the TriD default
-  # $window_type ||= 'glut';
-  $window_type ||= 'x11';       # use X11 default until glut code is ready
+  $window_type ||= 'glut';
+  # $window_type ||= 'x11';       # use X11 default until glut code is ready
 
   my $self;
   if ( $window_type =~ /x11/i ) {       # X11 windows
-     print "Creating X11 OO window\n";
+     print STDERR "Creating X11 OO window\n" if $debug;
      $self =  OpenGL::glpcOpenWindow(
         $p->{x},$p->{y},$p->{width},$p->{height},
         $p->{parent},$p->{mask}, $p->{steal}, @{$p->{attributes}});
   } else {                              # GLUT or FreeGLUT windows
-     print "Creating GLUT OO window\n";
+     print STDERR "Creating GLUT OO window\n" if $debug;
+     OpenGL::glutInit() unless OpenGL::done_glutInit();        # make sure glut is initialized
+     OpenGL::glutInitWindowPosition( $p->{x}, $p->{y} );
+     OpenGL::glutInitWindowSize( $p->{width}, $p->{height} );      
+     OpenGL::glutInitDisplayMode( OpenGL::GLUT_RGBA() | OpenGL::GLUT_DOUBLE() | OpenGL::GLUT_DEPTH() );        # hardwire for now
+
+     my($glutwin) = OpenGL::glutCreateWindow( "GLUT TriD" );
+     $self = { 'glutwindow' => $glutwin, 'xevents' => \@fakeXEvents };
+
+     OpenGL::glutReshapeFunc( \&_pdl_fake_ConfigureNotify );
+     OpenGL::glutCloseFunc( \&_pdl_fake_exit_handler );
+     OpenGL::glutKeyboardFunc( \&_pdl_fake_KeyPress );
+     OpenGL::glutMouseFunc( \&_pdl_fake_button_event );
+     OpenGL::glutMotionFunc( \&_pdl_fake_MotionNotify );
+     OpenGL::glutDisplayFunc( \&PDL::Graphics::TriD::Window::display );
+
   }
   if(ref($self) ne 'HASH'){
      die "Could not create OpenGL window";
@@ -131,6 +181,7 @@ sub new {
 #  my $self = bless [ \%{"$class\::FIELDS"}], $class;
 #
   $self->{Options} = $p;
+  $self->{window_type} = $window_type;
   if($isref){
      if(defined($class_or_hash->{Options})){
        return bless $self,ref($class_or_hash);
@@ -142,6 +193,57 @@ sub new {
      }
   }
   bless $self,$class_or_hash;
+}
+
+=head2 default GLUT callbacks
+
+These routines are set as the default GLUT callbacks for when GLUT windows
+are used for PDL/POGL.  Their only function at the moment is to drive an
+fake XEvent queue to feed the existing TriD GUI controls.  At some point,
+the X11 stuff will the deprecated and we can rewrite this more cleanly.
+
+=cut
+
+sub _pdl_fake_exit_handler {
+   print "_pdl_fake_exit_handler: clicked\n" if $debug;
+   # Need to clean up better and exit/transition cleanly
+   OpenGL::glutDestroyWindow(OpenGL::glutGetWindow());
+}
+
+sub _pdl_fake_ConfigureNotify {
+   print "_pdl_fake_ConfigureNotify: got (@_)\n" if $debug;
+   push @fakeXEvents, [ 22, @_ ];
+}
+
+sub _pdl_fake_KeyPress {
+   print "_pdl_fake_KeyPress: got (@_)\n" if $debug;
+   push @fakeXEvents, [ 2, chr($_[0]) ];
+}
+
+{
+   my @button_to_mask = (256,512,1024);
+   my $fake_mouse_state = 16;  # default have EnterWindowMask set;
+   my $last_fake_mouse_state;
+
+   sub _pdl_fake_button_event {
+      print "_pdl_fake_button_event: got (@_)\n" if $debug;
+      $last_fake_mouse_state = $fake_mouse_state;
+      if ( $_[1] == 0 ) {       # a press
+         $fake_mouse_state |= $button_to_mask[$_[0]];
+         push @fakeXEvents, [ 4, $_[0]+1, @_[2,3], -1, -1, $last_fake_mouse_state ];
+      } elsif ( $_[1] == 1 ) {  # a release
+         $fake_mouse_state &= ~$button_to_mask[$_[0]];
+         push @fakeXEvents, [ 5, $_[0]+1 , @_[2,3], -1, -1, $last_fake_mouse_state ];
+      } else {
+         die "ERROR: _pdl_fake_button_event got unexpected value!";
+      }
+   }
+
+   sub _pdl_fake_MotionNotify {
+      print "_pdl_fake_MotionNotify: got (@_)\n" if $debug;
+      push @fakeXEvents, [ 6, $fake_mouse_state, @_ ];
+   }
+
 }
 
 =head2 default_options
@@ -156,11 +258,12 @@ sub default_options{
       'width' => 500,
       'height'=> 500,
       'parent'=> 0,
-      'mask'  => &OpenGL::StructureNotifyMask,
+      'mask'  => eval '&OpenGL::StructureNotifyMask',
       'steal' => 0,
-      'attributes' => [ &OpenGL::GLX_DOUBLEBUFFER, &OpenGL::GLX_RGBA ],
+      'attributes' => eval '[ &OpenGL::GLX_DOUBLEBUFFER, &OpenGL::GLX_RGBA ]',
    }	
 }
+
 
 =head2 XPending()
 
@@ -170,7 +273,13 @@ OO interface to XPending
 
 sub XPending {
    my($self) = @_;
-   OpenGL::XPending($self->{Display});
+   if ( $self->{window_type} eq 'glut' ) {
+      # monitor state of @fakeXEvents, return number on queue
+      print STDERR "OO::XPending: have " .  scalar( @{$self->{xevents}} ) . " xevents\n" if $debug > 1;
+      scalar( @{$self->{xevents}} );
+   } else {
+      OpenGL::XPending($self->{Display});
+   }
 }
 
 
@@ -195,7 +304,16 @@ OO interface to glpXNextEvent
 
 sub glpXNextEvent {
    my($self) = @_;
-   OpenGL::glpXNextEvent($self->{Display});
+   if ( $self->{window_type} eq 'glut' ) {
+      while ( !scalar( @{$self->{xevents}} ) ) {
+         # If no events, we keep pumping the event loop
+         OpenGL::glutMainLoopEvent();
+      }
+      # Extract first event from fake event queue and return
+      return @{ shift @{$self->{xevents}} };
+   } else {
+      return OpenGL::glpXNextEvent($self->{Display});
+   }
 }
 
 
