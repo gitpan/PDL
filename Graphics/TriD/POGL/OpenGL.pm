@@ -1,6 +1,11 @@
 package PDL::Graphics::OpenGL::Perl::OpenGL;
 
-use OpenGL 0.58_007 qw();
+BEGIN {
+   use PDL::Config;
+   if ($PDL::Config{USE_POGL}) {
+      eval "use OpenGL $PDL::Config{POGL_VERSION} qw()";
+   }
+}
 
 BEGIN {
    eval 'OpenGL::ConfigureNotify()';
@@ -22,7 +27,7 @@ BEGIN {
       sub OpenGL::Button3Mask         () { (1<<10) };
       sub OpenGL::ButtonMotionMask    () { (1<<13) };
       sub OpenGL::ExposureMask        () { (1<<15) };
-      sub OpenGL::StructureNotifyMask () { (1<<17) };
+      sub OpenGL::StructureNotifyMask    { (1<<17) };
       sub OpenGL::KeyPress            () { 2 };
       sub OpenGL::KeyRelease          () { 3 };
       sub OpenGL::ButtonPress         () { 4 };
@@ -35,6 +40,7 @@ BEGIN {
       sub OpenGL::ConfigureNotify     () { 22 };
    }
 }
+
 use warnings;
 use strict;
 
@@ -44,11 +50,11 @@ PDL::Graphics::OpenGL::Perl::OpenGL - PDL TriD OpenGL interface using POGL
 
 =head1 VERSION
 
-Version 0.01_07
+Version 0.01_10
 
 =cut
 
-our $VERSION = '0.01_09';
+our $VERSION = '0.01_10';
 
 
 =head1 SYNOPSIS
@@ -81,8 +87,6 @@ interface and build environment matures
 
 =cut
 
-#OpenGL::glpSetDebug(1);
-
 *glpOpenWindow = \&OpenGL::glpOpenWindow;
 
 *glpcOpenWindow = \&OpenGL::glpcOpenWindow;
@@ -96,8 +100,9 @@ package PDL::Graphics::OpenGL::OO;
 use PDL::Graphics::TriD::Window qw();
 use PDL::Options;
 use strict;
-my $debug = 1;
+my $debug = 0;
 my (@fakeXEvents) = ();
+my (@winObjects) = ();
 #
 # This is a list of all the fields of the opengl object and one could create a 
 # psuedo hash style object but I want to use multiple inheritence with Tk...
@@ -129,70 +134,73 @@ Allowed 3d window types, case insensitive, are:
 =cut
 
 sub new {
-  my($class_or_hash,$options,$window_type) = @_;
+   my($class_or_hash,$options,$window_type) = @_;
 
-  my $isref = ref($class_or_hash);  
-  my $p;
+   my $isref = ref($class_or_hash);  
+   my $p;
 #  OpenGL::glpSetDebug(1);
 
-  if($isref and defined $class_or_hash->{Options}){
-    $p = $class_or_hash->{Options};
-  }else{
-    my $opt = new PDL::Options(default_options());
-    $opt->incremental(1);
-    $opt->options($options) if(defined $options);
-    $p = $opt->options;
-  }
+   if($isref and defined $class_or_hash->{Options}){
+      $p = $class_or_hash->{Options};
+   }else{
+      my $opt = new PDL::Options(default_options());
+      $opt->incremental(1);
+      $opt->options($options) if(defined $options);
+      $p = $opt->options;
+   }
 
-  # Use GLUT windows and event handling as the TriD default
-  $window_type ||= 'glut';
-  # $window_type ||= 'x11';       # use X11 default until glut code is ready
+   # Use GLUT windows and event handling as the TriD default
+   $window_type ||= $PDL::Config{POGL_WINDOW_TYPE};
+   # $window_type ||= 'x11';       # use X11 default until glut code is ready
 
-  my $self;
-  if ( $window_type =~ /x11/i ) {       # X11 windows
-     print STDERR "Creating X11 OO window\n" if $debug;
-     $self =  OpenGL::glpcOpenWindow(
-        $p->{x},$p->{y},$p->{width},$p->{height},
-        $p->{parent},$p->{mask}, $p->{steal}, @{$p->{attributes}});
-  } else {                              # GLUT or FreeGLUT windows
-     print STDERR "Creating GLUT OO window\n" if $debug;
-     OpenGL::glutInit() unless OpenGL::done_glutInit();        # make sure glut is initialized
-     OpenGL::glutInitWindowPosition( $p->{x}, $p->{y} );
-     OpenGL::glutInitWindowSize( $p->{width}, $p->{height} );      
-     OpenGL::glutInitDisplayMode( OpenGL::GLUT_RGBA() | OpenGL::GLUT_DOUBLE() | OpenGL::GLUT_DEPTH() );        # hardwire for now
+   my $self;
+   if ( $window_type =~ /x11/i ) {       # X11 windows
+      print STDERR "Creating X11 OO window\n" if $debug;
+      $self =  OpenGL::glpcOpenWindow(
+         $p->{x},$p->{y},$p->{width},$p->{height},
+         $p->{parent},$p->{mask}, $p->{steal}, @{$p->{attributes}});
+   } else {                              # GLUT or FreeGLUT windows
+      print STDERR "Creating GLUT OO window\n" if $debug;
+      OpenGL::glutInit() unless OpenGL::done_glutInit();        # make sure glut is initialized
+      OpenGL::glutInitWindowPosition( $p->{x}, $p->{y} );
+      OpenGL::glutInitWindowSize( $p->{width}, $p->{height} );      
+      OpenGL::glutInitDisplayMode( OpenGL::GLUT_RGBA() | OpenGL::GLUT_DOUBLE() | OpenGL::GLUT_DEPTH() );        # hardwire for now
 
-     my($glutwin) = OpenGL::glutCreateWindow( "GLUT TriD" );
-     $self = { 'glutwindow' => $glutwin, 'xevents' => \@fakeXEvents };
+      my($glutwin) = OpenGL::glutCreateWindow( "GLUT TriD" );
+      $self = { 'glutwindow' => $glutwin, 'xevents' => \@fakeXEvents, 'winobjects' => \@winObjects };
 
-     OpenGL::glutReshapeFunc( \&_pdl_fake_ConfigureNotify );
-     OpenGL::glutCloseFunc( \&_pdl_fake_exit_handler );
-     OpenGL::glutKeyboardFunc( \&_pdl_fake_KeyPress );
-     OpenGL::glutMouseFunc( \&_pdl_fake_button_event );
-     OpenGL::glutMotionFunc( \&_pdl_fake_MotionNotify );
-     OpenGL::glutDisplayFunc( \&PDL::Graphics::TriD::Window::display );
+      OpenGL::glutReshapeFunc( \&_pdl_fake_ConfigureNotify );
+      OpenGL::glutCloseFunc( \&_pdl_fake_exit_handler );
+      OpenGL::glutKeyboardFunc( \&_pdl_fake_KeyPress );
+      OpenGL::glutMouseFunc( \&_pdl_fake_button_event );
+      OpenGL::glutMotionFunc( \&_pdl_fake_MotionNotify );
+      OpenGL::glutDisplayFunc( \&_pdl_display_wrapper );
 
-  }
-  if(ref($self) ne 'HASH'){
-     die "Could not create OpenGL window";
-  }
+      OpenGL::glutSetOption(OpenGL::GLUT_ACTION_ON_WINDOW_CLOSE, OpenGL::GLUT_ACTION_GLUTMAINLOOP_RETURNS) if $OpenGL::_have_freeglut;
+
+      OpenGL::glutMainLoopEvent();       # pump event loop so window appears
+   }
+   if(ref($self) ne 'HASH'){
+      die "Could not create OpenGL window";
+   }
 
 #  psuedo-hash style see note above  
 #  no strict 'refs';
 #  my $self = bless [ \%{"$class\::FIELDS"}], $class;
-#
-  $self->{Options} = $p;
-  $self->{window_type} = $window_type;
-  if($isref){
-     if(defined($class_or_hash->{Options})){
-       return bless $self,ref($class_or_hash);
-     }else{
-       foreach(keys %$self){
-         $class_or_hash->{$_} = $self->{$_};
-       }
-       return $class_or_hash;
-     }
-  }
-  bless $self,$class_or_hash;
+   #
+   $self->{Options} = $p;
+   $self->{window_type} = $window_type;
+   if($isref){
+      if(defined($class_or_hash->{Options})){
+         return bless $self,ref($class_or_hash);
+      }else{
+         foreach(keys %$self){
+            $class_or_hash->{$_} = $self->{$_};
+         }
+         return $class_or_hash;
+      }
+   }
+   bless $self,$class_or_hash;
 }
 
 =head2 default GLUT callbacks
@@ -204,14 +212,22 @@ the X11 stuff will the deprecated and we can rewrite this more cleanly.
 
 =cut
 
+sub _pdl_display_wrapper {
+   my ($win) = OpenGL::glutGetWindow();
+   if ( defined($win) and defined($winObjects[$win]) ) {
+      $winObjects[$win]->display();
+   }
+}
+
 sub _pdl_fake_exit_handler {
-   print "_pdl_fake_exit_handler: clicked\n" if $debug;
+   my ($win) = shift;
+   print "_pdl_fake_exit_handler: clicked for window $win\n" if $debug;
    # Need to clean up better and exit/transition cleanly
-   OpenGL::glutDestroyWindow(OpenGL::glutGetWindow());
 }
 
 sub _pdl_fake_ConfigureNotify {
    print "_pdl_fake_ConfigureNotify: got (@_)\n" if $debug;
+   OpenGL::glutPostRedisplay();
    push @fakeXEvents, [ 22, @_ ];
 }
 

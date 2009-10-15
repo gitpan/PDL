@@ -10,7 +10,7 @@
 BEGIN {
    use PDL::Config;
    if ( $PDL::Config{USE_POGL} ) {
-      eval 'use OpenGL 0.58_007 qw(:all)';
+      eval "use OpenGL $PDL::Config{POGL_VERSION} qw(:all)";
       eval 'use PDL::Graphics::OpenGL::Perl::OpenGL';
    } else {
       eval 'use PDL::Graphics::OpenGL';
@@ -204,7 +204,7 @@ sub PDL::Graphics::TriD::CylindricalEquidistantAxes::togl_axis {
 sub PDL::Graphics::TriD::EuclidAxes::togl_axis {
 	my($this,$graph) = @_;
 
-        print "togl_axis: got object type " . ref($this) . "\n";
+        print "togl_axis: got object type " . ref($this) . "\n" if $PDL::debug_trid;
 #	print "TOGLAX\n";
 	my $fontbase = $PDL::Graphics::TriD::GL::fontbase;
 #	print "TOGL EUCLID\n";
@@ -584,8 +584,9 @@ sub PDL::Graphics::TriD::SimpleController::togl {
 package PDL::Graphics::TriD::Window;
 
 BEGIN {
+   use PDL::Config;
    if ( $PDL::Config{USE_POGL} ) {
-      eval 'use OpenGL 0.58_007 qw(:all)';
+      eval "use OpenGL $PDL::Config{POGL_VERSION} qw(:all)";
       eval 'use PDL::Graphics::OpenGL::Perl::OpenGL';
    } else {
       eval 'use PDL::Graphics::OpenGL';
@@ -628,18 +629,25 @@ sub gdriver {
 
   print "STARTING OPENGL $options->{width} $options->{height}\n" if($PDL::Graphics::TriD::verbose);
 
-  print "gdriver: Calling OpengGL::OO($options)...\n" if($PDL::debug_trid);
+  print "gdriver: Calling OpengGL::OO($options)...\n" if ($PDL::debug_trid);
 
   $this->{_GLObject}= new PDL::Graphics::OpenGL::OO($options);
 
+  if (exists $this->{_GLObject}->{glutwindow}) {
+     if ($PDL::debug_trid) {
+        print "gdriver: Got OpenGL::OO object(GLUT window ID# " . $this->{_GLObject}->{glutwindow} . ")\n";
+     }
+     $this->{_GLObject}->{winobjects}->[$this->{_GLObject}->{glutwindow}] = $this;      # circular ref
+  }
+
 #glpOpenWindow(%$options);
   
-  print "gdriver: Calling glClearColor...\n" if($PDL::debug_trid);
+  print "gdriver: Calling glClearColor...\n" if ($PDL::debug_trid);
   glClearColor(0,0,0,1);
 
-  print "gdriver: Calling glpRasterFont...\n" if($PDL::debug_trid);
+  print "gdriver: Calling glpRasterFont...\n" if ($PDL::debug_trid);
   if ( $this->{_GLObject}->{window_type} eq 'glut' ) {
-     print STDERR "gdriver: window_type => 'glut' so not actually setting the rasterfont\n";
+     print STDERR "gdriver: window_type => 'glut' so not actually setting the rasterfont\n" if ($PDL::debug_trid);
      $PDL::Graphics::TriD::GL::fontbase = GLUT_BITMAP_8_BY_13;
   } else {
      # NOTE: glpRasterFont() will die() if the requested font cannot be found
@@ -750,7 +758,7 @@ sub twiddle {
          # this pumps the system allowing callbacks to populate
          # the fake XEvent queue.
          #
-         glutMainLoopEvent() if $this->{_GLObject}->{window_type} eq 'glut';
+         glutMainLoopEvent() if $this->{_GLObject}->{window_type} eq 'glut' and not $this->{_GLObject}->XPending();
 
          if ($this->{_GLObject}->XPending() or !$getout) {
             @e = $this->{_GLObject}->glpXNextEvent();
@@ -823,6 +831,9 @@ sub domotion {
 sub display {
   my($this) = @_;
 
+  return unless defined($this);
+
+  print "display: calling glClear()\n" if ($PDL::Graphics::TriD::verbose);
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
 
@@ -836,7 +847,7 @@ sub display {
 
 
 	 if($vp->{Transformer}) {
-		print "Transforming viewport!\n" if($PDL::Graphics::TriD::verbose);
+		print "display: transforming viewport!\n" if ($PDL::Graphics::TriD::verbose);
 		$vp->{Transformer}->togl();
 	 }
 
@@ -851,10 +862,13 @@ sub display {
 
   if ( $PDL::Config{USE_POGL} ) {
 
-     if ( $this->{_GLObject}->{window_type} eq 'x11' ) {  # need to make method call
+     print "display: SwapBuffers() call on return\n" if ($PDL::Graphics::TriD::verbose);
+     if ( $this->{_GLObject}->{window_type} eq 'glut' ) {  # need to make method call
+        glutSwapBuffers();
+     } elsif ( $this->{_GLObject}->{window_type} eq 'x11' ) {  # need to make method call
         $this->{_GLObject}->glXSwapBuffers();
      } else {
-        OpenGL::glutSwapBuffers();
+        print "display: got object with inconsistent _GLObject info\n";
      }
 
   } else {
@@ -887,8 +901,9 @@ sub read_picture {
 package PDL::Graphics::TriD::EventHandler;
 
 BEGIN {
+   use PDL::Config;
    if ( $PDL::Config{USE_POGL} ) {
-      eval 'use OpenGL 0.58_007 qw/ConfigureNotify MotionNotify ButtonPress ButtonRelease Button1Mask Button2Mask Button3Mask/';
+      eval "use OpenGL $PDL::Config{POGL_VERSION} qw(ConfigureNotify MotionNotify ButtonPress ButtonRelease Button1Mask Button2Mask Button3Mask)";
       eval 'use PDL::Graphics::OpenGL::Perl::OpenGL';
    } else {
       eval 'use PDL::Graphics::OpenGL';
@@ -913,8 +928,7 @@ sub new {
 sub event {
   my($this,$type,@args) = @_;
 
-  # print "EH: ",ref($this)," $type (",join(",",@args),")\n" if($PDL::Graphics::TriD::verbose);
-    print "EH: ",ref($this)," $type (",join(",",@args),")\n";
+  print "EH: ",ref($this)," $type (",join(",",@args),")\n" if($PDL::Graphics::TriD::verbose);
   my $retval;
 
   if($type == MotionNotify) {
@@ -982,8 +996,9 @@ use fields qw/X0 Y0 W H Transformer EHandler Active ResizeCommands
               DefMaterial AspectRatio Graphs/;
 
 BEGIN {
+   use PDL::Config;
    if ( $PDL::Config{USE_POGL} ) {
-      eval 'use OpenGL 0.58_007 qw(:all)';
+      eval "use OpenGL $PDL::Config{POGL_VERSION} qw(:all)";
       eval 'use PDL::Graphics::OpenGL::Perl::OpenGL';
    } else {
       eval 'use PDL::Graphics::OpenGL';

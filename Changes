@@ -1,3 +1,504 @@
+commit 91f56f01580fca19b7baf0c2969b2e331ab759e4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 15 11:19:42 2009 -0400
+
+    Update readme's, VERSION, and manifest for CPAN
+    
+    This is likely to be the final PDL developers release
+    before the official PDL-2.4.5
+
+ Basic/PDL.pm   |    2 +-
+ DEPENDENCIES   |    2 +-
+ DEVELOPMENT    |    2 +-
+ Known_problems |   62 +++++++++++++++++--------------------------------------
+ MANIFEST       |    1 +
+ Release_Notes  |   55 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 78 insertions(+), 46 deletions(-)
+
+commit 8acbc61f5166537c8040b6e73c2a26a042bbdc0b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 15 10:21:21 2009 -0400
+
+    Turn off TriD debugging output for release
+    
+    Now that the TriD code seems to be working, I'm turning
+    off the verbose diagnostics in preparation for the PDL-2.4.5
+    release.
+
+ 3dtest.pl                          |    6 +++---
+ Graphics/TriD/POGL/OpenGL.pm       |    4 +---
+ Graphics/TriD/TriD/GL.pm           |   14 ++++++++------
+ Graphics/TriD/TriD/SimpleScaler.pm |    2 +-
+ line3d.pl                          |    4 ++--
+ 5 files changed, 15 insertions(+), 15 deletions(-)
+
+commit 0c12b4208905787275c8970253e28c07b7b2de1b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 14 18:24:00 2009 -0400
+
+    Adding a GLUT font example code for debugging
+    
+    There have been multiple reports of GLUT failures on
+    linux machines with the symptom being font not found.
+    This is a C program that users can try to build to see
+    if the problem is in the bindings or in their local
+    FreeGLUT install.  I plan to move this to utils and
+    put in some sort of build information.
+
+ bitfont.c |  130 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 130 insertions(+), 0 deletions(-)
+
+commit ea227ea812c094aabadf2e3b413bd85603f946a3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 14 18:11:45 2009 -0400
+
+    Add Stefan Evert patch to twiddle for Mac OS X
+    
+    Apparently calling glutMainLoopEvent() every twiddle loop
+    caused resize events not to be correctly processed on Mac
+    OS X with Apple GLUT (not FreeGLUT).  This patch only
+    calls glutMainLoopEvent() if there are no unprocessed
+    events in the fake XEvent queue.  This problem and the
+    confusion may eventually go away if we move away from
+    the pseudo-X11 event processing to a native GLUT callback
+    framework.
+
+ Graphics/TriD/TriD/GL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit b1378933cf948006286b533c9ed4a92adcb06cf4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 14 18:09:53 2009 -0400
+
+    Add clean option to IO/Browser/Makefile.PL
+    
+    It was leaving Browser.* files behind.  Also added those
+    files to .gitignore since they were left out in the original
+    list since PDL::IO::Browser was completely broken.  It is
+    not robust but it does compile with cygwin and ncurses.
+
+ .gitignore             |    3 +++
+ IO/Browser/Makefile.PL |    3 ++-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
+
+commit eaaa13411748ffb30cc42f76373478bbedea0526
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 14 10:14:53 2009 -0400
+
+    Change prompt to perl> if no PDL loaded in perldl
+    
+    This will give visual feedback that there is no PDL
+    capabilities if PDL was not loaded.  Don't know if
+    will help much but might reduce duration of confusion...
+
+ perldl.PL |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit e93558be16073549cae881e3a428f7ebccb4c009
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 13 11:50:16 2009 -0400
+
+    Add glutPostRedisplay to ConfigNotify
+
+ Graphics/TriD/POGL/OpenGL.pm |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 562383301c7f6ffc429e12b7e223d601bdb62372
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Mon Oct 12 18:31:29 2009 -0400
+
+    Another undef fix for display() as sub
+
+ Graphics/TriD/POGL/OpenGL.pm |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 31fc6e615b8f2c88d0c7c9b45b3b858f63c8f397
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Mon Oct 12 18:23:35 2009 -0400
+
+    Fix problem with undefined window object
+
+ Graphics/TriD/POGL/OpenGL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f3d4332165c074757eb2e7ea2b0ac70b3cd2a3ee
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Mon Oct 12 18:17:44 2009 -0400
+
+    Make sub version of display() for GLUT callbacks
+    
+    See if this resolves the blank image problems for Mac GLUT
+    systems.
+
+ Basic/PDL.pm                 |    2 +-
+ Graphics/TriD/POGL/OpenGL.pm |  127 ++++++++++++++++++++++--------------------
+ Graphics/TriD/TriD/GL.pm     |    5 ++
+ 3 files changed, 73 insertions(+), 61 deletions(-)
+
+commit b601580cfb768c9c28aa7d3a55d2f1068d1adf8b
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sat Oct 10 17:53:03 2009 -0400
+
+    POGL_WINDOW_TYPE now sets OpenGL window type
+    
+    If you have the the needed X11 bindings
+    in your POGL then you can use the
+    $PDL::Config{POGL_WINDOW_TYPE} to select
+    which flavor of OpenGL window is created.
+    
+    The X11 interface has been preserved to
+    enable the use of PDL::Graphics::TriD::Tk
+    which provides a Tk widget interface to
+    PDL::Graphics::TriD. The existing widget
+    implementation only works for X11.
+    
+    It appears that Gtk+ may actually have a
+    supported OpenGL widget which might make
+    better sense for a full featured widget set
+    to support.
+
+ Graphics/TriD/POGL/OpenGL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f0733514160bd0050ae50969297eaf87a015bbd3
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sat Oct 10 14:45:29 2009 -0400
+
+    Update POGL_VERSION to 0.59
+
+ perldl.conf |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 3e0f2427a4751d1dec3f05e5b87b05105e2dd113
+Author: sisyphus <sisyphus1@optusnet.com.au>
+Date:   Thu Oct 8 16:39:00 2009 +1100
+
+    Remove 'D:/gd/gdwin32/include' from @inc_locations in IO/GD/Makefile.PL
+    
+    Was a nuisance on Win32 boxes where 'D:' is the CD drive.
+    (Having gd in that location is very rare, anyway.)
+
+ IO/GD/Makefile.PL |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit 6dd6bb86661c1a84f391900148047adfdd28c36c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 7 17:45:43 2009 -0400
+
+    Add browse.exe to clean for PDL::IO::Browser
+
+ IO/Browser/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 6ded129679883ead13525027aca72a91630e0b72
+Merge: 246324f... b5243ae...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 7 17:35:09 2009 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 246324f72396ca27e48262c7d053a01a5de56f4d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 7 17:19:56 2009 -0400
+
+    Update Known_problems file for 1button mouse
+
+ Known_problems |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit d2d5c4eb16fe2dca8e7fb1ecfc000b71a0f062a2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 7 17:16:33 2009 -0400
+
+    Partial fix to PDL::IO::Browser
+    
+    Only tested with cygwin/XP.  The Makefile.PL logic to determine
+    if curses/ncurses are present and to use them needs to be verified
+    and extended to support win32 (e.g. if PDcurses is installed).
+    
+    There appears to be functionality relating to setting values in
+    the piddle being viewed.  This needs to be cleaned up and
+    documented.  As is, it can get pretty confusing.  Also need
+    to add redraw (via Ctrl-L), and Page Up, Page Down, etc.
+
+ IO/Browser/browse.c |   47 +++++++++++++++++++++++++++++++++++++----------
+ 1 files changed, 37 insertions(+), 10 deletions(-)
+
+commit b5243ae84ca25c84442c484ada3d7f81107bb547
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Oct 7 20:25:59 2009 +1100
+
+    Remove 'D:/gd/gdwin32' from @lib_locations in IO/GD/Makefile.PL
+    
+    Was a nuisance on Win32 boxes where 'D:' is the CD drive.
+    (Having gd in that location is very rare, anyway.)
+
+ IO/GD/Makefile.PL |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit fb422be56311b42457b4e6374cc3b587fa19233e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Oct 5 17:13:15 2009 -0400
+
+    Add POGL_WINDOW_TYPE parameter to perldl.conf
+
+ perldl.conf |   78 ++++++++++++++++++++++++++++++----------------------------
+ 1 files changed, 40 insertions(+), 38 deletions(-)
+
+commit b1b22628daf752b2f6654105398975a6c9e7786d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Oct 5 17:08:50 2009 -0400
+
+    Add some MinGW cruft to .gitignore
+
+ .gitignore |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit 438a342222485708caf09ea869d14a14e5312314
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Oct 5 15:27:10 2009 -0400
+
+    Update $PDL::VERSION and POGL_VERSION
+    
+    Prepare to push this to sf.net PDL git for wider spread testing.
+
+ Basic/PDL.pm |    2 +-
+ perldl.conf  |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit f0ae54dd912715686e1721b153cefde8d74a8af0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Oct 5 15:06:03 2009 -0400
+
+    Add $PDL::Config{POGL_VERSION} to the CPAN prereqs
+    
+    I don't know if this will work for CPAN installs and
+    indexing.  It depends on how things are done.
+
+ Makefile.PL |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit a26515d622d7d7e9c3a87d8e6c4c964bb3319757
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Oct 5 14:59:51 2009 -0400
+
+    Use POGL_VERSION in perdl.conf to use OpenGL
+    
+    This allows the value of POGL_VERSION to set the requirements
+    for the minimum OpenGL version to support PDL+POGL TriD.  It
+    also reduces the amount of hand editing required when the
+    prerequisites change.
+
+ Graphics/TriD/OpenGLQ/Makefile.PL |    2 +-
+ Graphics/TriD/POGL/OpenGL.pm      |    7 ++++++-
+ Graphics/TriD/TriD/GL.pm          |   11 +++++++----
+ Graphics/TriD/TriD/GoBoard.pm     |    3 ++-
+ Graphics/TriD/TriD/GraphBox.pm    |    3 ++-
+ Graphics/TriD/TriD/Labels.pm      |    3 ++-
+ Graphics/TriD/TriD/Lines.pm       |    3 ++-
+ Graphics/TriD/TriD/MathGraph.pm   |    3 ++-
+ Graphics/TriD/TriD/Mesh.pm        |    3 ++-
+ Graphics/TriD/TriD/OOGL.pm        |    6 +++++-
+ Graphics/TriD/TriD/Surface.pm     |    3 ++-
+ Graphics/TriD/TriD/Tk.pm          |    3 ++-
+ Makefile.PL                       |    4 ++--
+ 13 files changed, 37 insertions(+), 17 deletions(-)
+
+commit bb9f00e4743ce8cc9d9e051eb5738d96707d5d6f
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Oct 4 23:22:16 2009 -0400
+
+    Add some default consistency check to display()
+    
+    Just in case the routine is called with an inconsistent
+    object, print out a warning message.
+
+ Graphics/TriD/TriD/GL.pm |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit e6919d27f87860f711d73c2200bcea9a35ab9812
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Oct 4 22:51:44 2009 -0400
+
+    Update PDL version for develop reference
+    
+    Trying to keep Basic/PDL.pm VERSION and Graphics/TriD/POGL/OpenGL.pm
+    VERSION values incrementing so we can tell things apart in problem
+    reports.
+
+ Basic/PDL.pm                 |    2 +-
+ Graphics/TriD/POGL/OpenGL.pm |    6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 2d30a0c20f4aa9acdf1e2de0d44479daf3c09c9a
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Oct 4 22:36:14 2009 -0400
+
+    Return original verbose flag control on EH: output
+
+ Graphics/TriD/TriD/GL.pm |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
+
+commit ef98ad783c62b5bc31646da62cf82c8e1518892b
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Oct 4 21:48:43 2009 -0400
+
+    Add GLUT init stuff to new for cleaner exits
+
+ Graphics/TriD/POGL/OpenGL.pm |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
+
+commit 88658a16daeb690363f3229bb6d79380ab0a8498
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Oct 4 21:15:49 2009 -0400
+
+    Fix problem with extra glClear() calls
+    
+    This resulted in blank displays on systems with acceleration,
+    particularly ones without X11 at all.  The origin of the problem
+    appears to the the fact that the display() routine being called
+    by the TriD graphics is not callable as a subroutine which is
+    what glutDisplayFunc() actually needs.  This partial fix to
+    display just returns immediately if called with no arguments.
+    It is hoped that a more complete solution to the problem can
+    wait for a more thorough refactoring to use GLUT functionality
+    directly rather than mimic the X11 interface.
+
+ Graphics/TriD/TriD/GL.pm |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+commit c86a563c1d2d754f149013554fd30e02c70349cb
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Oct 4 12:37:46 2009 -0400
+
+    Add PDL_INT check for t/opengl.t
+    
+    If PDL_INT is set then the GUI tests will be run.  This allows
+    systems without X11 installed to enable the live display tests.
+
+ t/opengl.t |   36 +++++++++++++++---------------------
+ 1 files changed, 15 insertions(+), 21 deletions(-)
+
+commit aadda99de64a01222cf395587cf3132dfa1448f8
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Oct 4 11:52:14 2009 -0400
+
+    Fix t/flexraw.t to skip compress tests on MSWin32
+    
+    The current t/flexraw.t has a test for the compress code in
+    readflex but does not check that it can actually has compress
+    or gzip with which to create the test data file.  This adds
+    a check for MSWin32 to skip the test if needed.
+
+ t/flexraw.t |   60 ++++++++++++++++++++++++++++++++--------------------------
+ 1 files changed, 33 insertions(+), 27 deletions(-)
+
+commit ba049f7b779d792f40a64d272a68517df7200037
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Oct 4 10:14:56 2009 -0400
+
+    Fix default TriD device to GL
+    
+    With the new PDL+POGL TriD, GL works everywhere.  Still need to
+    fix the VRML output driver so we can do cool stuff with web browsers...
+
+ Graphics/TriD/TriD.pm |   15 ++++++++-------
+ 1 files changed, 8 insertions(+), 7 deletions(-)
+
+commit e9ca29dac2228f5237ef7e4ade2f2afdae933da1
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sun Oct 4 09:12:17 2009 -0400
+
+    Put Filter::Util::Call in DEPENDENCIES
+    
+    The distribution is Filter, the module is Filter::Util::Call
+    I hope using the exact module will be clearer here.
+
+ Basic/PDL.pm |    2 +-
+ DEPENDENCIES |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 4ffdeb3943938bc46e2ad0865469d980e74f95d5
+Author: C.Soeller <c.soeller _at_ auckland_dot_ ac _dot_ nz>
+Date:   Sun Oct 4 11:13:21 2009 +1300
+
+    Change PP typemap finding code again, ensure Makefile.PL honours USE_POGL setting
+    
+    The new PP typemap finding logic was broken. Realised this on OS X after upgrading MakeMaker, which installs the new MakeMaker in an update directory. There is no 'typemap' file in that update dir, BOOM... PP falls flat on its face. The latest attempt is based on what I found in MM_Unix.pm, although way less general in terms of checking for special cases. If this does not work portably, we should consult a site like Perl Monks or similar and split this code out.
+    
+    The Open_GL test in toplevel Makefile.PL did not honour the USE_POGL config setting. I thought it should.
+
+ Basic/Gen/PP.pm |   26 ++++++++------------------
+ Makefile.PL     |   10 ++++++----
+ 2 files changed, 14 insertions(+), 22 deletions(-)
+
+commit a89aab943aa9929acf66fe6b9833fc6a023e6165
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sat Oct 3 13:13:14 2009 -0400
+
+    More README/doc cleanups prep for 2.4.5 release
+
+ Basic/Pod/FAQ.pod |  392 ++++++++++++++++++++++++++++-------------------------
+ DEPENDENCIES      |   13 +-
+ Known_problems    |   53 +++++---
+ Release_Notes     |   11 +-
+ cygwin/INSTALL    |    2 +-
+ cygwin/README     |   10 +-
+ 6 files changed, 262 insertions(+), 219 deletions(-)
+
+commit ac016b5d4fd855724b7fa1e12755181895d7c8f8
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sat Oct 3 11:56:50 2009 -0400
+
+    Update perldl VERSION to 1.351 from 1.35 for CPAN
+    
+    No major changes, just some docs tweaked, but this will help
+    people keep track of which PDL release they are using from the
+    interactive shell.
+
+ perldl.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit fad22b96cf566a6639d50a1088861395e7a6980e
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Sat Oct 3 10:35:11 2009 -0400
+
+    Change prototype of StructureNotifyMask
+    
+    The definition of StructureNotifyMask in Graphics/TriD/POGL/OpenGL.pm
+    was inconsitent with the usage in OpenGL.  This makes them the same.
+    Eventually, we need a cleanup pass for these constants rather than
+    overriding them in PDL::Graphics::OpenGL::Perl::OpenGL.
+
+ Basic/PDL.pm                 |    2 +-
+ Graphics/TriD/POGL/OpenGL.pm |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 6641895f72fa1b98dde8359eb49c3ba54478c970
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Fri Oct 2 21:00:13 2009 -0400
+
+    Update MANIFEST and Release_Notes for CPAN
+
+ MANIFEST      |    1 +
+ Release_Notes |    5 +++++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
+
+commit 7b52e162bb8408f8df5f84b1902851341d8287f3
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Fri Oct 2 20:56:11 2009 -0400
+
+    VERSION to 2.4.4_13 for a CPAN developers release
+    
+    Also updated Known_problems and Release_Notes.  The purpose
+    of this releas is to make the latest git available via CPAN
+    for more general testing.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    6 ++++++
+ Release_Notes  |   49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+), 1 deletions(-)
+
 commit e0cf2d1917bb9482264b883410ebaf97d9007689
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Oct 2 17:57:39 2009 -0400
@@ -1788,3 +2289,56 @@ Date:   Wed Apr 29 18:44:35 2009 -0400
 
  t/pic_16bit.t |    4 ++--
  1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 6048e3d6f082a3299d10b4920db41388f3762eb4
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Thu Apr 23 18:52:48 2009 -0400
+
+    Fixed test 17 in t/plplot.t
+    
+    Fixed test 17 in t/plplot.t to use a magnitude difference test
+    rather than equality for the floating point quanitities.
+
+ Changes    |    3 +++
+ t/plplot.t |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
+
+commit 5a31fe28398581c840b652d6d42964a156270545
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Thu Apr 23 11:04:35 2009 -0400
+
+    Fix t/autoload.t per sf bug number 2339726
+    
+    Fixed test 3 of autoload.t per the SF.net bug #2339726
+    report by zowie.
+
+ Changes      |    3 +++
+ t/autoload.t |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
+
+commit edb132bc9bdecd1d1f80a7675c23028d92e49896
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Thu Apr 23 11:00:21 2009 -0400
+
+    F bug #2753869 fixed with pctover()/oddpctover()
+    
+    This fixes SF bug #2753869 and also corrects the calculations
+    performed for both the pctover() and oddpctover() functions.
+    pctover() should now be consistent with NIST recommendations
+    and MS Excel.  oddpctover() should now be the basic textbook
+    implementation.
+
+ Basic/Ufunc/ufunc.pd |   38 +++++++++++++++++++++++---------------
+ Changes              |    6 ++++++
+ t/ufunc.t            |   10 ++++++++--
+ 3 files changed, 37 insertions(+), 17 deletions(-)
+
+commit f33e5fe07b9a98fdc48931e5376ad36d9af0e33b
+Author: Tim Jenness <t.jenness@jach.hawaii.edu>
+Date:   Wed Nov 12 19:16:53 2008 -1000
+
+    Git not CVS so change the dev version string
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
