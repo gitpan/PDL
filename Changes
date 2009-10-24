@@ -1,16 +1,193 @@
-commit 561d3e99b6b99b3f62bd9767a6407ca7cb294061
+commit c62a322b1c8648fc0c6c7a7bbcade6bc1b2350ab
 Author: Chris Marshall <devel.chm.01@gmail.com>
-Date:   Mon Oct 19 20:43:11 2009 -0400
+Date:   Sat Oct 24 11:56:23 2009 -0400
 
-    Revert VERSION to 2.4.4_900 for PDL-2.4.5 pre2
+    Update MANIFEST for PDL-2.4.5 release
+
+ MANIFEST |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
+
+commit 55a321ba41a056e1b29bcc606e4080b0fbee7b9b
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sat Oct 24 09:21:55 2009 +1100
+
+    Update win32/INSTALL
     
-    This is just to check some changes made to the USE_POGL option
-    in perldl.conf.  Now a value of undef is supported where the
-    configure process will try to determine if OpenGL is available
-    and, if so, sets USE_POGL => 1.
+    Installation procedures for win32 updated
 
- Basic/PDL.pm |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ win32/INSTALL |  150 +++++++++++++++++++++++++++++++++++++++------------------
+ 1 files changed, 103 insertions(+), 47 deletions(-)
+
+commit 9d75cfa8e32646c47e569e169afaec3a2118d873
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sat Oct 24 08:46:45 2009 +1100
+
+    Remove obsolete files from win32 folder
+    
+    Readme, PDL.ppd, pbmwin32.tar.gz, makeppm.pl,
+    and install.ppm removed from win32 folder.
+
+ win32/PDL.ppd         |   12 ----------
+ win32/Readme          |   40 ------------------------------------
+ win32/install.ppm     |   54 -------------------------------------------------
+ win32/makeppm.pl      |   20 ------------------
+ win32/pbmwin32.tar.gz |  Bin 258002 -> 0 bytes
+ 5 files changed, 0 insertions(+), 126 deletions(-)
+
+commit 4362c1c77d80d78f51cd37f93ec5e13f2969f32b
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri Oct 23 16:03:56 2009 +0200
+
+    switch TriD window mode to x11 in debian package
+
+ debian/perldl.conf |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit af381813d13be2e7d6112cde4a371f97fb6450df
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 23 09:24:03 2009 -0400
+
+    Update Known_problems with x64 OpenGL issue
+
+ Known_problems |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+
+commit 308bdc9dd45a7e12f855b2f3f8bb24199354ccd5
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri Oct 23 11:43:16 2009 +0200
+
+    remove full path from perl calls in debian/postinst
+
+ debian/postinst |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 6ea299c944e856c6727331797294fd9a4db469c2
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri Oct 23 11:41:17 2009 +0200
+
+    removed empty debian/preinst script
+
+ debian/preinst |   38 --------------------------------------
+ 1 files changed, 0 insertions(+), 38 deletions(-)
+
+commit bd209c53d51fde9b0a73463657083518b2a6f4bc
+Merge: da9b755... 6b71df5...
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri Oct 23 10:57:18 2009 +0200
+
+    Merge branch 'master' of ssh://eartoaster@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit da9b7557bcebc42332c6ade81c7be6fb49591faf
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri Oct 23 10:55:37 2009 +0200
+
+    fix some POD syntax errors found by lintian
+
+ Basic/Core/Dev.pm                |    4 +++-
+ Doc/Doc/Perldl.pm                |    3 ---
+ Graphics/PGPLOT/Window/Window.pm |    4 ++--
+ Lib/FFT/fft.pd                   |    3 ---
+ 4 files changed, 5 insertions(+), 9 deletions(-)
+
+commit 6b71df53ea2e10fbcef1372f6df344df948e6158
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 22 17:29:09 2009 -0400
+
+    Clean up POD for Graphics/TriD/TriD.pm
+
+ Graphics/TriD/TriD.pm |   59 +++++++++++++++++++++++++------------------------
+ 1 files changed, 30 insertions(+), 29 deletions(-)
+
+commit d3ac9a74b727c80f02b3b714eac779580ee36f42
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 22 16:57:20 2009 -0400
+
+    Update Known_problems re Mac OS X TriD font issue
+
+ Known_problems |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+commit eed356c09baf69dfe6ae35d1227a1342811c9734
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Oct 22 17:13:04 2009 +0200
+
+    fix typo in minuit Makefile.PL
+
+ Lib/Minuit/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 36f11d3ab315e5245fed2d1a20c1a15e91e5453e
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Oct 22 16:59:12 2009 +0200
+
+    import debian packaging info up to 2.4.3-8
+
+ debian/changelog    |   25 +++++++++++++++++++++++--
+ debian/control      |    7 ++++---
+ debian/pdl.doc-base |    3 +--
+ debian/pdl.remove   |    1 +
+ 4 files changed, 29 insertions(+), 7 deletions(-)
+
+commit 58e0e5e16986f5d30bd7794935f420e8ce808a04
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Oct 22 15:29:15 2009 +0200
+
+    merge new lib options into debian perldl.conf
+
+ debian/perldl.conf |   23 ++++++++++++++++++++++-
+ 1 files changed, 22 insertions(+), 1 deletions(-)
+
+commit 2b62a2a0055104fbb4df682d36d1b9def1a4497e
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Oct 22 15:25:42 2009 +0200
+
+    import trid/perl-opengl config
+
+ debian/perldl.conf |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
+
+commit 05a265877561abded2766f3b333a59c2f8b7c12d
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Oct 22 15:18:19 2009 +0200
+
+    apply whitespace and comment typo changes
+    
+    first step of updating debian/perldl.conf
+
+ debian/perldl.conf |   71 ++++++++++++++++++++++++++-------------------------
+ 1 files changed, 36 insertions(+), 35 deletions(-)
+
+commit 82933b9d2707e2dfd59f8c4d6dc02fc5493d22c4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 21 17:59:19 2009 -0400
+
+    Remove bitfont.c from MANIFEST
+
+ MANIFEST |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit 018c1aef44668f8708cebcd6a4ae41b06dd2dc59
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 21 10:12:23 2009 -0400
+
+    Finished PDL-2.4.5 release notes/announcement
+
+ Announce       |  157 --------------------------------------------------------
+ Known_problems |    5 ++
+ Release_Notes  |   92 ++++++++++++++++++++++++++-------
+ 3 files changed, 77 insertions(+), 177 deletions(-)
+
+commit 03a62ede2ffa851f8015f69846646f7029a9903d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 20 16:14:46 2009 -0400
+
+    Add draft Announce file as working copy
+    
+    This is a temporary document only.  It will be replaced
+    by the announcements and official release notes when complete.
+
+ Announce |  157 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 157 insertions(+), 0 deletions(-)
 
 commit adaf22b79107a75c30cf7c44e7e8c61f94ff0a96
 Author: Chris Marshall <devel.chm.01@gmail.com>
