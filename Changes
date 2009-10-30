@@ -1,3 +1,42 @@
+commit 29dcd99a806f477bf4f495a5a0e13367c3004889
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 30 14:07:00 2009 -0400
+
+    Removed automated testing USE_POGL=>1 setting
+    
+    This and the hardwired 1 in the perldl.conf may have been
+    the origin of a lack of CPAN automated testers reports.
+    It may not have been but this release should check it.
+
+ Makefile.PL |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
+
+commit 032321eadae4a09ad358947960f3d9113e530ec8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 30 13:28:49 2009 -0400
+
+    Fix perldl.conf to set USE_POGL => undef
+    
+    I think this may resolve some of the not appearing test
+    results from CPAN.  If this works, then it will be the
+    basis for a PDL-2.4.6 release.  Maybe 2.4.61?
+
+ perldl.conf |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 09b657b4b71326fb0c55dbaf056af9ba806fa175
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Oct 24 13:26:54 2009 -0400
+
+    Update VERSION to 2.4.5_001 for development
+    
+    The official PDL-2.4.5 release is now available on CPAN and at the
+    PDL sf.net downloads page.  The git master branch goes back to
+    development versioning starting with 2.4.5_001.  Happy coding!
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
 commit c62a322b1c8648fc0c6c7a7bbcade6bc1b2350ab
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Oct 24 11:56:23 2009 -0400
