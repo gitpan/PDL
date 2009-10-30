@@ -1,3 +1,25 @@
+commit 300fae29802d2b8a8c3f42808105bf4ae8dc3b8f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 30 19:03:15 2009 -0400
+
+    Update version to 2.4.5_002 to test fix
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 33f84778832582823f8ca054a94b3cb7a14a76dc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 30 19:01:13 2009 -0400
+
+    Fix some TriD OpenGL config and test bugs
+    
+    This should help with CPAN automated testers.
+
+ Graphics/TriD/OpenGL/opengl.pd    |    2 +-
+ Graphics/TriD/OpenGLQ/Makefile.PL |    6 ++++--
+ t/opengl.t                        |    2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
 commit 29dcd99a806f477bf4f495a5a0e13367c3004889
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Oct 30 14:07:00 2009 -0400
