@@ -1,3 +1,23 @@
+commit 9e1ea2b80604d429be8276396e016bd74e6cf0c0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 1 11:47:58 2009 -0500
+
+    Update to version 2.4.5_003 for developers release
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 35dd416bd603f21b40c6caf99d368d07ca0e9ef6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 1 10:12:22 2009 -0500
+
+    Fix OpenGLQ/Makefile.PL use/require problem
+    
+    Had require but with use statement syntax.
+
+ Graphics/TriD/OpenGLQ/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
 commit 300fae29802d2b8a8c3f42808105bf4ae8dc3b8f
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Oct 30 19:03:15 2009 -0400
