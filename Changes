@@ -1,3 +1,351 @@
+commit 9fb93f8980aecc9abf5b6ddf4ace8c6a3fe126b9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 9 17:17:31 2009 -0500
+
+    Update MANIFEST with debian/ changes
+    
+    I don't know why "make manifest" did not remove the irrelevant
+    entries.
+
+ MANIFEST |   11 ++++++-----
+ 1 files changed, 6 insertions(+), 5 deletions(-)
+
+commit e2fac04d1352ef034230904dbc08c1fcd9ed6269
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 9 16:44:04 2009 -0500
+
+    Update Known_Problems and TODO for release
+
+ Known_problems |    3 +++
+ TODO           |    4 +++-
+ 2 files changed, 6 insertions(+), 1 deletions(-)
+
+commit ed079eddc13d9d82e78d36eea453706f313702b0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 9 16:37:54 2009 -0500
+
+    Update OpenGL version required info
+
+ DEPENDENCIES |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ea2ea7b7efc162c5535904c4300befa8149337a6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 9 16:36:03 2009 -0500
+
+    Set POGL_VERSION in perldl.conf to 0.61 for CPAN
+    
+    CPAN dependencies don't support developers releases so I've
+    added a comment what the unofficial version required is and
+    the official required dependency that CPAN will use is below.
+
+ perldl.conf |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit a85bf7885514fcf17b355746a0bfc8ae4d9fcd2c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 9 16:31:00 2009 -0500
+
+    Update Release_Notes for CPAN 2.4.5_004 release
+
+ Release_Notes |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+commit 2e79ab76b123990c39114182525e65e0f5a0ad41
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 9 16:29:41 2009 -0500
+
+    Update to v3.14 of ppport.h portability
+
+ Basic/Core/ppport.h | 3870 +++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 files changed, 3722 insertions(+), 148 deletions(-)
+
+commit affe0cc052580600bfc5bd93245fd0d14a9de6a2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 9 16:27:28 2009 -0500
+
+    Permissions cleanup
+
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 80688088d54ab8128069b05a701412e59c150bd3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 22 14:03:12 2009 -0500
+
+    Fix OpenGLQ headers for AGL GLUT only build
+    
+    This permits a completely non-X11 Apple GLUT TriD to build.
+    Also updated POGL_VERSION => 0.61_002 as a reminder that this
+    prerequisite information will need to be updated for releases.
+
+ Graphics/TriD/OpenGLQ/openglq.pd |    5 +++++
+ perldl.conf                      |    2 +-
+ 2 files changed, 6 insertions(+), 1 deletions(-)
+
+commit 27d2b07aa500cb5b046991905e0267b3ced9d4a7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 20 13:45:24 2009 -0500
+
+    Update Release_Notes for 2.4.5_004
+
+ Release_Notes |   30 ++++++++++++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
+
+commit dd951a75bf8c7edeaae8d0ff39ddbc02340734a0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 20 13:34:35 2009 -0500
+
+    Set VERSION to 2.4.5_004 for development
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit e4ed469076e1a12a1cc2f4343223af3b7ac67282
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 20 13:33:14 2009 -0500
+
+    Make Perl OpenGL 0.61 the minimum version
+    
+    OpenGL-0.61 has a needed fix to some FreeGLUT parameters that
+    are required for correct event loop exit handling.
+
+ perldl.conf |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f3a4409d982957a9863f5aa8d9f6f9d9ed515f4a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 20 13:31:45 2009 -0500
+
+    Fix bug with _have_freeglut check
+    
+    The new() method was using $OpenGL::_have_freeglut to test
+    rather than the correct OpenGL::_have_freeglut().
+
+ Graphics/TriD/POGL/OpenGL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 2a2ab08ea995bcbdcccdd3ac7eedba56c17df376
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Nov 9 13:38:13 2009 +0100
+
+    add list of symlinks to create in debian package
+
+ debian/pdl.links |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 12371263640afb8724c87703aa6018842bcdba82
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Nov 9 13:37:00 2009 +0100
+
+    import changelog from latest debian upload
+
+ debian/changelog |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
+
+commit 7e18a6cb47478d93613e7f56ed4511a03396fb8b
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Nov 9 13:36:16 2009 +0100
+
+    debian: switch to freeglut window type
+
+ debian/perldl.conf |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 66616037c82bbee4990d7e1d0ff5f552563fd28b
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Nov 9 13:35:57 2009 +0100
+
+    link against -lgfortran
+
+ debian/f77conf.pl |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit fc2e63b1447d58bf91387133ac41dbf144802416
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Nov 9 13:35:17 2009 +0100
+
+    build-depend and suggest ExtUtils::F77
+
+ debian/control |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit d3d8e443cac5446894f7ad0c964cfef092a2fa28
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Nov 9 13:34:41 2009 +0100
+
+    debian: run testsuite in verbose mode
+
+ debian/rules |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 2f0ff44a70ff363309a2792f699099c6e054cff0
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Nov 9 13:22:13 2009 +0100
+
+    report exact slatec load error in verbose mode
+
+ t/limits_00.t |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 3baf3788b33ea3caf2071709f37d66081e4df5cf
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Nov 9 13:20:49 2009 +0100
+
+    tell if the test was actually skipped
+    
+    confusingly, the minuit test was giving 'ok' in case of minuit
+    load errors
+
+ t/minuit.t |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+commit 2a675f60de5407819f01be178652ccf32a2fd549
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Nov 9 13:18:40 2009 +0100
+
+    tell if the test was actually skipped
+    
+    confusingly, the slatec test was giving 'ok' in case of slatec
+    load errors
+
+ t/slatec.t |   34 +++++++++++-----------------------
+ 1 files changed, 11 insertions(+), 23 deletions(-)
+
+commit 133a3b714bc981d0f1c60f6fb33973e3c3477a86
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 10:20:17 2009 +0100
+
+    import changelog from debian upload
+
+ debian/changelog |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
+
+commit 1a90f28b6585720ba6d177ca374f9d94373eec81
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 10:18:05 2009 +0100
+
+    clean also .inlinepdlpp
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 40410cc6502f48362b7633a4600d2c9b15d7615e
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 10:16:51 2009 +0100
+
+    properly clean minuit
+    
+    the library was still there after clean
+
+ Lib/Minuit/Makefile.PL |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 6934ed3a1db64839424a11478a6547463df6fa8a
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 10:06:13 2009 +0100
+
+    move installtime-generated docs to /var/lib/pdl
+
+ debian/pdl.dirs              |    1 +
+ debian/pdl.doc-base          |    4 ++--
+ debian/pdl.lintian-overrides |    4 ++--
+ debian/pdl.postinst          |    6 ++----
+ debian/pdl.prerm             |    4 ++--
+ 5 files changed, 9 insertions(+), 10 deletions(-)
+
+commit 779f59ec1b564577d390cee482e16a0e785b5f3a
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 09:56:30 2009 +0100
+
+    do not scan Index.pod
+    
+    this is actually the result of the scan, so...
+
+ Doc/Doc.pm |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit fc9a1cf00c9711dafae4501ad6e4becba15ef64b
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 09:55:20 2009 +0100
+
+    add 3rd argument to scantree: index location
+
+ Doc/scantree.pl |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 748386e840b7ec22e65c17788c8dfb9acc4e41bd
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 09:51:01 2009 +0100
+
+    use debhelper for lintian override handling
+
+ debian/rules |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 2329f5e6a85faa2e7e1da58e7f3b4e9834df3ddf
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 09:49:48 2009 +0100
+
+    use dh_prep instead of dh_clean -k
+    
+    recommended by newer debhelper versions
+
+ debian/rules |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 9b2ffcbc1df014113d90c66690967407d42de120
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 09:48:50 2009 +0100
+
+    debian configure rule should depend on patch-stamp
+
+ debian/rules |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 4fd6df440fa04b5d67bfd7792415e7985b0edc5f
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 09:45:57 2009 +0100
+
+    remove useless postrm script
+
+ debian/postrm |   38 --------------------------------------
+ 1 files changed, 0 insertions(+), 38 deletions(-)
+
+commit 35f25ec3df9669f235eb80cd22a28a3a36708d02
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 09:44:01 2009 +0100
+
+    move package infrastructure into pdl pkg namespace
+
+ debian/dirs         |    2 --
+ debian/docs         |    5 -----
+ debian/pdl.dirs     |    2 ++
+ debian/pdl.docs     |    5 +++++
+ debian/pdl.postinst |   46 ++++++++++++++++++++++++++++++++++++++++++++++
+ debian/pdl.prerm    |   40 ++++++++++++++++++++++++++++++++++++++++
+ debian/postinst     |   46 ----------------------------------------------
+ debian/prerm        |   40 ----------------------------------------
+ 8 files changed, 93 insertions(+), 93 deletions(-)
+
+commit b30ef1738ddca8a58f25724602076f0110fe89f1
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 09:41:08 2009 +0100
+
+    update build-depends, bump debhelper/standard
+
+ debian/compat  |    2 +-
+ debian/control |    7 +++----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+commit 26bb75208338df325f97118d4eb1d3a6c92257df
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Nov 7 09:37:28 2009 +0100
+
+    add readme about the debian source and patches
+
+ debian/README.source |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
+
 commit 9e1ea2b80604d429be8276396e016bd74e6cf0c0
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Nov 1 11:47:58 2009 -0500

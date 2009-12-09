@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                PDL
-version:             2.4.5_003
+version:             2.4.5_004
 abstract:            Perl Data Language
 license:             ~
 author:              
@@ -13,7 +13,7 @@ requires:
     File::Spec:                    0.6
     Filter::Util::Call:            0
     Inline:                        0.43
-    OpenGL:                        0.6
+    OpenGL:                        0.61
     Storable:                      1.03
     Text::Balanced:                0
 meta-spec:
