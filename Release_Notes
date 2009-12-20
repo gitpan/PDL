@@ -1,10 +1,39 @@
-Release notes for PDL 2.4.5_004 --------------------------
+Release notes for PDL 2.4.5_005 --------------------------
 
 Highlights:
 
   * This is a DEVELOPER's release
 
-  * Fix OpenGLQ headers for AGL GLUT only build
+  * Fixed conv1d() bug where it was actually calculating the
+    correlation and not the convolution.  For symmetric kernels
+    they are the same.
+
+  * Fixed fftconvolve to give the same results as the other
+    convolution algorithms.  The new implementation is
+    probably slower than the previous and definitely uses
+    more temporary memory.  The old routine is preserved
+    as fftconvolve_inplace() if needed.  This was listed
+    as SF bug #2630369.
+
+  * Fixed SF bug #2524068 for PDL::Minuit.  Now use pp_addxs()
+    to define the binding to mnseti() to avoid bug in pp_def()
+    when there are no piddle arguments.
+
+  * TriD graphics windows now have their GLUT window ID in
+    the window title.  This allows for simpler identification
+    and use of multiple TriD graphics windows.
+
+  * Fixed the TriD display() routine to set the current GLUT
+    window before drawing takes place.   Now multiple TriD
+    windows can exist and be drawn to.
+
+
+
+Release notes for PDL 2.4.5_004 --------------------------
+
+Highlights:
+
+  * This is a DEVELOPER's release
 
   * Make Perl OpenGL 0.61 the minimum version
     OpenGL-0.61 has a needed fix to some FreeGLUT parameters that
@@ -27,9 +56,6 @@ Highlights:
     the origin of a lack of CPAN automated testers reports.
 
   * Fix perldl.conf to set USE_POGL => undef
-
-  * Update Basic/Core/ppport.h to latest version, 3.14 from 3.09
-    This should not break anything.
 
 
 

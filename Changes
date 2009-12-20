@@ -1,72 +1,176 @@
-commit 9fb93f8980aecc9abf5b6ddf4ace8c6a3fe126b9
+commit 578deac1c0b61f3f40c4e69c9540f36bb5804c56
 Author: Chris Marshall <devel.chm.01@gmail.com>
-Date:   Wed Dec 9 17:17:31 2009 -0500
+Date:   Sun Dec 20 17:00:12 2009 -0500
 
-    Update MANIFEST with debian/ changes
+    Update Known_problems for PDL version
+
+ Known_problems |    9 +++------
+ 1 files changed, 3 insertions(+), 6 deletions(-)
+
+commit 5b7931f3a1ba49780cfb19c9d19fc9cc75dec496
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 20 16:53:12 2009 -0500
+
+    Update Release_Notes w TriD multi-window status
+
+ Release_Notes |   16 ++++++++++++----
+ 1 files changed, 12 insertions(+), 4 deletions(-)
+
+commit 728d7d8bfbd152319a7b97fdd8c3aba2c601dad6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 20 16:36:55 2009 -0500
+
+    Make window the *GLUT* current window for display
     
-    I don't know why "make manifest" did not remove the irrelevant
-    entries.
-
- MANIFEST |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
-
-commit e2fac04d1352ef034230904dbc08c1fcd9ed6269
-Author: Chris Marshall <devel.chm.01@gmail.com>
-Date:   Wed Dec 9 16:44:04 2009 -0500
-
-    Update Known_Problems and TODO for release
-
- Known_problems |    3 +++
- TODO           |    4 +++-
- 2 files changed, 6 insertions(+), 1 deletions(-)
-
-commit ed079eddc13d9d82e78d36eea453706f313702b0
-Author: Chris Marshall <devel.chm.01@gmail.com>
-Date:   Wed Dec 9 16:37:54 2009 -0500
-
-    Update OpenGL version required info
-
- DEPENDENCIES |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-commit ea2ea7b7efc162c5535904c4300befa8149337a6
-Author: Chris Marshall <devel.chm.01@gmail.com>
-Date:   Wed Dec 9 16:36:03 2009 -0500
-
-    Set POGL_VERSION in perldl.conf to 0.61 for CPAN
+    This doesn't make any difference with only one window but
+    with multiple windows, the image was appearing in the
+    wrong windows.  Still need a better way to select/set an
+    active figure window. There are currently two globals for
+    the TriD current window:
     
-    CPAN dependencies don't support developers releases so I've
-    added a comment what the unofficial version required is and
-    the official required dependency that CPAN will use is below.
+      $PDL::Graphics::TriD::cur
+      $PDL::Graphics::TriD::current_window
+    
+    Need to determine if they are both needed and if not,
+    get rid of one of them.
 
- perldl.conf |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-commit a85bf7885514fcf17b355746a0bfc8ae4d9fcd2c
-Author: Chris Marshall <devel.chm.01@gmail.com>
-Date:   Wed Dec 9 16:31:00 2009 -0500
-
-    Update Release_Notes for CPAN 2.4.5_004 release
-
- Release_Notes |    5 +++++
+ Graphics/TriD/TriD/GL.pm |    5 +++++
  1 files changed, 5 insertions(+), 0 deletions(-)
 
-commit 2e79ab76b123990c39114182525e65e0f5a0ad41
+commit 1a5793d43ae03081708c78175a079a0588c0c9d1
 Author: Chris Marshall <devel.chm.01@gmail.com>
-Date:   Wed Dec 9 16:29:41 2009 -0500
+Date:   Sun Dec 20 16:35:36 2009 -0500
 
-    Update to v3.14 of ppport.h portability
+    Add window ID to GLUT TriD window titles
+    
+    This allows for easier multi-window support since the user
+    can tell at a glance what ID goes with what window.
 
- Basic/Core/ppport.h | 3870 +++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 files changed, 3722 insertions(+), 148 deletions(-)
+ Graphics/TriD/POGL/OpenGL.pm |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-commit affe0cc052580600bfc5bd93245fd0d14a9de6a2
+commit 15e098ca2a28be2fa3b468cd3a5b8f3d9c811c25
 Author: Chris Marshall <devel.chm.01@gmail.com>
-Date:   Wed Dec 9 16:27:28 2009 -0500
+Date:   Sun Dec 20 15:50:14 2009 -0500
 
-    Permissions cleanup
+    Fix annoying PGPLOT::HANDLE warning message
+    
+    Apparently perl_get_sv() and the non-deprecated version get_sv()
+    will cause a variable used only once message since perl 5.10.
+    Or in GV_ADDMULTI with the create option to quiet the message.
 
- 0 files changed, 0 insertions(+), 0 deletions(-)
+ Graphics/PGPLOT/Window/Window.xs |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit de1a6e5b7c4ecc4e6524964670203869836ae63b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 20 15:48:39 2009 -0500
+
+    Update MANIFEST for Padre
+    
+    The Padre directory is experimental for now but we would
+    like to make it available for users to try with releases
+    as well as just git pulls.
+
+ MANIFEST |  269 +++++++++++++++++++++++++++++++-------------------------------
+ 1 files changed, 136 insertions(+), 133 deletions(-)
+
+commit 67bf357263a7ff63ac2bb55193e3f8e52568fd17
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 20 12:46:13 2009 -0500
+
+    Update conv1d pod with math definition
+    
+    Added the equation being calculated for the conv1d()
+    routine.  Still need to update the general convolution
+    docs.
+
+ Basic/Primitive/primitive.pd |   21 ++++++++++++++++++++-
+ 1 files changed, 20 insertions(+), 1 deletions(-)
+
+commit 5855ee33d6d98c8207a2d09942afa18580e14950
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 19 21:55:38 2009 -0500
+
+    Fix SF bug #2524068 re pp_def() w no piddles
+    
+    pp_def() when used to generate bindings to functions with
+    no piddle arguments (numm Pars option) creates invalid C99
+    syntax.  The workaround is to use pp_addxs() instead.
+
+ Known_problems       |    6 ------
+ Lib/Minuit/minuit.pd |   23 +++++++++++++++++------
+ Release_Notes        |    4 ++++
+ 3 files changed, 21 insertions(+), 12 deletions(-)
+
+commit 3972fa71f6c6717cf3c276d656fa442867e3ca54
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 19 18:54:22 2009 -0500
+
+    Update Release_Notes with convolution fixes
+
+ Release_Notes |   19 +++++++++++++++++++
+ 1 files changed, 19 insertions(+), 0 deletions(-)
+
+commit 165a2a692ccbcc9545248fb71c09dcaee716ba01
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 19 18:46:04 2009 -0500
+
+    Fix fftconvolve
+    
+    This fixes SF bug #2630369 where fftconvolve() did not give the
+    same results as conv1d, conv2d, or convolveND.  This implements
+    fftconvolve at the perl level using the direct calculation the
+    FFT for the each of the input arguments, then complex multiplication
+    of the results followed by iFFT.  This implementation uses the
+    full complex FFT and iFFT with all the associated temporaries.
+    The results are returned in place which preserves the original
+    (confusing) behavior.
+
+ Lib/FFT/fft.pd |   29 +++++++++++++++++++++++++++--
+ 1 files changed, 27 insertions(+), 2 deletions(-)
+
+commit a3ca0b0529d7f56b3e79d0a855426f3c57d5d7ef
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 19 16:48:24 2009 -0500
+
+    Fix conv1d to calculate convolution
+    
+    The existing code was actually calculating the correlation and
+    not convolution.  They are the same for symmetric kernels which
+    may be why this was not recognized until now.
+
+ Basic/Primitive/primitive.pd |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 731e6d5b82548366fc819680e5c0930239586359
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 19 16:46:51 2009 -0500
+
+    Update version to 2.4.5_005 for development
+    
+    This is the final "fix" cycle with PDL before a minor
+    bug fix release of PDL-2.4.6 to CPAN with the little fixes
+    since 2.4.5.
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 319c72b5fab7a36284a89f5794c06348950457cc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Dec 10 22:33:18 2009 -0500
+
+    Make Padre subdir for integration work
+    
+    This is a scratch directory for work integrating PDL with Padre.
+    The first file is NiceSlice.pm which is a Devel::REPL::Plugin
+    support perldlpp NiceSlice preprocessing for Devel::REPL.
+    Work continues to implement the rest of existing perldl
+    functionality.
+
+ Padre/NiceSlice.pm |   27 +++++++++++++++++++++++++++
+ Padre/README       |    7 +++++++
+ 2 files changed, 34 insertions(+), 0 deletions(-)
 
 commit 80688088d54ab8128069b05a701412e59c150bd3
 Author: Chris Marshall <devel.chm.01@gmail.com>
