@@ -1,3 +1,50 @@
+commit 6f5adf14a1ea130517c90ab3307ef0fd0affe3b9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 21 13:05:57 2009 -0500
+
+    Update Release_Notes, Known_problems,...
+    
+    and MANIFEST with imag2d.pdl for trial release of new 2D
+    image display functionality.
+
+ Known_problems |    2 +-
+ MANIFEST       |    1 +
+ Release_Notes  |   21 +++++++++++++++++++++
+ 3 files changed, 23 insertions(+), 1 deletions(-)
+
+commit 7e7bad8e941ac1d77862e650538e9f87317f8216
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 21 13:04:22 2009 -0500
+
+    Fix missing use PDL::Core in VRML.pm
+    
+    VRML.pm is not supported but it was missing a use PDL::Core
+    to provide barf.  I'm not sure why it was not detected sooner.
+
+ Graphics/TriD/VRML/VRML.pm |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 46dfcc9147588c3749a7f292b05113e58080d22a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 21 13:02:28 2009 -0500
+
+    Add imag2d.pdl
+    
+    This implements the basic functionality planned regarding
+    an improved imagrgb() routine.
+
+ imag2d.pdl |  638 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 638 insertions(+), 0 deletions(-)
+
+commit ee2a13e45c5664fef765c039f320c3d0b979928e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 21 13:01:26 2009 -0500
+
+    Update $PDL::VERSION to 2.4.5_006 for devel
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
 commit 578deac1c0b61f3f40c4e69c9540f36bb5804c56
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Dec 20 17:00:12 2009 -0500
