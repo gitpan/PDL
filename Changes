@@ -1,3 +1,101 @@
+commit ae53283d0f0a97bbdbc1e783faefec04d6e6053b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 27 13:06:00 2009 -0500
+
+    Add Release_Notes for PDL-2.4.5_008 release
+    
+    This release is basically PDL-2.4.6 release candidate 2....
+
+ Release_Notes |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
+
+commit 9c348c5eb5ffa91343b29c5f7484bca8bec9523d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 27 13:05:29 2009 -0500
+
+    Add sf.net PDL wiki URL to INSTALL file
+
+ INSTALL |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+commit b1910b5e2bed0e6762b42775b79c8f115a02505f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 27 12:58:06 2009 -0500
+
+    Add "how to use" comment to imag2d.pdl
+
+ imag2d.pdl |   10 +++++++++-
+ 1 files changed, 9 insertions(+), 1 deletions(-)
+
+commit 260a2491af88e0ef9c34a38cee92dd1070f8b6a9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 27 12:22:56 2009 -0500
+
+    Update POGL_VERSION and WITH_3D in perldl.conf
+    
+    Autoprobe for TriD build now works on all supported
+    platform types so removed WITH_3D special cases.  Also
+    set POGL_VERSION to 0.62.  Earlier may work mostly but
+    you'll need to edit perldl.conf to change.
+
+ perldl.conf |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 87151fb54b33ecdc197e1c410bf759b9d60d77a8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 27 12:22:16 2009 -0500
+
+    Update VERSION to 2.4.5_008 for development
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 001b76543ce97accac986ced29d5336b3dcd09b1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 27 12:21:00 2009 -0500
+
+    Update MANIFEST with Example/TriD files
+
+ MANIFEST |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 811ddff923fb79d9190c93c0ee7e39588ccfbb66
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 26 13:13:08 2009 -0500
+
+    Update readme's for 2.4.5_007 release
+
+ BUGS           |    7 ++++---
+ DEPENDENCIES   |    3 ++-
+ DEVELOPMENT    |    2 +-
+ Known_problems |   15 ++++++---------
+ Release_Notes  |   15 +++++++++++++++
+ 5 files changed, 28 insertions(+), 14 deletions(-)
+
+commit 873ab2ca7248e24f25140e22f6a764fffd97efd0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 26 12:52:40 2009 -0500
+
+    Mv 3dtest.pl and line3d.pl to Example/TriD
+
+ 3dtest.pl |   18 ------------------
+ line3d.pl |   19 -------------------
+ 2 files changed, 0 insertions(+), 37 deletions(-)
+
+commit 80e341d92050179475e924e0e9f52f24582d3908
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 26 12:51:11 2009 -0500
+
+    Move TriD example/test progs to Example/TriD
+    
+    Clean up top level PDL directory by moving the example/test programs
+    3dtest.pl and line3d.pl to Example/TriD/ which is probably where they
+    should have been to begin with.
+
+ Example/TriD/3dtest.pl |   18 ++++++++++++++++++
+ Example/TriD/line3d.pl |   19 +++++++++++++++++++
+ 2 files changed, 37 insertions(+), 0 deletions(-)
+
 commit 3ad6b847666f5b66289e406234349abef12807e9
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Dec 22 14:35:16 2009 -0500
