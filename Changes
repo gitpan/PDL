@@ -1,3 +1,74 @@
+commit 3ad6b847666f5b66289e406234349abef12807e9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 22 14:35:16 2009 -0500
+
+    Rm unnecessary ${ } around get_dataref in GL.pm
+
+ Graphics/TriD/TriD/GL.pm |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit baf3c96196c2f13ac1000f0777230865e452eb0a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 22 13:52:36 2009 -0500
+
+    Add example to imag2d() documentation
+
+ imag2d.pdl |   14 +++++++++++++-
+ 1 files changed, 13 insertions(+), 1 deletions(-)
+
+commit c86f955a59b3ab95ced604e603e4c5887c132476
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 22 12:39:51 2009 -0500
+
+    Replace GIMME by GIMME_V in Core.xs
+
+ Basic/Core/Core.xs.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 57651a8aa6027ca038de249d45a8f57a3054d316
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 22 10:59:32 2009 -0500
+
+    Add q or Q to Quit message to twiddle
+    
+    Also added the GLUT window ID to the Title for reference
+    and changed the minimum dimension to 200 pixels from 100 pixels
+    which seemed a bit small.  Probably should handle user override
+    when they specify their own value for $zoom.
+
+ imag2d.pdl |   13 ++++++++-----
+ 1 files changed, 8 insertions(+), 5 deletions(-)
+
+commit 8ed116a4f55443a07b9e1e4333378127dac45528
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 22 10:59:11 2009 -0500
+
+    Update version to 2.4.5_007 for devel
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 4b0bb173adb47db4d5296fa556f536cfd23404d9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 21 16:19:34 2009 -0500
+
+    Update readme type files for 2.4.5_006
+
+ Known_problems |    4 ++++
+ Padre/README   |    5 ++++-
+ TODO           |   12 ++++++++++++
+ cygwin/INSTALL |   17 ++++++++++++++++-
+ 4 files changed, 36 insertions(+), 2 deletions(-)
+
+commit 7c5bf726f578a9e6e3c4a91aba9fda2d2569d675
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 21 16:05:28 2009 -0500
+
+    Update Known_problems for PDL-2.4.5_006
+
+ Known_problems |   53 ++++++++++++++++++-----------------------------------
+ 1 files changed, 18 insertions(+), 35 deletions(-)
+
 commit 6f5adf14a1ea130517c90ab3307ef0fd0affe3b9
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Dec 21 13:05:57 2009 -0500
@@ -3126,3 +3197,26 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:51:04 2009 -0400
+
+    Added the Changes for the t/pic_16bit.t commit.
+
+ Changes |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:44:35 2009 -0400
+
+    Fix sf.net bug 2784016
+    
+    This fixes sourceforge.net bug number 2784016 originally reported
+    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
+    with a very english specific test.  The test has been modified to
+    be less english specific.  This is still far from full i8n of PDL.
+
+ t/pic_16bit.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
