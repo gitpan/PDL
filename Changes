@@ -1,3 +1,791 @@
+commit 8d5691c514e71a1d7f849e1f2ddaf83e506b241a
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Wed Feb 10 13:40:19 2010 -0500
+
+    Update readme type files for 2.4.6_001 release
+
+ Known_problems |    3 ++-
+ Makefile.PL    |    1 -
+ README         |    8 ++++----
+ Release_Notes  |   11 +++++++----
+ TODO           |   18 ++++++++++++++++++
+ cygwin/INSTALL |   18 +++++++++++++++---
+ cygwin/README  |    5 ++---
+ win32/INSTALL  |    4 ++--
+ 8 files changed, 50 insertions(+), 18 deletions(-)
+
+commit dc4b1b84b3b352b0df0bfff66133882870943088
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Wed Feb 10 12:53:59 2010 -0500
+
+    Clean up IO::Misc docs for [rw]cols
+
+ IO/Misc/misc.pd |  281 +++++++++++++++++++++++++++----------------------------
+ 1 files changed, 139 insertions(+), 142 deletions(-)
+
+commit 33eee77360ccef0048293d1dcf62493cc8f420ef
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Wed Feb 10 12:19:07 2010 -0500
+
+    Fix WITH_GSL => true to undef
+    
+    The only allowed values are 0, 1, or undef and *not* true.
+
+ perldl.conf |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit de95f9ba653c7e3f4d27226f0aecc2091a69d799
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Mon Feb 8 20:28:29 2010 +1100
+
+    t/fastraw.t - fix win32 SKIP
+    
+    Need to skip only 1 test (not 4).
+
+ t/fastraw.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f815e92074a930892f1668d6aa59adea01c38eec
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Sun Feb 7 20:49:44 2010 -0500
+
+    Add PERLCOLS support to any rcols output arg
+    
+    Now PERLCOLS option syntax may be used to specify whether or
+    not a column to be read is destined for a piddle or a perl
+    array.  This allows rcols and wcols to be symmetric on input
+    and output.
+
+ IO/Misc/misc.pd |   96 ++++++++++++++++++++++++++++++++++++++++++++----------
+ 1 files changed, 78 insertions(+), 18 deletions(-)
+
+commit 462ce299da62236d69e307dcdf8f44dac4d388d3
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Sun Feb 7 17:32:42 2010 -0500
+
+    Update Known_problems+Release_Notes for 2.4.6_001
+
+ Known_problems |   13 +++++--------
+ Release_Notes  |   26 ++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+), 8 deletions(-)
+
+commit 3858a934ef8f73f9bfb34d7c0c25c4754c5bd59c
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Sun Feb 7 17:17:09 2010 -0500
+
+    Fix bug in handling of perl array output in wcols
+
+ IO/Misc/misc.pd |   31 ++++++++++++++++++-------------
+ 1 files changed, 18 insertions(+), 13 deletions(-)
+
+commit 66a8b6b04617b8760d19c66f61a67b5756ed2417
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Sun Feb 7 16:43:05 2010 -0500
+
+    Add support for perl array refs to wcols
+    
+    Now you can use the input from the PERL_COLS directly in the wcols
+    output list.  Still need to make the rcols support symmetric but this
+    is much more CSV file friendly.
+
+ IO/Misc/misc.pd |   38 ++++++++++++++++++++++++++++----------
+ 1 files changed, 28 insertions(+), 10 deletions(-)
+
+commit 9e2b3f201e3852e33f7f727b5befdbae1a1c4a2d
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Sun Feb 7 16:14:52 2010 -0500
+
+    Update docs for COLSEP option to [rw]cols
+
+ IO/Misc/misc.pd |   18 ++++++++++--------
+ 1 files changed, 10 insertions(+), 8 deletions(-)
+
+commit 6d7d13cb0dd272c78d1b01ee6b4e6c7cd482cdc3
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Sun Feb 7 16:10:48 2010 -0500
+
+    Fix dangling colsep after last piddle in wcols
+    
+    This is not noticed with the default column separator of space
+    but is noticable and a bit annoying for CSV and other output with
+    printing characters as separators.
+
+ IO/Misc/misc.pd |   25 ++++++++++++++++---------
+ 1 files changed, 16 insertions(+), 9 deletions(-)
+
+commit 45414337c89cec64a1e025def2e5259465587bb2
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Sun Feb 7 15:40:43 2010 -0500
+
+    Fixed extra $, in wcols output with colsep
+    
+    Because print was being used "under the hood" there was an extra
+    $, between every column of wcols output---even when the colsep
+    option was specified.
+
+ IO/Misc/misc.pd |   11 +++++++----
+ 1 files changed, 7 insertions(+), 4 deletions(-)
+
+commit 71c159d0ccb0778248fc2447b64cd3431704ff88
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Sun Feb 7 14:42:42 2010 -0500
+
+    Renamed the default colsep to $defcolsep for [rw]cols
+    
+    The original global $PDL::IO::Misc::colsep use is preserved in
+    that if you set that value, it will be picked up and used for
+    rcols/wcols as before.  However, the initial value of that global
+    is undef now.  This change is in preparation for improved support
+    for PERLCOLS in rcols and wcols.
+
+ IO/Misc/misc.pd |   49 +++++++++++++++++++++++++++++++------------------
+ 1 files changed, 31 insertions(+), 18 deletions(-)
+
+commit eb5a3be5df58cc6f3d4cb8a6eb5c10e1f76fc363
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Sun Feb 7 14:35:57 2010 -0500
+
+    Add image pixel value to output on mouse click
+    
+    This should make it easier to investigate data.  TODO: support
+    clicking to access the original visualized data values rather
+    than the pixel values required for display.
+
+ imag2d.pdl |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
+
+commit 0ccf8bc853b90482f19ba1fa6df5034d5f8d45a1
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Fri Feb 5 11:11:07 2010 -0600
+
+    PLplot: Fixed a regression and modified .gitignore to include PLplot build files.
+
+ .gitignore                |    4 ++++
+ Graphics/PLplot/plplot.pd |    1 +
+ 2 files changed, 5 insertions(+), 0 deletions(-)
+
+commit 1494780a55bd9cdffdb6e8df1ea4dc2b92ab36bb
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Fri Feb 5 11:00:58 2010 -0600
+
+    Minor modification to PLplot to use =head1 METHODS for the OO methods.
+    
+    This will help make the distinction between the high-level and low-level documentation at least a little clearer.
+
+ Graphics/PLplot/plplot.pd |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 8c68ae915d797232c68bf2b7ff59491f6040700d
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Fri Feb 5 10:58:45 2010 -0600
+
+    Corrected the documentation for Doc.pm to include OPERATORS, METHODS, and CONSTRUCTORS.
+    
+    The online PDL help scans the POD for sections with head1-headings of FUNCTIONS, OPERATORS, METHODS, and CONSTRUCTORS, but only FUNCTIONS was mentioned in the documentation.
+
+ Doc/Doc.pm |   12 ++++++++++--
+ 1 files changed, 10 insertions(+), 2 deletions(-)
+
+commit 2f3190ab44698b5b72fe4b13e08620ae14306662
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Fri Feb 5 10:40:49 2010 -0600
+
+    Updated plplot.pd to version 0.52
+
+ Graphics/PLplot/Makefile.PL |    2 +-
+ Graphics/PLplot/plplot.pd   |  405 +++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 368 insertions(+), 39 deletions(-)
+
+commit 0f0134f5be7df320bd14f7c7294c0c4a155e97dc
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Wed Feb 3 21:21:38 2010 -0600
+
+    Added function declaration for PDL::Graphics::TriD::EventHandler::new so TriD could load GL.pm or VRML.pm on the fly.
+
+ Graphics/TriD/TriD/Window.pm |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+commit af710e8e0b40e1fd7c1970a425fe4ca9005a3874
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Tue Feb 2 10:44:34 2010 -0600
+
+    Fixed a couple of documentation typos and made slices.pd CPAN friendly!
+
+ Basic/Core/Types.pm.PL |    2 +-
+ Basic/Gen/PP.pm        |    2 +-
+ Basic/Slices/slices.pd |  131 ++++++++++++++++++++++++++++++++++-------------
+ 3 files changed, 97 insertions(+), 38 deletions(-)
+
+commit 5f1c99d906ef7bb4c621168e03e767cf5efa0f0c
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Tue Jan 26 11:46:01 2010 -0600
+
+    Minor documentation tweaks.
+
+ Basic/Core/Exporter.pm |   12 ++++++++----
+ Basic/Pod/Objects.pod  |    3 ++-
+ 2 files changed, 10 insertions(+), 5 deletions(-)
+
+commit a58a300f85c7845f5a90e88a648d64bbe33bfd41
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Wed Jan 20 17:47:47 2010 -0600
+
+    Added and clarified som IO documentation, and added a note for mmapping in Windows.
+    
+    I noticed DiskCache for the first time.  I cleaned up a few niggles in the pod.
+    Having noticed DiskCache, I added a few notes about it to my IO.pod file, since it is very much an IO tool.
+    I've noted before that you can't mmap on Windows with PDL, but I spent a few minutes and found some code discussing mmap on windows.  I've included it in a pod comment in Core.xs.PL
+
+ Basic/Core/Core.xs.PL |   54 +++++++++++++++++++++++++++++++++++++++++++++++++
+ IO/IO.pod             |   43 +++++++++++++++++++++++++++++++++-----
+ Lib/DiskCache.pm      |    4 +-
+ 3 files changed, 93 insertions(+), 8 deletions(-)
+
+commit c396534f97b81cbd1e4e5ecc66f125d7509a857f
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Wed Jan 20 16:55:33 2010 -0600
+
+    Fixed an error in my last correction.
+
+ IO/FastRaw/FastRaw.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 312df6adf7a29390388e4d461395d75549761c94
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Wed Jan 20 16:42:21 2010 -0600
+
+    Removed Perl 5.10 specific code from FastRaw.
+
+ IO/FastRaw/FastRaw.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 109e4e916e3c3380f6f6bcfff3a9876f92d9826a
+Merge: 812c36e 2e38dad
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Wed Jan 20 15:28:05 2010 -0600
+
+    Merge branch 'master' of git://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 812c36ebc83f8b796b7371adda09132a059e658a
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Wed Jan 20 15:27:36 2010 -0600
+
+    Updated FlexRaw so that passing and undefined header worked the same as not passing a header.
+
+ IO/FlexRaw/FlexRaw.pm |   45 ++++++++++++++++++++++-----------------------
+ 1 files changed, 22 insertions(+), 23 deletions(-)
+
+commit 2e38dadc8ce6fbc499fbd0db8af570f0efe666f1
+Merge: 7a56efd d34aae6
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Wed Jan 20 15:50:58 2010 -0500
+
+    Merge branch 'master' of ssh://lambd@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 7a56efd0b17437cd9458d521ca4d98ce7fc54d0e
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Wed Jan 20 15:29:02 2010 -0500
+
+    Modify rint algorithm for non-GNU compilers.
+    
+    On GNU compilers, PDL::Math::rint uses the system library function. But on Microsoft compilers, there is no rint. The rint that was provided handled half-integer rounding differently than the GNU implementation. This commit implements a simple Banker's rounding algorithm that can be used by Microsoft compilers, updates the docs for rint to describe the calculation being performed (as well as providing some additional rounding guidance), and adds a new test file for this function.
+
+ Basic/Math/math.pd |   16 +++++++++++++++-
+ Basic/Math/rint.c  |   28 ++++++++++++++++++----------
+ MANIFEST           |    1 +
+ t/round.t          |   19 +++++++++++++++++++
+ 4 files changed, 53 insertions(+), 11 deletions(-)
+
+commit d34aae6259c81714fd0705f12fe2561a487f364f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jan 18 00:12:32 2010 -0500
+
+    Fix new problem with POGL test fails
+    
+    There were some problems with the compile and strict due to
+    undefined/declare functions.  Added a couple of explicit sub
+    call syntax and the problem appears to be resolved.
+
+ Graphics/TriD/POGL/OpenGL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 957bba2659e74f375e8fd1c6de6b4e4878386204
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 16 09:15:49 2010 -0500
+
+    Quiet some of the preproc_oldwarn messages
+
+ perldl.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit a6cb99f672998181b173dd3c337d963004d6b893
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Fri Jan 15 15:39:17 2010 -0600
+
+    Cleaned up a little mistake in the TriD docs, and added a big example.
+    
+    The example is meant to demonstrate the difference between drawing
+    gridded and non-gridded and drawing non-gridded surfaces.
+
+ Graphics/TriD/TriD.pm |  130 +++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 files changed, 125 insertions(+), 5 deletions(-)
+
+commit 0f03559b4463b56df7ceccbf04b1fccb6bcc2a99
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Jan 15 15:21:23 2010 -0500
+
+    Documentation update for PDL::Transform::map from previous commit.
+
+ Lib/Transform/transform.pd |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 8c13261bba8be3a3390a58db37a4038b5f2a8953
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Jan 15 14:12:44 2010 -0500
+
+    Remove 'p' option to PDL::Transform::map
+    
+    The 'p' option was acceptable as an alias for both the 'pix' and 'phot' options.  To avoid confusion and favoring one over the other, now map will croak if this is used.
+
+ Lib/Transform/transform.pd |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 1d978f1ba50cd9db74ebe6b4543dfc55cf963e39
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Wed Jan 13 10:31:05 2010 -0500
+
+    Allow 'wim' to work with arrow operator
+    
+    Small fix to allow wim to work with arrow operator [$pdl->wim('file')], like rpic, and like the docs say wim should.
+
+ IO/Pnm/Pic.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 471913f3c6aada339732f38e9a275aadb3fbdbc1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 12 15:47:29 2010 -0500
+
+    Update DEPENDENCIES with pgplot warning info
+    
+    Add note to DEPENDENCIES that *both* pgplot library and PGPLOT
+    the perl module are required.  This was already documented, just
+    adding some emphasis.
+
+ DEPENDENCIES |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 6573d179ce00ba1c1a0c415de2fc86e970894007
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jan 11 19:40:01 2010 -0500
+
+    Add demo 3d and 3d2 window close to Known_problems
+    
+    More than one person has reported the problem.
+
+ Known_problems |    4 ++++
+ perldl.conf    |    2 +-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
+
+commit 6f9f3781d6e8488f885ef9f56131d78a4bdafa66
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jan 11 13:07:56 2010 -0500
+
+    Fix use fields problem for VRML driver
+    
+    The problem was that Window.pm was use-ing PDL::Graphics::TriD::GL
+    for interactive windows without checking for offline to ensure that
+    incompatible declarations were not introduced.  This seems to fix
+    the compile problem.  Still need to verify that the operation is
+    correct.
+
+ Graphics/TriD/TriD.pm        |    1 -
+ Graphics/TriD/TriD/Window.pm |    6 +++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+commit 4cf23d0632b7b3aa28355135c52aac483fce32e3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 9 19:11:47 2010 -0500
+
+    Add use PDL::Graphics::TriD::Labels 2 tmathgraph.p
+
+ Demos/TriD/tmathgraph.p |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 82e6584895edbd56d01f2b244019e5a91e837035
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 9 19:10:29 2010 -0500
+
+    Add no VRML exits to Demos/TriD/tvrml*.p examples
+
+ Demos/TriD/tvrml.p  |    8 +++++++-
+ Demos/TriD/tvrml2.p |   10 +++++++++-
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+commit d4e89f8009ed911c31463648b50f50ff6fcd766d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 8 11:21:14 2010 -0500
+
+    Added exit and warning to Demo/TriD/test6.p
+    
+    This was a Tk demo which is not supported by
+    PDL+POGL TriD and is deprecated.  The plan is
+    to replace Tk by some other more OpenGL
+    friendly GUI toolkit: Gtk2 and wxWidgets
+    both provide OpenGL widgets and are supported
+    on multiple platforms.
+
+ Demos/TriD/test6.p |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
+
+commit 066f70f78769909e8265eaabc3a4047daf6868ec
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 8 11:19:50 2010 -0500
+
+    Add sleep to Demo/TriD/mandel.p
+    
+    Otherwise the demo completed too quickly to
+    watch.  The modification uses Time::HiRes::sleep
+    so pre-perl 5.8 will need to install that module
+    for the code to work.
+
+ Demos/TriD/mandel.pl |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 5dea5c793e92e75cb419746d3d55d4906a60bc62
+Merge: e738fa2 87a1e84
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jan 6 13:31:21 2010 -0500
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit e738fa233207aa3d6445b36b08bb12aa872ca6ee
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jan 6 13:29:44 2010 -0500
+
+    Make help vars list PDLs alphabetically
+    
+    It is hoped that this will make it easier to find
+    a given name for reference.  Feedback welcome!
+
+ Basic/Core/Dbg.pm |   22 ++++++++++++----------
+ 1 files changed, 12 insertions(+), 10 deletions(-)
+
+commit 87a1e844b5f733058cbfeaf852fd1ed5f23b0a43
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 5 20:44:45 2010 -0500
+
+    Fix minor typo in POD for imag2d.pdl
+
+ imag2d.pdl |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit fed00daadec8c69df039bdb892110e8dfc8c89b9
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Tue Jan 5 13:42:05 2010 -0600
+
+    Added my by-line to PDL::IO.pod.
+
+ IO/IO.pod |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 7acbb1a20e4163650b6e62d26cf63f1a4c1b043e
+Merge: 30d1c7b 0ccd029
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Tue Jan 5 13:37:00 2010 -0600
+
+    Merge branch 'master' of ssh://run4flat@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 30d1c7b00e54bc24941be89cb5a3e41e13482917
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Tue Jan 5 13:35:04 2010 -0600
+
+    Wrote a summary of the PDL::IO modules in PDL/IO.pod.
+    
+    I also added some documentation to FlexRaw.
+
+ IO/FlexRaw/FlexRaw.pm |   16 +++
+ IO/IO.pod             |  253 +++++++++++++++++++++++++++++++++++++++++++++++++
+ IO/Makefile.PL        |    5 +-
+ 3 files changed, 273 insertions(+), 1 deletions(-)
+
+commit 0ccd029e1327060583fcdbdf81667b39b7819c1d
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Jan 5 13:39:54 2010 -0500
+
+    Add documentation to hdrcpy
+    
+    Document potentially ambiguous behavior when two piddles with hdrcpy flags set are used in an expression. The hdr of the first piddle is used in the result.
+
+ Basic/Core/Core.pm.PL |   13 +++++++++++++
+ IO/FITS/FITS.pm       |    4 +++-
+ 2 files changed, 16 insertions(+), 1 deletions(-)
+
+commit d4956defe886744ce8256cdc09f4725d4f50a83f
+Author: Derek Lamb <dlamb@gs671-rocket.gsfc.nasa.gov>
+Date:   Tue Jan 5 12:04:45 2010 -0500
+
+    prevent @t from being defined in main:: after ?, ??, sig, etc
+    
+    @t was being defined in main by the perldl shell after help, sig,
+    apropos, etc were called.  'my'-ing @t fixes this.
+
+ perldl.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit d0b54635a76de7e1625f6088445415630da00125
+Merge: a2da5ac 3aaab11
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Tue Jan 5 07:48:57 2010 -0600
+
+    Merge branch 'master' of git://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 3aaab11dbd9321de513f42f50bce3591523cc2c8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jan 4 20:38:44 2010 -0500
+
+    Minor clean-up to imag2d() POD
+
+ imag2d.pdl |   39 +++++++++++++++++++++++++++------------
+ 1 files changed, 27 insertions(+), 12 deletions(-)
+
+commit b54e3a68a8ebd207559527b982f4e0cde5cffbbe
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jan 3 12:54:02 2010 -0500
+
+    Set USE_KARMA => 0 in perldl.conf
+    
+    Karma is being deprecated.  You can still force the build
+    by setting this to 1 but eventually Karma will eventually
+    stop being supported.
+
+ perldl.conf |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 9df065e59cf3d626e2343f3a9341efbc563ddd15
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jan 3 12:41:02 2010 -0500
+
+    f2c Lib/Slatec/slatec/*.f into f2c subdirectory
+    
+    These are the converted Slatec files from our PDL
+    distribution.  The next step is to modify the build
+    process to use these for the Slatec bindings.  We
+    will need to add some f2c runtime routines eventually
+    to get things working all the way.
+
+ Lib/Slatec/slatec/f2c/chfcm.c  |  184 ++++++++
+ Lib/Slatec/slatec/f2c/chfdv.c  |  211 +++++++++
+ Lib/Slatec/slatec/f2c/chfev.c  |  201 +++++++++
+ Lib/Slatec/slatec/f2c/chfie.c  |  142 ++++++
+ Lib/Slatec/slatec/f2c/d1mach.c |  535 +++++++++++++++++++++++
+ Lib/Slatec/slatec/f2c/dasum.c  |  125 ++++++
+ Lib/Slatec/slatec/f2c/daxpy.c  |  150 +++++++
+ Lib/Slatec/slatec/f2c/dchfcm.c |  184 ++++++++
+ Lib/Slatec/slatec/f2c/dchfdv.c |  216 ++++++++++
+ Lib/Slatec/slatec/f2c/dchfev.c |  205 +++++++++
+ Lib/Slatec/slatec/f2c/dchfie.c |  143 ++++++
+ Lib/Slatec/slatec/f2c/ddot.c   |  149 +++++++
+ Lib/Slatec/slatec/f2c/dgeco.c  |  313 ++++++++++++++
+ Lib/Slatec/slatec/f2c/dgedi.c  |  216 ++++++++++
+ Lib/Slatec/slatec/f2c/dgefa.c  |  172 ++++++++
+ Lib/Slatec/slatec/f2c/dgesl.c  |  196 +++++++++
+ Lib/Slatec/slatec/f2c/dp1vlu.c |  249 +++++++++++
+ Lib/Slatec/slatec/f2c/dpchbs.c |  265 ++++++++++++
+ Lib/Slatec/slatec/f2c/dpchce.c |  320 ++++++++++++++
+ Lib/Slatec/slatec/f2c/dpchci.c |  235 ++++++++++
+ Lib/Slatec/slatec/f2c/dpchcm.c |  292 +++++++++++++
+ Lib/Slatec/slatec/f2c/dpchcs.c |  333 ++++++++++++++
+ Lib/Slatec/slatec/f2c/dpchdf.c |  150 +++++++
+ Lib/Slatec/slatec/f2c/dpchfd.c |  412 ++++++++++++++++++
+ Lib/Slatec/slatec/f2c/dpchfe.c |  398 +++++++++++++++++
+ Lib/Slatec/slatec/f2c/dpchia.c |  349 +++++++++++++++
+ Lib/Slatec/slatec/f2c/dpchic.c |  423 ++++++++++++++++++
+ Lib/Slatec/slatec/f2c/dpchid.c |  255 +++++++++++
+ Lib/Slatec/slatec/f2c/dpchim.c |  358 ++++++++++++++++
+ Lib/Slatec/slatec/f2c/dpchkt.c |  124 ++++++
+ Lib/Slatec/slatec/f2c/dpchsp.c |  505 ++++++++++++++++++++++
+ Lib/Slatec/slatec/f2c/dpchst.c |   84 ++++
+ Lib/Slatec/slatec/f2c/dpchsw.c |  253 +++++++++++
+ Lib/Slatec/slatec/f2c/dpcoef.c |  121 ++++++
+ Lib/Slatec/slatec/f2c/dpoco.c  |  303 +++++++++++++
+ Lib/Slatec/slatec/f2c/dpodi.c  |  203 +++++++++
+ Lib/Slatec/slatec/f2c/dpofa.c  |  128 ++++++
+ Lib/Slatec/slatec/f2c/dpolft.c |  528 +++++++++++++++++++++++
+ Lib/Slatec/slatec/f2c/dscal.c  |  123 ++++++
+ Lib/Slatec/slatec/f2c/dswap.c  |  161 +++++++
+ Lib/Slatec/slatec/f2c/ezfft1.c |  159 +++++++
+ Lib/Slatec/slatec/f2c/ezfftb.c |  162 +++++++
+ Lib/Slatec/slatec/f2c/ezfftf.c |  145 +++++++
+ Lib/Slatec/slatec/f2c/ezffti.c |   70 +++
+ Lib/Slatec/slatec/f2c/fdump.c  |   47 ++
+ Lib/Slatec/slatec/f2c/i1mach.c |  929 ++++++++++++++++++++++++++++++++++++++++
+ Lib/Slatec/slatec/f2c/idamax.c |  121 ++++++
+ Lib/Slatec/slatec/f2c/isamax.c |  121 ++++++
+ Lib/Slatec/slatec/f2c/j4save.c |   84 ++++
+ Lib/Slatec/slatec/f2c/pchbs.c  |  261 +++++++++++
+ Lib/Slatec/slatec/f2c/pchce.c  |  320 ++++++++++++++
+ Lib/Slatec/slatec/f2c/pchci.c  |  234 ++++++++++
+ Lib/Slatec/slatec/f2c/pchcm.c  |  290 +++++++++++++
+ Lib/Slatec/slatec/f2c/pchcs.c  |  332 ++++++++++++++
+ Lib/Slatec/slatec/f2c/pchdf.c  |  148 +++++++
+ Lib/Slatec/slatec/f2c/pchfd.c  |  408 ++++++++++++++++++
+ Lib/Slatec/slatec/f2c/pchfe.c  |  394 +++++++++++++++++
+ Lib/Slatec/slatec/f2c/pchia.c  |  343 +++++++++++++++
+ Lib/Slatec/slatec/f2c/pchic.c  |  418 ++++++++++++++++++
+ Lib/Slatec/slatec/f2c/pchid.c  |  251 +++++++++++
+ Lib/Slatec/slatec/f2c/pchim.c  |  355 +++++++++++++++
+ Lib/Slatec/slatec/f2c/pchkt.c  |  122 ++++++
+ Lib/Slatec/slatec/f2c/pchsp.c  |  501 ++++++++++++++++++++++
+ Lib/Slatec/slatec/f2c/pchst.c  |   82 ++++
+ Lib/Slatec/slatec/f2c/pchsw.c  |  249 +++++++++++
+ Lib/Slatec/slatec/f2c/pcoef.c  |  121 ++++++
+ Lib/Slatec/slatec/f2c/polfit.c |  527 +++++++++++++++++++++++
+ Lib/Slatec/slatec/f2c/pvalue.c |  249 +++++++++++
+ Lib/Slatec/slatec/f2c/pythag.c |   70 +++
+ Lib/Slatec/slatec/f2c/r1mach.c |  452 +++++++++++++++++++
+ Lib/Slatec/slatec/f2c/radb2.c  |  139 ++++++
+ Lib/Slatec/slatec/f2c/radb3.c  |  162 +++++++
+ Lib/Slatec/slatec/f2c/radb4.c  |  214 +++++++++
+ Lib/Slatec/slatec/f2c/radb5.c  |  232 ++++++++++
+ Lib/Slatec/slatec/f2c/radbg.c  |  381 ++++++++++++++++
+ Lib/Slatec/slatec/f2c/radf2.c  |  141 ++++++
+ Lib/Slatec/slatec/f2c/radf3.c  |  155 +++++++
+ Lib/Slatec/slatec/f2c/radf4.c  |  200 +++++++++
+ Lib/Slatec/slatec/f2c/radf5.c  |  220 ++++++++++
+ Lib/Slatec/slatec/f2c/radfg.c  |  386 +++++++++++++++++
+ Lib/Slatec/slatec/f2c/rfftb.c  |  121 ++++++
+ Lib/Slatec/slatec/f2c/rfftb1.c |  224 ++++++++++
+ Lib/Slatec/slatec/f2c/rfftf.c  |  122 ++++++
+ Lib/Slatec/slatec/f2c/rfftf1.c |  221 ++++++++++
+ Lib/Slatec/slatec/f2c/rs.c     |  133 ++++++
+ Lib/Slatec/slatec/f2c/sasum.c  |  124 ++++++
+ Lib/Slatec/slatec/f2c/saxpy.c  |  150 +++++++
+ Lib/Slatec/slatec/f2c/sdot.c   |  148 +++++++
+ Lib/Slatec/slatec/f2c/sgeco.c  |  311 ++++++++++++++
+ Lib/Slatec/slatec/f2c/sgedi.c  |  214 +++++++++
+ Lib/Slatec/slatec/f2c/sgefa.c  |  171 ++++++++
+ Lib/Slatec/slatec/f2c/sgesl.c  |  195 +++++++++
+ Lib/Slatec/slatec/f2c/snrm2.c  |  251 +++++++++++
+ Lib/Slatec/slatec/f2c/spoco.c  |  302 +++++++++++++
+ Lib/Slatec/slatec/f2c/spodi.c  |  202 +++++++++
+ Lib/Slatec/slatec/f2c/spofa.c  |  124 ++++++
+ Lib/Slatec/slatec/f2c/srot.c   |  133 ++++++
+ Lib/Slatec/slatec/f2c/srotg.c  |  144 +++++++
+ Lib/Slatec/slatec/f2c/sscal.c  |  122 ++++++
+ Lib/Slatec/slatec/f2c/ssvdc.c  |  756 ++++++++++++++++++++++++++++++++
+ Lib/Slatec/slatec/f2c/sswap.c  |  161 +++++++
+ Lib/Slatec/slatec/f2c/tql2.c   |  297 +++++++++++++
+ Lib/Slatec/slatec/f2c/tqlrat.c |  250 +++++++++++
+ Lib/Slatec/slatec/f2c/tred1.c  |  217 ++++++++++
+ Lib/Slatec/slatec/f2c/tred2.c  |  260 +++++++++++
+ Lib/Slatec/slatec/f2c/xerbla.c |  100 +++++
+ Lib/Slatec/slatec/f2c/xercnt.c |   77 ++++
+ Lib/Slatec/slatec/f2c/xerhlt.c |   57 +++
+ Lib/Slatec/slatec/f2c/xermsg.c |  469 ++++++++++++++++++++
+ Lib/Slatec/slatec/f2c/xerprn.c |  310 +++++++++++++
+ Lib/Slatec/slatec/f2c/xersve.c |  233 ++++++++++
+ Lib/Slatec/slatec/f2c/xgetua.c |   87 ++++
+ 112 files changed, 26795 insertions(+), 0 deletions(-)
+
+commit 4af280225a635e6ef1ae34bf52ee7318d30fd4b1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 2 14:52:49 2010 -0500
+
+    Fix no more windows hang in imag2d twiddle()
+    
+    There was a possible hang with imag2d() and its twiddle() subroutine
+    where closing the image windows via the window manager close widget
+    could leave you with no active windows to receive the Q command to
+    stop twiddling.  Now we correctly update the list of imag2d() image
+    windows and check during the twiddle.
+
+ imag2d.pdl |   67 ++++++++++++++++++++++++++++++++++++++++++++---------------
+ 1 files changed, 50 insertions(+), 17 deletions(-)
+
+commit 95adcd60ce0463050e8397d26ad895b923779a36
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 2 12:19:40 2010 -0500
+
+    Update Known_problems (whitespace path bug fixed)
+    
+    This is sf.net bug #2924854.
+
+ Known_problems |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
+
+commit c48de5a5b4949c967ab02f8e4ae34c1dc6f8b99d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 2 11:38:50 2010 -0500
+
+    Make PDL prompt/warn if space in build path
+    
+    This resolves sf.net bug #2924854.  The Makefile.PL will check
+    the current directory of the Makefile.PL and warn if white space
+    is detected.  A prompt is issued to see if the user wishes to
+    continue anyway.
+
+ Makefile.PL |   20 +++++++++++++++++---
+ 1 files changed, 17 insertions(+), 3 deletions(-)
+
+commit ef612667b1634400f85544e1cb4443295b925e7b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 2 10:09:55 2010 -0500
+
+    Update INSTALL/Known_problems for sf bug #2924854
+    
+    PDL build currently breaks if the build directory has
+    white space in it.  The work around is to use a build
+    directory without white space in the path.
+
+ INSTALL        |   16 ++++++++++++++++
+ Known_problems |    5 +++++
+ 2 files changed, 21 insertions(+), 0 deletions(-)
+
+commit b13bda4cc6513b5699213c407e80c68f630a525f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 2 00:03:29 2010 -0500
+
+    Fix GL.pm compile problem with x11 windows
+    
+    If you build TriD with the 'x11' window type option, then some GLUT
+    routines are not declared/defined and GL.pm fails to compile.  This
+    puts a string eval around the problem line to fix the compile.
+
+ Graphics/TriD/TriD/GL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 0042f0d7c53f0f574d0bef39347cb616fe82e5f3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 1 15:33:16 2010 -0500
+
+    Add imag2d twiddle hang info to Known_problems
+    
+    This is a reminder to fix the problem by checking for
+    any remaining open windows and if the last one closes,
+    return from twiddle().  Also need to refresh the display
+    on a new twiddle() in case the image data has changed.
+
+ Known_problems |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+commit feccc2d81ada0f4ed655a44929cbf1362e00185b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 1 15:32:49 2010 -0500
+
+    Update VERSION to 2.4.6_001 for development
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f4d68710abd86a754b86dd0ceed4d101c8fba634
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 1 12:05:18 2010 -0500
+
+    Add Padre/pdlrun to MANIFEST
+
+ MANIFEST |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
 commit d378ec2edd2728f008d0ce67f5b26337ac8616f2
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu Dec 31 23:06:11 2009 -0500
@@ -44,7 +832,7 @@ Date:   Wed Dec 30 23:09:00 2009 -0500
  1 files changed, 6 insertions(+), 0 deletions(-)
 
 commit 117d1cdc9b1efeafd12d063315c3c01dda8d7da8
-Merge: 35321ff... bb3d913...
+Merge: 35321ff bb3d913
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Dec 30 21:30:31 2009 -0500
 
@@ -82,7 +870,7 @@ Date:   Tue Dec 29 11:10:41 2009 -0500
  2 files changed, 37 insertions(+), 1 deletions(-)
 
 commit 35321ff5103616716b6b02c2cf8ca1258c2559c0
-Merge: 25cf2c6... 7c31c35...
+Merge: 25cf2c6 7c31c35
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Dec 28 20:16:51 2009 -0500
 
@@ -111,7 +899,7 @@ Date:   Mon Dec 28 15:34:45 2009 -0500
  1 files changed, 42 insertions(+), 43 deletions(-)
 
 commit f11bd26d75d4241e9102fabfc64591bfc0c3f77d
-Merge: d0bd1af... ae53283...
+Merge: d0bd1af ae53283
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Dec 28 10:42:32 2009 -0500
 
@@ -511,8 +1299,15 @@ Date:   Sat Dec 19 16:46:51 2009 -0500
  Basic/PDL.pm |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
+commit a2da5ac4c70c66abd7d5205481256ff2aeb98c94
+Merge: 2df55ef 319c72b
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Mon Dec 14 12:56:45 2009 -0600
+
+    Merge branch 'master' of git://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
 commit d0bd1af56add57a397e3dd16019bcc3d59dedbc9
-Merge: 9fb93f8... 319c72b...
+Merge: 9fb93f8 319c72b
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Dec 11 10:07:39 2009 -0500
 
@@ -1036,7 +1831,7 @@ Date:   Fri Oct 23 11:41:17 2009 +0200
  1 files changed, 0 insertions(+), 38 deletions(-)
 
 commit bd209c53d51fde9b0a73463657083518b2a6f4bc
-Merge: da9b755... 6b71df5...
+Merge: da9b755 6b71df5
 Author: Henning Glawe <glaweh@debian.org>
 Date:   Fri Oct 23 10:57:18 2009 +0200
 
@@ -1326,6 +2121,27 @@ Date:   Wed Oct 14 18:09:53 2009 -0400
  IO/Browser/Makefile.PL |    3 ++-
  2 files changed, 5 insertions(+), 1 deletions(-)
 
+commit 2df55ef32ba5b858841dea766e91b99a033c7e17
+Merge: dd4e079 e93558b
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Wed Oct 14 17:06:24 2009 -0500
+
+    Merge branch 'master' of git://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit dd4e079a8c91d93674f57475d190d9fdf560b21d
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Wed Oct 14 17:04:27 2009 -0500
+
+    I've updated FastRaw to allow for arbitrary header files.  This is mostly useful for
+    using the same header file for many data sets.  I updated the tests accordingly.
+    
+    I also poked around with perldl.conf, but I didn't think I had done anything to it.
+
+ IO/FastRaw/FastRaw.pm |  160 ++++++++++++++++++++++++++++++++++++++++++++---
+ perldl.conf           |    4 +-
+ t/fastraw.t           |  166 ++++++++++++++++++++++++++-----------------------
+ 3 files changed, 241 insertions(+), 89 deletions(-)
+
 commit eaaa13411748ffb30cc42f76373478bbedea0526
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Oct 14 10:14:53 2009 -0400
@@ -1436,7 +2252,7 @@ Date:   Wed Oct 7 17:45:43 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit 6ded129679883ead13525027aca72a91630e0b72
-Merge: 246324f... b5243ae...
+Merge: 246324f b5243ae
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Oct 7 17:35:09 2009 -0400
 
@@ -2272,7 +3088,7 @@ Date:   Wed Sep 23 16:51:26 2009 -0400
  6 files changed, 69 insertions(+), 114 deletions(-)
 
 commit 1f9a74d944f8fcf09e3d8bbf5f87133bf1d0867b
-Merge: 5fedb91... 2e3fcf6...
+Merge: 5fedb91 2e3fcf6
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 16:44:00 2009 -0400
 
@@ -2288,7 +3104,7 @@ Date:   Wed Sep 23 16:36:20 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit 5fedb919b3b95e42b0acb39b62df45d25693a3e0
-Merge: dd01556... 7677f77...
+Merge: dd01556 7677f77
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 16:10:48 2009 -0400
 
@@ -2307,7 +3123,7 @@ Date:   Wed Sep 23 16:07:08 2009 -0400
  1 files changed, 13 insertions(+), 0 deletions(-)
 
 commit dd01556cd99467dba79c1c4f24456e2e8dd91627
-Merge: 9b6b1f9... 3084dba...
+Merge: 9b6b1f9 3084dba
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 14:27:36 2009 -0400
 
@@ -2325,7 +3141,7 @@ Date:   Wed Sep 23 14:26:42 2009 -0400
  3 files changed, 10 insertions(+), 8 deletions(-)
 
 commit 9b6b1f9d1f4a2880ab179e430211af2856f71dab
-Merge: 205d5b9... 6743108...
+Merge: 205d5b9 6743108
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 14:24:21 2009 -0400
 
@@ -3123,7 +3939,7 @@ Date:   Fri Jul 10 15:27:16 2009 -0400
  1 files changed, 2 insertions(+), 2 deletions(-)
 
 commit 100a3114b05e4afeb156485d94f89320861b697a
-Merge: 1401619... 2146da8...
+Merge: 1401619 2146da8
 Author: Chris Marshall <chm@alum.mit.edu>
 Date:   Fri Jul 10 11:25:57 2009 -0400
 
@@ -3161,7 +3977,7 @@ Date:   Thu Jul 9 22:11:39 2009 -0400
  1 files changed, 4 insertions(+), 2 deletions(-)
 
 commit 822c0e08c0243b054d6f87dcd61841083d745c46
-Merge: b1270b4... 5b15c19...
+Merge: b1270b4 5b15c19
 Author: Chris Marshall <marshallch@users.sourceforge.net>
 Date:   Thu Jul 9 21:53:00 2009 -0400
 
@@ -3198,7 +4014,7 @@ Date:   Thu Jul 9 13:09:16 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit b1270b46b05019ab859b7e730eeef8a5cde34a09
-Merge: b1c7bd8... 479e8a3...
+Merge: b1c7bd8 479e8a3
 Author: Chris Marshall <marshallch@users.sourceforge.net>
 Date:   Tue Jun 30 23:17:12 2009 -0400
 

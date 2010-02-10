@@ -1,5 +1,9 @@
 The following issues have been reported with this version of PDL:
 
+- The demo 3d and 3d2 windows do not close (can not be closed)
+  after the demo finishes.  You need to exit the perldl shell
+  to have the window close.
+
 
 - The default TriD controls are based on having 2+ button mouse.
 
@@ -8,11 +12,13 @@ The following issues have been reported with this version of PDL:
   Macbook tracpad to generate a secondary click via the control panel.
 
 
-- VRML output driver does not work for PDL::Graphics::TriD
-
-
 - When you close a TriD graphics window with the frame widget
   the whole process exits including the perldl shell.
+
+
+- Label artifacts have been reported for the TriD demos with a 64bit
+  linux system.  It has not been determined if the problem is in
+  PDL or the user system OpenGL configuration.
 
 
 - A depth/overlay artifact with axis labels on one Mac OS system
@@ -65,8 +71,9 @@ The following issues have been reported with this version of PDL:
 
 
 - The following SourceForge bugs are outstanding at time of the
-  PDL-2.4.6 release:
+  PDL-2.4.6_001 release:
 
+  2946119    TriD garbled axis text
   2901814    Arrow keys don't work in perldl on win32 console
   2901810    Ctrl-C kills perldl in win32 console
   2901170    many warnings w TriD and perl -w

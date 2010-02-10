@@ -355,6 +355,7 @@ IO/HDF/VS/VS.pd
 IO/HDF/buildfunc.pm
 IO/HDF/typemap
 IO/IDL/README
+IO/IO.pod
 IO/Makefile.PL
 IO/Misc/Makefile.PL
 IO/Misc/misc.pd
@@ -764,6 +765,7 @@ t/pthread.t
 t/reduce.t
 t/refs.t
 t/requiredmods.t
+t/round.t
 t/scope.t
 t/segfault.t
 t/slatec.t

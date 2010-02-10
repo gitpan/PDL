@@ -2,10 +2,13 @@
 
 use 5.006_002;      # explicitly require 5.6.2 or above
 
+use ExtUtils::MakeMaker;
+
 $::PP_VERBOSE = 0; # =1 makes PP waffle a lot
 
 use Config;
 use IO::File;
+use Cwd;
 
 sub checkbuggysetup {
     # detect buggy Perl setups
@@ -345,9 +348,20 @@ BEGIN{
   # Version test.
   # (See also warning note in the END block)
 
-  eval "use 5.6.0";
-  die "\nPDL requires Perl v5.6.0 or later\n\n" if $@ ne "";
+  eval "use 5.6.2";
+  die "\nPDL requires Perl v5.6.2 or later\n\n" if $@ ne "";
   
+  # Check for white space in build directory
+  my $pdl_build_dir = getcwd;
+  if ( $pdl_build_dir =~ /\s+/ ) {
+     warn( "\n  ****** WARNING ******\n"
+           . "  Space detected in path '$pdl_build_dir'\n"
+           . "  PDL may not build correctly!\n" );
+
+     my $go_on = prompt("\nDo you wish to continue?", 'y');
+     die "OK, stopping build\n" unless $go_on =~ /^[yY]/;
+  }
+
   # test for critical modules
   @hasnt = ();
   my @test = (['Filter::Util::Call','Filter'],
@@ -417,7 +431,7 @@ make_badval_dependencies();
 
 make_Types_pm();
 
-use ExtUtils::MakeMaker;
+# use ExtUtils::MakeMaker;
 
 # only perform one test if required modules are missing
 # the test will print an informational message and fail
@@ -433,7 +447,6 @@ my @podpms = map { $_.".pod", '$(INST_LIBDIR)/PDL/' . $_ .".pod"}
 	   'File::Spec'          => 0.6,
 	   'Filter::Util::Call'  => 0,         # for PDL::NiceSlice
 	   'Inline'              => 0.43,
-           # 'OpenGL'              => 0.58004,   # for PDL::Graphics::TriD
            'OpenGL'              => $PDL::Config{POGL_VERSION},
            'Storable'            => 1.03,      # for PDL::IO::Storable
 	   'Text::Balanced'      => 0,         # for PDL::NiceSlice
