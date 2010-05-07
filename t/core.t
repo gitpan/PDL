@@ -4,7 +4,7 @@
 #
 
 use strict;
-use Test::More tests => 28;
+use Test::More tests => 61;
 
 BEGIN {
     # if we've got this far in the tests then 
@@ -134,3 +134,130 @@ do {
 } while(0);
     
 # end
+
+# cat problems
+eval {cat(1, pdl(1,2,3), {}, 6)};
+ok ($@ ne '', 'cat barfs on non-piddle arguments');
+like ($@, qr/Arguments 0, 2 and 3 are not piddles/, 'cat correctly identifies non-piddle arguments');
+$@ = '';
+eval {cat(1, pdl(1,2,3))};
+like($@, qr/Argument 0 is not a piddle/, 'cat uses good grammar when discussing non-piddles');
+$@ = '';
+
+my $two_dim_array = cat(pdl(1,2), pdl(1,2));
+eval {cat(pdl(1,2,3,4,5), $two_dim_array, pdl(1,2,3,4,5), pdl(1,2,3))};
+ok ($@ ne '', 'cat barfs on mismatched piddles');
+like($@, qr/The dimensions of arguments 1 and 3 do not match/
+	, 'cat identifies all piddles with differing dimensions');
+like ($@, qr/\(argument 0\)/, 'cat identifies the first actual piddle in the arg list');
+$@ = '';
+eval {cat(pdl(1,2,3), pdl(1,2))};
+like($@, qr/The dimensions of argument 1 do not match/
+	, 'cat uses good grammar when discussing piddle dimension mismatches');
+$@ = '';
+eval {cat(1, pdl(1,2,3), $two_dim_array, 4, {}, pdl(4,5,6), pdl(7))};
+ok ($@ ne '', 'cat barfs combined screw-ups');
+like($@, qr/Arguments 0, 3 and 4 are not piddles/
+	, 'cat properly identifies non-piddles in combined screw-ups');
+like($@, qr/arguments 2 and 6 do not match/
+	, 'cat properly identifies piddles with mismatched dimensions in combined screw-ups');
+like($@, qr/\(argument 1\)/,
+	'cat properly identifies the first actual piddle in combined screw-ups');
+$@ = '';
+
+
+
+
+
+#### pdl STRING constructor tests ####
+
+isa_ok( pdl("[1,2]"), "PDL", qq{pdl("[1,2]") returns a piddle} );
+ok( all(pdl([1,2])==pdl("[1,2]")), qq{pdl(ARRAY REF) equals pdl("ARRAY REF")});
+
+
+my $compare = pdl([
+	[1, 0, 8],
+	[6, 3, 5],
+	[3, 0, 5],
+	[2, 4, 2]
+]);
+
+my $test_string = <<EOPDL;
+   [
+     [1, 0, 8],
+     [6, 3, 5],
+     [3, 0, 5],
+     [2, 4, 2],
+   ]
+EOPDL
+
+#diag("test string is: $test_string\n");
+
+my $t1 = pdl $test_string;
+ok(all(approx($t1, $compare)), "Unstringify properly interprets good PDL input string");
+
+# See what happens when we remove the end commas
+$test_string =~ s/\],/]/g;
+
+my $t2 = pdl $test_string;
+ok(all(approx($t2, $compare)), "Unstringify properly interprets good PDL input string sans ending commas");
+
+my $t3 = pdl '[1, 0, 8; 6, 3, 5; 3, 0, 5; 2, 4, 2]';
+ok(all(approx($t3, $compare)), "Unstringify properly handles semicolongs");
+
+my $t4 = pdl "$compare";
+ok(all(approx($t4, $compare)), "Unstringify properly interprets good PDL output string");
+
+# Now some more interesting tests
+my $t5 = pdl "[1 - 4]";
+$compare = pdl [-3];
+ok(all(approx($t5, $compare)), "Unstringify does not interfere with subtraction in statement");
+
+my $t6 = pdl "[1 -4]";
+$compare = pdl [1, -4];
+ok(all(approx($t6, $compare)), "Unstringify properly identifies negative numbers with white-space");
+
+ok(all(approx(pdl("[1 - .4]"), pdl(0.6))), "Unstringify properly handles decimals");
+
+my $t8 = pdl <<EOPDL;
+[
+	[1,2,3; 4,-5,6]
+	[7 +8, 8 + 9; 10, - .11, 12e3]
+]
+EOPDL
+
+$compare = pdl([[[1,2,3], [4,-5,6]],[[7,8,8+9],[10,-.11,12e3]]]);
+ok(all(approx($t8, $compare)), "Unstringify properly handles all sorts of stuff!");
+
+$compare = pdl [-2];
+my $t9 = pdl '[1  + 2 - 5]';
+ok(all(approx($t9, $compare)), "Another operator check for unstringify");
+
+$compare = pdl [1, 2, -5];
+my $t10 = pdl '[1  +2 -5]';
+ok(all(approx($t10, $compare)), "Yet another operator check for unstringify");
+
+$compare = pdl [[1], [2], [3]];
+my $t11 = pdl '[1;2;3]';
+ok(all(approx($t11, $compare)), "Unstringify column check");
+
+$compare = pdl([[1,2,3],[4,5,6]]);
+my $t12 = pdl q[1 2 3; 4 5 6];
+ok(all(approx($t12, $compare)), "Unstringify implicit bracketing check");
+
+my $compare = pdl([1,2,3,4]);
+my $t13 = pdl q[1 2 3 4];
+my $t14 = pdl q[1,2,3,4];
+my $t15 = pdl '[1 2 3 4]';
+my $t16 = pdl '[1,2,3,4]';
+
+ok(all(approx($t13, $compare)), "Double-check implicit bracketing - no brackets");
+ok(all(approx($t14, $compare)), "Double-check implicit bracketing - no brackets and commas");
+ok(all(approx($t15, $compare)), "Double-check implicit bracketing - brackets");
+ok(all(approx($t16, $compare)), "Double-check implicit bracketing - brackets and commas");
+
+# check dimensions of tests
+ok($t13->ndims == 1, "Implicit bracketing gets proper number of dimensions - no brackets");
+ok($t14->ndims == 1, "Implicit bracketing gets proper number of dimensions - no brackets and commas");
+ok($t15->ndims == 1, "Implicit bracketing gets proper number of dimensions - brackets");
+ok($t16->ndims == 1, "Implicit bracketing gets proper number of dimensions - brackets and commas");

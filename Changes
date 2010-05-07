@@ -1,3 +1,1394 @@
+commit e70dbacf9bee498f889d3f45e93752aac95aaf27
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 6 21:36:21 2010 -0400
+
+    Final Release_Notes update before CPAN
+
+ Release_Notes |   54 ++++++++++++++++++++++++++++++++++--------------------
+ 1 files changed, 34 insertions(+), 20 deletions(-)
+
+commit 40716375d7015311fc87d7797ba8c9847caa95e1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 6 17:45:51 2010 -0400
+
+    Indent Code so POD doesn't wrap
+    
+    The mmap for win32 comment in Basic/Core/Core.xs.PL
+    has a code section in it.  I've indented the code
+    so that the POD processor does not wrap it.  NOTE:
+    since the code is not in a valid chunk type, most
+    POD processors should ignore it.
+
+ Basic/Core/Core.xs.PL |   89 +++++++++++++++++++++++++------------------------
+ 1 files changed, 45 insertions(+), 44 deletions(-)
+
+commit 5bedc6d95e2de55168b60742c219a74ef53300d6
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu May 6 19:59:09 2010 +0200
+
+    start work on 2.4.7 package
+
+ debian/changelog |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit d62cdb99c7f212da8b7e30c1819282ad83a6b103
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu May 6 19:58:44 2010 +0200
+
+    fix path in generated HTML docs
+
+ debian/pdl.postinst |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 5a88d7a7bb8c08c5eb7e9f369bd931906f340610
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu May 6 19:27:31 2010 +0200
+
+    add option '-s' modify href paths
+    
+    syntax is '-s "stuff_to_strip[,stuff_to_add]"
+    this way, you can remove e.g. 'PDL/' from the paths referenced in the
+    links (which are thus broken in the debian case)
+
+ Doc/mkhtmldoc.pl |   27 ++++++++++++++++++++++++++-
+ 1 files changed, 26 insertions(+), 1 deletions(-)
+
+commit f5a1aba6ff80c628b8383b0eca9198164f85d819
+Merge: 53f4a4e... 31c8016...
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Thu May 6 11:44:28 2010 -0500
+
+    Merge branch 'master' of ssh://run4flat@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 53f4a4e2b5976393dd4e976b95b074e681ad78bd
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Thu May 6 11:43:23 2010 -0500
+
+    Fixed functioning of the new_pdl_from_string so it properly handled implicit bracketing.
+
+ Basic/Core/Core.pm.PL |   20 ++++++++++----------
+ t/core.t              |   43 ++++++++++++++++++++++++++++++-------------
+ 2 files changed, 40 insertions(+), 23 deletions(-)
+
+commit 31c8016b006cb60c0fd7219e2bd14d6616c8d7e8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed May 5 19:15:03 2010 -0400
+
+    Update readmes and VERSION for CPAN release
+    
+    Update VERSION to 2.4.6_006 to mark a new CPAN developers
+    release.  Various edits to readme-type files for the release.
+
+ Basic/PDL.pm |    2 +-
+ DEPENDENCIES |    9 +++++++++
+ DEVELOPMENT  |   34 ++++++++++++++++++++--------------
+ 3 files changed, 30 insertions(+), 15 deletions(-)
+
+commit 484c6f65e864f87a1439a991678fb53bb9449705
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed May 5 06:39:00 2010 -0400
+
+    Minor POD-smithing for PDL::new
+
+ Basic/Core/Core.pm.PL |   39 +++++++++++++++++++++------------------
+ 1 files changed, 21 insertions(+), 18 deletions(-)
+
+commit 7686fd568507e99d0b7176df540a7e1e94900f5f
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Tue May 4 00:32:00 2010 -0500
+
+    Added implementation for string input to PDL::new.
+
+ Basic/Core/Core.pm.PL   |  122 ++++++++++++++++++++++++++++++++--------------
+ Basic/Pod/Impatient.pod |   26 ++++++++--
+ t/core.t                |  104 ++++++++++++++++++++++++++++++----------
+ 3 files changed, 186 insertions(+), 66 deletions(-)
+
+commit 53f41124db2633492597edacbc8cf3534f4a393c
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Mon May 3 21:22:37 2010 -0500
+
+    Fixed a documentation typo in bad.pd
+
+ Basic/Bad/bad.pd |  111 ++++++++++++++++++++++++++++++++---------------------
+ 1 files changed, 67 insertions(+), 44 deletions(-)
+
+commit 27fa4e37130f3236f224956865790f888f690806
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 3 15:30:44 2010 -0400
+
+    Fix ReadLineHistory to work with T::R::Perl
+    
+    The stifle_history() method is GNU readline specific.
+    Added the alternative code needed for Term::ReadLine::Perl
+    support.
+
+ Padre/README             |   10 +++++++---
+ Padre/ReadLineHistory.pm |   45 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 52 insertions(+), 3 deletions(-)
+
+commit abecfe219f3a67d314447b7c17c2328772cf0cdd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 3 14:04:42 2010 -0400
+
+    Skip broken win32 plugins for Perldl2 profile load
+    
+    Interrupt and ReadLineHistory do not work on win32 in Term::REPL.
+    * Interrupt because Sys::SigAction does not work on windows.
+    * ReadLineHistory because it uses a Gnu readline specific function.
+
+ Padre/Perldl2.pm |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
+
+commit f9fa1e6df3a4ef6b48755dba6ead1ac4256d96a8
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sun May 2 22:02:59 2010 +1000
+
+    IO/Pnm/Pic.pm - Fix (MS Windows) portability
+    
+    Near the beginning of the file, use
+    File::Spec->path() to split the path portably
+    and add the '.exe' extension to "pnmtojpeg" iff
+    $^O is MS Windows.
+
+ IO/Pnm/Pic.pm |   62 +++++++++++++++++++++++++++++---------------------------
+ 1 files changed, 32 insertions(+), 30 deletions(-)
+
+commit 83c1308d9ccf00f68d17fec19cedcc1cc49dc55b
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sun May 2 20:57:33 2010 +1000
+
+    Lib/Transform/Proj4/Makefile.PL - un-"local"-ise $lib_path
+    
+    Replace the"local()" $lib_path with
+    $transform_gis_proj4_lib_path, so that the variable's
+    contents are accessible throughout the Makefile.PL.
+
+ Lib/Transform/Proj4/Makefile.PL |   47 +++++++++++++++++++--------------------
+ 1 files changed, 23 insertions(+), 24 deletions(-)
+
+commit 3d22591dd6f37069e4e961d2ef1388dcf5a13020
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sun May 2 20:44:56 2010 +1000
+
+    Lib/GIS/Proj/Makefile.PL - un-"local"-ise $lib_path
+    
+    Replace the"local()" $lib_path with $gis_proj_lib_path,
+    so that the variables contents are accessible
+    throughout the Makefile.PL.
+
+ Lib/GIS/Proj/Makefile.PL |   37 ++++++++++++++++++-------------------
+ 1 files changed, 18 insertions(+), 19 deletions(-)
+
+commit 994ca216768f720021b357daa61a6858d9d6f5c2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 1 16:05:57 2010 -0400
+
+    Add WITH_DEVEL_REPL to perldl.conf
+    
+    To support perldl v2 capabilities.  In the transition, we don't
+    want to have Devel::REPL as a hard dependency but we want to use
+    it for all the new features if it is there already...
+
+ perldl.conf |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+commit 98e9c90c34c01bbb2fbaa685c6deac7eac5ee8fa
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 1 15:45:50 2010 -0400
+
+    Add fix for Term::ReadLine::Perl support
+    
+    The Term::ReadLine::Perl support for the Attribs method
+    was broken because there was only partial implementation
+    of the TIEHASH capability.  This is (should be) a backward
+    compatable replacement that fixes the known problems.
+
+ Padre/README     |   22 +++++++++++++++-------
+ Padre/TieHash.pm |   38 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 53 insertions(+), 7 deletions(-)
+
+commit 1a9f6eb37d8c9cf0d06eccd4b1fd2cb8c0fa6e90
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 1 14:13:25 2010 -0400
+
+    Add Padre/readline-fix/ to MANIFEST.SKIP
+
+ MANIFEST.SKIP |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 6485d2788a704224633dafeec37c15e48f44ca7a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 1 12:55:47 2010 -0400
+
+    Update Known_problems and Release_Notes for CPAN
+    
+    Minor README cleanups in preparation for an upcoming
+    CPAN developer's release.
+
+ Known_problems |    3 ++-
+ Release_Notes  |   13 ++++++++++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+commit dd9a0c1e1123d78001d9fc86bf1d1890f79cd4bd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 1 12:53:33 2010 -0400
+
+    Update Perldl2 and README
+    
+    Added a couple of plugins to the Perldl2.pm profile
+    which support more types of completion as well as
+    catching Ctrl-C rather than exiting the shell.
+    A new Completion.pm now supports Term::ReadLine::Perl
+    for TAB completion on win32---finally!  Some README
+    update for consistency.
+
+ Padre/Perldl2.pm |    6 ++++--
+ Padre/README     |   38 ++++++++++++++++++++++++--------------
+ 2 files changed, 28 insertions(+), 16 deletions(-)
+
+commit cbf21ab20848ee1241930cf3e1fad282093ff02b
+Merge: 071eb86... d4a1fc4...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 30 17:36:20 2010 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 071eb866354d74c45c2ff6f15f65b00d250f8499
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 30 17:34:06 2010 -0400
+
+    Fix Perldl2 to work with Term::ReadLine::Perl
+    
+    Now completion appears to work for both Term::ReadLine::Gnu
+    and Term::ReadLine::Perl systems.
+
+ Padre/Completion.pm |  113 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ Padre/Perldl2.pm    |    4 +-
+ 2 files changed, 115 insertions(+), 2 deletions(-)
+
+commit d4a1fc4f6b224790cb90880931eb0dbfdebf104f
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Apr 30 13:43:21 2010 -0400
+
+    More documentation fixes.
+    
+    Found more broken links, etc.
+
+ Basic/Core/Basic.pm          |    1 +
+ Basic/MatrixOps/matrixops.pd |   10 +++++-----
+ Basic/Pod/Impatient.pod      |    4 ++--
+ Basic/Primitive/primitive.pd |    2 +-
+ Graphics/LUT/LUT.pm          |    2 +-
+ IO/Dumper.pm                 |    2 +-
+ IO/NDF/NDF.pm.PL             |    2 +-
+ IO/Pnm/Pic.pm                |    2 +-
+ IO/Pnm/pnm.pd                |    2 +-
+ Lib/GSL/DIFF/gsl_diff.pd     |    2 +-
+ Lib/GSL/INTEG/gsl_integ.pd   |    2 +-
+ Lib/Image2D/image2d.pd       |    2 +-
+ Lib/ImageND/imagend.pd       |    4 ++--
+ Lib/Transform/Proj4/Proj4.pd |    7 ++++---
+ 14 files changed, 23 insertions(+), 21 deletions(-)
+
+commit 2a6e926d596b4e610276b10336d0cd27c2a319c8
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Apr 30 13:38:54 2010 -0400
+
+    Remove redundant Functions head in pod
+    
+    The pp_def will insert the FUNCTIONS heading into the pod, so it is not
+    needed explicitly.  Also, some files had the incorrect =head1 name,
+    which prevented them from appearing in PDL::Index.
+
+ Lib/GSL/SF/airy/gsl_sf_airy.pd               |    2 --
+ Lib/GSL/SF/bessel/gsl_sf_bessel.pd           |    2 --
+ Lib/GSL/SF/clausen/gsl_sf_clausen.pd         |    2 --
+ Lib/GSL/SF/coulomb/gsl_sf_coulomb.pd         |    2 --
+ Lib/GSL/SF/coupling/gsl_sf_coupling.pd       |    2 --
+ Lib/GSL/SF/dawson/gsl_sf_dawson.pd           |    2 --
+ Lib/GSL/SF/debye/gsl_sf_debye.pd             |    2 --
+ Lib/GSL/SF/dilog/gsl_sf_dilog.pd             |    2 --
+ Lib/GSL/SF/elementary/gsl_sf_elementary.pd   |    4 +---
+ Lib/GSL/SF/ellint/gsl_sf_ellint.pd           |    2 --
+ Lib/GSL/SF/elljac/gsl_sf_elljac.pd           |    2 --
+ Lib/GSL/SF/erf/gsl_sf_erf.pd                 |    2 --
+ Lib/GSL/SF/exp/gsl_sf_exp.pd                 |    2 --
+ Lib/GSL/SF/expint/gsl_sf_expint.pd           |    2 --
+ Lib/GSL/SF/fermi_dirac/gsl_sf_fermi_dirac.pd |    2 --
+ Lib/GSL/SF/gamma/gsl_sf_gamma.pd             |    2 --
+ Lib/GSL/SF/gegenbauer/gsl_sf_gegenbauer.pd   |    2 --
+ Lib/GSL/SF/hyperg/gsl_sf_hyperg.pd           |    2 --
+ Lib/GSL/SF/laguerre/gsl_sf_laguerre.pd       |    2 --
+ Lib/GSL/SF/legendre/gsl_sf_legendre.pd       |    2 --
+ Lib/GSL/SF/log/gsl_sf_log.pd                 |    2 --
+ Lib/GSL/SF/poly/gsl_sf_poly.pd               |    2 --
+ Lib/GSL/SF/pow_int/gsl_sf_pow_int.pd         |    4 +---
+ Lib/GSL/SF/psi/gsl_sf_psi.pd                 |    2 --
+ Lib/GSL/SF/synchrotron/gsl_sf_synchrotron.pd |    4 +---
+ Lib/GSL/SF/transport/gsl_sf_transport.pd     |    4 +---
+ Lib/GSL/SF/trig/gsl_sf_trig.pd               |    2 --
+ Lib/GSL/SF/zeta/gsl_sf_zeta.pd               |    2 --
+ 28 files changed, 4 insertions(+), 60 deletions(-)
+
+commit 31ed9b68203076d17c3dacae10f938208d42795f
+Merge: 266f1f8... 19047be...
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Apr 30 13:36:09 2010 -0400
+
+    Merge branch 'master' of ssh://lambd@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 19047beba630700b30ecd89fa6e2048859a30ea7
+Merge: bb96a70... ba65d3d...
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Thu Apr 29 23:59:22 2010 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit ba65d3d016fc9523f0c8c67de840b91a7cc84760
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Fri Apr 30 00:58:15 2010 -0500
+
+    Updated the Guide based on Derek's linking suggestions.
+
+ Basic/Pod/Guide.pod |  172 +++++++++++++++++++++++++++-----------------------
+ 1 files changed, 93 insertions(+), 79 deletions(-)
+
+commit bb96a70629fc75e4e1e40cb89aa824924da80f2a
+Merge: 17430ad... 7501237...
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Thu Apr 29 23:51:20 2010 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 17430adb39b1395f43bfb05df5ba1701c4c1d720
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Thu Apr 29 23:49:43 2010 -0600
+
+    Fix rice compression to work with unsigned shorts; add TDIM support to FITS
+
+ IO/FITS/FITS.pm                |    4 ++--
+ Lib/Compression/compression.pd |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 75012376d6f5efa1cbcd8e2a0b3bcb3f083351c5
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Thu Apr 29 20:07:46 2010 -0500
+
+    Added my guide to PDL.
+
+ Basic/Pod/Guide.pod |  485 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 485 insertions(+), 0 deletions(-)
+
+commit 025cdd9ead0bf33568362dddc68fe0bb70e3a448
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Apr 28 22:05:45 2010 -0400
+
+    Got Term::ReadLine::Gnu to compile
+    
+    It still needs the init code on startup to be completed.
+    Some functions had to be commented out because they were
+    not actually provided by the win32 readline library used.
+    Still to be determined if the two (now commented out)
+    routines are needed for our PDL/Padre uses...
+
+ Padre/readline-fix/Gnu.xs |   26 +++++++++++++-------------
+ Padre/readline-fix/README |   31 ++++++++++++++++++++++++++++++-
+ 2 files changed, 43 insertions(+), 14 deletions(-)
+
+commit 410e6d97fe0490c7bfc09d05077c88fa231b62e3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Apr 28 13:57:40 2010 -0400
+
+    Add working directory of ReadLine::GNU on win32
+    
+    This is a temporary working directory for development
+    of Term::ReadLine::Gnu on win32 to support Perldl v.2
+    development and better win32 command support in general.
+
+ Padre/README                   |    6 +-
+ Padre/readline-fix/Gnu.xs      | 3002 ++++++++++++++++++++++++++++++++++++++++
+ Padre/readline-fix/Makefile    |  983 +++++++++++++
+ Padre/readline-fix/Makefile.PL |  217 +++
+ Padre/readline-fix/README      |   55 +
+ 5 files changed, 4262 insertions(+), 1 deletions(-)
+
+commit de06e75b06eea4d2b28d7ac3fd2265327332f9a9
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Apr 27 14:03:29 2010 -0400
+
+    Fix dimension numbering in PDL::Transform::t_fits
+    
+    Correct some unit offset errors in the labeling of input image dimensions:
+    Image X, Image Y, etc.
+
+ Lib/Transform/transform.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 47d3927dc36e8f66e062807c95a10ff83071e9f2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Apr 26 13:30:15 2010 -0400
+
+    Take tapprox() out of tests that don't use it
+    
+    Note also that tapprox is basically approx()->all so tests using
+    the hand-rolled tapprox() routine might be clearer and more
+    portably coded with approx() and all().
+
+ t/argtest.t    |   12 ++++++------
+ t/conv.t       |   12 ++++++------
+ t/croak.t      |   12 ++++++------
+ t/familyfree.t |   12 ++++++------
+ t/ica.t        |   14 +++++++-------
+ t/ones.t       |   12 ++++++------
+ t/refs.t       |   12 ++++++------
+ 7 files changed, 43 insertions(+), 43 deletions(-)
+
+commit 86df7b82bc68de78072aa83063fbd3e9bee61ae4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Apr 26 13:29:53 2010 -0400
+
+    Add Lib/Compression/ stuff to .gitignore
+
+ .gitignore |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 845873e05334fc01869fe51cdf97973f91fab454
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 25 20:30:16 2010 -0400
+
+    Minor change to perldl2 prompt and README
+
+ Padre/Perldl2.pm |    4 ++--
+ Padre/README     |    4 +++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+commit 74975d04f8ead85f3b32eff8fbbf48a7d9172dda
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 25 18:50:25 2010 -0400
+
+    New and improved perldl2 shell
+    
+    Knocked out a few more missing items for the perldl2 shell.
+    See the README in PDL/Padre for how to manually install.
+    You'll need to install Devel::REPL to use.
+
+ Padre/Perldl2.pm |   34 ++++++++++++++++++
+ Padre/README     |  102 ++++++++++++++++++++++++++++++++++++++++-------------
+ Padre/pdlrun     |    8 ----
+ 3 files changed, 111 insertions(+), 33 deletions(-)
+
+commit ae71cf82210b63e660707db2a044657eda3e1280
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 24 10:41:15 2010 -0400
+
+    Update with 2nd code from DM email
+    
+    Changed the zero handling to add a zero after an ending
+    decimal point rather than removing the decimal.  That can
+    affect implied type conversions in C and sometimes PDL.
+
+ Example/Core/new_from_string.pl |   20 ++++++++++++++++----
+ 1 files changed, 16 insertions(+), 4 deletions(-)
+
+commit 1367839c3084f78a3b173d75dfe7a1f1c65371f7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 24 09:39:47 2010 -0400
+
+    Commit first new_from_string.pl
+    
+    I realized that David had already provided a better
+    first code for this than my do-nothing one...
+
+ Example/Core/new_from_string.pl |  108 +++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 105 insertions(+), 3 deletions(-)
+
+commit 5b721b507aff0fb208c5c27db5e98d46ad5e7c36
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 24 08:51:36 2010 -0400
+
+    Add Example/Core directory
+    
+    This can be a home for code examples relating to Core
+    PDL functionality: i.e., the new_pdl_from_string routine.
+
+ Example/Core/new_from_string.pl |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 81d3b73f93cacb4c2f1969ca8e391dcc2e5223ba
+Merge: 66a90be... 47f525d...
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sat Apr 24 00:41:10 2010 -0700
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 66a90be32a9f996b0e5e14ef127dfafadeaa0bec
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sat Apr 24 00:40:11 2010 -0700
+
+    Add write support for variable-length arrays in binary tables.
+    Add support for TDIM fields in binary tables.
+
+ IO/FITS/FITS.pm |  224 ++++++++++++++++++++++++++++++++++++++++++++++---------
+ 1 files changed, 189 insertions(+), 35 deletions(-)
+
+commit 266f1f816277e4440f208d9454904980bf3d8916
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Apr 22 16:48:28 2010 -0400
+
+    Fix html links to PDL::PDL
+    
+    pod2html causes pod links like L<PDL|PDL> to point to "../PDL.html", but the correct file is "PDL.html", in the same directory as all the other top-level html docs.  PDL::Index correctly points to PDL::PDL.  This patch to mkhtmldoc.pl removes one set of '../' from links to PDL.html.
+
+ Doc/mkhtmldoc.pl |   28 +++++++++++++++++++++++++++-
+ 1 files changed, 27 insertions(+), 1 deletions(-)
+
+commit 47f525da34dd9d8318d77a087a9e005af62d1aee
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Apr 22 14:31:19 2010 -0400
+
+    Add POD for writeflexhdr to FlexRaw.pm
+    
+    I don't know why writeflex() does not write the header too...
+
+ IO/FlexRaw/FlexRaw.pm |   16 +++++++++++++++-
+ 1 files changed, 15 insertions(+), 1 deletions(-)
+
+commit 4bef4ee7afc61660064d79e012ac94a9efb197ff
+Merge: 94eaa00... 4f23e3f...
+Author: Craig DeForest <zowie@pcp057117pcs.wireless.calpoly.edu>
+Date:   Wed Apr 21 16:21:16 2010 -0700
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 94eaa00967d0e9287a2ca94f5fbcaaeaf99ed14e
+Author: Craig DeForest <zowie@pcp057117pcs.wireless.calpoly.edu>
+Date:   Wed Apr 21 16:20:25 2010 -0700
+
+    run-time (not compile-time) load for PDL::Compression.
+
+ IO/FITS/FITS.pm |  100 ++++++++++++++++++++++++++++++++++++++++---------------
+ 1 files changed, 73 insertions(+), 27 deletions(-)
+
+commit a8059f8d481e64ddda95efe3bb47594d4f5c8890
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Wed Apr 21 17:46:54 2010 -0400
+
+    Update POD to fix many broken hyperlinks
+    
+    Used the W3C::Checklink module to find broken links in the generated HTML documentation.
+    This commit takes care of (all of?) the broken links that were due to POD typos, etc.
+
+ Basic/Core/Core.pm.PL           |   18 +++++++-------
+ Basic/Core/Exporter.pm          |    4 +-
+ Basic/Gen/pptemplate.PL         |    2 +-
+ Basic/Ops/ops.pd                |    2 +-
+ Basic/Pod/API.pod               |    2 +-
+ Basic/Pod/Impatient.pod         |    6 ++--
+ Basic/Pod/Indexing.pod          |   16 ++++++------
+ Basic/Pod/Internals.pod         |    2 +-
+ Basic/SourceFilter/NiceSlice.pm |    2 +-
+ Doc/Doc.pm                      |   12 ++++----
+ Lib/DiskCache.pm                |   50 +++++++++++++++++++++++++-------------
+ Lib/FFT/fft.pd                  |    8 +++---
+ Lib/ImageND/imagend.pd          |    2 +-
+ Lib/Transform/transform.pd      |   31 ++++++++++++-----------
+ 14 files changed, 87 insertions(+), 70 deletions(-)
+
+commit 4f23e3f72f07be8733b13a2b0432d9d98c94d910
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Wed Apr 21 12:51:29 2010 -0500
+
+    Made PP's import function a tad smarter and added useful error messages to FFT.
+
+ Basic/Gen/PP.pm |    6 +++++-
+ Lib/FFT/fft.pd  |   38 ++++++++++++++++++++++++++++++++------
+ t/fft.t         |   12 +++++++++++-
+ 3 files changed, 48 insertions(+), 8 deletions(-)
+
+commit 0e5bb11fb89f0f6134ecaf53ce6c3cb7e72e08cd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 20 17:22:18 2010 -0400
+
+    Minor fix to test output text for t/pgplot.t
+    
+    NOTE: if you have PGPLOT_DEV environment variable set to
+    /xs then the plot window will never go away---even if closed.
+    Use /xw for a cleaner test appearance.
+
+ t/pgplot.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit b8ace26c6b79ae1de0ed270febeeb05d380e9a8f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 20 11:04:22 2010 -0400
+
+    Update pdl() and PDL::new() docs for STRING args
+    
+    Added some infomation in the pdl() POD referencing
+    the new STRING capability with a note to check the
+    PDL::new POD if you want to try it.  Not the most
+    useful but it should help folks get started with the
+    new support if interested---they'll have a better
+    chance at figuring out what to do...
+
+ Basic/Core/Core.pm.PL |   28 ++++++++++++++++++----------
+ 1 files changed, 18 insertions(+), 10 deletions(-)
+
+commit 674cb390e1235e2957be78b7a030ffcdf2cc7db9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 18 22:41:58 2010 -0400
+
+    Add tests to t/core.t for pdl(STRING) arguments
+    
+    These are placeholder tests for now.  They need to grow as the
+    STRING constructor interface evolves.
+
+ t/core.t |   28 +++++++++++++++++++++++++++-
+ 1 files changed, 27 insertions(+), 1 deletions(-)
+
+commit 707ef96b4ebb1d4f4ffd86f1206d2373a79cd807
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 18 21:56:00 2010 -0400
+
+    Update $PDL::VERSION to 2.4.6_005 and readme's
+    
+    This version increase marks two new additions to PDL: FITS compressed
+    format support with an associated PDL::Compression module and hooks to
+    support support of string data format support to pdl and PDL::new which
+    will lead to matlab/octave style constructor support and cut-and-paste
+    capability between perldl display output and pdl constructor input.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    7 +------
+ Release_Notes  |   38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+), 7 deletions(-)
+
+commit ad7d299b075e133f6b97425f08ca4f01bcb5b17b
+Merge: 3334ff5... 4061e08...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 18 17:55:50 2010 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 3334ff5d8a77fc10cbbcf924b64506906be5e599
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 18 17:50:17 2010 -0400
+
+    Add hooks for PDL::new to handle STRING data
+    
+    I did not have time to to a full implementation for the
+    new Matlab-style (comma free) string data option for the
+    pdl routine (a.k.a. PDL::new under the hood).  I did get
+    a basic dispatch for the new option working which uses
+    a routine PDL::Core::new_pdl_from_string to do its magic.
+    
+    If you define that routine, you'll be able to play with
+    options for the STRING input handling for pdl / PDL::new.
+    Type help PDL::new or look at the PDL/Basic/Core/Core.pm
+    source for how it works and what a proper new_pdl_from_string
+    routine needs to do.  A free example is included!
+
+ Basic/Core/Core.pm.PL |   46 +++++++++++++++++++++++++++++++++++++++++-----
+ Basic/Core/Core.xs.PL |    9 +++++++++
+ 2 files changed, 50 insertions(+), 5 deletions(-)
+
+commit 4061e08e031ad22d4ba315c000c9c6610deb0493
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sun Apr 18 14:50:23 2010 -0600
+
+    Added tiled compressed image handling to rfits in FITS.pm
+
+ IO/FITS/FITS.pm                |  101 +++++++++++++++++++++++++++++++++++-----
+ Lib/Compression/compression.pd |    5 +-
+ 2 files changed, 91 insertions(+), 15 deletions(-)
+
+commit 2a35906d75fb7c13f9c7e2bd953d8a554ffedc9a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 18 16:10:13 2010 -0400
+
+    Update Known_problems from fixed bugs info
+
+ Known_problems |   44 ++++++++++++++++++--------------------------
+ 1 files changed, 18 insertions(+), 26 deletions(-)
+
+commit c0dfa062b87c930f179612a4258cf4510a3831d3
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sun Apr 18 00:55:01 2010 -0600
+
+    Fix up code to not crash on non-lazy linking systems; improve
+    documentation; shut up chatter.
+
+ Lib/Compression/compression.pd |   90 ++++++++++++++++++++++++++++-----------
+ Lib/Compression/ricecomp.c     |   21 +--------
+ 2 files changed, 66 insertions(+), 45 deletions(-)
+
+commit 0e56805851dd2fae9faec416f730f4a5cb5bbda6
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sat Apr 17 09:13:54 2010 -0600
+
+    Remove unused .h file reference from ricecomp.c
+
+ Lib/Compression/ricecomp.c |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit c66761d7cb3a7dd7897a664e33db0889d0b51bd2
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sat Apr 17 23:41:32 2010 +1000
+
+    perldl.PL - 'defined %h' is deprecated in 5.12
+    
+    Remove the 'defined' from 'defined %PDL::Config'
+    in order to avoid the deprecation warning that
+    perl-5.12 issues wrt this practice.
+
+ perldl.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 69a40d166b6b5d038f4db23b989c98629173deed
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sat Apr 17 02:08:02 2010 -0600
+
+    New compression module in Lib
+
+ IO/FITS/FITS.pm                |    5 +-
+ Lib/Compression/Makefile.PL    |   14 +
+ Lib/Compression/compression.pd |  213 ++++++++++++
+ Lib/Compression/ricecomp.c     |  714 ++++++++++++++++++++++++++++++++++++++++
+ Lib/Makefile.PL                |    2 +-
+ 5 files changed, 944 insertions(+), 4 deletions(-)
+
+commit 22e72f69bb07931d5b7503de92357451a596291d
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Thu Apr 15 00:54:48 2010 -0600
+
+    Added variable-length record support to binary table extension for rfits;
+    began work on a tile-compressed-image unpacker.
+
+ IO/FITS/FITS.pm     |  219 +++++++++++++++++++++++++++++++++++++++++++++------
+ IO/FITS/Makefile.PL |    2 +-
+ 2 files changed, 195 insertions(+), 26 deletions(-)
+
+commit d790370a05e2ad4a7b834f7e33bf691d24c7e470
+Author: Craig DeForest <zowie@dhcp-10-120.boulder.swri.edu>
+Date:   Wed Apr 14 10:56:09 2010 -0600
+
+    Added variable-length row support to the FITS bintable reader.
+    This is preparatory to supporting tile-compressed images.
+
+ IO/FITS/FITS.pm |  188 ++++++++++++++++++++++++++++++++++++++++++++++++------
+ 1 files changed, 167 insertions(+), 21 deletions(-)
+
+commit d148add1880d7dac8f200723e07c9c77fac9ae5d
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Tue Apr 13 22:50:08 2010 -0600
+
+    Fixes SF bug 2949455 ("demo transform broken"): sign error in FITS header
+    CROTA2 interpretation by PGPLOT libraries.
+
+ Graphics/PGPLOT/Window/Window.pm |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 0234f353fd8d970c3a4a6a550400b17560d4e309
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 13 17:36:18 2010 -0400
+
+    Use s/\r?\n$// instead of chomp for rcols
+    
+    This should be more tolerate of mixed unix and dos
+    file environments.
+
+ IO/Misc/misc.pd |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 292a2040bcb76645a9cbd9c62de1161d283af5b9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Apr 8 10:15:02 2010 -0400
+
+    Fix problem with window shrink creep in imag2d()
+    
+    Due to round off errors in the constrained resize, some
+    platforms saw the imag2d() windows shrink slowly until
+    the display died.  This fixes the problem by not issuing
+    a glutReshapeWindow() call unless the change would be
+    more than 2 pixels.
+
+ imag2d.pdl |   19 +++++++++++++++++--
+ 1 files changed, 17 insertions(+), 2 deletions(-)
+
+commit 07269fd66807ad8fad59129addda02a21c0e6810
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Thu Apr 8 07:44:43 2010 -0500
+
+    Added a note about local::lib to the See Also section of the docs.
+
+ Basic/AutoLoader.pm |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+commit 7f12b9e1dc6a3ce040f5a38f62c04e0325946058
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu Apr 8 00:28:21 2010 +1000
+
+    Basic/Core/Dev.pm - deprecation warning of 'defined(%h)'
+    
+    With 5.12, a deprecation warning is issued when we
+    check for 'defined(%h)'. The solution is to instead
+    simply check that '%h' is true ... let's try that !!
+
+ Basic/Core/Dev.pm |   11 ++---------
+ 1 files changed, 2 insertions(+), 9 deletions(-)
+
+commit 90929e095aea8ec65d02458d12e00faa078e6d58
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 2 10:23:12 2010 -0400
+
+    Add to lib/include paths for IO/HDF/Makefile.PL
+    
+    Patch submitted by Olivier Archer, sf patch #2981131
+
+ IO/HDF/Makefile.PL |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 6119c52f51d58614f486968aa552e0996bba4bd7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 2 09:22:11 2010 -0400
+
+    Apply "silliest patch ever" to NiceSlice.pm
+    
+    In an April 1st tour de force, avar@cpan.org submitted
+    a patch to pdl-git which should allow just his modules
+    to show up on the first page of search.cpan.org if you
+    type in avar.  Made my day, AEvar.  Hope this works!
+
+ Basic/SourceFilter/NiceSlice.pm |   10 +++++-----
+ Basic/SourceFilter/README       |    6 +++---
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+commit 67c72199c38523eebbac2490cb488d166ea5a166
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Apr 1 09:28:03 2010 -0400
+
+    Fix re.cpan.org #53815 in IO/HDF/SD/SD.pd
+    
+    There was a typo in the return from the SDgetattributename
+    sub where it should have been returning SDgetattributenames,
+    the method defined immediately above.  There is no test
+    for this error but pushing to git in the hopes that the
+    user reporting the problem can verify the fix.
+
+ IO/HDF/SD/SD.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 52af047e353b7039e43316a22abd2426b523df28
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 31 13:40:30 2010 -0400
+
+    Fix minor doc example error for rcols in misc.pd
+
+ IO/Misc/misc.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 49a70e2cbade87256a6254f24b85965253ac8ea5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 29 09:43:16 2010 -0400
+
+    Fix uniqvec bug from SF# 2978576
+    
+    uniqvec is documented to always return a 2D output piddle.
+    This was not the case for the case with a single uniq vector
+    of length greater than 2 which got returned in 1D.
+
+ Basic/Primitive/primitive.pd |    2 +-
+ t/primitive.t                |    7 +++----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+commit 94746e76138508a34282848562f0d39ffc49a290
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 24 17:30:21 2010 -0400
+
+    Add some more examples of [] syntax for rcols POD
+
+ IO/Misc/misc.pd |   16 ++++++++++++----
+ 1 files changed, 12 insertions(+), 4 deletions(-)
+
+commit 7a2fc1dcddce3a73096206a0c0afc913e9d96fb0
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Wed Mar 24 14:30:44 2010 -0400
+
+    correct typo in PDL::Index description
+    
+    dcouments-->documents
+
+ Doc/scantree.pl |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 825425c83ab6c4be6eb904c3a5c282f570b3ee75
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Mar 16 16:08:59 2010 -0400
+
+    Add VERBOSE option to rcols()
+    
+    By default it has the value of $PDL::verbose.
+    Other routines in PDL::IO::Misc can be converted
+    once they support more general options as with
+    rcols().
+
+ IO/Misc/misc.pd |   26 +++++++++++++++-----------
+ 1 files changed, 15 insertions(+), 11 deletions(-)
+
+commit c63abd04fa2765843f6c70c66911fd427a1e101f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Mar 16 10:53:36 2010 -0400
+
+    Update Release_Notes and Known_problems
+
+ Known_problems |   16 ++++++++++------
+ Release_Notes  |   24 ++++++++++++++++++++++++
+ 2 files changed, 34 insertions(+), 6 deletions(-)
+
+commit 5a063e63be009c7f156af8bf8524ac57929fe938
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 15 23:49:44 2010 -0400
+
+    Fix another rcols edge case
+
+ IO/Misc/misc.pd |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit 07ca5de92ccb4358fe683abce761ebe6249b822d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 15 23:25:48 2010 -0400
+
+    Updated $PDL::VERSION to 2.4.6_004 for new rcols
+    
+    Since PDL::IO::Misc does not have its own version, I've
+    incremented the developers version number to mark the
+    fact that this is the first with the multicolumn piddle
+    support in rcols.
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 9d9f2561b8c56752cb444454290b8a086b83173d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 15 23:23:33 2010 -0400
+
+    Finished rcols() multicolumn piddle support
+    
+    Updated the rcols() POD with details of the new multicolum
+    specification option via array refs.  Finished implementing
+    a few more edge cases of the implicit column number generation
+    for multicolumn piddles.
+
+ IO/Misc/misc.pd |   58 +++++++++++++++++++++++++++++++++++++++---------------
+ 1 files changed, 42 insertions(+), 16 deletions(-)
+
+commit cf362903ed96244b5a9311be8af7e320b8c2cffb
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 15 22:30:20 2010 -0400
+
+    Fix failure to strip PERLCOLS in rcols
+    
+    If a column is specified for input with rcols() but also
+    listed in PERLCOLS, then the position of the data in output
+    is as listed in the explicit column specification location
+    but the type is a perl array ref.  This fixes an oops where
+    I had failed to stop reading into the piddle.
+
+ IO/Misc/misc.pd |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 9c4708fde643579bdbd74664adf1e6b7e5b07798
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 15 18:48:02 2010 -0400
+
+    Multicol input piddles for rcol()
+    
+    This is the first implementation of the new multicolumn
+    syntax supporting multicolumn input data piddles as rcols
+    output.  Still needs testing, docs.
+
+ IO/Misc/misc.pd |  498 ++++++++++++++++++++++++++++++-------------------------
+ 1 files changed, 268 insertions(+), 230 deletions(-)
+
+commit 04a3bca1fda0413d8502f4fd7be381c592398d1a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 15 11:03:37 2010 -0400
+
+    Refactor data structure for rcols
+    
+    This is a minor change of data structure used for
+    chunking the rcols IO.  Originally, this was [ X, a, b, c... ]
+    where X was either a PDL or ARRAY and a, b, c... were the
+    elements being collected.  It makes book keeping and access
+    much simpler if I use [ PDL, [] ] or [ [], [] ] since now
+    all the new elements can be directly accessed without shifts
+    or pops.  Conveniently, pdl() take either arrays or array
+    refs.
+
+ IO/Misc/misc.pd |   35 +++++++++++++++++------------------
+ 1 files changed, 17 insertions(+), 18 deletions(-)
+
+commit e948e1bbfde04098f53d829d627708e14f7c2120
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 14 20:33:01 2010 -0400
+
+    Add support for qr{} patterns to rcols
+
+ IO/Misc/misc.pd |   18 +++++++++++-------
+ 1 files changed, 11 insertions(+), 7 deletions(-)
+
+commit a99eda0575e7c09262de65a55ac423d3659c7bd5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 14 18:45:07 2010 -0400
+
+    Refactor _ext_1D to _ext_lastD for rcols
+    
+    In order to support multiple columns in one piddle
+    with rcols, need to have the extend routine work on
+    the last dim of an arbitrary piddle and not just
+    dim 0 of a 1D piddle.
+    
+    A cool thing about the implementation was that I
+    could use ->mv(-1,)->slice()->mv(0,-1) to use the
+    same, simple slice expression as in the original
+    code.  Way to go PDL!
+
+ IO/Misc/misc.pd |   19 +++++++++++--------
+ 1 files changed, 11 insertions(+), 8 deletions(-)
+
+commit dd4b2dc1728ec149d29677a456f11f553b22058a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 13 10:14:53 2010 -0500
+
+    Fuse push for loops in rcols
+    
+    Minor refactoring only, no algorithm change.
+
+ IO/Misc/misc.pd |   11 +----------
+ 1 files changed, 1 insertions(+), 10 deletions(-)
+
+commit 1b51f653ee4f8de0e68e9a436edea7f233ee8de4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 12 13:19:30 2010 -0500
+
+    Minor cleanup of _burp_1D for rcols performance
+    
+    This did not make much difference but it saved
+    a few percent in the overhead.
+
+ IO/Misc/misc.pd |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
+
+commit 91683a97d6608846aa0d621ed0e3b2a5a439a627
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 12 11:25:59 2010 -0500
+
+    Set $PDL::VERSION to 2.4.6_003 to mark new rcols
+    
+    Since PDL::IO::Misc takes its version information from
+    PDL, I'm incrementing the sub release to mark the new
+    rcols performance and functionality introduced.
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit bebb0d951db3418f5267952d39a65d910675fa4c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 12 11:23:48 2010 -0500
+
+    Fix problem with default split handling
+    
+    I rediscovered that split(' ', $var) is not the
+    same as split($imaspace, $var) where $imaspace eq ' '
+    and fixed the oops.
+
+ IO/Misc/misc.pd |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 850f312e3dd705d0ed37beed9d1fe637792b0f9d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 11 23:02:29 2010 -0500
+
+    Make rcols calculate # of piddle cols more often
+    
+    Now rcols will calculate the piddle columns in your
+    data file based on the split of the first data line
+    even if PERLCOLS is specified.
+
+ IO/Misc/misc.pd |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 8218825ef90aa9fe2ed2b975778014dfe3bb67bc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 11 18:21:47 2010 -0500
+
+    Add support for COLUMN ID headings to rcols()
+    
+    This adds a new option, COLIDS to rcols() that may be used to
+    return an array of field strings from the first line of the
+    file where the strings are typically used as column IDs for
+    processing purposes.
+
+ IO/Misc/misc.pd |  219 +++++++++++++++++++++++++++++++------------------------
+ 1 files changed, 124 insertions(+), 95 deletions(-)
+
+commit 0f8fa6e742d21c3074aaf23186d9b973eae3879b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 11 14:26:43 2010 -0500
+
+    Improved rcols() IO performance
+    
+    By using intermediate perl lists to queue column data
+    the number of calls converting between perl data and
+    PDL data are reduced.  Since the per-call latency was
+    the reason for relative slowness, batching these by
+    chunks of 500 reduces the overhead considerably...
+
+ IO/Misc/misc.pd |   27 +++++++++++++++++++--------
+ 1 files changed, 19 insertions(+), 8 deletions(-)
+
+commit 04329123fc016a2e4086b75648d2a86e3a931554
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 10 18:36:44 2010 -0500
+
+    Refactor rcols to support memory-time perf trades
+    
+    A profile of PDL::rcols shows that much/most of the
+    time is spent in the PDL set (and internal set_c) calls
+    to update the column piddles with the values as they
+    are read.  This refactors the basic data structures for
+    the columns to allow for associated perl arrays for all
+    columns.  Then we can call the expensive (in latency)
+    PDL set/assignment routines less often with the hope of
+    speeding up the overall IO performance.
+
+ IO/Misc/misc.pd |   64 +++++++++++++++++++++++++++++++++++++++++-------------
+ 1 files changed, 48 insertions(+), 16 deletions(-)
+
+commit 2fa1c51e2ec289edf3ffc74144fbdc86033a55dd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 10 14:07:39 2010 -0500
+
+    Refactor rcols and improve regex usage
+    
+    Clean up the pattern options in rcols() by replacing
+    them with qr{} to avoid re-compiles and to factor out
+    repetitive checks in the inner IO loop split operation.
+
+ IO/Misc/misc.pd |   25 +++++++++++++------------
+ 1 files changed, 13 insertions(+), 12 deletions(-)
+
+commit cd03c1e0e8e704d279c17a46c427302bfbb302d2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 8 18:00:41 2010 -0500
+
+    More PDL/ARRAY clean up for rcols
+    
+    Added pass-thru "do nothing" the routine to extend the PDL
+    arrays being read into allowing for symmetric treatment of
+    piddles and perl ARRAY refs.
+    
+    Renamed ext1D to _ext_1D since it is an internal routine
+    
+    Renamed _at_1d to _at_1D to match the naming scheme
+    
+    Changed 1d to 1D in comments and strings throughout to consistency.
+    
+    Added some comments/notes to remind us to follow up on possible
+    performance issues with the current rcols() implementation.
+    The hope is to use the feedback from Maggie Xiong re here get_data()
+    routine to set rcols() performance and functionalty goals: where
+    it works with comparable performance to get_data() and provides
+    similar functionality as well (specifically missing is support for
+    column headers).
+
+ IO/Misc/misc.pd |   58 +++++++++++++++++++++++++++++-------------------------
+ 1 files changed, 31 insertions(+), 27 deletions(-)
+
+commit a95815769d889429548a217dea467bbef5a8c9f6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 4 16:57:46 2010 -0500
+
+    Fix minor doc error
+
+ IO/Misc/misc.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 3867b9a34e2198a7c2a64f051dbc7916f1a8c6b8
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Tue Mar 2 15:37:27 2010 -0600
+
+    Added tentative documentation for PDL::PP's pp_setversion command.
+
+ Basic/Pod/PP.pod |   18 ++++++++++++++++--
+ 1 files changed, 16 insertions(+), 2 deletions(-)
+
+commit 3a6a21811d1c64d76d3a1bb317bd8f4c19f143ff
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Wed Feb 24 00:14:59 2010 -0600
+
+    A few more error-handling corrections.
+    
+    No tests.  Sorry.
+
+ Basic/Core/Core.pm.PL |    9 ++++++---
+ 1 files changed, 6 insertions(+), 3 deletions(-)
+
+commit 38802754fed835c0d8d763c91ae5f65e631a9655
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Tue Feb 23 19:26:02 2010 -0600
+
+    Added some handy error checking and messaging for screwy slices.
+
+ Basic/Core/Core.pm.PL |   74 ++++++++++++++++++++++++++++--------------------
+ 1 files changed, 43 insertions(+), 31 deletions(-)
+
+commit 2dbefe331493d6bbdf5dee3ae2dd2808ba5880b0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 18 09:58:42 2010 -0500
+
+    Add subtest names to t/proj_transform.t
+    
+    Hope this helps to track down a CPAN test failure for this.
+    Need to isolate the problem first.
+
+ t/proj_transform.t |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 7e814d1cd203cde164c376d677d43fdc6785118f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 18 09:49:58 2010 -0500
+
+    Add subtest names to t/gsl_interp.t
+    
+    There have been test failures from CPAN testers and the
+    subtest names may help to locate and diagnose the failures.
+
+ t/gsl_interp.t |   24 ++++++++++++------------
+ 1 files changed, 12 insertions(+), 12 deletions(-)
+
+commit d30b1b2d7921c7c255e92b3adc8e6b13d1fbdaa3
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Thu Feb 11 21:47:25 2010 -0600
+
+    Rewrote cat's error processing so that it's faster and more informative.
+    
+    The original cat code would barf, but the problem is that it would do so
+    with a retarded message.  I revised my first attempts at solving this by
+    putting the original cat code inside an eval.  After the eval, if there
+    was an error, I go on a big parsing spree to figure out what all the
+    user may have screwed up.
+
+ Basic/Core/Core.pm.PL |  114 ++++++++++++++++++++++++++++++++++++++++---------
+ t/core.t              |   33 ++++++++++++--
+ 2 files changed, 122 insertions(+), 25 deletions(-)
+
+commit 5011f4d63e91d6857b6132e74e9c16afcb07b432
+Merge: 54532da... ff8da8b...
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Thu Feb 11 17:43:20 2010 -0600
+
+    Merge branch 'master' of ssh://run4flat@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 54532da39fabb509a4c41e154bdb69b821e989a8
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Thu Feb 11 17:42:24 2010 -0600
+
+    Made cat's bad-argument message easier to read.
+
+ Basic/Core/Core.pm.PL |    4 ++--
+ t/core.t              |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit a06c5b98f1f4853cbd5548d277102026eef0591c
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Thu Feb 11 17:27:41 2010 -0600
+
+    Make cat check its arguments for piddleness and give a useful error when they're not.
+    
+    Before this, cat wouldn't check it arguments.  As a result, if you inadvertently gave
+    cat a non-piddle you would usually get an obscure error message directing you to
+    PDL's Core.pm.  Now cat checks its arguments and tells you when they're messed up.
+
+ Basic/Core/Core.pm.PL |   12 ++++++++++++
+ t/core.t              |    9 ++++++++-
+ 2 files changed, 20 insertions(+), 1 deletions(-)
+
+commit ff8da8b646c2e969948fb4a14167bcbfb77f41fa
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Thu Feb 11 12:50:24 2010 -0600
+
+    Fixed weird parser warning about a bad signature.
+
+ Doc/Pod/Parser.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit edd3668e64379c6a0ad7acbfa471713e7918b3b3
+Merge: 806c75e... a6f4018...
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Thu Feb 11 09:15:34 2010 -0600
+
+    Merge branch 'master' of ssh://run4flat@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 806c75ee89de1719ea47dffcfef6f9be3914ddf4
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Thu Feb 11 08:52:47 2010 -0600
+
+    Corrected PDL::Doc::Perldl::usage_string's erroneous no-match behavior.
+    
+    usage_string is supposed to return a usage string, but if it didn't match anything the function
+    printed 'no match' rather than returning it.  Normally this isn't a problem, but it gave my
+    extraneous output.
+
+ Doc/Doc/Perldl.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit a6f4018fc378499ed4272ac8cd8bb5d40220a52b
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu Feb 11 14:29:51 2010 +1100
+
+    perldl.conf - invalid config option fixed.
+    
+    'WITH_GSL => true' changed to 'WITH_GSL => undef'
+
+ perldl.conf |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 4f1e877c52373b10c916db84ee759f14e333f82d
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Wed Feb 10 14:42:39 2010 -0500
+
+    PDL version to 2.4.6_002 for new development
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit aa7f2a2bac6e446c99491e4bcf660cad0123ea7d
+Merge: 114701c... 7afd98a...
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Wed Feb 10 14:41:20 2010 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 114701cddcade76058d87cc7faa1a1179d75be0f
+Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
+Date:   Wed Feb 10 14:36:11 2010 -0500
+
+    Added IO/IO.pod to the MANIFEST
+
+ MANIFEST |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 7afd98a9a4be8d0f4c63e3adb46634c88fad48fd
+Author: David Mertens <david@david-laptop.(none)>
+Date:   Wed Feb 10 13:09:31 2010 -0600
+
+    Fixed confusing PP documentation about pp_add_exported.
+
+ Basic/Pod/PP.pod |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
+
 commit 8d5691c514e71a1d7f849e1f2ddaf83e506b241a
 Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
 Date:   Wed Feb 10 13:40:19 2010 -0500
@@ -260,7 +1651,7 @@ Date:   Wed Jan 20 16:42:21 2010 -0600
  1 files changed, 2 insertions(+), 2 deletions(-)
 
 commit 109e4e916e3c3380f6f6bcfff3a9876f92d9826a
-Merge: 812c36e 2e38dad
+Merge: 812c36e... 2e38dad...
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Wed Jan 20 15:28:05 2010 -0600
 
@@ -276,7 +1667,7 @@ Date:   Wed Jan 20 15:27:36 2010 -0600
  1 files changed, 22 insertions(+), 23 deletions(-)
 
 commit 2e38dadc8ce6fbc499fbd0db8af570f0efe666f1
-Merge: 7a56efd d34aae6
+Merge: 7a56efd... d34aae6...
 Author: Derek Lamb <lambd@users.sourceforge.net>
 Date:   Wed Jan 20 15:50:58 2010 -0500
 
@@ -452,7 +1843,7 @@ Date:   Fri Jan 8 11:19:50 2010 -0500
  1 files changed, 2 insertions(+), 0 deletions(-)
 
 commit 5dea5c793e92e75cb419746d3d55d4906a60bc62
-Merge: e738fa2 87a1e84
+Merge: e738fa2... 87a1e84...
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Jan 6 13:31:21 2010 -0500
 
@@ -489,7 +1880,7 @@ Date:   Tue Jan 5 13:42:05 2010 -0600
  1 files changed, 2 insertions(+), 1 deletions(-)
 
 commit 7acbb1a20e4163650b6e62d26cf63f1a4c1b043e
-Merge: 30d1c7b 0ccd029
+Merge: 30d1c7b... 0ccd029...
 Author: David Mertens <david@david-laptop.(none)>
 Date:   Tue Jan 5 13:37:00 2010 -0600
 
@@ -533,7 +1924,7 @@ Date:   Tue Jan 5 12:04:45 2010 -0500
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit d0b54635a76de7e1625f6088445415630da00125
-Merge: a2da5ac 3aaab11
+Merge: a2da5ac... 3aaab11...
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Tue Jan 5 07:48:57 2010 -0600
 
@@ -832,7 +2223,7 @@ Date:   Wed Dec 30 23:09:00 2009 -0500
  1 files changed, 6 insertions(+), 0 deletions(-)
 
 commit 117d1cdc9b1efeafd12d063315c3c01dda8d7da8
-Merge: 35321ff bb3d913
+Merge: 35321ff... bb3d913...
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Dec 30 21:30:31 2009 -0500
 
@@ -870,7 +2261,7 @@ Date:   Tue Dec 29 11:10:41 2009 -0500
  2 files changed, 37 insertions(+), 1 deletions(-)
 
 commit 35321ff5103616716b6b02c2cf8ca1258c2559c0
-Merge: 25cf2c6 7c31c35
+Merge: 25cf2c6... 7c31c35...
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Dec 28 20:16:51 2009 -0500
 
@@ -899,7 +2290,7 @@ Date:   Mon Dec 28 15:34:45 2009 -0500
  1 files changed, 42 insertions(+), 43 deletions(-)
 
 commit f11bd26d75d4241e9102fabfc64591bfc0c3f77d
-Merge: d0bd1af ae53283
+Merge: d0bd1af... ae53283...
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Dec 28 10:42:32 2009 -0500
 
@@ -1300,14 +2691,14 @@ Date:   Sat Dec 19 16:46:51 2009 -0500
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit a2da5ac4c70c66abd7d5205481256ff2aeb98c94
-Merge: 2df55ef 319c72b
+Merge: 2df55ef... 319c72b...
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Mon Dec 14 12:56:45 2009 -0600
 
     Merge branch 'master' of git://pdl.git.sourceforge.net/gitroot/pdl/pdl
 
 commit d0bd1af56add57a397e3dd16019bcc3d59dedbc9
-Merge: 9fb93f8 319c72b
+Merge: 9fb93f8... 319c72b...
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Dec 11 10:07:39 2009 -0500
 
@@ -1831,7 +3222,7 @@ Date:   Fri Oct 23 11:41:17 2009 +0200
  1 files changed, 0 insertions(+), 38 deletions(-)
 
 commit bd209c53d51fde9b0a73463657083518b2a6f4bc
-Merge: da9b755 6b71df5
+Merge: da9b755... 6b71df5...
 Author: Henning Glawe <glaweh@debian.org>
 Date:   Fri Oct 23 10:57:18 2009 +0200
 
@@ -2122,7 +3513,7 @@ Date:   Wed Oct 14 18:09:53 2009 -0400
  2 files changed, 5 insertions(+), 1 deletions(-)
 
 commit 2df55ef32ba5b858841dea766e91b99a033c7e17
-Merge: dd4e079 e93558b
+Merge: dd4e079... e93558b...
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Wed Oct 14 17:06:24 2009 -0500
 
@@ -2252,7 +3643,7 @@ Date:   Wed Oct 7 17:45:43 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit 6ded129679883ead13525027aca72a91630e0b72
-Merge: 246324f b5243ae
+Merge: 246324f... b5243ae...
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Oct 7 17:35:09 2009 -0400
 
@@ -3088,7 +4479,7 @@ Date:   Wed Sep 23 16:51:26 2009 -0400
  6 files changed, 69 insertions(+), 114 deletions(-)
 
 commit 1f9a74d944f8fcf09e3d8bbf5f87133bf1d0867b
-Merge: 5fedb91 2e3fcf6
+Merge: 5fedb91... 2e3fcf6...
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 16:44:00 2009 -0400
 
@@ -3104,7 +4495,7 @@ Date:   Wed Sep 23 16:36:20 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit 5fedb919b3b95e42b0acb39b62df45d25693a3e0
-Merge: dd01556 7677f77
+Merge: dd01556... 7677f77...
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 16:10:48 2009 -0400
 
@@ -3123,7 +4514,7 @@ Date:   Wed Sep 23 16:07:08 2009 -0400
  1 files changed, 13 insertions(+), 0 deletions(-)
 
 commit dd01556cd99467dba79c1c4f24456e2e8dd91627
-Merge: 9b6b1f9 3084dba
+Merge: 9b6b1f9... 3084dba...
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 14:27:36 2009 -0400
 
@@ -3141,7 +4532,7 @@ Date:   Wed Sep 23 14:26:42 2009 -0400
  3 files changed, 10 insertions(+), 8 deletions(-)
 
 commit 9b6b1f9d1f4a2880ab179e430211af2856f71dab
-Merge: 205d5b9 6743108
+Merge: 205d5b9... 6743108...
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 14:24:21 2009 -0400
 
@@ -3939,7 +5330,7 @@ Date:   Fri Jul 10 15:27:16 2009 -0400
  1 files changed, 2 insertions(+), 2 deletions(-)
 
 commit 100a3114b05e4afeb156485d94f89320861b697a
-Merge: 1401619 2146da8
+Merge: 1401619... 2146da8...
 Author: Chris Marshall <chm@alum.mit.edu>
 Date:   Fri Jul 10 11:25:57 2009 -0400
 
@@ -3977,7 +5368,7 @@ Date:   Thu Jul 9 22:11:39 2009 -0400
  1 files changed, 4 insertions(+), 2 deletions(-)
 
 commit 822c0e08c0243b054d6f87dcd61841083d745c46
-Merge: b1270b4 5b15c19
+Merge: b1270b4... 5b15c19...
 Author: Chris Marshall <marshallch@users.sourceforge.net>
 Date:   Thu Jul 9 21:53:00 2009 -0400
 
@@ -4014,7 +5405,7 @@ Date:   Thu Jul 9 13:09:16 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit b1270b46b05019ab859b7e730eeef8a5cde34a09
-Merge: b1c7bd8 479e8a3
+Merge: b1c7bd8... 479e8a3...
 Author: Chris Marshall <marshallch@users.sourceforge.net>
 Date:   Tue Jun 30 23:17:12 2009 -0400
 

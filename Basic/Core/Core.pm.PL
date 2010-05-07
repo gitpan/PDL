@@ -170,11 +170,11 @@ sub barf;
 
 =for ref
 
-piddle constructor - creates new piddle from perl scalars/arrays and piddles
+PDL constructor - creates new piddle from perl scalars/arrays, piddles, and strings
 
 =for usage
 
- $a = pdl(SCALAR|ARRAY REFERENCE|ARRAY);
+ $a = pdl(SCALAR|ARRAY REFERENCE|ARRAY|STRING);
 
 =for example
 
@@ -182,6 +182,10 @@ piddle constructor - creates new piddle from perl scalars/arrays and piddles
  $a = pdl ([1..10]);           # 1D array
  $a = pdl (1,2,3,4);           # Ditto
  $b = pdl [[1,2,3],[4,5,6]];   # 2D 3x2 array
+ $b = pdl "[[1,2,3],[4,5,6]]"; # Ditto (slower)
+ $b = pdl "[1 2 3; 4 5 6]";    # Ditto
+ $b = pdl q[1 2 3; 4 5 6];     # Ditto, using the q quote operator
+ $b = pdl "1 2 3; 4 5 6";      # Ditto, less obvious, but still works
  $b = pdl 42                   # 0-dimensional scalar
  $c = pdl $a;                  # Make a new copy
  $a = pdl([1,2,3],[4,5,6]);    # 2D
@@ -196,6 +200,10 @@ list, and C<pdl> will sort them out.  You get back a PDL whose last
 (slowest running) dim runs across the top level of the list you hand
 in, and whose first (fastest running) dim runs across the deepest
 level that you supply.
+
+At the moment, you cannot mix and match those arguments with string
+arguments, though we can't imagine a situation in which you would
+really want to do that.
 
 Throwing a PDL into the mix has the same effect as throwing in a list ref:
 
@@ -291,8 +299,8 @@ Returns a 'null' piddle.
  $x = PDL->nullcreate($arg)
 
 This is an routine used by many of the threading primitives
-(i.e. L<sumover|PDL::Primitive/sumover>, 
-L<minimum|PDL::Primitive/minimum>, etc.) to generate a null piddle for the
+(i.e. L<sumover|PDL::Ufunc/sumover>, 
+L<minimum|PDL::Ufunc/minimum>, etc.) to generate a null piddle for the
 function's output that will behave properly for derived (or
 subclassed) PDL objects.
 
@@ -488,7 +496,7 @@ need to call L<upd_data|upd_data> afterward, to make sure that the
 piddle points to the new location of the underlying perl variable.
 
 You shouldn't mess with the SV unless you've called
-L<make_physical|/make_physical> or something similar.  You definitely
+L<make_physical|/PDL::make_physical> or something similar.  You definitely
 don't want to do anything to the SV to truncate or deallocate the
 string, unless you correspondingly call L<reshape|/reshape> to make the
 PDL match its new data dimension.
@@ -572,12 +580,19 @@ sub topdl {PDL->topdl(@_)}
 		"="     =>  sub {$_[0]},          # Don't deep copy, just copy reference
 
 		".="    => sub {my @args = reverse &PDL::Core::rswap;
-# This strange undocumented behavior commented out by CED 18-Mar-2003;
-# remove it if you see it in current code after 18-Mar-2004!
-#				return $args[1]->info("%C (%A): %T %D %S %M")
-#				  if !ref $args[0] && $args[0] eq '';
-				PDL::Ops::assgn(@args);
-				return $args[1];},
+						eval {
+							PDL::Ops::assgn(@args);
+						};
+						if ($@) {
+							# Remove references to this (and deeper)
+							# code before rebarfing:
+							$@ =~ s/\s*at .* line \d+\s*\.\n*/./;
+							$@ =~ s/PDL:\s+//g;
+							$@ =~ s/\s*Caught at .* pkg .+\n+//;
+							PDL::Core::barf("Problem with assignment: $@");
+						}
+						return $args[1];
+					},
 		 
 		'x'     =>  sub{my $foo = $_[0]->null();
 				  PDL::Primitive::matmult(@_[0,1],$foo); $foo;},
@@ -682,16 +697,92 @@ new piddle constructor method
 
 =for usage
 
- $x = PDL->new(SCALAR|ARRAY|ARRAY REF);
+ $x = PDL->new(SCALAR|ARRAY|ARRAY REF|STRING);
 
 =for example
 
- $x = PDL->new(42);
- $y = new PDL [1..10];
+ $x = PDL->new(42);             # new from a Perl scalar
+ $x = new PDL 42;               # ditto
+ $y = PDL->new(@list_of_vals);  # new from Perl list
+ $y = new PDL @list_of_vals;    # ditto
+ $z = PDL->new(\@list_of_vals); # new from Perl list reference
+ $w = PDL->new("[1 2 3]");      # new from Perl string, using
+                                # Matlab constructor syntax
 
-Constructs piddle from perl numbers and lists.	
+Constructs piddle from perl numbers and lists
+and strings with Matlab/Octave style constructor
+syntax.
+
+The string input is fairly versatile though not
+performance optimized. The goal is to make it
+easy to copy and paste code from PDL output and
+to offer a familiar Matlab syntax for piddle
+construction. As of May, 2010, it is a new
+feature, so feel free to report bugs or suggest
+new features.  See documentation for L<pdl> for
+more examples of usage.
+
 
 =cut
+
+use Scalar::Util;       # for looks_like_number test
+
+# This is the code that handles string arguments.
+sub PDL::Core::new_pdl_from_string {
+	my ($new, $value, $this, $type) = @_;
+	
+	# Wrap the string in brackets [], so that the following works:
+	# $a = new PDL q[1 2 3];
+	# We'll have to check for dimensions of size one after we've eval'd
+	# the string and built a PDL from the resulting array.
+	$value = '[' . $value . ']';
+
+	# some basic checks that can/should be run on everything.
+	# Make sure that each closing bracket followed by an opening bracket
+	# has a comma in between them:
+	$value =~ s/\]\s*\[/],[/g;
+	
+	# Semicolons indicate 'start a new row' and require special handling:
+	if ($value =~ /;/) {
+		$value =~ s/(\[[^\]]+;[^\]]+\])/[$1]/g;
+		$value =~ s/;/],[/g;
+	}
+
+	# Remove ending decimal points and insert zeroes in front of starting
+	# decimal points. This makes the white-space-to-comma replacement
+	# in the next few lines much simpler.
+	$value =~ s/(\d)\.\s+/$1 /g;
+	$value =~ s/([^\d])\./${1}0./g;
+	
+	# make unambiguous addition/subtraction (white-space on both sides
+	# of operator) by removing white-space from both sides
+	$value =~ s/(\d)\s+([+-])\s+(?=[\d])/$1$2/g;
+
+	# Replace white-space separators with commas:
+	$value =~ s/([.\d])\s+(?=[+\-\d])/$1,/g;
+	
+	# Let's see if the darn thing compiles as normal Perl code, in which
+	# case we just assume the result is a stringified bunch of nested
+	# arrays. 
+	my $val = eval $value;
+	if (ref $val eq 'ARRAY') {
+		my $to_return = PDL::Core::pdl_avref($val,$this,$type);
+		# remove potentially spurious last dimension
+		$to_return = $to_return->mv(-1,1)->clump(2) if $to_return->dim(-1) == 1;
+		return $to_return;
+	}
+	else {
+#		# Let's try wrapping it in brackets, to allow for really lazy
+#		# syntax like qq[1 2 3];
+#		$val = eval '[' . $value . ']';
+#		if (ref $val eq 'ARRAY') {
+#			return PDL::Core::pdl_avref($val,$this,$type);
+#		}
+#		else {
+			barf "PDL::Core::new_pdl_from_string: I had trouble interpreting what you sent:\n@!";
+#		}
+	}
+}
 
 sub PDL::new {
    # print "in PDL::new\n";
@@ -713,9 +804,20 @@ sub PDL::new {
 
 
    if (ref(\$value) eq "SCALAR") {
-       $new->setdims([]);
-       ${$new->get_dataref}     = pack( $pack[$new->get_datatype], $value );
-       $new->upd_data();
+      if (PDL::Core::is_scalar_SvPOK($value) and !Scalar::Util::looks_like_number($value)) {
+         # new was passed a string argument that doesn't look like a number
+         # so we can process as a Matlab-style, no commas data entry format.
+#         if (defined &PDL::Core::new_pdl_from_string) {
+            return PDL::Core::new_pdl_from_string($new,$value,$this,$type);
+#         } else {
+#            print STDERR "Warning: PDL::new: PDL::Core::new_pdl_from_string() not defined.\n";
+#            barf("PDL::new cannot make piddle from string input '$value'\n");
+#         }
+      } else {
+         $new->setdims([]);
+         ${$new->get_dataref}     = pack( $pack[$new->get_datatype], $value );
+         $new->upd_data();
+      }
    }
    elsif (blessed($value)) { # Object
        $new = $value->copy;
@@ -1554,7 +1656,7 @@ sub PDL::approx {
 
 =for ref
 
-Convenience interface to L<slice|PDL::Slice/slice>, 
+Convenience interface to L<slice|PDL::Slices/slice>, 
 allowing easier inclusion of dimensions in perl code.
 
 =for usage
@@ -1587,8 +1689,8 @@ sub PDL::mslice {
 
 =for ref
 
-Internally used interface to L<slice|PDL::Slice/slice>
-and L<dice|PDL::Slice/dice> that is the runtime part of
+Internally used interface to L<slice|PDL::Slices/slice>
+and L<dice|PDL::Slices/dice> that is the runtime part of
 the L<PDL::NiceSlice|PDL::NiceSlice> implementation.
 
 =for usage
@@ -1925,7 +2027,7 @@ Various forms of usage,
  perldl> $z = zeroes ushort, 3,2 # Create ushort array
  [ushort() etc. with no arg returns a PDL::Types token]
 
-See also L<new_from_specification|/new_from_specification>
+See also L<new_from_specification|/PDL::new_from_specification>
 for details on using piddles in the dimensions list.
 
 =cut
@@ -1966,7 +2068,7 @@ construct a one filled piddle
 
  see zeroes() and add one
 
-See also L<new_from_specification|/new_from_specification>
+See also L<new_from_specification|/PDL::new_from_specification>
 for details on using piddles in the dimensions list.
 
 =cut
@@ -2257,32 +2359,40 @@ $PDL::_STRINGIZING = 0;
 
 sub PDL::string {
     my($self,$format)=@_;
-    if($PDL::_STRINGIZING) {
-    	return "ALREADY_STRINGIZING_NO_LOOPS";
-    }
-    local $PDL::_STRINGIZING = 1;
-    my $ndims = $self->getndims;
-    if($self->nelem > 10000) {
-    	return "TOO LONG TO PRINT";
-    }
-    if ($ndims==0) {
-	if ( $self->badflag() and $self->isbad() ) {
-	    return "BAD";
-	} else {
-	    my @x = $self->at();
-	    return ($format ? sprintf($format, $x[0]) : "$x[0]");
+    my $to_return = eval {
+		if($PDL::_STRINGIZING) {
+			return "ALREADY_STRINGIZING_NO_LOOPS";
+		}
+		local $PDL::_STRINGIZING = 1;
+		my $ndims = $self->getndims;
+		if($self->nelem > 10000) {
+			return "TOO LONG TO PRINT";
+		}
+		if ($ndims==0) {
+		if ( $self->badflag() and $self->isbad() ) {
+			return "BAD";
+		} else {
+			my @x = $self->at();
+			return ($format ? sprintf($format, $x[0]) : "$x[0]");
+		}
+		}
+		return "Null" if $self->isnull;
+		return "Empty" if $self->isempty; # Empty piddle
+		local $sep  = $PDL::use_commas ? "," : " ";
+		local $sep2 = $PDL::use_commas ? "," : "";
+		if ($ndims==1) {
+		   return str1D($self,$format);
+		}
+		else{
+		   return strND($self,$format,0);
+		}
+	};
+	if ($@) {
+		# Remove reference to this line:
+		$@ =~ s/\s*at .* line \d+\s*\.\n*/./;
+		PDL::Core::barf("Stringizing problem: $@");
 	}
-    }
-    return "Null" if $self->isnull;
-    return "Empty" if $self->isempty; # Empty piddle
-    local $sep  = $PDL::use_commas ? "," : " ";
-    local $sep2 = $PDL::use_commas ? "," : "";
-    if ($ndims==1) {
-       return str1D($self,$format);
-    }
-    else{
-       return strND($self,$format,0);
-    }
+	return $to_return;
 }
 
 ############## Section/subsection functions ###################
@@ -2545,15 +2655,101 @@ print OUT <<'!NO!SUBS!';
 =cut
 
 sub PDL::cat {
-  my $res = $_[0]->initialize; $res->set_datatype($_[0]->get_datatype);
-  $res->setdims([$_[0]->dims,scalar(@_)]);
-  my ($i,$t); my $s = ":,"x$_[0]->getndims;
-  for (@_) { $t = $res->slice($s."(".$i++.")"); $t .= $_}
+	my $res;
+	my $old_err = $@;
+	$@ = '';
+	eval {
+		$res = $_[0]->initialize; $res->set_datatype($_[0]->get_datatype);
+		$res->setdims([$_[0]->dims,scalar(@_)]);
+		my ($i,$t); my $s = ":,"x$_[0]->getndims;
+		for (@_) { $t = $res->slice($s."(".$i++.")"); $t .= $_}
 
-   # propogate any bad flags
-   for (@_) { if ( $_->badflag() ) { $res->badflag(1); last; } }
+		# propogate any bad flags
+		for (@_) { if ( $_->badflag() ) { $res->badflag(1); last; } }
+	};
+	if ($@ eq '') {
+		# Restore the old error and return
+		$@ = $old_err;
+		return $res;
+	}
 
-  return $res;
+	# If we've gotten here, then there's been an error, so check things
+	# and barf out a meaningful message.
+  
+	if  ($@ =~ /PDL::Ops::assgn/
+	  or $@ =~ /"badflag"/
+	  or $@ =~ /"initialize"/) {
+		my (@mismatched_dims, @not_a_piddle);
+		my $i = 0;
+
+		# non-piddles and/or dimension mismatch.  The first argument is
+		# ok unless we have the "initialize" error:
+		if ($@ =~ /"initialize"/) {
+			while ($i < @_ and ref($_[$i]) !~ /PDL/) {
+				push (@not_a_piddle, $i);
+				$i++;
+			}
+				
+		}
+
+		# Get the dimensions of the first actual piddle in the argument
+		# list:
+		my $first_piddle_argument = $i;
+		my @dims = $_[$i]->dims if ref($_[$i]) =~ /PDL/;
+		
+		# Figure out all the ways that the caller screwed up:
+		while ($i < @_) {
+			my $arg = $_[$i];
+			# Check if not a piddle
+			if (ref($arg) !~ /PDL/) {
+				push @not_a_piddle, $i;
+			}
+			# Check if different number of dimensions
+			elsif (@dims != $arg->ndims) {
+				push @mismatched_dims, $i;
+			}
+			# Check if size of dimensions agree
+			else {
+				DIMENSION: for (my $j = 0; $j < @dims; $j++) {
+					if ($dims[$j] != $arg->dim($j)) {
+						push @mismatched_dims, $i;
+						last DIMENSION;
+					}
+				}
+			}
+			$i++;
+		}
+		
+		# Construct a message detailing the results
+		my $message = "bad arguments passed to function PDL::cat\n";
+		if (@mismatched_dims > 1) {
+			# Many dimension mismatches
+			$message .= "The dimensions of arguments "
+						. join(', ', @mismatched_dims[0 .. $#mismatched_dims-1])
+						. " and $mismatched_dims[-1] do not match the\n"
+						. "   dimensions of the first piddle argument (argument $first_piddle_argument).\n";
+		}
+		elsif (@mismatched_dims) {
+			# One dimension mismatch
+			$message .= "The dimensions of argument $mismatched_dims[0] do not match the\n"
+						. "   dimensions of the first piddle argument (argument $first_piddle_argument).\n";
+		}
+		if (@not_a_piddle > 1) {
+			# many non-piddles
+			$message .= "Arguments " . join(', ', @not_a_piddle[0 .. $#not_a_piddle-1])
+						. " and $not_a_piddle[-1] are not piddles.\n";
+		}
+		elsif (@not_a_piddle) {
+			# one non-piddle
+			$message .= "Argument $not_a_piddle[0] is not a piddle.\n";
+		}
+		
+		$message .= "(Argument counting starts from zero.)";
+		barf($message);
+	}
+	else {
+		barf("cat: unknown error from the internals:\n$@");
+	}
 }
 
 =head2 dog
@@ -3092,7 +3288,7 @@ copy gets made, which is rather processor-inefficient -- so avoid
 using header copying in tight loops!
 
 Most PDLs have the C<hdrcpy> flag cleared by default; however, some
-routines (notably L<rfits|PDL::IO::FITS/rfits>) set it by default
+routines (notably L<rfits|PDL::IO::FITS/rfits()>) set it by default
 where that makes more sense.
 
 The C<hdrcpy> flag is viral: if you set it for a PDL, then derived

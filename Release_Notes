@@ -1,3 +1,90 @@
+Release notes for PDL 2.4.6_006 --------------------------
+
+General Notes:
+
+ * This is a developers release!  It is a snapshot of the current git
+   development tree and everything may not work correctly.  However,
+   it is the easiest way to get the latest and greatest from PDL
+   developers without going to the git repository at sourceforge.net.
+
+Highlights:
+
+ * Experimental perldl version 2 shell available.
+ 
+   See the README file in PDL/Padre for details on how to use.
+   Full completion support is now available for all platforms
+   via Term::ReadLine::Perl as well as Term::ReadLine::Gnu.
+
+   Work continues to port existing perldl features to the new
+   Devel::REPL framework.
+
+ * Preliminary support for MATLAB/Octave array constructor
+   notation as allowed input to the pdl() constructor,
+   a.k.a. PDL::new.  The same implementation also supports
+   cutting and pasting from PDL print output for piddles
+   as valid input for pdl in scripts.  Just use the pasted
+   input as a string.  For example:
+
+    a  =      [ 1 2 3 ; 4 5 6 ] # MATLAB/Octave
+    $a = pdl q[ 1 2 3 ; 4 5 6 ] # PDL/perldl
+
+    Printing $a gives:
+
+    [
+     [1 2 3]
+     [4 5 6]
+    ]
+
+    And we can cut and paste like this
+
+    $a = pdl q[
+               [1 2 3]
+               [4 5 6]
+              ];
+
+    Problem reports and feature suggestions welcome at the
+    perldl mailing list.
+
+ * Added tiled compressed image handling to rfits in FITS.pm
+   including a new compression module in Lib/Compression.
+
+ * Partial fix for a problem with window shrink creep in imag2d()
+
+ * Fix uniqvec bug from SF# 2978576
+
+ * Fix rt.cpan.org #53815 in IO/HDF/SD/SD.pd
+
+ * Fixes SF bug 2949455 ("demo transform broken"): sign error in FITS
+   header CROTA2 interpretation by PGPLOT libraries.
+
+ See the Changes file for the full log entries.
+
+
+
+Release notes for PDL 2.4.6_004 --------------------------
+
+General Notes:
+
+ * This is a developers release!  It is a snapshot of the current git
+   development tree and everything may not work correctly.  However,
+   it is the easiest way to get the latest and greatest from PDL
+   developers without going to the git repository at sourceforge.net.
+
+Highlights:
+
+ * rcols() now has support for specifying multicolumn piddles for
+   input data and performance has been significantly improved for
+   common input data options.
+
+   - Patterns for rcols() may now be specified using
+     the qr{} syntax instead of quoted strings.
+
+   - The COLIDS option allows one to return line 0 of
+     the data file containing field names/identifiers.
+     PERLCOLS may be used to return non-piddle ids from
+     the row data.
+
+
 Release notes for PDL 2.4.6_001 --------------------------
 
 General Notes:
