@@ -1,7 +1,6 @@
 =head1 NAME
 
-PDL::Guide - A journey through PDL's documentation, from beginner to
-advanced.
+PDL::Guide - A journey through PDL's documentation, from beginner to advanced.
 
 =head1 AUTHOR, DATE
 
@@ -51,7 +50,7 @@ familiarize yourself with the basic capabilities of PDL.
 
 =over
 
-=item * L<PDL::Intro|PDL::Intro>, L<PDL::Impatient|PDL::Impatient>, L<PDL::Philosophy|PDL::Philosophy>
+=item * L<PDL::Intro|PDL::Intro>, L<PDL::QuickStart|PDL::QuickStart>, L<PDL::Philosophy|PDL::Philosophy>
 
 A couple of brief introductions to PDL.  The middle one is a bit
 more hands-on.  If you are new to PDL, you should start with
@@ -251,7 +250,7 @@ processing, but which can be defined for higher-dimensional data.  For
 examples this module defines high-dimensional convolution and
 interpolation, among others.
 
-=item * L<PDL::ImageRBG|PDL::ImageRBG>
+=item * L<PDL::ImageRGB|PDL::ImageRGB>
 
 Defines some useful functions for working with RBG image data.  It's
 not very feature-full, but it may have something you need, and if not,
@@ -496,4 +495,13 @@ distributions.
 =back
 
 =end questionable
+
+
+=head1 COPYRIGHT
+
+Copyright 2010 David Mertens (dcmertens.perl@gmail.com). You can
+distribute and/or modify this document under the same terms as the
+current Perl license.
+
+See: http://dev.perl.org/licenses/
 

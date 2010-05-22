@@ -1,3 +1,923 @@
+commit 719dd4dade61f66eec2d673c8347bd0e4bcd01f2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri May 21 18:09:50 2010 -0400
+
+    Add POD to Perldl2 modules
+    
+    Also updated Perldl2/README and added a pod-plate file
+    with the template for POD and my copyright information.
+
+ Perldl2/NiceSlice.pm    |   48 +++++++++++++++++++++++++++++++++
+ Perldl2/Perldl2.pm      |   67 ++++++++++++++++++++++++++++++++++++++++++++++-
+ Perldl2/PrintControl.pm |   56 +++++++++++++++++++++++++++++++++++++++
+ Perldl2/README          |    7 +++--
+ Perldl2/pod-plate       |   45 +++++++++++++++++++++++++++++++
+ 5 files changed, 219 insertions(+), 4 deletions(-)
+
+commit 8127a7786e11dc1be81cfab4fb6abd66b0ee3443
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri May 21 10:12:27 2010 -0400
+
+    Move TODO to wiki page for review
+    
+    The current TODO file is languishing because of all the dead
+    wood.  It has been pointed out in recent mailing list threads
+    that irrelevant and incomplete TODO lists give a poor impression
+    of PDL development to potential new contributers.  Also, with
+    all the new interest, we need a way to keep focus on priorities
+    to keep moving forward.
+
+ TODO |  287 +----------------------------------------------------------------
+ 1 files changed, 5 insertions(+), 282 deletions(-)
+
+commit 0188c5895963fac8542b696074be7d58891237dd
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Thu May 20 14:03:02 2010 -0500
+
+    Very minor updates to the VS docs.
+
+ IO/HDF/VS/VS.pd |   11 ++++++++---
+ 1 files changed, 8 insertions(+), 3 deletions(-)
+
+commit 09b5d4d582273df39228d8ca8c0f157ad6ae46c0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed May 19 13:32:15 2010 -0400
+
+    Re-fix the default pdl2 package and no strict
+    
+    The two fixes were accidentally removed during
+    an iteration of testing.  Back now.
+
+ Perldl2/Perldl2.pm |    5 +++--
+ Perldl2/README     |   27 ++++++++++++++-------------
+ 2 files changed, 17 insertions(+), 15 deletions(-)
+
+commit 164432c1e42345e1ca4efb3a15d643f256e15aa8
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Wed May 19 11:18:27 2010 -0500
+
+    Linked cat/append/glue references and updated primitive for CPAN viewing.
+
+ Basic/Core/Core.pm.PL        |    4 +
+ Basic/Primitive/primitive.pd |  610 ++++++++++++++++++++++++++++++++----------
+ 2 files changed, 471 insertions(+), 143 deletions(-)
+
+commit cbeec05057f741c4b30fcaa0de8bdb44d71df8d0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 18 22:29:12 2010 -0400
+
+    Show loaded Perldl2 plugins on startup
+
+ Perldl2/Perldl2.pm |   16 +++++++++++++++-
+ Perldl2/README     |   10 +---------
+ 2 files changed, 16 insertions(+), 10 deletions(-)
+
+commit 276ffdcb917d73ee6cda86c4c59635f9bdc85101
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 18 22:07:36 2010 -0400
+
+    Add ability to toggle default print for Perldl2
+    
+    There is an attribute do_print with a like named
+    accessor method which can be used to enable or disable
+    printing by default the result of the REPL loop iteration.
+    $_REPL->do_print(0) turns printing off (Perldl2 default)
+    $_REPL->do_print(1) turns printing on (Devel::REPL default)
+
+ Perldl2/PrintControl.pm |    7 ++++++-
+ Perldl2/README          |   13 +++++++------
+ 2 files changed, 13 insertions(+), 7 deletions(-)
+
+commit 6ba2bd11acd93538d43253fb4292c14338cddcd1
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue May 18 16:59:42 2010 -0400
+
+    Minor change to Guide.pod
+    
+    Fix typo (RBG->RGB), put head1 NAME on one line for easier perldoc
+    parsing.
+
+ Basic/Pod/Guide.pod |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
+
+commit 9c143a8dcdca72b4b740e051072ba439957368fe
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 18 14:21:58 2010 -0400
+
+    Update Perldl2/README to clarify
+
+ Perldl2/README |  213 ++++++++++++++++++++++++++-----------------------------
+ 1 files changed, 101 insertions(+), 112 deletions(-)
+
+commit 8d938c2fd49de785358ceb083e2868eaf974791f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 18 13:59:12 2010 -0400
+
+    Set $, to space for p alias in Perldl2
+
+ Perldl2/Perldl2.pm |    9 ++++-----
+ 1 files changed, 4 insertions(+), 5 deletions(-)
+
+commit 7f3549fa5a80453be3036aba46c550a5b87a3e8e
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Mon May 17 22:31:40 2010 +0200
+
+    Book: Fix a bug with HTML generator.
+
+ Basic/Pod/Book/make-book.pl |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f1c5b2700eda910a49d618181903d187676f4c3c
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Mon May 17 22:25:05 2010 +0200
+
+    PDL Book: CSS for HTML generator.
+
+ Basic/Pod/Book/pdl-book.css |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+commit 72f334dc729c09d1f1bba282b629e51e6802a94b
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Mon May 17 22:20:29 2010 +0200
+
+    Book: First stab at a PDL book HTML generator.
+
+ Basic/Pod/Book/make-book.pl |  175 +++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 175 insertions(+), 0 deletions(-)
+
+commit 5c76b0c79386560e47663432209160c2d531da7a
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Mon May 17 09:35:39 2010 -0500
+
+    Another minor change to the wording of the PDL::PP paragraph.
+
+ Basic/Pod/Book/MATLAB.pod |    2 +-
+ Basic/Pod/Book/Scilab.pod |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 34927c4631ce5bc8557df6c1616f72f8c2ed9701
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Mon May 17 08:21:53 2010 -0500
+
+    A few wording changes to the migration guides.
+
+ Basic/Pod/Book/MATLAB.pod |    4 ++--
+ Basic/Pod/Book/Scilab.pod |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+commit dd8464437ddce839551af9f448d061bd0f291530
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 17 08:59:54 2010 -0400
+
+    Add clean fail as todo to Perldl2/README
+    
+    Devel::REPL is very powerful, but the stack trace one gets
+    if something is missing is *horrible*.  This was a note to
+    add better error handling with graceful degradation rather
+    than just dying.  e.g., if something is missing, don't load
+    it and continue if possible...with a warning message.
+
+ Perldl2/README |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+commit 825850f3a1e52a56466bd9e449a7437544ba6230
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Mon May 17 13:51:09 2010 +0200
+
+    Book: Move several non-reference document to the new "book" section.
+
+ Basic/Pod/Book/FAQ.pod        | 1872 +++++++++++++++++++++++++++++++++++++++++
+ Basic/Pod/Book/Indexing.pod   | 1561 ++++++++++++++++++++++++++++++++++
+ Basic/Pod/Book/Philosophy.pod |   70 ++
+ Basic/Pod/Book/QuickStart.pod |  615 ++++++++++++++
+ Basic/Pod/Book/Threading.pod  |  961 +++++++++++++++++++++
+ Basic/Pod/Book/Tips.pod       |  129 +++
+ Basic/Pod/FAQ.pod             | 1872 -----------------------------------------
+ Basic/Pod/Indexing.pod        | 1561 ----------------------------------
+ Basic/Pod/Philosophy.pod      |   70 --
+ Basic/Pod/QuickStart.pod      |  615 --------------
+ Basic/Pod/Threading.pod       |  961 ---------------------
+ Basic/Pod/Tips.pod            |  129 ---
+ 12 files changed, 5208 insertions(+), 5208 deletions(-)
+
+commit fc5470223b1df7ad4940f3a50135a443f9a943ff
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Mon May 17 13:46:14 2010 +0200
+
+    Book: Replace "PDL::Migration" -> "PDL::Book"
+
+ Basic/Pod/Book/MATLAB.pod |    2 +-
+ Basic/Pod/Book/Scilab.pod |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 403ebbe4bd3aa601c726c258b1d94457014e5eb1
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Mon May 17 13:00:17 2010 +0200
+
+    Documentation: First steps toward a PDL book.
+    
+    Created a new 'Book' directory where I hope to create a new PDL book.
+
+ Basic/Pod/Book/MATLAB.pod      |  865 ++++++++++++++++++++++++++++++++++++++++
+ Basic/Pod/Book/Scilab.pod      |  815 +++++++++++++++++++++++++++++++++++++
+ Basic/Pod/Migration.pod        |   34 --
+ Basic/Pod/Migration/MATLAB.pod |  865 ----------------------------------------
+ Basic/Pod/Migration/Scilab.pod |  815 -------------------------------------
+ 5 files changed, 1680 insertions(+), 1714 deletions(-)
+
+commit 5789093253079406e974cd391de9900d94e7b6ce
+Merge: 19cbde7... 92a971f...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 17 06:27:26 2010 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 19cbde762fa9f047295715d3fc706e8983cceaff
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 17 06:25:26 2010 -0400
+
+    Update Perldl2/README with platform support
+    
+    Somehow with all the talk about win32, people seem to
+    have gotten the idea that all this work is for that
+    system only.  Make explicit that this is for all OS
+    and platforms.
+
+ Perldl2/README |   22 +++++++++++++---------
+ 1 files changed, 13 insertions(+), 9 deletions(-)
+
+commit 92a971f67a12dd107c10f7669a69617d2d719850
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon May 17 08:09:33 2010 +0200
+
+    add descriptions to tests in hdf_st.t
+
+ t/hdf_sd.t |   62 ++++++++++++++++++++++++++++++------------------------------
+ 1 files changed, 31 insertions(+), 31 deletions(-)
+
+commit 947d22199516e62162afa017f6dad83a0daf3d97
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 16 22:46:16 2010 -0400
+
+    Add another missing feature to Perldl2/README
+
+ Perldl2/README |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
+
+commit 7caf9e417f1e6787e248de31f55609edd310e55c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 16 18:34:11 2010 -0400
+
+    Add "\n" to print lines for Perldl2
+    
+    There is some sort of inconsistency between the introduction
+    of newlines from the Term::ReadLine::Gnu and Term::ReadLine::Perl.
+    There seems to be an extra one now for TR::Gnu but at least the
+    lines don't run on for either now.
+
+ Perldl2/Perldl2.pm |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
+
+commit 15d78ce70aa721cfd0c670ef8d9e4aa29c78f6ac
+Merge: 0b98645... e3c50c1...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 16 15:33:57 2010 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 0b98645eb43006398c01dd4e47558d80e82739ea
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 16 15:32:24 2010 -0400
+
+    Add pdl2, pdl2.bat to run Perldl2 + update README
+    
+    Still have to manually install things but it looks a lot
+    more like a perldl replacement/upgrade.
+
+ Perldl2/README   |   78 ++++++++++++++++++++++++++++++++++++++---------------
+ Perldl2/pdl2     |    5 +++
+ Perldl2/pdl2.bat |   20 ++++++++++++++
+ 3 files changed, 81 insertions(+), 22 deletions(-)
+
+commit 2907282abcabfb201f2ec7ee8043e0a958058622
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 16 15:31:03 2010 -0400
+
+    Enable perldl v1 style no-print of return values
+    
+    The PrintControl plugin implements a first version of
+    this and the Perldl2 profile has been updated to load
+    that as well.
+
+ Perldl2/Perldl2.pm      |   16 ++++++++++++----
+ Perldl2/PrintControl.pm |   16 ++++++++++++++++
+ 2 files changed, 28 insertions(+), 4 deletions(-)
+
+commit e3c50c11dc278e6ee3457c534138b46bf9a5150d
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sun May 16 14:47:05 2010 +0200
+
+    Changed copyright license in IO.pod with permission from the author.
+    
+    With permission from the author (see pdl-porters mailing list) I
+    changed the copyright notice in IO.pod to say that the document can
+    be modified and/or distributed under the same terms as the current
+    Perl license.
+
+ IO/IO.pod |   13 ++++++++-----
+ 1 files changed, 8 insertions(+), 5 deletions(-)
+
+commit ab7f49e1a6946e1632ef1f637d6e7936d47f0966
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sun May 16 14:40:19 2010 +0200
+
+    Changed copyright notice in API.pod with permission from the author.
+    
+    With permission from the author (see pdl-porters mailing list) I
+    changed the copyright notice of API.pod to say that the document
+    can be modified and/or distributed under the same terms as the
+    current Perl license.
+
+ Basic/Pod/API.pod |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
+
+commit c5980b692452706244f903bf7aca93d6b9659c5a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 15 14:52:14 2010 -0400
+
+    rm REPL.pm and update README
+    
+    The relevant code is now in the Devel-REPL-1.003009_02.tar.gz
+
+ Perldl2/README  |    7 +-
+ Perldl2/REPL.pm |  427 -------------------------------------------------------
+ 2 files changed, 1 insertions(+), 433 deletions(-)
+
+commit 31e0c88be9a8381da4cf6f978a6642f3d8b7890d
+Merge: a21804a... e2001f6...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 15 13:37:01 2010 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit a21804a223c701df6556e2a0b1698c2e133f5f09
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 15 13:36:07 2010 -0400
+
+    Update Devel::REPL snapshot and README for Perldl2
+
+ Perldl2/Devel-REPL-1.003009_01.tar.gz |  Bin 47600 -> 0 bytes
+ Perldl2/Devel-REPL-1.003009_02.tar.gz |  Bin 0 -> 47951 bytes
+ Perldl2/README                        |    6 +++---
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+commit e2001f6e3dee3907956f5dbdde82d3b16f0a8767
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat May 15 19:26:51 2010 +0200
+
+    Documentation: Use postfix notation for all method calls.
+    
+    Replase "foo $A" with "$A->foo". The prefix method looks like a
+    function and invites the use to write "foo($A)" which works
+    inconsistently.
+
+ Basic/Pod/Migration/MATLAB.pod |   26 +++++++++++++-------------
+ Basic/Pod/Migration/Scilab.pod |   18 +++++++++---------
+ 2 files changed, 22 insertions(+), 22 deletions(-)
+
+commit 91bc8eba2f159b61e1d9d9e6078b90c85add86e6
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat May 15 18:49:30 2010 +0200
+
+    Documentation: Change description of PDL::PP in migration guides.
+
+ Basic/Pod/Migration/MATLAB.pod |   13 +++++--------
+ Basic/Pod/Migration/Scilab.pod |   11 +++++------
+ 2 files changed, 10 insertions(+), 14 deletions(-)
+
+commit ca44a04ece66d61b870d42867debed127dee5ed8
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat May 15 18:40:06 2010 +0200
+
+    Clarify copyright license for my own files.
+    
+    Clearly state that the files can be modified and/or distributed under
+    the same terms as the current Perl license.
+
+ Basic/Pod/Migration/MATLAB.pod |    6 +++---
+ Basic/Pod/Migration/Scilab.pod |    6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+commit a8c3a14e15635219f010461a422d0aca8fb79cf7
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat May 15 18:35:00 2010 +0200
+
+    Update Copyright notices.
+    
+    With permission from the authors (see list archives) I am updating
+    the copyright notices of three files to clearly state that they can
+    be distributed and/or modified under the current Perl license.
+
+ Basic/Pod/Guide.pod     |    9 +++++++++
+ Basic/Pod/Migration.pod |    8 ++++++++
+ Basic/Pod/Threading.pod |    4 +++-
+ 3 files changed, 20 insertions(+), 1 deletions(-)
+
+commit 08e0b80e20e8736165cb64f196a98b8caaa753ef
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 15 11:54:31 2010 -0400
+
+    Rename the Padre directory to Perldl2
+    
+    It turns out that the directory has become mostly Perldl2
+    development.  The next step is to make a version of the
+    new shell that is built and installed with PDL.  This directory
+    rename is the first step.  Updated MANIFEST, README, and
+    Release_Notes with the new directory path.
+
+ MANIFEST                              |   14 +-
+ Padre/Devel-REPL-1.003009_01.tar.gz   |  Bin 47600 -> 0 bytes
+ Padre/NiceSlice.pm                    |   27 -
+ Padre/Perldl2.pm                      |   75 -
+ Padre/README                          |  267 ---
+ Padre/REPL.pm                         |  427 -----
+ Padre/TieHash.pm                      |   38 -
+ Padre/readline-fix/Gnu.xs             | 3002 ---------------------------------
+ Padre/readline-fix/Makefile           |  983 -----------
+ Padre/readline-fix/Makefile.PL        |  217 ---
+ Padre/readline-fix/README             |   84 -
+ Perldl2/Devel-REPL-1.003009_01.tar.gz |  Bin 0 -> 47600 bytes
+ Perldl2/NiceSlice.pm                  |   27 +
+ Perldl2/Perldl2.pm                    |   75 +
+ Perldl2/README                        |  267 +++
+ Perldl2/REPL.pm                       |  427 +++++
+ Perldl2/TieHash.pm                    |   38 +
+ Perldl2/readline-fix/Gnu.xs           | 3002 +++++++++++++++++++++++++++++++++
+ Perldl2/readline-fix/Makefile         |  983 +++++++++++
+ Perldl2/readline-fix/Makefile.PL      |  217 +++
+ Perldl2/readline-fix/README           |   84 +
+ README                                |    2 +-
+ Release_Notes                         |   21 +
+ 23 files changed, 5149 insertions(+), 5128 deletions(-)
+
+commit e143b805757a4af082cc657c00f7e6bedc89b401
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Sat May 15 08:55:53 2010 -0500
+
+    Added tentative PDL::Beta searching to Autoloader.
+    
+    The code is presently commented out, pending approval from the porters.
+
+ Basic/AutoLoader.pm |   11 ++++++++++-
+ 1 files changed, 10 insertions(+), 1 deletions(-)
+
+commit e57eec31e9f4483977164d908a0534e21a9fa673
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Sat May 15 06:50:31 2010 -0500
+
+    Clarified the migration guides' discussion of PDL::PP.
+
+ Basic/Pod/Migration/MATLAB.pod |   10 ++++++----
+ Basic/Pod/Migration/Scilab.pod |   12 ++++++------
+ 2 files changed, 12 insertions(+), 10 deletions(-)
+
+commit 5b3d9b4aadc7656762e2a16257f59a45160514d0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri May 14 18:51:19 2010 -0400
+
+    Update Padre/README with TODO list
+
+ Padre/README |  116 +++++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 files changed, 110 insertions(+), 6 deletions(-)
+
+commit b42a4367f186a9845fb3a706fd8c826d2b3a6dee
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri May 14 23:46:35 2010 +0200
+
+    Documentation: Migration guide for Scilab users.
+    
+    Initial commit. Based on the migration guide for MATLAB users.
+
+ Basic/Pod/Migration.pod        |    2 +-
+ Basic/Pod/Migration/Scilab.pod |  816 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 817 insertions(+), 1 deletions(-)
+
+commit 7c6f36810ce00bfa7d522041ab31ba1df0113d8e
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri May 14 23:45:30 2010 +0200
+
+    Documentation: Fix typo.
+
+ Basic/Pod/Migration/MATLAB.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit c54b7f1e258dfe88b2b501d41402341284796042
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri May 14 23:05:18 2010 +0200
+
+    Documentation: Fix typo. (sorry!)
+
+ Basic/Pod/Migration/MATLAB.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 32c6333363c4da3e8dcc5b67883f0799feaa0729
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri May 14 23:02:30 2010 +0200
+
+    Documentation: Minor edit for MATLAB migration guide.
+    
+    Just getting the terminology right: "N-D matrix" -> "N-D array".
+
+ Basic/Pod/Migration/MATLAB.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit a6c1d77ff5502269f0ce4189d2ae4a7060847b0b
+Author: Daniel Carrera <daniel@daniel-lenovo.(none)>
+Date:   Fri May 14 22:45:56 2010 +0200
+
+    Documentation: Migration guide index page.
+    
+    Just to help orient any user who types "perldoc Migration". In the
+    future this will be an index to all the migration guides.
+
+ Basic/Pod/Migration.pod |   26 ++++++++++++++++++++++++++
+ 1 files changed, 26 insertions(+), 0 deletions(-)
+
+commit b9f186493c08413badbb4b487c9d5202c423dd09
+Author: Daniel Carrera <daniel@daniel-lenovo.(none)>
+Date:   Fri May 14 22:44:52 2010 +0200
+
+    Documentation: Migration guide for MATLAB users.
+    
+    Initial commit.
+
+ Basic/Pod/Migration/MATLAB.pod |  866 ++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 866 insertions(+), 0 deletions(-)
+
+commit 8b06d99d9b38538c767f211119c57926bb511463
+Author: Daniel Carrera <daniel@daniel-lenovo.(none)>
+Date:   Fri May 14 21:30:16 2010 +0200
+
+    Documentation: Edited threading tutorial.
+
+ Basic/Pod/Threading.pod |  166 ++++++++++++++++++++++++-----------------------
+ 1 files changed, 85 insertions(+), 81 deletions(-)
+
+commit 392e4124099294c9dffc282c36d2f96e74e37380
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri May 14 15:02:29 2010 -0400
+
+    Make main the default Perldl2 package
+    
+    This is consistent with the usage from perldl version 1.x
+
+ Padre/Perldl2.pm |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 63f384ea3e53b3dcda953db18b5e861ca4739049
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri May 14 13:24:40 2010 -0400
+
+    Add quit command support to Perldl2
+    
+    This entailed adding an exit_repl attribute to the Devel::REPL
+    shell to support clean exits.  The REPL.pm file is the modified
+    version for push to the Devel::REPL git repository.
+
+ Padre/Perldl2.pm |   10 +-
+ Padre/README     |   24 +++-
+ Padre/REPL.pm    |  427 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 454 insertions(+), 7 deletions(-)
+
+commit 1c43de542caa738dcc1dbf7c7593e856b8cb43d0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri May 14 10:57:20 2010 -0400
+
+    Add TERM=dumb warning to Perldl2 shell
+    
+    If you have a dumb terminal, lots of things
+    won't work right.  The original perldl shell
+    had some issues for which using TERM=dumb was a
+    partial work around.  Not with v2.
+
+ Padre/Perldl2.pm |   18 ++++++++++++++++--
+ 1 files changed, 16 insertions(+), 2 deletions(-)
+
+commit be17c5ec1382ba7c36ae586e2795af12d677d802
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri May 14 07:41:19 2010 -0500
+
+    Added PDL::Threading doc.
+
+ Basic/Pod/Threading.pod |  955 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 955 insertions(+), 0 deletions(-)
+
+commit 705af923d14ff5d00250d06f838d5ba040f4ad36
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri May 14 00:04:53 2010 -0400
+
+    Update Padre/README re _plugin_locator
+    
+    This is needed to display the banner of shell capabilities
+    on startup.  Another issue is how to enable and disable the
+    various features.  If that is not directly possible, maybe
+    it is possible to mark features to load, then save state,
+    and start another shell with the desired plugins loaded in
+    place of the existing shell instance.
+
+ Padre/README |   13 ++++++++++++-
+ 1 files changed, 12 insertions(+), 1 deletions(-)
+
+commit 18df01fa5a53c86b236c0ce30162e5112664c77c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 13 18:51:00 2010 -0400
+
+    Minor FAQ updates
+
+ Basic/Pod/FAQ.pod |   74 ++++++++++++++++++++++++++++++-----------------------
+ 1 files changed, 42 insertions(+), 32 deletions(-)
+
+commit 9abc806561f4e3dbcba9ac00bcfa93893d3325e4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 13 10:19:10 2010 -0400
+
+    Update Padre/README for history file loc
+
+ Padre/README |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 7350a933e96cba6714ac43fa571bd395f5ab3652
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 13 10:10:30 2010 -0400
+
+    Update perldl2 with latest Devel::REPL
+    
+    Fixes to Devel::REPL Completion and ReadLineHistory plugins
+    to support Term::ReadLine::Perl have been merged into their
+    development trunk.  I've removed the now duplicate files and
+    updated the README directions for installation.  Also, the
+    perldl2 prompt default has been changed to 'PDL> ' in response
+    to recent mailing list discussions.
+
+ Padre/Completion.pm      |  113 ----------------------------------------------
+ Padre/Perldl2.pm         |   23 +++++++---
+ Padre/README             |   79 +++++++++++++++++++-------------
+ Padre/ReadLineHistory.pm |   45 ------------------
+ 4 files changed, 63 insertions(+), 197 deletions(-)
+
+commit fb1fdf96c82bb8c50136db55f1b15f521463175b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed May 12 22:05:04 2010 -0400
+
+    Add test version of Devel::REPL for win32
+    
+    This have Term::ReadLine::Perl and Term::ReadLine::Gnu
+    support for the ReadLineHistory plugin of Devel::REPL.
+
+ Padre/Devel-REPL-1.003009_01.tar.gz |  Bin 0 -> 47600 bytes
+ 1 files changed, 0 insertions(+), 0 deletions(-)
+
+commit e303073588ce8204ad325282c05c557467d4c733
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed May 12 14:12:43 2010 -0500
+
+    Removed ill-planned attempts to fix pdl.exe issue
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 22fd040a95d7a43c743ee0a98167c40741c50096
+Author: unknown <Charles@.(none)>
+Date:   Wed May 12 12:54:30 2010 -0500
+
+    Trying to unbreak what I just broke, getting pdl to execute on windows.
+
+ Makefile.PL |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit e38a9ad9ca64218844025abb3b90dbdf415d374c
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Wed May 12 12:15:17 2010 -0500
+
+    I think I've added 'pdl' as an executable for windows machines.
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 71df03e2b3b19682ebebe6cd00b111a95417f714
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Wed May 12 15:05:17 2010 +0200
+
+    build-depend on proj-bin and netpbm
+    
+    this fixes two errors during test suite runs
+
+ debian/control |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 15392431cd05acf32b8a726d231d0572cd7e024b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 11 12:53:22 2010 -0400
+
+    Mark Karma DEPRECATED in QuickStart.pod
+
+ Basic/Pod/QuickStart.pod |   23 +++++++++++------------
+ 1 files changed, 11 insertions(+), 12 deletions(-)
+
+commit 5df9e244450b07bb118ee25a3f30445c3626c94f
+Merge: 4ff1dcd... 25cfae8...
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Mon May 10 20:54:29 2010 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 4ff1dcd76b38aff5a67273e5ce7ac625f42ced2f
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Mon May 10 20:53:55 2010 -0500
+
+    Added references to PDL::IO and the string argument to pdl().
+
+ Basic/Pod/QuickStart.pod |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+commit 25cfae8947305d67bd9aba9a20518431c0d25de5
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon May 10 10:13:58 2010 +0200
+
+    be clear about the package not being released yet
+
+ debian/changelog |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 8d2c48e4b0b7c2b6c32889d3fcc2d90b897180b5
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon May 10 10:07:16 2010 +0200
+
+    recommend libpgplot-perl instead of pgperl
+
+ debian/changelog |    7 +++++++
+ debian/control   |    2 +-
+ 2 files changed, 8 insertions(+), 1 deletions(-)
+
+commit 4b5e6ee86e10db3c5f6b4bc8ef79b2cdc2bdc951
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Mon May 10 01:02:05 2010 -0500
+
+    Declared the same variable with 'my' twice in core.t. Fixed.
+
+ t/core.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 7ba4ec537697ee992c07eee87705c8cd94903039
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Mon May 10 00:48:46 2010 -0500
+
+    Fixed a couple of bad-doc errors and fixed the compiler warnings from GSL SF.
+
+ Basic/Bad/bad.pd    |    4 ++--
+ Lib/GSL/SF/gslerr.h |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 9e9ac6adf2533f6be782bd53a8435d690fbfa2b8
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Sun May 9 23:14:26 2010 -0500
+
+    Made bad.pd CPAN friendly.
+
+ Basic/Bad/bad.pd |  310 +++++++++++++++++++++++++++++++++++++++++-------------
+ 1 files changed, 239 insertions(+), 71 deletions(-)
+
+commit 1afcd0e996ccd596233e72f2da1ebf1c56e4d633
+Author: David Mertens <dcmertens@gmail.com>
+Date:   Sun May 9 21:20:17 2010 -0500
+
+    Fixed invalid pod cuts in slices.pd
+
+ Basic/Slices/slices.pd |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+commit 1e11d37d2c717c956c39fb60f23ca40cb4879cbc
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sun May 9 17:59:04 2010 -0500
+
+    Daniel's corrections and cleanups to the Autoloader documentation.
+
+ Basic/AutoLoader.pm |   33 ++++++++++++++++-----------------
+ 1 files changed, 16 insertions(+), 17 deletions(-)
+
+commit f33371150dfbd49f125a9590253eaa71b40b3645
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sun May 9 17:50:58 2010 -0500
+
+    Updated PDL.pm documentation.
+
+ Basic/PDL.pm |   74 +++++++++++++++++++++++++++++++++++++++++++---------------
+ 1 files changed, 55 insertions(+), 19 deletions(-)
+
+commit 5a501ea8eb728733781cc5f26bc1531ef93fcb90
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sun May 9 17:49:29 2010 -0500
+
+    Moved PDL::Impatient to PDL::QuickStart.
+
+ Basic/Pod/FAQ.pod        |    8 +-
+ Basic/Pod/Guide.pod      |    2 +-
+ Basic/Pod/Impatient.pod  |  615 ----------------------------------------------
+ Basic/Pod/Intro.pod      |    4 +-
+ Basic/Pod/QuickStart.pod |  615 ++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 622 insertions(+), 622 deletions(-)
+
+commit a0efa3b899e3a13a723f8a8ad089dadb0b45934f
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun May 9 10:22:22 2010 +0200
+
+    detect presence of 'alt' flavour of hdf4
+
+ IO/HDF/Makefile.PL    |   11 ++++++++++-
+ IO/HDF/SD/Makefile.PL |    4 ++--
+ IO/HDF/VS/Makefile.PL |    2 +-
+ 3 files changed, 13 insertions(+), 4 deletions(-)
+
+commit 2a4d3ce9a3b846a9efa801480b1a33f8596772ce
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun May 9 10:20:23 2010 +0200
+
+    update debian packaging to uploaded 2.4.6
+
+ debian/changelog    |   16 ++++++++++++++--
+ debian/control      |   10 +++++-----
+ debian/pdl.postinst |    1 -
+ debian/rules        |    2 +-
+ 4 files changed, 20 insertions(+), 9 deletions(-)
+
+commit ae8d79b8076a3b434067162aa6be9f9f0501748d
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu May 6 20:12:51 2010 +0200
+
+    add dpkg trigger for doc updates
+    
+    if dpkg installs a file in and below /usr/lib/perl5/PDL, the pdldoc
+    index is updated, as is the HTML documentation
+
+ debian/pdl.postinst |    2 +-
+ debian/pdl.triggers |    1 +
+ 2 files changed, 2 insertions(+), 1 deletions(-)
+
+commit cc2b9be46ffd3efe72a384f0a0ea30babbf7b4e8
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sat May 8 15:17:20 2010 -0600
+
+    Fixed corner case in new matrix multiply code:  sometimes PDL dimincs array isn't valid,
+    even after calling PDL->make_physical or PDL->make_physdims.  Now we instead calculate
+    the diminc explicitly.
+    
+    Also, subclass3.t had an erroneous test that used matrix multiply as a proxy for inner().
+    Now that inner isn't used by matmult, we had to use an inner check directly.
+
+ Basic/Primitive/primitive.pd |   27 ++++++++++++++++++---------
+ t/matrixops.t                |    1 +
+ t/subclass3.t                |    3 ++-
+ 3 files changed, 21 insertions(+), 10 deletions(-)
+
+commit 7760030bd6520c606d8d9d5b2cee2c9ac554123c
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sat May 8 07:35:05 2010 -0600
+
+    Even faster matrix multiply - now use dimincs to walk through the data explicitly, rather than calculating each element's offset in memory individually.
+
+ Basic/Primitive/primitive.pd |   28 +++++++++++++++++++++++++---
+ 1 files changed, 25 insertions(+), 3 deletions(-)
+
+commit 8244725170a561f481c70933d057cc8aeb290284
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sat May 8 01:21:50 2010 -0600
+
+    Replaced simple threading expression with a PP tiling loop; yields 2x speedup
+    for large matrices due to better cache hits. -- CED
+
+ Basic/Primitive/primitive.pd |  100 ++++++++++++++++++++++++++++-------------
+ 1 files changed, 68 insertions(+), 32 deletions(-)
+
+commit 5402c258d081efadd8cad0f152947f98405ceb8d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 6 23:05:30 2010 -0400
+
+    Update VERSION to 2.4.6_007 post CPAN dev release
+    
+    ...for ongoing development to continue.
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ada71dd3aed4af0a869a7ca55d6b37a47fab8648
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 6 21:42:52 2010 -0400
+
+    Update MANIFEST for PDL-2.4.6_006 release
+
+ MANIFEST |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
 commit e70dbacf9bee498f889d3f45e93752aac95aaf27
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu May 6 21:36:21 2010 -0400
@@ -5718,69 +6638,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
-
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-commit 6048e3d6f082a3299d10b4920db41388f3762eb4
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Thu Apr 23 18:52:48 2009 -0400
-
-    Fixed test 17 in t/plplot.t
-    
-    Fixed test 17 in t/plplot.t to use a magnitude difference test
-    rather than equality for the floating point quanitities.
-
- Changes    |    3 +++
- t/plplot.t |    2 +-
- 2 files changed, 4 insertions(+), 1 deletions(-)
-
-commit 5a31fe28398581c840b652d6d42964a156270545
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Thu Apr 23 11:04:35 2009 -0400
-
-    Fix t/autoload.t per sf bug number 2339726
-    
-    Fixed test 3 of autoload.t per the SF.net bug #2339726
-    report by zowie.
-
- Changes      |    3 +++
- t/autoload.t |    2 +-
- 2 files changed, 4 insertions(+), 1 deletions(-)
-
-commit edb132bc9bdecd1d1f80a7675c23028d92e49896
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Thu Apr 23 11:00:21 2009 -0400
-
-    F bug #2753869 fixed with pctover()/oddpctover()
-    
-    This fixes SF bug #2753869 and also corrects the calculations
-    performed for both the pctover() and oddpctover() functions.
-    pctover() should now be consistent with NIST recommendations
-    and MS Excel.  oddpctover() should now be the basic textbook
-    implementation.
-
- Basic/Ufunc/ufunc.pd |   38 +++++++++++++++++++++++---------------
- Changes              |    6 ++++++
- t/ufunc.t            |   10 ++++++++--
- 3 files changed, 37 insertions(+), 17 deletions(-)
