@@ -1,3 +1,358 @@
+commit d736825882d89b7e1d7c3b08fdf25ac8cc719d1c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 31 10:40:43 2010 -0400
+
+    Implement rudimentary spheres3d for TriD
+    
+    Per-sphere radius and color not yet implemented but this
+    is a start.  Also need to add proper normals with interpolation
+    so the shading comes out smooth.
+
+ Graphics/TriD/TriD.pm         |   33 +++++++++++++++++++++++++++++++--
+ Graphics/TriD/TriD/GL.pm      |   16 ++++++++++++++++
+ Graphics/TriD/TriD/Objects.pm |    8 ++++++++
+ Release_Notes                 |    4 ++++
+ 4 files changed, 59 insertions(+), 2 deletions(-)
+
+commit e8ffb02d7b8f232c82410bb02f7a0f976865c345
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 31 00:23:42 2010 -0400
+
+    Update Release_Notes with .perldl_hist support
+
+ Release_Notes |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+commit 1cad162e09647dce3adc81dced4e6114e867743a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 31 00:14:51 2010 -0400
+
+    Make Perldl2 use ~/.perldl_hist for history file
+    
+    Can't yet do the .perldlrc because still have back compatible
+    features to implement...
+
+ Perldl2/pdl2 |   11 ++++++++++-
+ 1 files changed, 10 insertions(+), 1 deletions(-)
+
+commit aecb52edf519c6ea4758c8227989ec6a705e63ea
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 30 16:10:39 2010 -0400
+
+    Update Release_Notes for Perldl2 install info
+
+ Release_Notes |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit c1e1238f0748c48fddb9cea7f3810edf7f9c13a2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 30 16:09:18 2010 -0400
+
+    Update Perldl2/README now that pdl2 is installed
+
+ Perldl2/README   |   18 +++++++-----------
+ Perldl2/pdl2.bat |   21 ---------------------
+ 2 files changed, 7 insertions(+), 32 deletions(-)
+
+commit 44d09061de67e0cce9d744046132776b67d26c54
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 30 15:57:15 2010 -0400
+
+    Add install support for pdl2 script
+
+ Perldl2/Makefile.PL |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit afe6605543fc4b43a51d5614805986100fc1e62e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 30 14:21:20 2010 -0400
+
+    Update Release_Notes for Perldl2
+
+ Release_Notes |   14 ++++++--------
+ 1 files changed, 6 insertions(+), 8 deletions(-)
+
+commit 0b9040810665f1a903f80db4b90301109c443a41
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 30 14:19:19 2010 -0400
+
+    Fix accidental change to perldl.conf
+
+ perldl.conf |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+commit d83179993e7de32587f546a17bbe4127e64ece9d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 30 13:52:42 2010 -0400
+
+    Add rough build/install support for Perldl2
+    
+    This should be enough for folks to try things out without
+    having to hand copy install files to hand determined locations.
+
+ Perldl2/Makefile.PL              |   16 +
+ Perldl2/NiceSlice.pm             |   75 -
+ Perldl2/Perldl2.pm               |  162 --
+ Perldl2/Plugin/Makefile.PL       |   10 +
+ Perldl2/Plugin/NiceSlice.pm      |   75 +
+ Perldl2/Plugin/PrintControl.pm   |   77 +
+ Perldl2/PrintControl.pm          |   77 -
+ Perldl2/Profile/Makefile.PL      |    7 +
+ Perldl2/Profile/Perldl2.pm       |  165 +++
+ Perldl2/README                   |   72 +-
+ Perldl2/TieHash.pm               |   38 -
+ Perldl2/pdl2                     |    2 +-
+ Perldl2/pdl2.bat                 |    3 +-
+ Perldl2/pod-plate                |   45 -
+ Perldl2/readline-fix/Gnu.xs      | 3002 --------------------------------------
+ Perldl2/readline-fix/Makefile    |  983 -------------
+ Perldl2/readline-fix/Makefile.PL |  217 ---
+ Perldl2/readline-fix/README      |   84 --
+ perldl.conf                      |   14 +-
+ 19 files changed, 379 insertions(+), 4745 deletions(-)
+
+commit 59d931a365cf1e09bf7526fb085f660757c1b67d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 30 08:39:38 2010 -0400
+
+    Work around perl -d for t/gsl_mroot.t
+    
+    Also updated the POD code example in gsl_mroot.pd to
+    include the work around.
+
+ Lib/GSL/MROOT/gsl_mroot.pd |    9 +++++++--
+ t/gsl_mroot.t              |    5 +++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+commit 3b490b620b3e16ea5eb1c3fff8726756925d93f8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 29 19:19:24 2010 -0400
+
+    Update Known_problems and Release_Notes for CPAN
+    
+    A new CPAN developers release is planned with the work around
+    for the known perl -d "feature" against PDL usage of lvalue
+    subs.  Not a solution, but tests can be run under the debugger.
+
+ Known_problems |   24 ++++++++++++++++++------
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+), 6 deletions(-)
+
+commit 353df1776748c0e5d6d4e9cff5770280131994d3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 29 18:54:10 2010 -0400
+
+    Fix transform.pd for perl -d "feature"
+
+ Lib/Transform/transform.pd |   81 ++++++++++++++++++++++++++++---------------
+ 1 files changed, 53 insertions(+), 28 deletions(-)
+
+commit 5ae4e680076641e8012f646053258ded99b16608
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 29 18:27:18 2010 -0400
+
+    Workaround perl -d "feature" for IO/Misc/misc.pd
+
+ IO/Misc/misc.pd |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 945328134dd44d038e6a0fed42013c2bb9208ad3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 29 16:04:03 2010 -0400
+
+    Fix matrixops stuff  to avoid lvalue temps
+
+ Basic/MatrixOps/matrixops.pd |   22 +++++++++++++++-------
+ t/matrixops.t                |    9 ++++++---
+ 2 files changed, 21 insertions(+), 10 deletions(-)
+
+commit ff633c8ee344ecee550145b8561f686ee9eb825c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 29 15:46:04 2010 -0400
+
+    Add skip to test if run under the perl debugger
+    
+    There is a new "feature" in the perl debugger which breaks
+    lvalue subs usage for PDL.  This skips the test if it is
+    run under the debugger.
+
+ t/lvalue.t |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 70e7813d9a5fe463349192ec2058a7c47545c9b5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 29 15:45:14 2010 -0400
+
+    Add lvalue temp workaround to ImageND
+
+ Lib/ImageND/imagend.pd |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit b523b7b1693048d9a6ec8e71c4bcdfc3443f8f23
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 29 14:26:38 2010 -0400
+
+    Add Convert::UU to PDL requirements list
+    
+    Yes, I know this is yet another dependency but it is an all perl
+    replacement for the uuencode/uudecode needed for PDL::IO::Dumper.
+    This should not affect performance as the faster system calls to
+    uuencode/uudecode will still be made if available.  However, now
+    PDL::IO::Dumper should work on every PDL platform.
+
+ DEPENDENCIES |    7 ++++---
+ Makefile.PL  |    1 +
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+commit c1ae401a1d2d63e673bc2a5f7fafcbaa99aa0f2f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 29 13:54:54 2010 -0400
+
+    Remove skip for win32 platforms
+    
+    The problem was that you need a uuencode/uudecode functionality.
+    We check explicitly for uuencode/uudecode or Convert::UU so
+    the platform skip is no longer needed or justified.
+
+ t/dumper.t |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
+
+commit 35c519b860cb07eb1834fbba50fdd6b8e45a39cc
+Author: Shlomi Fish <shlomif@iglu.org.il>
+Date:   Thu May 27 16:00:21 2010 -0500
+
+    Fixed format string attack errors in GSL, PGPLOT, and Transform.
+    
+    See previous commits. For a discussion of why this is considered a
+    problem, see http://en.wikipedia.org/wiki/Format_string_attack
+
+ Graphics/PGPLOT/Window/Window.xs     |    2 +-
+ Lib/GSL/INTERP/gslerr.h              |    2 +-
+ Lib/GSL/SF/coulomb/gsl_sf_coulomb.pd |    4 ++--
+ Lib/Transform/transform.pd           |   20 ++++++++++----------
+ 4 files changed, 14 insertions(+), 14 deletions(-)
+
+commit da8ab6f1fe0a72e4df1bb08014ab6790c1975e0f
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Thu May 27 14:00:58 2010 -0500
+
+    Fixed varargs/stdargs issues with barf in slices.pd.
+    
+    Reported by shlomi (rindolf) on irc, slices.pd was not compiling because
+    it was giving a non-constant string to barf, which is croak, which
+    behaves a lot like prinft. gcc insists that the specification string
+    to printf and similar functions is a string literal. This fixes that
+    problem in slices.pd.
+    
+    It appears that the original code couldn't decide if barf just took
+    a single string argument or a variable number of arguments, so they
+    used sprintf and put the message in a buffer string. I simply
+    copied the contents of the sprintf statement and gave it to
+    the barf function call.
+
+ Basic/Slices/slices.pd |   20 ++++++++++++++------
+ 1 files changed, 14 insertions(+), 6 deletions(-)
+
+commit bc959b287ad4be6c1451c771390a5509527b3982
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Thu May 27 13:18:00 2010 -0500
+
+    Added entries to .gitignore.
+    
+    Build files for FFTW and HDF were not yet in .gitignore, so I
+    added them.
+
+ .gitignore |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+commit aaff83688f6797028d050b7cb466f4ed53c56549
+Author: David Mertens <david@david-desktop.(none)>
+Date:   Thu May 27 12:44:31 2010 -0500
+
+    Cleaning errors out of pdlcore.c
+
+ .gitignore              |    3 +++
+ Basic/Core/pdlcore.c.PL |    6 +++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+commit 6c5527f1251c0da3cc6a48b4a31b262dee1bed3e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 25 10:46:56 2010 -0400
+
+    Document default 200x200 min imag2d size
+    
+    This was missing from the POD and I was puzzled when the
+    image did not seem to be imaged at 1:1 scale.  An idea
+    would be to display the current zoom with the image to
+    keep things straight.
+
+ imag2d.pdl |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 5d4bcc830cb58256e2504b7fda1fa7179daf306b
+Author: Craig DeForest <zowie@dhcp-10-120.boulder.swri.edu>
+Date:   Mon May 24 16:45:28 2010 -0600
+
+    Fixed rice compression case where the compressed tile size (in bytes) does not
+    divide evenly into the size of the final datatype.
+
+ IO/FITS/FITS.pm |   22 ++++++++++++++++++----
+ 1 files changed, 18 insertions(+), 4 deletions(-)
+
+commit d2c15aff08950a71745aa1474d69d9c70ca61f2e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 23 21:44:40 2010 -0400
+
+    Update MANIFEST with make manifest
+    
+    I noticed that it had not been updated when some warning messages
+    were returned from the 2.4.6_007 CPAN developers release.  This
+    should fix that problem.
+
+ MANIFEST |   21 ++++++++++++++++++++-
+ 1 files changed, 20 insertions(+), 1 deletions(-)
+
+commit 495018cea8a2151f5bf4e3160cd05e7a0d84237e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 23 12:06:44 2010 -0400
+
+    Update Perldl2/README with new Devel::REPL build
+    
+    Now that there is an official Devel::REPL release with the
+    fixes supporting Perldl2 development, we no longer need to
+    bundle a tar file of the distribution with the Perldl2 stuff.
+
+ Perldl2/Devel-REPL-1.003009_02.tar.gz |  Bin 47951 -> 0 bytes
+ Perldl2/README                        |   62 ++++++++++++---------------------
+ 2 files changed, 22 insertions(+), 40 deletions(-)
+
+commit 0eb3dd8196b7d303f8f23cf83ebc484d820eb46d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 22 15:32:45 2010 -0400
+
+    Update $PDL::VERSION to 2.4.6_008
+    
+    For development to continue following the PDL-2.4.6_007
+    CPAN developers release.
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit fb0726323a58ba33f5177497e54fcd82ff43fdc1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 22 15:30:56 2010 -0400
+
+    Minor cleanup for PDL-2.4.6_007 developers release
+    
+    Removed Graphics/TriD/TriD/Cube.pm as it never had code.
+    Also updated Known_Problems and MANIFEST for the new
+    developers release.
+
+ Graphics/TriD/TriD/Cube.pm |    5 -----
+ Known_problems             |    3 ++-
+ MANIFEST                   |    8 ++++----
+ 3 files changed, 6 insertions(+), 10 deletions(-)
+
 commit 719dd4dade61f66eec2d673c8347bd0e4bcd01f2
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri May 21 18:09:50 2010 -0400

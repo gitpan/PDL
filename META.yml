@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                PDL
-version:             2.4.6_007
+version:             2.4.6_008
 abstract:            Perl Data Language
 license:             ~
 author:              
@@ -9,6 +9,7 @@ generated_by:        ExtUtils::MakeMaker version 6.44
 distribution_type:   module
 requires:     
     Astro::FITS::Header:           0
+    Convert::UU:                   0
     Data::Dumper:                  2.121
     File::Spec:                    0.6
     Filter::Util::Call:            0
