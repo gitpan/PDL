@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+
+use strict;
+use PDL;
+
+sub whereND {
+
+   # w is a mask 0 = false, 1 = true
+   my $w = pop @_;
+
+   my @to_return;
+
+   foreach my $i (@_) {
+      # i is M dimensional
+      # w is N < M dimensional
+      # dims(i) 1..N == dims(i) 1..N
+      # thread over N+1 to M dimensions
+
+      my $n = sum($w);
+      my $mask = $w * ones($i);
+
+      # count the number of dims in w and i
+      # w = a b c d e f.....
+      my @idims = dims($i);
+
+      # ...and pop off the number of dims in w
+      foreach (dims($w)) { shift @idims };
+
+      # calculate the indicies of $mask
+      my $t = whichND($mask);
+
+      # reshape $t so that it will look into $i correctly
+      $t->reshape($mask->ndims, $n, @idims);
+
+      push (@to_return, $i->indexND($t));
+   }
+
+   return @to_return;
+}
+
+1;
