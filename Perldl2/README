@@ -1,5 +1,5 @@
 Created on: Thu 10 Dec 2009 10:32:58 PM
-Last saved: Tue 01 Jun 2010 02:28:18 PM 
+Last saved: Mon 21 Jun 2010 09:39:52 PM
 
 
 +-----------------------------------------------------------+
@@ -10,28 +10,41 @@ This directory contains development efforts for a new and
 improved perldl shell (Perldl2) that can integrate with
 the Padre IDE to support PDL development.
 
-You need to install the version 1.003010 of Devel::REPL
+You need to install the version 1.003011 of Devel::REPL
 in order to build/use the Perldl2 shell. A description
 of the files in this directory and how to install and
 use the Perldl2 shell follows.
 
 
 +-----------------------------------------------------------+
-|                          FILES                            |
+|                         CONTENTS                          |
 +-----------------------------------------------------------+
 
  README
-   This file.
+   This file
+
+ TODO
+   Development list for Perldl2 shell
+
+ Makefile.PL
+   Perl configuration/build script for Perldl2
+
+ Plugin/
+ Profile/
+ Script.pm
+   Perl modules and directories with modules for Perldl2
 
  pdl2
-   This is a perl script for starting the Perldl2 shell.
+   A perl script for starting the Perldl2 shell.
+
+
 
 
 +-----------------------------------------------------------+
 |                      INSTALLATION                         |
 +-----------------------------------------------------------+
 
-  Install Devel::REPL version 1.003010 or greater.
+  Install Devel::REPL version 1.003011 or greater.
 
   Then configure and build PDL as usual.  The presence
   of Devel::REPL should be detected and the Perldl2
@@ -53,11 +66,7 @@ use the Perldl2 shell follows.
     pdl2
 
  To exit the Perldl2 shell from the PDL> prompt, type Ctrl-D
- or quit.
-
- WARNING: Typing exit will also quit the shell but do so by
- terminating the perl interpreter. Probably not what you
- want to do---especially if you want to keep command history.
+ or quit, q, x, or exit.
 
 
 +-----------------------------------------------------------+
@@ -65,7 +74,6 @@ use the Perldl2 shell follows.
 +-----------------------------------------------------------+
 
  Supported functionality from Devel::REPL and PDL:
-  * Commands (generic command creation)
   * DDS (pretty prints output using Data::Dump::Streamer)
   * History (redo commands with !-1 and !<num> syntax)
   * Interrupt (interrupt with Ctrl-C; not on MSWin32)
@@ -92,33 +100,27 @@ use the Perldl2 shell follows.
   * PDL::Image2D
   * PDL::AutoLoader
 
- help, apropos work but
- * ? and ?? aliases don't work (use help or apropos words)
- * you need to quote the arguments (e.g.,  help 'sumover')
+ ? and ?? aliases for help and apropos now work
+ 
+ Arguments to help|usage|apropos|sig|badinfo|demo are not autoquoted
+
+ Shell escapes starting with $PERLDL::ESCAPE as the first character
+ of a line now work.
 
  l <num> prints the last num lines of history, default 20.
 
  p is an alias for print.
 
- demo works but you'll need to quote the demo name argument
- and, at the end of the demo, you may need to type Ctrl-D
- if it hangs after the final (press enter).
+ demo works but at the end of the demo, you may need to type Ctrl-D
+ if it hangs after the final "press enter".
 
  The Perldl2 shell, pdl2, now loads/saves from the same
- history file as perldl.  This is a new feature so, as
+ history file as perldl. This is a new feature so, as
  always, feedback welcome.
 
-
-+-----------------------------------------------------------+
-|                        ADVANCED                           |
-+-----------------------------------------------------------+
-
- Work is underway to enable the use of the $HOME/.perldlrc
- and local.perldlrc startup files with the Perldl2 shell.
-
- If you can't wait and wish to customize your pdl2 startup
- further, you can edit the Perldl2.pm file following the
- documentation for Devel::REPL::Profile.
-
- It is probably simpler to put your customizations in a
- file and just do the filename.
+ The Perldl2 shell, pdl2, now loads your .perldlrc file
+ from the same location as the perldl shell does.  It also
+ accepts .pdlrc as the name---looking forward to the new
+ naming scheme for the interactive shell.  A local.pdlrc
+ or local.perldlrc are run if present as well.  As always,
+ feedback is welcome.
