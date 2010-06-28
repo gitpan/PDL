@@ -1101,6 +1101,7 @@ positive indices.
 
 sub PDL::dummy($$;$) {
    my ($pdl,$dim,$size) = @_;
+   barf("Missing position argument to dummy()") unless defined $dim;  # required argument
    $dim = $pdl->getndims+1+$dim if $dim < 0;
    $size = 1 unless defined($size);
 
@@ -1108,7 +1109,7 @@ sub PDL::dummy($$;$) {
 	 . -($pdl->getndims+1).", pos=". ($dim-1-$pdl->getndims) ) if($dim<0);
 
    my($s) = ',' x ( ($dim > $pdl->getndims) ? ($pdl->getndims) : ($dim) );
-   $s .= '*,' x ( $dim-$pdl->getndims-1 );
+   $s .= '*1,' x ( $dim-$pdl->getndims );
    $s .= "*$size";
 
    $pdl->slice($s);
