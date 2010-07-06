@@ -1,3 +1,107 @@
+commit a3f0a1c709e527b10d167257bbc2b6e8e8cde4c0
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Mon Jul 5 09:38:07 2010 +0200
+
+    Eliminate Book folder until I undersand how HTML docs are generated.
+
+ Basic/Pod/Book/FAQ.pod        | 1872 -----------------------------------------
+ Basic/Pod/Book/Indexing.pod   | 1561 ----------------------------------
+ Basic/Pod/Book/MATLAB.pod     |  865 -------------------
+ Basic/Pod/Book/Philosophy.pod |  148 ----
+ Basic/Pod/Book/QuickStart.pod |  615 --------------
+ Basic/Pod/Book/Scilab.pod     |  815 ------------------
+ Basic/Pod/Book/Threading.pod  |  961 ---------------------
+ Basic/Pod/Book/Tips.pod       |  129 ---
+ Basic/Pod/Book/make-book.pl   |  175 ----
+ Basic/Pod/Book/pdl-book.css   |    8 -
+ Basic/Pod/FAQ.pod             | 1872 +++++++++++++++++++++++++++++++++++++++++
+ Basic/Pod/Indexing.pod        | 1561 ++++++++++++++++++++++++++++++++++
+ Basic/Pod/MATLAB.pod          |  865 +++++++++++++++++++
+ Basic/Pod/Philosophy.pod      |  148 ++++
+ Basic/Pod/QuickStart.pod      |  615 ++++++++++++++
+ Basic/Pod/Scilab.pod          |  815 ++++++++++++++++++
+ Basic/Pod/Threading.pod       |  961 +++++++++++++++++++++
+ Basic/Pod/Tips.pod            |  129 +++
+ Basic/Pod/make-book.pl        |  175 ++++
+ Basic/Pod/pdl-book.css        |    8 +
+ 20 files changed, 7149 insertions(+), 7149 deletions(-)
+
+commit 2734fdf63c7e78dc7cec79aa8f2ef940db7e5765
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 4 12:45:21 2010 -0400
+
+    Fix jpegtopnm problem in proj_transform.t
+    
+    The problem arises because the jpegtopnm routine
+    recently started giving a different output from
+    extracting the same input earth_image data file from
+    PDL::Transform::Cartography. That results in test failure
+    because the data does not match but not because the
+    PDL::Transform::Proj4 has an error.
+    
+    The fix is in two parts. Modify the original
+    t/proj_transform.t to skip the tests if the image data
+    checksum does not match that for which the tests were
+    written. Second, a new t/proj_transform2.t test was written
+    using a synthetic image in place of the earth_image. This is
+    possible because the image data is only used to compare the
+    test results but it does not contain any explicit content
+    related to the transform beyond the FITS header information.
+    
+    This should fix sf.net bug #3013751.
+
+ t/proj_transform.t  |   91 +++++++------
+ t/proj_transform2.t |  383 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 430 insertions(+), 44 deletions(-)
+
+commit 01a053483036f9bad6aa81d468d3e48ff7da091a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 2 14:08:37 2010 -0400
+
+    Fix threading with lu_decomp and lu_backsub
+    
+    This closes sf.net bug #3021567.  lu_decomp threaded version was
+    implemented and the fall through to the numerically unstable
+    lu_decomp2 is not done any more.  This had some bad consequences
+    for any routines expecting threading and matrix inverses (for
+    example) since the inverse is calculated with lu_decomp which
+    uses the non-pivoting lu_decomp2  if you try to invert more than
+    one matrix at a time.
+    
+    lu_backsub now correctly handles thread dimensions from any of
+    its input arguments and returns the appropriately dimensioned
+    results.  The signatures have been updated as well.
+    
+    Known_problems and Release_Notes have also been updated.
+
+ Basic/MatrixOps/matrixops.pd |  475 ++++++++++++++++++++++--------------------
+ Known_problems               |    5 +-
+ Release_Notes                |   17 ++
+ 3 files changed, 263 insertions(+), 234 deletions(-)
+
+commit 1a88725bc9966a88984d768453f0cfe8ed03e089
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jun 27 20:35:36 2010 -0400
+
+     VERSION to 2.4.6_012 for more development
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 82830d6d22953b545938242698e4747659325678
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jun 27 20:12:01 2010 -0400
+
+    Update Known_problems and Release_Notes for CPAN
+    
+    Also updated MANIFEST.  This is for a CPAN developer's
+    release to get additional diagnostic output from t/proj_transform.t.
+
+ Known_problems |    9 +++++----
+ MANIFEST       |    6 ------
+ Release_Notes  |   26 ++++++++++++++++++++++++++
+ 3 files changed, 31 insertions(+), 10 deletions(-)
+
 commit cb823a2ef2096d937eb9cd49e5a8627b98674506
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Jun 25 18:13:46 2010 -0400
@@ -714,7 +818,7 @@ Date:   Thu Jun 10 21:59:02 2010 -0400
  1 files changed, 2 insertions(+), 1 deletions(-)
 
 commit 9423fef79712c83bcc1db2b2877b07d3de91a59a
-Merge: 4943472... 79b6146...
+Merge: 4943472 79b6146
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu Jun 10 20:08:42 2010 -0400
 
@@ -879,7 +983,7 @@ Date:   Thu Jun 3 19:03:04 2010 +1000
  1 files changed, 1 insertions(+), 5 deletions(-)
 
 commit 6da87ac6c32cfd0d7b620e72ee6591f061c2dc40
-Merge: 2b812b2... b9cffa4...
+Merge: 2b812b2 b9cffa4
 Author: Matthew Kenworthy <mattk@Matthew-Kenworthys-MacBook-Pro.local>
 Date:   Tue Jun 1 23:33:33 2010 +0200
 
@@ -1627,7 +1731,7 @@ Date:   Mon May 17 13:00:17 2010 +0200
  5 files changed, 1680 insertions(+), 1714 deletions(-)
 
 commit 5789093253079406e974cd391de9900d94e7b6ce
-Merge: 19cbde7... 92a971f...
+Merge: 19cbde7 92a971f
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon May 17 06:27:26 2010 -0400
 
@@ -1680,7 +1784,7 @@ Date:   Sun May 16 18:34:11 2010 -0400
  1 files changed, 5 insertions(+), 5 deletions(-)
 
 commit 15d78ce70aa721cfd0c670ef8d9e4aa29c78f6ac
-Merge: 0b98645... e3c50c1...
+Merge: 0b98645 e3c50c1
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun May 16 15:33:57 2010 -0400
 
@@ -1755,7 +1859,7 @@ Date:   Sat May 15 14:52:14 2010 -0400
  2 files changed, 1 insertions(+), 433 deletions(-)
 
 commit 31e0c88be9a8381da4cf6f978a6642f3d8b7890d
-Merge: a21804a... e2001f6...
+Merge: a21804a e2001f6
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat May 15 13:37:01 2010 -0400
 
@@ -2126,7 +2230,7 @@ Date:   Tue May 11 12:53:22 2010 -0400
  1 files changed, 11 insertions(+), 12 deletions(-)
 
 commit 5df9e244450b07bb118ee25a3f30445c3626c94f
-Merge: 4ff1dcd... 25cfae8...
+Merge: 4ff1dcd 25cfae8
 Author: David Mertens <dcmertens@gmail.com>
 Date:   Mon May 10 20:54:29 2010 -0500
 
@@ -2375,7 +2479,7 @@ Date:   Thu May 6 19:27:31 2010 +0200
  1 files changed, 26 insertions(+), 1 deletions(-)
 
 commit f5a1aba6ff80c628b8383b0eca9198164f85d819
-Merge: 53f4a4e... 31c8016...
+Merge: 53f4a4e 31c8016
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Thu May 6 11:44:28 2010 -0500
 
@@ -2569,7 +2673,7 @@ Date:   Sat May 1 12:53:33 2010 -0400
  2 files changed, 28 insertions(+), 16 deletions(-)
 
 commit cbf21ab20848ee1241930cf3e1fad282093ff02b
-Merge: 071eb86... d4a1fc4...
+Merge: 071eb86 d4a1fc4
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Apr 30 17:36:20 2010 -0400
 
@@ -2653,14 +2757,14 @@ Date:   Fri Apr 30 13:38:54 2010 -0400
  28 files changed, 4 insertions(+), 60 deletions(-)
 
 commit 31ed9b68203076d17c3dacae10f938208d42795f
-Merge: 266f1f8... 19047be...
+Merge: 266f1f8 19047be
 Author: Derek Lamb <lambd@users.sourceforge.net>
 Date:   Fri Apr 30 13:36:09 2010 -0400
 
     Merge branch 'master' of ssh://lambd@pdl.git.sourceforge.net/gitroot/pdl/pdl
 
 commit 19047beba630700b30ecd89fa6e2048859a30ea7
-Merge: bb96a70... ba65d3d...
+Merge: bb96a70 ba65d3d
 Author: Craig DeForest <zowie@Clio.local>
 Date:   Thu Apr 29 23:59:22 2010 -0600
 
@@ -2676,7 +2780,7 @@ Date:   Fri Apr 30 00:58:15 2010 -0500
  1 files changed, 93 insertions(+), 79 deletions(-)
 
 commit bb96a70629fc75e4e1e40cb89aa824924da80f2a
-Merge: 17430ad... 7501237...
+Merge: 17430ad 7501237
 Author: Craig DeForest <zowie@Clio.local>
 Date:   Thu Apr 29 23:51:20 2010 -0600
 
@@ -2837,7 +2941,7 @@ Date:   Sat Apr 24 08:51:36 2010 -0400
  1 files changed, 3 insertions(+), 0 deletions(-)
 
 commit 81d3b73f93cacb4c2f1969ca8e391dcc2e5223ba
-Merge: 66a90be... 47f525d...
+Merge: 66a90be 47f525d
 Author: Craig DeForest <zowie@Clio.local>
 Date:   Sat Apr 24 00:41:10 2010 -0700
 
@@ -2876,7 +2980,7 @@ Date:   Thu Apr 22 14:31:19 2010 -0400
  1 files changed, 15 insertions(+), 1 deletions(-)
 
 commit 4bef4ee7afc61660064d79e012ac94a9efb197ff
-Merge: 94eaa00... 4f23e3f...
+Merge: 94eaa00 4f23e3f
 Author: Craig DeForest <zowie@pcp057117pcs.wireless.calpoly.edu>
 Date:   Wed Apr 21 16:21:16 2010 -0700
 
@@ -2986,7 +3090,7 @@ Date:   Sun Apr 18 21:56:00 2010 -0400
  3 files changed, 40 insertions(+), 7 deletions(-)
 
 commit ad7d299b075e133f6b97425f08ca4f01bcb5b17b
-Merge: 3334ff5... 4061e08...
+Merge: 3334ff5 4061e08
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Apr 18 17:55:50 2010 -0400
 
@@ -3606,7 +3710,7 @@ Date:   Thu Feb 11 21:47:25 2010 -0600
  2 files changed, 122 insertions(+), 25 deletions(-)
 
 commit 5011f4d63e91d6857b6132e74e9c16afcb07b432
-Merge: 54532da... ff8da8b...
+Merge: 54532da ff8da8b
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Thu Feb 11 17:43:20 2010 -0600
 
@@ -3646,7 +3750,7 @@ Date:   Thu Feb 11 12:50:24 2010 -0600
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit edd3668e64379c6a0ad7acbfa471713e7918b3b3
-Merge: 806c75e... a6f4018...
+Merge: 806c75e a6f4018
 Author: David Mertens <david@david-laptop.(none)>
 Date:   Thu Feb 11 09:15:34 2010 -0600
 
@@ -3686,7 +3790,7 @@ Date:   Wed Feb 10 14:42:39 2010 -0500
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit aa7f2a2bac6e446c99491e4bcf660cad0123ea7d
-Merge: 114701c... 7afd98a...
+Merge: 114701c 7afd98a
 Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
 Date:   Wed Feb 10 14:41:20 2010 -0500
 
@@ -3972,7 +4076,7 @@ Date:   Wed Jan 20 16:42:21 2010 -0600
  1 files changed, 2 insertions(+), 2 deletions(-)
 
 commit 109e4e916e3c3380f6f6bcfff3a9876f92d9826a
-Merge: 812c36e... 2e38dad...
+Merge: 812c36e 2e38dad
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Wed Jan 20 15:28:05 2010 -0600
 
@@ -3988,7 +4092,7 @@ Date:   Wed Jan 20 15:27:36 2010 -0600
  1 files changed, 22 insertions(+), 23 deletions(-)
 
 commit 2e38dadc8ce6fbc499fbd0db8af570f0efe666f1
-Merge: 7a56efd... d34aae6...
+Merge: 7a56efd d34aae6
 Author: Derek Lamb <lambd@users.sourceforge.net>
 Date:   Wed Jan 20 15:50:58 2010 -0500
 
@@ -4164,7 +4268,7 @@ Date:   Fri Jan 8 11:19:50 2010 -0500
  1 files changed, 2 insertions(+), 0 deletions(-)
 
 commit 5dea5c793e92e75cb419746d3d55d4906a60bc62
-Merge: e738fa2... 87a1e84...
+Merge: e738fa2 87a1e84
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Jan 6 13:31:21 2010 -0500
 
@@ -4201,7 +4305,7 @@ Date:   Tue Jan 5 13:42:05 2010 -0600
  1 files changed, 2 insertions(+), 1 deletions(-)
 
 commit 7acbb1a20e4163650b6e62d26cf63f1a4c1b043e
-Merge: 30d1c7b... 0ccd029...
+Merge: 30d1c7b 0ccd029
 Author: David Mertens <david@david-laptop.(none)>
 Date:   Tue Jan 5 13:37:00 2010 -0600
 
@@ -4245,7 +4349,7 @@ Date:   Tue Jan 5 12:04:45 2010 -0500
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit d0b54635a76de7e1625f6088445415630da00125
-Merge: a2da5ac... 3aaab11...
+Merge: a2da5ac 3aaab11
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Tue Jan 5 07:48:57 2010 -0600
 
@@ -4544,7 +4648,7 @@ Date:   Wed Dec 30 23:09:00 2009 -0500
  1 files changed, 6 insertions(+), 0 deletions(-)
 
 commit 117d1cdc9b1efeafd12d063315c3c01dda8d7da8
-Merge: 35321ff... bb3d913...
+Merge: 35321ff bb3d913
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Dec 30 21:30:31 2009 -0500
 
@@ -4582,7 +4686,7 @@ Date:   Tue Dec 29 11:10:41 2009 -0500
  2 files changed, 37 insertions(+), 1 deletions(-)
 
 commit 35321ff5103616716b6b02c2cf8ca1258c2559c0
-Merge: 25cf2c6... 7c31c35...
+Merge: 25cf2c6 7c31c35
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Dec 28 20:16:51 2009 -0500
 
@@ -4611,7 +4715,7 @@ Date:   Mon Dec 28 15:34:45 2009 -0500
  1 files changed, 42 insertions(+), 43 deletions(-)
 
 commit f11bd26d75d4241e9102fabfc64591bfc0c3f77d
-Merge: d0bd1af... ae53283...
+Merge: d0bd1af ae53283
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Dec 28 10:42:32 2009 -0500
 
@@ -5012,14 +5116,14 @@ Date:   Sat Dec 19 16:46:51 2009 -0500
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit a2da5ac4c70c66abd7d5205481256ff2aeb98c94
-Merge: 2df55ef... 319c72b...
+Merge: 2df55ef 319c72b
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Mon Dec 14 12:56:45 2009 -0600
 
     Merge branch 'master' of git://pdl.git.sourceforge.net/gitroot/pdl/pdl
 
 commit d0bd1af56add57a397e3dd16019bcc3d59dedbc9
-Merge: 9fb93f8... 319c72b...
+Merge: 9fb93f8 319c72b
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Dec 11 10:07:39 2009 -0500
 
@@ -5543,7 +5647,7 @@ Date:   Fri Oct 23 11:41:17 2009 +0200
  1 files changed, 0 insertions(+), 38 deletions(-)
 
 commit bd209c53d51fde9b0a73463657083518b2a6f4bc
-Merge: da9b755... 6b71df5...
+Merge: da9b755 6b71df5
 Author: Henning Glawe <glaweh@debian.org>
 Date:   Fri Oct 23 10:57:18 2009 +0200
 
@@ -5834,7 +5938,7 @@ Date:   Wed Oct 14 18:09:53 2009 -0400
  2 files changed, 5 insertions(+), 1 deletions(-)
 
 commit 2df55ef32ba5b858841dea766e91b99a033c7e17
-Merge: dd4e079... e93558b...
+Merge: dd4e079 e93558b
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Wed Oct 14 17:06:24 2009 -0500
 
@@ -5964,7 +6068,7 @@ Date:   Wed Oct 7 17:45:43 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit 6ded129679883ead13525027aca72a91630e0b72
-Merge: 246324f... b5243ae...
+Merge: 246324f b5243ae
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Oct 7 17:35:09 2009 -0400
 
@@ -6800,7 +6904,7 @@ Date:   Wed Sep 23 16:51:26 2009 -0400
  6 files changed, 69 insertions(+), 114 deletions(-)
 
 commit 1f9a74d944f8fcf09e3d8bbf5f87133bf1d0867b
-Merge: 5fedb91... 2e3fcf6...
+Merge: 5fedb91 2e3fcf6
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 16:44:00 2009 -0400
 
@@ -6816,7 +6920,7 @@ Date:   Wed Sep 23 16:36:20 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit 5fedb919b3b95e42b0acb39b62df45d25693a3e0
-Merge: dd01556... 7677f77...
+Merge: dd01556 7677f77
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 16:10:48 2009 -0400
 
@@ -6835,7 +6939,7 @@ Date:   Wed Sep 23 16:07:08 2009 -0400
  1 files changed, 13 insertions(+), 0 deletions(-)
 
 commit dd01556cd99467dba79c1c4f24456e2e8dd91627
-Merge: 9b6b1f9... 3084dba...
+Merge: 9b6b1f9 3084dba
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 14:27:36 2009 -0400
 
@@ -6853,7 +6957,7 @@ Date:   Wed Sep 23 14:26:42 2009 -0400
  3 files changed, 10 insertions(+), 8 deletions(-)
 
 commit 9b6b1f9d1f4a2880ab179e430211af2856f71dab
-Merge: 205d5b9... 6743108...
+Merge: 205d5b9 6743108
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 14:24:21 2009 -0400
 
@@ -7651,7 +7755,7 @@ Date:   Fri Jul 10 15:27:16 2009 -0400
  1 files changed, 2 insertions(+), 2 deletions(-)
 
 commit 100a3114b05e4afeb156485d94f89320861b697a
-Merge: 1401619... 2146da8...
+Merge: 1401619 2146da8
 Author: Chris Marshall <chm@alum.mit.edu>
 Date:   Fri Jul 10 11:25:57 2009 -0400
 
@@ -7689,7 +7793,7 @@ Date:   Thu Jul 9 22:11:39 2009 -0400
  1 files changed, 4 insertions(+), 2 deletions(-)
 
 commit 822c0e08c0243b054d6f87dcd61841083d745c46
-Merge: b1270b4... 5b15c19...
+Merge: b1270b4 5b15c19
 Author: Chris Marshall <marshallch@users.sourceforge.net>
 Date:   Thu Jul 9 21:53:00 2009 -0400
 
@@ -7726,7 +7830,7 @@ Date:   Thu Jul 9 13:09:16 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit b1270b46b05019ab859b7e730eeef8a5cde34a09
-Merge: b1c7bd8... 479e8a3...
+Merge: b1c7bd8 479e8a3
 Author: Chris Marshall <marshallch@users.sourceforge.net>
 Date:   Tue Jun 30 23:17:12 2009 -0400
 
@@ -8039,3 +8143,26 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:51:04 2009 -0400
+
+    Added the Changes for the t/pic_16bit.t commit.
+
+ Changes |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:44:35 2009 -0400
+
+    Fix sf.net bug 2784016
+    
+    This fixes sourceforge.net bug number 2784016 originally reported
+    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
+    with a very english specific test.  The test has been modified to
+    be less english specific.  This is still far from full i8n of PDL.
+
+ t/pic_16bit.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
