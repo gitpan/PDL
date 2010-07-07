@@ -1,5 +1,5 @@
 Created on: Thu 10 Dec 2009 10:32:58 PM
-Last saved: Tue 22 Jun 2010 10:44:38 PM
+Last saved: Tue 06 Jul 2010 10:48:49 PM
 
 
 +-------------------------------------------------------------------+
@@ -7,16 +7,14 @@ Last saved: Tue 22 Jun 2010 10:44:38 PM
 +-------------------------------------------------------------------+
 
   Use either perldl or Perldl2 when starting the PDL shell
-  based on the value of WITH_DEVEL_REPL in perld.conf
+  based on the whether Devel::REPL has been installed.
  
   Add documentation for the startup files for unix-en and win32
   systems.  Right now, the only doc is in the code.
  
   Add startup checks for the various Devel::REPL plugins
-  loaded to be sure that they run before the load_plugin
-  call. (Done for INC and Keywords completions.  The code
-  is there but need to refactor to clean up and simplify
-  for checking all plugins, not just a couple by hand)
+  loaded to be sure that they can run before the load_plugin
+  call to avoid nasty compile error traces.
   
   Investigate why Ctrl-L on win32 is issuing a 'clear' command.
   ANSWER: readline.pm from Term::ReadLine::Perl is using `clear`
@@ -25,7 +23,9 @@ Last saved: Tue 22 Jun 2010 10:44:38 PM
     the console does not support ANSI escape sequences.  Plan
     to fix by calling the DOS cls command to clear the screen
     or using Win32::Console and Win32::Console::ANSI to implement
-    the missing ANSI support.
+    the missing ANSI support.  Need to implement a routine
+    readline::F_ClearScreen() to override the default function
+    for win32 systems.
 
   Implement PDL shell startup boot messages, i.e.,
     perlDL shell v1.352
@@ -42,7 +42,9 @@ Last saved: Tue 22 Jun 2010 10:44:38 PM
  
   Fix the hang in the <> operator from the Demos Screen.pm routines.
   Need to track down why the readline operator is clashing with the
-  interactive IO from the Term::ReadLine stuff. 
+  interactive IO from the Term::ReadLine stuff.  Plan: modify the
+  run() call to take the Term::ReadLine term handle and use those to
+  do the IO if defined.  Otherwise, fall back to the existing code.
  
   Review and integrate PERLDL::XX parameters.  Some are not
   needed or useful for Perldl2.  Others need code to tie in
@@ -133,11 +135,17 @@ Last saved: Tue 22 Jun 2010 10:44:38 PM
  
   Skip command lines that are too short and don't put
   quit/q/x/exit in the history log.  Maybe remove duplicate
-  entries as well as list history commands.
+  entries as well as list history commands.  Don't put
+  history !-syntax into the history, put the actual command
+  that resulted.  e.g., not !6 but 'p "Hello, world.\n";
 
   Be sure to add a line to history if it closes out a
   multi-line block.  This should not be an issue once we
   have multi-line history entries supported.
+
+  Make !-syntax history more restrictive so that it does
+  not conflict with perl usage for negation.  Maybe it
+  should only be good for completion?
  
   Add runtime control options for NiceSlice:
    report

@@ -1,3 +1,101 @@
+commit 1411f5b7c02789cd17eab0b5636baba824599991
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 7 17:10:17 2010 -0400
+
+    Update Release_Notes for CPAN devel release
+    
+    This is to test the fix for t/opengl.t fails.
+
+ Release_Notes |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
+
+commit 26996e17c157144a2051a8693cd22f720d5d4d37
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 7 17:05:06 2010 -0400
+
+    Put fallback code to glutInitDisplay
+    
+    There have been CPAN test failures where the Perl OpenGL
+    module built and installed ok but then the t/opengl.t
+    fails for PDL.  A look at the two tests shows the main
+    difference is that POGL checks if the GLUT_ALPHA channel will
+    work and if not, tries again without GLUT_ALPHA set.
+
+ Graphics/TriD/POGL/OpenGL.pm |   17 ++++++++++++++++-
+ 1 files changed, 16 insertions(+), 1 deletions(-)
+
+commit 027163ed645d6ae56946fd1b0e0da0e61e72add0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 7 17:04:31 2010 -0400
+
+    Remove unneeded diag print from t/proj_transform.t
+
+ t/proj_transform.t |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit c5e40307b414d4bbf0dcece06153ebe10da53ba7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 6 22:49:01 2010 -0400
+
+    Update Known_Problems and Perldl2/TODO
+
+ Known_problems |    3 +--
+ Perldl2/TODO   |   16 ++++++++++------
+ 2 files changed, 11 insertions(+), 8 deletions(-)
+
+commit 97902f8d256770178cd75fc60f4b34e7ce3009ff
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 6 17:29:22 2010 -0400
+
+    Fix rt.cpan.org bug #59126 in isempty pod
+
+ Basic/Core/Core.pm.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 7dbfce79271643ba56cfac5a11110938b2c94fcd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 6 14:04:52 2010 -0400
+
+    Update Release_Notes and Perldl2/TODO
+
+ Perldl2/TODO  |   10 +++++++---
+ Release_Notes |   21 +++++++++++++++++++++
+ 2 files changed, 28 insertions(+), 3 deletions(-)
+
+commit dda8ae6dc17675e13df09accdda264b8e7153948
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 6 12:39:23 2010 -0400
+
+    Regenerate Changes from git log output for release
+    
+    make dist will now run git log --stat --since="29 Apr 2009" to
+    generate the current Changes file for including in the distribution
+    being made.
+
+ Makefile.PL |   10 +++++++---
+ 1 files changed, 7 insertions(+), 3 deletions(-)
+
+commit 094ecbfdb6ab66c22594520e13bad1a438aaf68a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 6 09:32:59 2010 -0400
+
+    VERSION to 2.4.6_013 for more development
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 350d7cd65405b0be3a0ea7b0900e339a49684334
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 6 09:26:27 2010 -0400
+
+    Update readme files for CPAN developers release
+
+ DEPENDENCIES   |   11 +--
+ Known_problems |   16 ---
+ MANIFEST       |  295 ++++++++++++++++++++++++++++----------------------------
+ Release_Notes  |    6 +
+ 4 files changed, 157 insertions(+), 171 deletions(-)
+
 commit a3f0a1c709e527b10d167257bbc2b6e8e8cde4c0
 Author: Daniel Carrera <dcarrera@gmail.com>
 Date:   Mon Jul 5 09:38:07 2010 +0200
