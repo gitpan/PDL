@@ -1,10 +1,19 @@
 Created on: Thu 10 Dec 2009 10:32:58 PM
-Last saved: Tue 06 Jul 2010 10:48:49 PM
+Last saved: Thu 29 Jul 2010 08:58:37 AM 
 
 
 +-------------------------------------------------------------------+
 |               TODO for Missing Perldl Functionality               |
 +-------------------------------------------------------------------+
+
+  Fix PDL::AutoLoader expansion to work for PDLLIB environment
+  variable using win32 syntax and make sure TAB expansion for
+  paths work for win32 paths as well (it doesn't appear so)
+
+  Fix glob pattern completion display for shell escapes in
+  pdl2 (e.g., file*<TAB><TAB> will list out tab.a tab.b and
+  tab.c if those are the valid expansions.  It should act
+  just like bash directly from the command line---ideally).
 
   Add documentation for the startup files for unix-en and win32
   systems.  Right now, the only doc is in the code.
@@ -13,6 +22,14 @@ Last saved: Tue 06 Jul 2010 10:48:49 PM
   loaded to be sure that they can run before the load_plugin
   call to avoid nasty compile error traces.
   
+  Add SIGINT handler for pdl2 for win32.  Also need to add
+  feature to ignore EOF to the read routine (around read modifier
+  should work here---need to decide where to put it)
+
+  Is there a way to fix the GNU readline where it doesn't
+  process the Ctrl-C interrupt until after <Enter> has been
+  typed?  The Perl readline routine doesn't have this problem.
+
   Investigate why Ctrl-L on win32 is issuing a 'clear' command.
   ANSWER: readline.pm from Term::ReadLine::Perl is using `clear`
     to determine the escape sequence to clear the screen.  This
@@ -42,6 +59,11 @@ Last saved: Tue 06 Jul 2010 10:48:49 PM
   interactive IO from the Term::ReadLine stuff.  Plan: modify the
   run() call to take the Term::ReadLine term handle and use those to
   do the IO if defined.  Otherwise, fall back to the existing code.
+
+  Fix 'demo 3d' so that it shifts focus to the display window
+  at the start and returns focus to the CMD or shell window
+  at then end.  It would be nice not to have to click, click,
+  click to keep things going.
  
   Review and integrate PERLDL::XX parameters.  Some are not
   needed or useful for Perldl2.  Others need code to tie in
@@ -124,8 +146,19 @@ Last saved: Tue 06 Jul 2010 10:48:49 PM
   inserted per command.
  
   Add MultiLine prompt with continuation character marking
-  the open structures. (e.g. MultiLine::TextBalanced)
+  the open structures. (e.g. MultiLine::TextBalanced).
+
+  Fix problem where q[ and qq[ type constructions can
+  not span lines (even with the supposed multiline support
+  in Devel::REPL.  Maybe just add check for unterminated
+  string to the multiline PPI.  Does the Text::Balanced
+  implementation work better?
  
+  Implement ^C/^D to end PPI multiline if it makes sense.
+  E.g., make sure that Ctrl-C can exit an incomplete block.
+  Need to see about implementing the Ctrl-D option to close
+  all blocks as well.
+
   Add GLUT event loop support to Term::ReadLine::Perl and
   Term::ReadLine::Gnu.  Need to figure out a clean way to
   map this into the original modules.
@@ -144,19 +177,22 @@ Last saved: Tue 06 Jul 2010 10:48:49 PM
   not conflict with perl usage for negation.  Maybe it
   should only be good for completion?
  
+  Add !<command>:p support to print history commands and
+  fix the problem where the !<num> command is different then
+  the one actually inserted by History...
+
   Add runtime control options for NiceSlice:
    report
    trans
    notrans
  
-  Implement ^C/^D to end PPI multiline if it makes sense.
-
   Add a CompletionDriver for Plugins for load_plugin() as well
   as the ability to toggle plugins on and off (or at least
   enable and disable them).
 
   Make pdl2 fall back cleanly to a basic Devel::REPL or
   even perldl if requirements to run are not installed.
+  (falls back to perldl right now)
 
 +-------------------------------------------------------------------+
 | Features                       perldl                 pdl2        |
@@ -166,7 +202,7 @@ Last saved: Tue 06 Jul 2010 10:48:49 PM
   
   ?,?? aliases                   yes                    yes
   
-  q,x aliases                    yes                    yes
+  q,x,exit aliases               yes                    yes
   
   User AUTO commands             yes                    TBD 
   

@@ -1,3 +1,59 @@
+Release notes for PDL 2.4.6_015 --------------------------
+
+General Notes:
+
+ * This is a developers release! It is a snapshot of the
+   current git development tree and everything may not work
+   correctly or have complete documentation (as in these
+   Release notes).
+
+ * Perl 5.6.x is no longer supported.
+ 
+   Perl 5.8.x or higher is now required.  NOTE: PDL
+   should still build for 5.6.2 and higher if you edit
+   the line in the top level Makefile.PL from 5.008_000
+   back to 5.006_002.
+
+Highlights:
+
+ * wmpeg in PDL::IO::Pic now uses ffmpeg to generate the
+   movie file instead of the outdated mpeg_encode.  This
+   is pretty much a straight translation of the original.
+   
+   NOTE: Example/IO has a program you can run to create
+   a quick check movie.  As there is no formal test for
+   this function, feedback on whether this works on your
+   platform is most welcome.  Thanks!
+
+   NOTE: For cygwin, ffmpeg requires version 1.7.x to build.
+
+ * PDL::Fit::Polynomial has been modified to remove the
+   Slatec library dependency requesting in sf.net feature
+   request ticket #2891276.
+
+ * Other sf.net bugs fixed:
+     3030998    PDL::Config does not match actual build configuration
+     2901170    many warnings w TriD and perl -w
+
+ * sf.net bug #117661, PDL::Complex string routine, has
+   been fixed.  In addition, the sum and sumover methods
+   now support PDL::Complex piddles.
+
+ * Problem with Ctrl-C killing perldl on win32 has been
+   resolved.  The 2nd Ctrl-C was resulting in an EOF from
+   the perl readline call which caused the shell to exit.
+   Now $PERLDL::NO_EOF=1 is the default for win32.
+
+ * Set SKIP_KNOWN_PROBLEMS environment variable to skip
+   tests correspond to reported sf.net bugs.  This allows
+   the full test suite to pass which makes it easier to
+   check if a new bug has been introduced.  For releases,
+   there is a SKIP_KNOWN_PROBLEMS option in perldl.conf.
+ 
+ * Some minor doc changes.
+
+
+
 Release notes for PDL 2.4.6_014 --------------------------
 
 General Notes:

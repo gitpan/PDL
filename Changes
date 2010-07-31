@@ -1,3 +1,650 @@
+commit 8fead1083be70fdfb2e2ffff153bea3c6454617a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 31 14:44:03 2010 -0400
+
+    Fix test problems for CPAN devel release
+    
+    Several tests were using %PDL::Config values but not
+    use-ing the PDL::Config module.  The SKIP_KNOWN_PROBLEMS
+    logic had a bug in t/constructor.t.  Also updated the
+    DEPENDENCIES and MANIFEST info for the new release.
+
+ DEPENDENCIES    |   26 ++++++++++++--------------
+ MANIFEST        |    8 +++++---
+ t/complex.t     |    1 +
+ t/constructor.t |    7 ++++---
+ t/gd_oo_tests.t |    1 +
+ t/gd_tests.t    |    1 +
+ t/minuit.t      |    1 +
+ t/slatec.t      |    1 +
+ 8 files changed, 26 insertions(+), 20 deletions(-)
+
+commit 7d18e6dbb0c5f61632c301d99bb81b4e03fb3207
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 30 22:44:24 2010 -0400
+
+    Add pdl2 refs where perldl was referered to
+    
+    Updating perldl docs with pdl2 for PDL-2.4.7 release.
+
+ Basic/Core/Dbg.pm                         |    2 +-
+ Basic/SourceFilter/NiceSlice.pm           |    5 +++--
+ Demos/BAD_demo.pm.PL                      |    6 +++---
+ Demos/Cartography_demo.pm                 |    3 ++-
+ Demos/General.pm                          |    6 +++---
+ Example/InlinePdlpp/Module/MyInlineMod.pm |    4 ++--
+ Graphics/PGPLOT/Window/Window.pm          |    2 +-
+ Lib/Func.pm                               |    2 +-
+ Lib/Slatec/slatec.pd                      |    2 +-
+ 9 files changed, 17 insertions(+), 15 deletions(-)
+
+commit d4baca2a291561d76831fef9bed42d7ca3facfdf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 30 18:35:40 2010 -0400
+
+    Apply patch 3024237 to VS.pd for verification
+    
+    I'm applying the patch to VS.pd in order to enable
+    testing of this fix by PDL HDF users (which I am not).
+    Please contact Olivier Archer with any test results
+    from the new code.  Thanks.
+
+ IO/HDF/VS/VS.pd |   32 ++++++++++++++++++++++++++++----
+ 1 files changed, 28 insertions(+), 4 deletions(-)
+
+commit e6a8a68f4aea42bed5b171e777fd7bc4ccc4e589
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jul 29 20:06:07 2010 -0400
+
+    Update Release_Notes for cygwin and ffmpeg
+    
+    Apparently ffmpeg requires version 1.7.x of cygwin to
+    build (because the older version lacks the llrint(() routine
+    in its C library).
+
+ Release_Notes |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 2dd07702b97fad87bb8976b241af29ca88949fbb
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jul 29 09:20:08 2010 -0400
+
+    fix wmpeg() to use ffmpeg to generate the video
+    
+    This resolves sf.net feature request #3010984.
+    Note that ffmpeg supports much more video file functionality
+    and formats than mpeg_encode.  I would like to see this as
+    the basis for a general read/write AVI capability in the
+    future.  This should work for cygwin and unix/linux/*bsd/macosx
+    but needs to be verified on win32.
+
+ Example/IO/wmpeg.pl |   58 +++++++++++++++++++
+ IO/Pnm/Pic.pm       |  159 ++++++++++++++++++++++----------------------------
+ Perldl2/TODO        |    6 +-
+ Release_Notes       |    9 +++
+ 4 files changed, 141 insertions(+), 91 deletions(-)
+
+commit d215a9c8cb334f00cc37ae08bdf13c5f6b44dbe5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 27 10:48:41 2010 -0400
+
+    Update required perl version to 5.8.x
+    
+    And some updates to the readme files and Release_Notes
+    documenting this fact as well as other fixes.
+
+ INSTALL               |    6 +++---
+ Lib/Fit/Polynomial.pm |    2 +-
+ Makefile.PL           |    2 +-
+ Release_Notes         |   10 ++++++++++
+ 4 files changed, 15 insertions(+), 5 deletions(-)
+
+commit 8adb0b9e6e88ded9153563509794ed253d4f50e1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 26 21:54:46 2010 -0400
+
+    Replace matinv() by inv() in PDL::Fit::Polynomial
+    
+    This removes the dependency on Slatec (an external, fortran
+    library) which make trouble for portability.  This takes
+    advantage of the new, threaded implementation of lu_decomp
+    and lu_backsub where partial pivoting is still supported
+    even in the case of threaded input data.
+    
+    This resolves sf.net feature request #2891276.
+
+ Lib/Fit/Polynomial.pm |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 6d6253e56d8833bf45bbaca2f302b4d2a8b7a4e4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 26 18:47:23 2010 -0400
+
+    Create directory for new PDL::IO::ENVI module
+
+ IO/ENVI/readenvi.pdl |  325 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 325 insertions(+), 0 deletions(-)
+
+commit 104f65720b6c3819115316b9e24b8b8459dce647
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 26 13:54:27 2010 -0400
+
+    Update perldl> prompt refs to pdl>
+    
+    Trying to make POD and docs consistent with the
+    new PDL shell prompt defaults.
+
+ Basic/AutoLoader.pm              |   12 +-
+ Basic/Bad/bad.pd                 |    6 +-
+ Basic/Complex/complex.pd         |   49 +++-------
+ Basic/Core/Basic.pm              |   63 +++++++------
+ Basic/Core/Core.pm.PL            |   74 +++++++-------
+ Basic/Core/Dbg.pm                |   12 ++-
+ Basic/PDL.pm                     |    3 +-
+ Basic/Pod/BadValues.pod          |   58 ++++++------
+ Basic/Pod/Dataflow.pod           |    8 +-
+ Basic/Pod/FAQ.pod                |    2 +-
+ Basic/Pod/Guide.pod              |    2 +-
+ Basic/Pod/Indexing.pod           |  110 +++++++++++-----------
+ Basic/Pod/Internals.pod          |   10 +-
+ Basic/Pod/MATLAB.pod             |   66 +++++++-------
+ Basic/Pod/QuickStart.pod         |   19 ++--
+ Basic/Pod/Scilab.pod             |   66 ++++++-------
+ Basic/Pod/Threading.pod          |  196 +++++++++++++++++++-------------------
+ Basic/Pod/Tips.pod               |    6 +-
+ Basic/Primitive/primitive.pd     |   91 ++++++++---------
+ Basic/Slices/slices.pd           |   64 ++++++------
+ Basic/SourceFilter/NiceSlice.pm  |   49 +---------
+ Basic/Ufunc/ufunc.pd             |   20 ++--
+ Demos/TriD/test6.p               |    2 +-
+ Doc/Doc/Perldl.pm                |   16 ++--
+ Graphics/IIS/iis.pd              |   10 +-
+ Graphics/Karma/karma.pd          |   10 +-
+ Graphics/PGPLOT/PGPLOT.pm        |   12 +-
+ Graphics/PGPLOT/Window/Window.pm |   22 ++--
+ Graphics/TriD/TriD.pm            |   18 ++--
+ 29 files changed, 506 insertions(+), 570 deletions(-)
+
+commit 0d0a4b8b249df108d74e0a5a576d655c28148eaf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 26 00:00:34 2010 -0400
+
+    Update DEPENDENCIES, Known_problems, Release_Notes
+
+ DEPENDENCIES   |    2 +-
+ Known_problems |    1 -
+ Release_Notes  |    8 +++-----
+ 3 files changed, 4 insertions(+), 7 deletions(-)
+
+commit b8f251f9f4d2528fb638e4c2eacab37660cac291
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 25 17:33:36 2010 -0400
+
+    Fix q|x|exit alias issue and update Perldl2/TODO
+
+ Perldl2/Plugin/PDLCommands.pm |    2 +-
+ Perldl2/TODO                  |   13 +++++++------
+ 2 files changed, 8 insertions(+), 7 deletions(-)
+
+commit fa89b6993e713f149f32574f67206c18bd11007a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 25 13:31:15 2010 -0400
+
+    Update TODO with SKIP_KNOWN_PROBLEMS status
+    
+    Done!
+
+ TODO |   77 ++++++++++++++++++++++++++++++++++++++++++++++++-----------------
+ 1 files changed, 57 insertions(+), 20 deletions(-)
+
+commit d5baccdb0ee63f9b0c948d68ac9bfb6d10006f90
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 25 12:51:41 2010 -0400
+
+    Add SKIP_KNOWN_PROBLEMS support for build
+    
+    This allows stable CPAN releases of PDL to include tests
+    for bugs that have not yet been fixed (i.e., in Known_problems)
+    but pass tests for automated installs and builds.
+
+ Makefile.PL     |    5 +++++
+ perldl.conf     |    7 +++++++
+ t/complex.t     |    2 +-
+ t/config.t      |    2 +-
+ t/constructor.t |    2 +-
+ t/flexraw.t     |    2 +-
+ 6 files changed, 16 insertions(+), 4 deletions(-)
+
+commit bf32eace3c68e023ebd3da74d7bc29bf5936d348
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 25 09:19:42 2010 -0400
+
+    Add stub tests for new pdl string constructor
+    
+    The test cases are their with the expected results.
+    Still need to implement the ok() test machinery.
+    Also updated Perldl2/TODO to diagnose issue with
+    multi-line q[ ] type string support.
+
+ Perldl2/TODO        |    6 +++-
+ t/pdl_from_string.t |   96 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 101 insertions(+), 1 deletions(-)
+
+commit 34430f1c49f4c76ff72d29459ae692a2587d988c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 24 15:53:08 2010 -0400
+
+    Missed Minuit and Slatec for fix to bug #3030998
+    
+    Also updated Known_problems and Release_Notes with the news.
+
+ Known_problems         |    4 +---
+ Lib/Minuit/Makefile.PL |    4 +++-
+ Lib/Slatec/Makefile.PL |    4 +++-
+ Release_Notes          |    4 ++++
+ 4 files changed, 11 insertions(+), 5 deletions(-)
+
+commit 9ff4bc36b93a91b0e6e4a3cfd9d4ea938b52e5ed
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 24 15:14:44 2010 -0400
+
+    Save built config information in %PDL::Config
+    
+    This should close sf.net bug #3030998 where the
+    "PDL::Config does not match actual build configuration"
+
+ Graphics/Makefile.PL            |    3 +++
+ IO/GD/Makefile.PL               |    2 ++
+ IO/HDF/Makefile.PL              |    2 ++
+ Lib/FFTW/Makefile.PL            |    4 +++-
+ Lib/GIS/Proj/Makefile.PL        |    3 +++
+ Lib/GSL/Makefile.PL             |    2 ++
+ Lib/Transform/Proj4/Makefile.PL |    2 ++
+ MANIFEST                        |    3 +++
+ 8 files changed, 20 insertions(+), 1 deletions(-)
+
+commit a39a855dfc96962b8188d7f7f0059b2206b18384
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 24 12:32:04 2010 -0400
+
+    Fix sf.net bug #2901170 re warnings and TriD
+    
+    This fixes the final two messages.  It appears that
+    there actually was a true duplicate subroutine definition
+    in TriD.pm which seems to have been a write-o.  Also made
+    some updates to PDL/TODO re progress and tasks.
+
+ Graphics/TriD/POGL/OpenGL.pm |   57 +++++++++++++++++---------------
+ Graphics/TriD/TriD.pm        |    2 +-
+ TODO                         |   73 ++++++++++++++++++++++++------------------
+ 3 files changed, 73 insertions(+), 59 deletions(-)
+
+commit 038665ee242faeed5e073688baf72038ccd006e1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 23 22:39:30 2010 -0400
+
+    Update FAQ.pod with pdl2 along side perldl
+    
+    Eventually, the references to perldl will be deprecated
+    by the use of the new shell and the pdl2 command may eventually
+    become the pdl command to reduce confusion.
+
+ Basic/Pod/FAQ.pod |  291 +++++++++++++++++++++++++++--------------------------
+ 1 files changed, 146 insertions(+), 145 deletions(-)
+
+commit 69f2ed3d9b9d455f871c200bc9b2feac16fdd382
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 23 21:23:28 2010 -0400
+
+    Change pdl2 and perldl prompts to pdl>
+    
+    This matches the new PDL logo work on-going.
+
+ Perldl2/Profile/Perldl2.pm |    4 ++--
+ perldl.PL                  |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 9fee2b10dea434d5f05f4c76065853ceb9dac40c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 23 17:12:35 2010 -0400
+
+    Add some working files for cygwin memory issues
+
+ cygwin/fix-max-memory.txt |   34 ++++++++++++++++++++++++++++++++++
+ cygwin/max_memory.c       |   15 +++++++++++++++
+ cygwin/tmalloc.pl         |   12 ++++++++++++
+ 3 files changed, 61 insertions(+), 0 deletions(-)
+
+commit d0b2b84969dee4ca6bf6852c48f3a1384d56bed3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 23 16:18:38 2010 -0400
+
+    Fix PDL::Complex::string and sum and sumover
+    
+    This commit should close sf.net bug #1176614 by fully
+    installing the patch #1176619.  It also fixes a problem
+    that came up with sum and sumover and PDL::Complex piddles.
+
+ Basic/Complex/complex.pd |  512 ++++++++++++++++++++++++----------------------
+ Known_problems           |    1 -
+ Release_Notes            |    4 +
+ t/complex.t              |    2 +-
+ 4 files changed, 272 insertions(+), 247 deletions(-)
+
+commit f3792543451c0a086dc9519fc6e2f4a23e28041f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 23 16:18:15 2010 -0400
+
+    Update cygwin/INSTALL and README files
+
+ cygwin/INSTALL |   10 +++++-----
+ cygwin/README  |    9 +++------
+ 2 files changed, 8 insertions(+), 11 deletions(-)
+
+commit 29c13b5bf00536f4877d695293a96e07174046c1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 21 21:39:20 2010 -0400
+
+    Update PDL/TODO more PDL-2.4.7 details
+
+ TODO |   12 ++++++++++--
+ 1 files changed, 10 insertions(+), 2 deletions(-)
+
+commit 4249593775adda438cd95615d30e05d3fe0fa54f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 21 14:35:09 2010 -0400
+
+    Update Perldl2/{README,TODO}
+    
+    They have fallen behind the current development status
+    and are missing some of the new items that needed to
+    be addressed in the implementation.
+
+ Perldl2/README |   42 +++++++++++++++++++++++-------------------
+ Perldl2/TODO   |   31 ++++++++++++++++++++++++++-----
+ 2 files changed, 49 insertions(+), 24 deletions(-)
+
+commit 51e89abcf9a4aec5a6ebd1861ea04425cd8dba23
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 21 11:25:31 2010 -0400
+
+    Clear up new_pdl_from_string error reporting
+    
+    The chatty output was confusing since it was
+    unclear what was going on and what the message
+    actually meant.  Hope this is an improvement.
+
+ Basic/Core/Core.pm.PL |  116 +++++++++++++++++++++---------------------------
+ 1 files changed, 51 insertions(+), 65 deletions(-)
+
+commit 019c1302db07f0277e3924edc3dc5e6d1c249a9e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 20 15:29:17 2010 -0400
+
+    Add test file for spheres3d debugging in TriD
+
+ Perldl2/logo3d.pdl |  127 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 127 insertions(+), 0 deletions(-)
+
+commit 0cd1c43535faf7ac619a5c2630109ae5df5076e6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 19 16:59:26 2010 -0400
+
+    Add more specifics to pdl2 Ctrl-C fix for win32
+    
+    Need to modify the read method to keep EOF from ending the shell.
+    Maybe this should be at a higher level (e.g. Devel::REPL).
+
+ Perldl2/TODO |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
+
+commit 60cdc005f082a0e6de201b367a4b6f97b44e3ac3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 19 16:21:06 2010 -0400
+
+    Update Known_problems/Release_Notes & Perldl2/TODO
+    
+    The win32 problem with perldl dying from Ctrl-C
+    has been diagnosed and resolved.  Taking the bug
+    off of the list of Known_problems, updating the
+    Release_Notes and adding an item to Perldl2/TODO
+    about work needed to propagate the fix to pdl2.
+
+ Known_problems |    1 -
+ Perldl2/TODO   |    5 +++++
+ Release_Notes  |    5 +++++
+ 3 files changed, 10 insertions(+), 1 deletions(-)
+
+commit 7b53bf5048226b819dce95fc7ae0ca621fc43f66
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 19 16:02:47 2010 -0400
+
+    Make $PERLDL::NO_EOF=1 default for win32
+    
+    This works around an issue with the way windows handles
+    Ctrl-C signals.  It appears that a signal in the readline
+    call is caught the first time but the second time it is
+    treated as an EOF which caused perldl to exit.
+
+ perldl.PL |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 585fc7249dbc8e3635053789f5c85d231e86e288
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 19 15:48:06 2010 -0400
+
+    Add EOF termination message to perldl
+
+ perldl.PL |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit c1b6e7b1ddc70c7fa0a2ee1a2e24ea4d4ad4cb98
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 19 15:12:58 2010 -0400
+
+    Add Perldl2/tctrl-c.pl to git for Ctrl-C debugging
+    
+    This is an example program for which catching Ctrl-C
+    appears to work.  We need to determine why Devel::REPL
+    and perldl don't work.  Is this a code error or a bug
+    in perl signal handling...
+
+ Perldl2/tctrl-c.pl |   26 ++++++++++++++++++++++++++
+ 1 files changed, 26 insertions(+), 0 deletions(-)
+
+commit c3210316240b20bf9e8dcad9701717b5d636bdbc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 19 11:04:46 2010 -0400
+
+    Fix oops with t/complex.t and skip
+
+ t/complex.t |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit e4a9d7bb8ffb17bf61aaefea708efc6da2a0eb9e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 19 10:42:41 2010 -0400
+
+    Add support for SKIP_KNOWN_PROBLEMS env var
+    
+    If this is set then 'make test' will skip any tests that are
+    currently on the Known_problems list.  The tests have to be
+    modified by hand at the moment.  We probably need to base the
+    skips on a like generated from the Known_problems file...
+    eventually.
+
+ Perldl2/TODO    |    4 ++
+ Release_Notes   |   24 +++++++++++++++
+ t/complex.t     |   18 +++++++----
+ t/config.t      |   19 +++++++++---
+ t/constructor.t |   24 +++++++++------
+ t/flexraw.t     |   87 +++++++++++++++++++++++++++++--------------------------
+ 6 files changed, 114 insertions(+), 62 deletions(-)
+
+commit 17895a2ef8251a4a01a3702c3fe12ff484e990c7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 19 08:53:05 2010 -0400
+
+    FAQ updates and spell checking TODO/Known_problems
+
+ Basic/Pod/FAQ.pod |  322 ++++++++++++++++++++++++++---------------------------
+ Known_problems    |    4 +-
+ TODO              |   18 ++--
+ 3 files changed, 167 insertions(+), 177 deletions(-)
+
+commit fbd761f5848afaad0e6e9a8cd84b9cd23a02c13e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 18 14:55:27 2010 -0400
+
+    Update TODO with PDL-2.4.7 tasks/plans
+
+ TODO |  519 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 519 insertions(+), 0 deletions(-)
+
+commit a0a803e9ebe27759e283f4d31bf8430530baef52
+Merge: 95fc475... 74c034e...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 17 20:38:29 2010 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 95fc475d939970eecb2a6abe5eff4307714e0c8e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 17 20:37:41 2010 -0400
+
+    Add test for pdl() constructor bug #3011879
+
+ t/constructor.t |   22 ++++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
+
+commit 74c034e5b92b5b0c2d0d476c46482c617c04e62e
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sat Jul 17 17:39:33 2010 -0500
+
+    Added the bug ID for the mapflex troubles.
+
+ Known_problems |    1 +
+ t/flexraw.t    |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 25ffbb5eddf186ad9e5c10e3f3ed2fa26d2767ec
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 17 13:58:00 2010 -0400
+
+    Add test for sf.net bug #3030998 re PDL::Config.pm
+    
+    Config.pm needs to reflect the actual build configuration
+    for PDL.  That means that any undef options in perldl.conf
+    should have been checked and decided yes/no.  The config
+    info needs to show that decision, not the initial undef.
+
+ Known_problems |    1 +
+ t/config.t     |   24 ++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 0 deletions(-)
+
+commit 0e3bd24be00f0402c550b8fb1ceb591522fac22a
+Merge: f5dca19... 702a41f...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jul 15 18:07:58 2010 -0400
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit f5dca19c2d1d95041a07c312d1ce9d0ae672c44e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jul 15 18:05:35 2010 -0400
+
+    Fix imag2d() explicit zoom to override default
+    
+    The fixes the argument handling so a specific zoom
+    value in the imag2d() call will override the default
+    "smart" zoom setting which tries for 1:1 but makes
+    things bigger if the image would be too small to see.
+
+ imag2d.pdl |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+commit 702a41fceb4ce2b9da5cfbe5ae4d1745b1d1a0f6
+Author: David Mertens <dcmertens.perl@gmail.org>
+Date:   Wed Jul 14 20:25:58 2010 -0500
+
+    Added a whole new flexraw set of tests.
+    
+    These are based on the fastraw tests, and much functionality remains
+    to be tested, but it's a start. Among other things, it points out a
+    problem with the mapflex function.
+
+ t/flexraw.t |  727 +++++++----------------------------------------------------
+ 1 files changed, 78 insertions(+), 649 deletions(-)
+
+commit 6cca3822691813b9fd19804367646005e25f2724
+Author: David Mertens <dcmertens.perl@gmail.org>
+Date:   Wed Jul 14 20:23:23 2010 -0500
+
+    Fixed a bug in mapflex code (though others remain).
+    
+    The mapflex function created a piddle with something that looked like
+    
+      '$piddle = byte zeroes(1)'
+    
+    This used to be interpreted as a piddle with contents of zero, but
+    with the new piddle-from-string functionality, it was tripping an
+    error. It looks like broken behavior had a default result that the
+    piddle-from-string functionality has effectively removed. So I
+    fixed that.
+
+ IO/FlexRaw/FlexRaw.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 36e48bb9a70d4459e0dc316436165fafd862fdb6
+Author: David Mertens <dcmertens.perl@gmail.org>
+Date:   Wed Jul 14 20:22:01 2010 -0500
+
+    Fixed doc typo in FlexRaw that said 'use PDL::IO::FastRaw'
+
+ IO/FlexRaw/FlexRaw.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 10bff9c62595f97f8371039cc9834d1fc2a16218
+Author: David Mertens <dcmertens.perl@gmail.org>
+Date:   Wed Jul 14 14:00:59 2010 -0500
+
+    Moved the current flexraw tests to a new test name.
+    
+    The tests for flexraw are very confusing and I was loathing grokking
+    them. Instead, I just renamed them to something smart so I can make
+    new tests that are not dependent on a Fotran compiler.
+
+ t/flexraw_fortran.t |  666 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 666 insertions(+), 0 deletions(-)
+
+commit 73516ba3d133fab3d820a016a6c7290177c3875d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 13 22:22:06 2010 -0400
+
+    Update VERSION to 2.4.6_015 for more development
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ca9427a203bf187d9923690e9dab4d7f6eb00642
+Merge: 7451ff4... 8527c77...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 13 22:20:38 2010 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 8527c7755bd3cc2392fec72dc15c8e5588399d2b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 12 12:57:58 2010 -0400
+
+    Add test for sf.net bug #1176614
+    
+    This is broken complex stringification.  If you are not using
+    PDL::Complex features, you should be ok forcing an install.
+
+ t/complex.t |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
+
 commit 7451ff45c3f2074fc6729d4661a30000372016d5
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Jul 11 18:30:57 2010 -0400
