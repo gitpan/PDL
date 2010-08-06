@@ -110,7 +110,7 @@ start-up modules.
 
 
 # set the version:
-$PDL::VERSION = '2.4.6_015'; # Go to sub numbering per git push
+$PDL::VERSION = '2.4.6_016'; # Go to sub numbering per git push
 
 # Main loader of standard PDL package
 
@@ -139,6 +139,10 @@ use PDL::Lvalue;
 use PDL::IO::Misc;          # Misc IO (Ascii)
 use PDL::IO::FITS;          # FITS IO (rfits/wfits; used by rpic/wpic too)
 use PDL::IO::Pic;           # rpic/wpic
+
+# Load this so config/install info is available
+
+use PDL::Config;
 
 EOD
 
