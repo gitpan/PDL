@@ -1,30 +1,22 @@
 --- #YAML:1.0
-name:               PDL
-version:            2.4.6_016
-abstract:           Perl Data Language
-author:
+name:                PDL
+version:             2.4.6_017
+abstract:            Perl Data Language
+license:             ~
+author:              
     - PerlDL Developers (perldl@jach.hawaii.edu)
-license:            unknown
-distribution_type:  module
-configure_requires:
-    ExtUtils::MakeMaker:  0
-build_requires:
-    ExtUtils::MakeMaker:  0
-requires:
-    Astro::FITS::Header:  0
-    Convert::UU:          0
-    Data::Dumper:         2.121
-    File::Spec:           0.6
-    Filter::Util::Call:   0
-    Inline:               0.43
-    OpenGL:               0.63
-    Storable:             1.03
-    Text::Balanced:       0
-no_index:
-    directory:
-        - t
-        - inc
-generated_by:       ExtUtils::MakeMaker version 6.55_02
+generated_by:        ExtUtils::MakeMaker version 6.44
+distribution_type:   module
+requires:     
+    Astro::FITS::Header:           0
+    Convert::UU:                   0
+    Data::Dumper:                  2.121
+    File::Spec:                    0.6
+    Filter::Util::Call:            0
+    Inline:                        0.43
+    OpenGL:                        0.63
+    Storable:                      1.03
+    Text::Balanced:                0
 meta-spec:
-    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
-    version:  1.4
+    url:     http://module-build.sourceforge.net/META-spec-v1.3.html
+    version: 1.3
