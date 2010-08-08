@@ -1,3 +1,37 @@
+commit cab029b9e0be756c6b578d0f4dabc43914e6cfc5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 8 10:46:55 2010 -0400
+
+    Fix regex for IO/Dumper.pm fix (take 2)
+
+ IO/Dumper.pm  |    2 +-
+ Release_Notes |    4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 7d399b423cd0e9eddb5b530a521d675e9f32337c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 7 23:53:50 2010 -0400
+
+    Update Known_problems after CPAN devel release
+
+ Known_problems |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 0168aee10028f6d536664fa7644eaef4cca1735c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 7 23:52:36 2010 -0400
+
+    Update VERSION to 2.4.6_018 for more development
+    
+    This follows a very minimal new CPAN developers release
+    to test a single fix for a mysterious, long-time, difficult
+    to reproduce failure in t/dumper.t.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   19 ++++++++++++++++++-
+ 3 files changed, 20 insertions(+), 3 deletions(-)
+
 commit d0b49090ac10e8c6997a9ad7a220e7ed24bf42a0
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Aug 7 23:31:26 2010 -0400
