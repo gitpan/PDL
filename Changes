@@ -1,3 +1,464 @@
+commit 3bd74f8fc1e1f95a9c4c239f024824d509088c00
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 14 09:19:37 2010 -0400
+
+    Final file fixes before release
+    
+    NOTE: perldl.conf SKIP_KNOWN_PROBLEMS option is set
+    for official releases so that test cases entered for
+    unresolved problem tickets do not generate unexpected
+    distribution FAILs.  Be sure to change this back for
+    git development so tests will indicate actual status.
+
+ IO/ENVI/readenvi.pdl |    4 ++--
+ MANIFEST             |    4 +---
+ TODO                 |   13 ++++++-------
+ perldl.conf          |    2 +-
+ 4 files changed, 10 insertions(+), 13 deletions(-)
+
+commit 4ef39f7950d88656de6145e6916b77d10d6d2ebe
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 14 09:11:09 2010 -0400
+
+    Move imag2d() into Graphics2D and update TODO
+
+ Graphics/Graphics2D.pm |  787 +++++++++++++++++++++++++++++++++++++++++++++++-
+ TODO                   |   12 +-
+ imag2d.pdl             |  787 ------------------------------------------------
+ 3 files changed, 792 insertions(+), 794 deletions(-)
+
+commit 59e5f8f3004704c013fd0a4182f50bd76dbc66c1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 13 20:29:07 2010 -0400
+
+    Add pdl2 docs re filter leading prompt string
+    
+    This allows for easier cut-and-paste of PDL shell sessions
+    as examples or demo code into another session.  Not supported
+    by perldl at the moment.
+
+ Graphics/TriD/TriD/GL.pm |    2 +-
+ Perldl2/pdl2             |   12 ++++++++++--
+ 2 files changed, 11 insertions(+), 3 deletions(-)
+
+commit 95d13842030ddb488cc32f081205a513d9df64c1
+Merge: 9d13be7... 0833506...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 13 20:07:49 2010 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 9d13be76547c2f350b6c779efe1e3f7da882dd02
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 13 20:06:08 2010 -0400
+
+    Add filter for leading 'pdl>' to pdl2 commands
+    
+    This allows for convenient cut-and-paste of output from a PDL
+    shell session as input to another session (e.g., for tutorials
+    and other example code).
+
+ Perldl2/Plugin/PDLCommands.pm |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit e853424e6f22b8ca9697fa856aed3302d54186f3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 13 20:05:35 2010 -0400
+
+    Document spheres3d as a preliminary implementation
+
+ Graphics/TriD/TriD.pm |   11 ++++++-----
+ 1 files changed, 6 insertions(+), 5 deletions(-)
+
+commit 0833506d056417f267c1fc16ae615ec4e2c79adf
+Merge: aabc2a7... e26d3f1...
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat Aug 14 01:43:42 2010 +0200
+
+    Merge my recent changes with master.
+
+commit aabc2a7b65ccdea85c1b8046929737376cd6cd24
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat Aug 14 01:40:01 2010 +0200
+
+    Fix a lot of spelling mistakes and typos.
+
+ Basic/Pod/API.pod        |    4 +-
+ Basic/Pod/BadValues.pod  |   68 ++++++++++++++--------------
+ Basic/Pod/Course.pod     |   16 +++---
+ Basic/Pod/Dataflow.pod   |    8 ++--
+ Basic/Pod/Delta.pod      |    4 +-
+ Basic/Pod/FAQ.pod        |   46 ++++++++++----------
+ Basic/Pod/Indexing.pod   |  108 +++++++++++++++++++++++-----------------------
+ Basic/Pod/Internals.pod  |   22 +++++-----
+ Basic/Pod/MATLAB.pod     |   10 ++--
+ Basic/Pod/Objects.pod    |   10 ++--
+ Basic/Pod/PP.pod         |   90 +++++++++++++++++++-------------------
+ Basic/Pod/Philosophy.pod |   12 +++---
+ Basic/Pod/QuickStart.pod |   66 ++++++++++++++--------------
+ Basic/Pod/Scilab.pod     |    8 ++--
+ Basic/Pod/Threading.pod  |    6 +-
+ Basic/Pod/Tips.pod       |    9 ++--
+ Basic/Pod/Tutorials.pod  |    4 +-
+ 17 files changed, 246 insertions(+), 245 deletions(-)
+
+commit 32f45cda0db9c0e232435c5cd33bd3fd39360287
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat Aug 14 01:13:53 2010 +0200
+
+    Fix broken link.
+
+ Basic/Pod/Tutorials.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit e26d3f1a64c9b8676b8216da6c14b95d197b09ab
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 13 18:19:54 2010 -0400
+
+    Update Perldl2 README and TODO with demo fix info
+
+ Perldl2/README |   27 ++++++++++++---------------
+ Perldl2/TODO   |   13 +------------
+ TODO           |   50 +++++++++++++++++++++++++-------------------------
+ 3 files changed, 38 insertions(+), 52 deletions(-)
+
+commit de95d69cf87f80d1f093ed21d4e78193826ddc7e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 13 17:53:22 2010 -0400
+
+    Fix Demos/Screen.pm to work with pdl2 or perldl
+
+ Demos/Screen.pm |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 36a655afdb9868f7645b3dfbdc122c23ed5fcfb5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 13 15:49:50 2010 -0400
+
+    Added draft Release_Notes for 2.4.7
+
+ Release_Notes |  209 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 208 insertions(+), 1 deletions(-)
+
+commit 658c5807cb9a73c8ffaa4f76f2eaffc7a4708ef4
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 21:29:54 2010 +0200
+
+    Fix 3 typos and change one link.
+
+ INSTALL |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 65e61fb4383f8ef7b8c81daad4fa3f2b60297c38
+Merge: 1b8c7f5... 0e2bcaa...
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 21:17:00 2010 +0200
+
+    Merge my latest changes with master.
+
+commit 1b8c7f57d39cb6526163770acc956c8f1cf2c6d2
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 21:11:39 2010 +0200
+
+    Typo: broken link.
+
+ Basic/Pod/Modules.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 0e2bcaa66e8cea2e36283ea8f84e13612059268f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 13 13:49:25 2010 -0400
+
+    Fix t/autoload.t test problem when no shell ~
+    
+    The test was using the old check as a fallback which
+    breaks in the event of ~ expansion not being enabled in
+    the shell used by qx{}.  This updates it to the code
+    used by bash.
+
+ t/autoload.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 76395d5e5d24abbd66a5b85f87028c66ffe63041
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 19:03:04 2010 +0200
+
+    Add Modules.pod to manifest.
+
+ MANIFEST |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 89b57d19fd1ed614943a8127006459f12fff6be1
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 18:26:10 2010 +0200
+
+    Minor edit - shorten one title.
+
+ Basic/Pod/Modules.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit e889192e3a28ce3a7b2964bb02170a4672ef4ab2
+Merge: ecfc596... bf50b41...
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 17:13:04 2010 +0200
+
+    Merge my changes with master.
+
+commit ecfc59623e3c4a7b641697c6ee8b655e44e59568
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 17:09:43 2010 +0200
+
+    Add a guidance for PDL reference documentation.
+
+ Basic/PDL.pm          |   21 ++
+ Basic/Pod/Modules.pod |  482 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 503 insertions(+), 0 deletions(-)
+
+commit bf50b41f70d0dafdbdfecf925a806c3745e08620
+Merge: 62eae7e... eb48bab...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 13 09:35:47 2010 -0400
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 62eae7e5d3643b3605c4eb48ff9ede366ce6b96f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 13 09:35:00 2010 -0400
+
+    Update VERSION and readme for pre-release
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |   18 +++++-----
+ Release_Notes  |    9 ++---
+ cygwin/INSTALL |   17 +++++----
+ cygwin/README  |   14 +++----
+ win32/INSTALL  |  106 ++++++++++++++++++++++++++++++++------------------------
+ 6 files changed, 91 insertions(+), 75 deletions(-)
+
+commit eb48babef733cf84de33469397ec0fe5e83bfda2
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 14:57:47 2010 +0200
+
+    Significantly improve the Tutorials page (more links, better explanations).
+
+ Basic/Pod/Tutorials.pod |   67 ++++++++++++++++++++++++++++++++++++++++------
+ 1 files changed, 58 insertions(+), 9 deletions(-)
+
+commit ec79ed635a43cb6bcfd02b0109cfe066723571ee
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 12:49:37 2010 +0200
+
+    Make FAQ more platform-agnostic by refering to "perldoc" instead of "man".
+
+ Basic/Pod/FAQ.pod |   34 ++++++++++++----------------------
+ 1 files changed, 12 insertions(+), 22 deletions(-)
+
+commit f3d023a6f793a1c1197391f14a38799d6b1f571f
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 12:44:47 2010 +0200
+
+    Present PDL::Guide as a PDL course and add it to the PDL pod page.
+    
+    --HG--
+    rename : Basic/Pod/Guide.pod => Basic/Pod/Course.pod
+
+ Basic/PDL.pm         |    5 +
+ Basic/Pod/Course.pod |  492 ++++++++++++++++++++++++++++++++++++++++++++++++
+ Basic/Pod/Guide.pod  |  507 --------------------------------------------------
+ MANIFEST             |    2 +-
+ 4 files changed, 498 insertions(+), 508 deletions(-)
+
+commit fca8547e64da376af0e234d700b155ce208464fd
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 12:41:20 2010 +0200
+
+    Delete Intro.pod and introduce Tutorials.pod in its place.
+
+ Basic/PDL.pm            |   23 ++++++----
+ Basic/Pod/FAQ.pod       |    3 +-
+ Basic/Pod/Intro.pod     |  106 -----------------------------------------------
+ Basic/Pod/Makefile.PL   |    1 -
+ Basic/Pod/Tutorials.pod |   70 +++++++++++++++++++++++++++++++
+ Doc/Doc/Perldl.pm       |    6 +-
+ MANIFEST                |    2 +-
+ 7 files changed, 88 insertions(+), 123 deletions(-)
+
+commit 5bc80dc491f91254889f39f27cb33e3b060e5ed3
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 02:26:20 2010 +0200
+
+    Fix link to QuickStart.
+
+ README |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 998656aacc7694378ca3e7b220a1e94392a0115b
+Merge: 105239f... 1d98566...
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Fri Aug 13 02:23:23 2010 +0200
+
+    Merge my last changes with the master branch.
+
+commit 1d98566fcc93b88c8f0301077a4a6da372e77747
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Aug 12 10:39:02 2010 -0400
+
+    Add macosx directory for platform specific info
+
+ README        |    4 ++++
+ macosx/README |    7 +++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
+
+commit 4fdd735b747d9e277d7329849845e9cc94b7c5b6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Aug 12 10:35:07 2010 -0400
+
+    Update README and perldl.conf for 2.4.7...
+
+ README      |   45 +++++++++++------------
+ perldl.conf |  114 ++++++++++++++++++++++++++++++++---------------------------
+ 2 files changed, 84 insertions(+), 75 deletions(-)
+
+commit da6bbbfbf50f140b78e2c79074f590a6d7a28c60
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Aug 12 09:54:52 2010 -0400
+
+    More readme-type file updates for 2.4.7
+
+ BUGS           |   24 ++++++-----
+ INSTALL        |  130 ++++++++++++++++++++++++++++++++-----------------------
+ Known_problems |    8 +---
+ README         |   13 +++---
+ 4 files changed, 96 insertions(+), 79 deletions(-)
+
+commit fdc58176e643548eec64b2d7cd107e523ba94ef6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Aug 12 09:12:06 2010 -0400
+
+    make dist now builds Changes before distdir
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 326935d6d7f89a827708d7fa2d65d6966e73a4ae
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 10 18:19:44 2010 -0400
+
+    Update Known_problems and others for 2.4.7
+
+ Known_problems |    7 +++++++
+ README         |    2 +-
+ TODO           |   34 +++++++++++++++++-----------------
+ 3 files changed, 25 insertions(+), 18 deletions(-)
+
+commit 4a4905e8a40f5836de95a6fe826f26432e96c966
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 10 16:40:49 2010 -0400
+
+    Add Known_problems skip to t/dumper.t
+    
+    This allows the release tests to skip the mysterious failure
+    which occurs for various BSD platforms.  It is hoped the problem
+    will be solved if we can get a system to reproduce the problem
+    and developer access.
+
+ t/dumper.t |  113 ++++++++++++++++++++++++++++++++---------------------------
+ 1 files changed, 61 insertions(+), 52 deletions(-)
+
+commit aabe91cad678535ba821255e8c463168f981c797
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 10 16:24:54 2010 -0400
+
+    Fix uuencode/uudecode detection logic
+    
+    IO/Dumper.pm was not checking for both uuencode and uudecode
+    which meant sometimes things broke when it was not needed,
+    now that Convert::UU is a PDL dependency.
+
+ IO/Dumper.pm |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 105239ff505830cbf8fe36a25aad84a3abcf2f62
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Tue Aug 10 19:37:54 2010 +0200
+
+    Update descripton of PDL::Indexing.
+
+ Basic/Pod/Indexing.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f9a39dafebdf4293bcb7e06cd1239fd005e0b428
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Tue Aug 10 19:34:02 2010 +0200
+
+    Show the correct path for the modules that were going to be in the "book".
+
+ Basic/Pod/FAQ.pod        |    4 ++--
+ Basic/Pod/Indexing.pod   |    2 +-
+ Basic/Pod/MATLAB.pod     |    2 +-
+ Basic/Pod/Philosophy.pod |    2 +-
+ Basic/Pod/QuickStart.pod |    2 +-
+ Basic/Pod/Scilab.pod     |    2 +-
+ Basic/Pod/Threading.pod  |    2 +-
+ Basic/Pod/Tips.pod       |    2 +-
+ 8 files changed, 9 insertions(+), 9 deletions(-)
+
+commit 2b96acab56eebcc05c988c6606e3fb6e3da5e705
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Tue Aug 10 19:06:44 2010 +0200
+
+    Work on a PDL book is postponed for now. I want to just get a series of
+    tutorials finished and organized first.
+
+ Basic/Pod/make-book.pl |  175 ------------------------------------------------
+ Basic/Pod/pdl-book.css |    8 --
+ 2 files changed, 0 insertions(+), 183 deletions(-)
+
+commit 543bf22c80abedc8bb5ada96c29bf9f5cc9aada4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 10 07:26:49 2010 -0400
+
+    Update PDL/TODO with latest info
+
+ TODO |   30 +++++++++++++-----------------
+ 1 files changed, 13 insertions(+), 17 deletions(-)
+
+commit bfd9268bb4c6e07e120acaa6ddc56fff4a8aa946
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Aug 9 21:01:55 2010 -0400
+
+    Update Known_problems with t/dumper.t bug
+    
+    ...and some minor edits to README for the upcoming release.
+
+ Known_problems |    4 ++--
+ README         |   19 ++++++++++---------
+ 2 files changed, 12 insertions(+), 11 deletions(-)
+
+commit 75c903f9258bf30f028053a1b34a34da915c7715
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 8 21:56:27 2010 -0400
+
+    Add explicit test count for older Test::More
+
+ t/config.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 74642a5e5013d8da1e922ef7e4f089cc29e1bf1d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 8 11:06:31 2010 -0400
+
+    Update VERSION to 2.4.6_019 for development
+    
+    This follows another very minor release to CPAN to
+    try to verify a fix for the t/dumper.t failures for
+    some *bsd systems.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   15 +++++++++++++++
+ 3 files changed, 17 insertions(+), 2 deletions(-)
+
 commit cab029b9e0be756c6b578d0f4dabc43914e6cfc5
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Aug 8 10:46:55 2010 -0400

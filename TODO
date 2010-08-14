@@ -53,17 +53,6 @@ R  Need to test PDL build/install from scratch
      notes will be used to update release docs.
 
 
-R  Clean up and triage for tickets prior to release.
-
-     Required
-
-     Needs volunteers (especially for bugs with special
-     platform requirements, such as HDF that some folks
-     might not have).
-
-     We're making progress here.  Every little bit helps.
-
-
 R  Update PDL web site pages 
 
      Required
@@ -102,10 +91,16 @@ R  Need PLplot and PDL::Graphics::PLplot to build all platforms
      support works as well.
 
 
+
++------------------------------------------------------------------------+
+|                         Deferred to PDL-2.4.8                          |
++------------------------------------------------------------------------+
+
 R  Complete Perldl2 shell:
-R  * Fix demo to work with Perldl2
-R  * Fix Ctrl-C handling for win32 systems
-N  * Add safe pdl allocation option to prevent OOM death
+D  * Fix demo to work with Perldl2
+D  + Add prompt stripping for cut-and-paste support
+N  * Fix Ctrl-C handling for win32 systems
+L  * Add safe pdl allocation option to prevent OOM death
 
      Required (CHM has volunteered for this task)
      
@@ -120,9 +115,9 @@ N  * Add safe pdl allocation option to prevent OOM death
      errors when running interactively in win32....
 
 
-R  Add support for improved 2D image display using TriD
-R  * Move imag2d() into a module form
-N  * Enable REPL and GUI simultaneous operations and event loops
+R  Add support for improved 2D image display using OpenGL
+D  * Move imag2d() into a module form
+L  * Enable REPL and GUI simultaneous operations and event loops
 
      Required (CHM has volunteered for this task)
 
@@ -130,7 +125,15 @@ N  * Enable REPL and GUI simultaneous operations and event loops
      PDL-2.4.7 release.
 
 
-R  New pdl() constructor with matlab [] syntax for string arguments
+N  Finish PDL::IO::ENVI module
+
+     Nice to have
+
+     Needs to be added as an IO module with tests.
+     A basic writeenvi routine needs to be completed.
+
+
+N  New pdl() constructor with matlab [] syntax for string arguments
 
      Required
 
@@ -155,6 +158,14 @@ N  Document how to set up a local sandbox for PDL build
      reinvent the same wheel.
 
 
+N  Finish spheres3d implementation
+
+     Nice to have (CHM has volunteered for this task)
+
+     This involves completing support for color and radius
+     parameters for the spheres and some minor cleanup.
+
+
 N  How to install the CPAN Testers reporting packages
 
      Nice to have
@@ -167,15 +178,6 @@ N  How to install the CPAN Testers reporting packages
      feedback if we have a quick-start for that.
 
 
-N  Add docs/support for users of other non-PDL software
-
-     Nice to have
-
-     This has already been addressed.  Further
-     improvements are always possible but we're
-     probably good for 2.4.7 as we stand.
-
-
 N  Update PDL Book (in progress)
    
      Nice to have
@@ -184,14 +186,6 @@ N  Update PDL Book (in progress)
      the previous manuscript based on Tex/LaTeX.
      Work continues but the status re a 2.4.7
      release schedule is not known.
-
-
-N  Finish spheres3d implementation
-
-     Nice to have (CHM has volunteered for this task)
-
-     This involves completing support for color and radius
-     parameters for the spheres and some minor cleanup.
 
 
 N  PDL::Constants
@@ -204,19 +198,6 @@ N  PDL::Constants
      constants and, perhaps, have a 'use constant'
      fall back version.
    
-
-N  Finish PDL::IO::ENVI module
-
-     Nice to have
-
-     Needs to be added as an IO module with tests.
-     A basic writeenvi routine needs to be completed.
-
-
-
-+------------------------------------------------------------------------+
-|                         Deferred to PDL-2.4.8                          |
-+------------------------------------------------------------------------+
 
 N  Verify dependency detection across all major PDL platforms
 
@@ -282,6 +263,22 @@ N  Check/set perldl.conf options before the PDL build?
 |                                DONE                                    |
 +------------------------------------------------------------------------+
    
+D  Add docs/support for users of other non-PDL software
+
+     Nice to have
+
+     This has already been addressed.  Further
+     improvements are always possible but we're
+     probably good for 2.4.7 as we stand.
+
+
+D  Clean up and triage for tickets prior to release.
+
+     Required
+
+     Only one critical bug left...done soon.
+
+
 D  Fix the test problems with preexisting PDL installs
 
      Nice to have

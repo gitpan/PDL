@@ -18,6 +18,14 @@ The following issues have been reported with this version of PDL:
   100% effective---but ugly.
 
 
+- PDL::IO::Dumper sdump() fails for some system configurations.
+  Problems have been reported for various BSD platforms.  Please
+  use PDL::IO::Storable if you have this problem *and* let the
+  PDL developer know (Bonus points if you can work with us to
+  debug this problem---which has only languished because we don't
+  have the ability to create the bug to fix it...).  Thanks.
+
+
 - The demo 3d and 3d2 windows do not close (can not be closed)
   after the demo finishes.  You need to exit the perldl shell
   to have the window close.
@@ -25,13 +33,6 @@ The following issues have been reported with this version of PDL:
 
 - When you close a TriD graphics window with the frame widget
   the whole process exits including the perldl shell.
-
-
-- The default TriD controls are based on having 2+ button mouse.
-
-  For Macs with one button, you can use Ctrl+Click to generate
-  the needed Right-click.  It is also possible to configure the
-  Macbook tracpad to generate a secondary click via the control panel.
 
 
 - PDL::FFTW is based on version 2 of the FFTW API.  The current
@@ -66,13 +67,13 @@ The following issues have been reported with this version of PDL:
 
 
 - The following SourceForge bugs are outstanding at time of the
-  PDL-2.4.6_018 release:
+  PDL-2.4.6_991 release:
 
-  3031068    PDL::IO::FlexRaw memory mapping fails
+  3042201    t/dumper.t fails mysteriously
+  3031068    PDL::IO::FlexRaw mapflex memory mapping fails
   3018731    NiceSlice affects code where it should not
   3011879    pdl() constructor crashes for mixed array ref/piddle args
   2995500    perl -d chokes on lvalue functions
-  2989905    PDL PROJ4 does not build on win32
   2153898    default PDL build output too long
   1994584    PDL Has no signed 8-bit integer data type
   1507054    closing TriD window kills perldl shell
