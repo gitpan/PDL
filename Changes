@@ -1,3 +1,171 @@
+commit ca3daaa3c0b94b5561b37ec4782cb88487667855
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 15 19:54:30 2010 -0400
+
+    Update readme-type files for pre2 release
+
+ DEPENDENCIES   |   12 ++++++------
+ Known_problems |    2 +-
+ MANIFEST       |    1 +
+ Perldl2/README |   23 ++++++++++++-----------
+ Release_Notes  |   31 +++++++++++++++++++++++--------
+ 5 files changed, 43 insertions(+), 26 deletions(-)
+
+commit eca3468166b4f0a1b6ec2118ce4eb869eca6eb03
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 15 19:32:55 2010 -0400
+
+    Fix .perldlrc double require bug in perldl
+    
+    There was a problem where running 'perl perldl' after building
+    PDL from the source directory would only give you plain perl.
+    The code should have been retrying with 'use blib' so things
+    should have worked since 'perl -Mblib perldl' does work.
+    
+    The subtlety was that require caches the names of files that
+    it fails to load in %INC as well as ones that work.  To attempt
+    again, you have to delete the previously created hash entry.
+    
+    Also updated version for next pre-release and some documenting
+    comments in perldl.conf
+
+ Basic/PDL.pm |    2 +-
+ perldl.PL    |    1 +
+ perldl.conf  |    5 +++++
+ 3 files changed, 7 insertions(+), 1 deletions(-)
+
+commit 9c668ea42a299564bb70d13aaf1d463443d6738a
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Aug 15 19:44:45 2010 +0200
+
+    build-depend and suggest libdevel-repl-perl
+
+ debian/control |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit b05cfe6e3e4852254fc97daffb51274d207c963c
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Aug 15 19:43:47 2010 +0200
+
+    install Changes file only if available
+
+ debian/rules |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 44ea474c9f333f29bf8d9574e1b688f3eab835a5
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sun Aug 15 17:26:56 2010 +0200
+
+    Add PROJ.4 error to "common problems".
+
+ INSTALL |   37 +++++++++++++++++++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
+
+commit 6e754737d3f6ec48b8d915f4c8a2cea077291e00
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 15 10:37:19 2010 -0400
+
+    Fix pdl2 to run perldl if TR::Stub is used
+    
+    Devel::REPL is not safe against use of the minimal Term::ReadLine::Stub
+    support in the perl distributions.  This works around that limitation
+    until the fixes can be made upstread in the Devel::REPL module.
+
+ Perldl2/Profile/Perldl2.pm |  121 ++++++++++++++++++++++++--------------------
+ 1 files changed, 66 insertions(+), 55 deletions(-)
+
+commit 0fcfd0e38f0562f4cf8c9c46e7d3f91919b81290
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Aug 15 14:21:23 2010 +0200
+
+    gitignore files specific to debian package build
+
+ .gitignore |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+commit 782ba47c6124dca1f24246640f3654a4724ddfb6
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Aug 15 12:39:34 2010 +0200
+
+    don't set repacked version in upstream git
+
+ debian/changelog |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit a10f5284c856d5c80fd474f483f2a2b8b2ab7647
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Aug 15 12:33:31 2010 +0200
+
+    start work on new pdl package
+
+ debian/changelog |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
+commit a0c1aa51e383e3a0574957fe5a31ba4c3a02403b
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Aug 15 12:33:06 2010 +0200
+
+    suggest proj-bin in binary package
+
+ debian/control |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ab3743cb769817f609b62f507f61424cae6e2339
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Aug 15 12:07:38 2010 +0200
+
+    update debian/changelog from my last upload
+
+ debian/changelog |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 76a30064e4d0d9fbab98ae7ccac9d8b0554523d0
+Author: sisyphus <sisyphus1@optusnet.com.au>
+Date:   Sun Aug 15 12:48:24 2010 +1000
+
+    t/proj_transform.t - skip all if no jpegtopnm
+    
+    This test script needs the jpegtopnm utility
+    and should be skipped if that utility can't
+    be found - which is what now happens.
+
+ t/proj_transform.t |   39 ++++++++++++++++++++++++---------------
+ 1 files changed, 24 insertions(+), 15 deletions(-)
+
+commit 4f57cb1dea7bd8ef1452435ccb3d24c9107b1cde
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat Aug 14 15:51:48 2010 +0200
+
+    Update release notes with the lastest changes to documentation.
+
+ Release_Notes |   19 +++++++++++++------
+ 1 files changed, 13 insertions(+), 6 deletions(-)
+
+commit 1b44f2ceec0d69ab8d429ed4b6a97325923ae415
+Merge: a6c0fe6... 3bd74f8...
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat Aug 14 15:24:00 2010 +0200
+
+    Merge latest documentation changes with master.
+
+commit a6c0fe6cc3bedee11c7cad7b1811d7b87f0b63ee
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat Aug 14 15:21:53 2010 +0200
+
+    Add threading tutorial to PDL::Tutorials.
+
+ Basic/Pod/Tutorials.pod |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
+
+commit 1787a9e5e3a989f85917613f7ca19861279a11f2
+Author: Daniel Carrera <dcarrera@gmail.com>
+Date:   Sat Aug 14 15:21:36 2010 +0200
+
+    Add spaces to delineate code blocks correctly.
+
+ Basic/Pod/Threading.pod |   22 +++++++++++-----------
+ 1 files changed, 11 insertions(+), 11 deletions(-)
+
 commit 3bd74f8fc1e1f95a9c4c239f024824d509088c00
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Aug 14 09:19:37 2010 -0400
