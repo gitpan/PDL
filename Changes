@@ -1,3 +1,134 @@
+commit 4eb2760b6dc58c0b9eceaa741c8955e801544ea1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 17 20:46:07 2010 -0400
+
+    Fix some legacy problems with old X11 TriD code
+    
+    This is the last time...
+
+ Graphics/TriD/OpenGL/opengl.pd |    9 ++++++---
+ 1 files changed, 6 insertions(+), 3 deletions(-)
+
+commit 5d195653122f1bf36cb6237117abf1a295fa26f8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 17 14:23:42 2010 -0400
+
+    Update FAQ and Makefile.PL docs for 2.4.7 release
+
+ Basic/Pod/FAQ.pod |  363 +++++++++++++++--------------------------------------
+ Makefile.PL       |    8 +-
+ 2 files changed, 103 insertions(+), 268 deletions(-)
+
+commit 9ac17378d3c6a38b8c7110d9389364b3dfc4a165
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 17 12:16:46 2010 -0400
+
+    Fix imag2d/twiddle export from PDL::Graphics2D
+    
+    And more various doc updates for coming PDL-2.4.7...
+
+ Graphics/Graphics2D.pm |   50 +++++++++++++++++-------------
+ Graphics/TriD/TriD.pm  |    4 +-
+ Perldl2/README         |    8 ++++-
+ Perldl2/TODO           |   12 ++++----
+ TODO                   |   78 ++++++++++++++++++++++++------------------------
+ 5 files changed, 82 insertions(+), 70 deletions(-)
+
+commit 42bf9d6808f4389ee771b3746ff1162041d6aed2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Aug 16 15:49:58 2010 -0400
+
+    Doc/POD/word-smithing for the PDL-2.4.7 release
+    
+    This look to be stable as far as surprise bug reports
+    from PDL-2.4.7_pre2 testing.  I anticipate that the
+    PDL-2.4.7_pre3 may not really be necessary.  These
+    updates are getting ready for the real PDL-2.4.7 release.
+
+ BUGS                           |    2 +-
+ DEPENDENCIES                   |   14 ++--
+ DEVELOPMENT                    |    2 +-
+ INSTALL                        |   61 +++++++----------
+ IO/ENVI/readenvi.pdl           |    8 +-
+ Known_problems                 |    2 +-
+ Perldl2/Plugin/NiceSlice.pm    |   22 +++---
+ Perldl2/Plugin/PDLCommands.pm  |    6 +-
+ Perldl2/Plugin/PrintControl.pm |   16 ++--
+ Perldl2/Profile/Perldl2.pm     |    8 +-
+ Perldl2/TODO                   |   10 ++-
+ Release_Notes                  |   38 ++++++++----
+ cygwin/INSTALL                 |   38 +++++------
+ perldl.PL                      |  139 ++++++++++++++++++++--------------------
+ 14 files changed, 184 insertions(+), 182 deletions(-)
+
+commit 0e8ad23faae3cc806d8ac751286bce9fd076e6a9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Aug 16 14:20:59 2010 -0400
+
+    Fix leading white space in imag2d() POD
+    
+    The leading white spaces were missing on some "empty" lines
+    which split up the examples and usage into many separate
+    (ugly) boxes in the online version of the docs.
+
+ Graphics/Graphics2D.pm |   21 ++++++++++-----------
+ 1 files changed, 10 insertions(+), 11 deletions(-)
+
+commit 8fe01ca4307480982b51b0cb47751d477fa94f30
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Aug 16 09:10:04 2010 +0200
+
+    update debian changelog
+
+ debian/changelog |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 2c9c4270e8bb521ead4174d49a5a284c8e554e6b
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon Aug 16 09:08:31 2010 +0200
+
+    add symlink for manpages
+
+ debian/pdl.links |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 1d8083ea03ec8f242762691d20dd2b46bbedbe24
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Aug 15 23:30:33 2010 +0200
+
+    update debian Standards-Version
+
+ debian/control |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit bdbd9fe7e48244dc8782ac3d466d347ea75d77d0
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Aug 15 21:49:45 2010 +0200
+
+    minor debian changelog updates
+
+ debian/changelog |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 7d7cdd2cd9e8c6479e15289a76d8d187892e2bef
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 15 21:48:21 2010 -0400
+
+    Fix missing term in ~ expansion test t/autoload.t
+
+ t/autoload.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit b24825a07afe245d40930fc98608819702927a2b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 15 20:12:06 2010 -0400
+
+    Update VERSION to 2.4.6_993 for final fixes
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
 commit ca3daaa3c0b94b5561b37ec4782cb88487667855
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Aug 15 19:54:30 2010 -0400
