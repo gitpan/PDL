@@ -1,3 +1,65 @@
+commit 6155d20969a9307ae234e71efa87377d58d400b8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Aug 18 17:48:01 2010 -0400
+
+    Add INSTALL note re bad system clock prob w make
+    
+    Per list discussion, it may make sense to bulletproof
+    the Makefile.PL against this issue in future releases.
+
+ INSTALL |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
+
+commit 55f1a7f0cf09355e9c4b6ee500681526e908ffe6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Aug 18 14:45:01 2010 -0400
+
+    Turn off use of uuencode/decode for win32 Dumper
+    
+    There have been some bug reports from win32 systems where
+    the t/dumper.t test fails because of a uuencode or uudecode
+    error.  Since uuencode/uudecode are not available on win32,
+    we force use of Convert::UU.
+
+ IO/Dumper.pm |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 28d24a6cffd148ae1372686b08aad3e24e6ce8db
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Wed Aug 18 10:59:57 2010 +0200
+
+    disable EU::MM prompts during debian package build
+
+ debian/rules |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 209d168cb8e8d299287afabd9da9b8b317c69852
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Wed Aug 18 10:51:55 2010 +0200
+
+    git-ignore vim temp files
+
+ .gitignore |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit cfb18501d7686019db209542b8a166fcc3f3018a
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Wed Aug 18 10:50:13 2010 +0200
+
+    add more debian pkg tempfile to .gitignore
+
+ .gitignore |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 034d2a5948bd7c1651b380f079e7fcab0fc11066
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Wed Aug 18 10:47:19 2010 +0200
+
+    bump debian pkg version to pre3
+
+ debian/changelog |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
 commit 4eb2760b6dc58c0b9eceaa741c8955e801544ea1
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Aug 17 20:46:07 2010 -0400
