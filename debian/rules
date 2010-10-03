@@ -11,6 +11,7 @@
 #export DH_VERBOSE=1
 
 include /usr/share/dpatch/dpatch.make
+unexport DISPLAY
 
 CFLAGS = -Wall -g
 
@@ -41,7 +42,12 @@ build-stamp: configure-stamp
 test: test-stamp
 test-stamp: build-stamp
 	dh_testdir
-	-$(MAKE) TEST_VERBOSE=1 DISPLAY="" test
+	@echo "BEGIN test normal"
+	-$(MAKE) TEST_VERBOSE=0 LC_ALL=C test | perl debian/filter-test.pl
+	@echo "END test normal"
+	@echo "BEGIN test verbose"
+	-$(MAKE) TEST_VERBOSE=1 LC_ALL=C test | perl debian/filter-test.pl
+	@echo "END test verbose"
 	touch test-stamp
 
 clean: clean-patched unpatch

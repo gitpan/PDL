@@ -1,3 +1,373 @@
+commit acf0c2c7f1bc1a555d6f151c64cffe52a4ad82d5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 3 12:46:33 2010 -0400
+
+    Update README and prep for 2.4.7_001 release.
+
+ DEVELOPMENT       |    2 +
+ Known_problems    |   32 +++++++++++++++++++++--------
+ MANIFEST          |    1 +
+ README            |   20 ++++++++++++------
+ Release_Notes     |   57 ++++++++++++++++++++++++++++++++++++++++++++++++----
+ utils/perldlpp.pl |   14 +++++++++++++
+ 6 files changed, 105 insertions(+), 21 deletions(-)
+
+commit e06ca58d121f8d51cc7040802d361e505ad0f540
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 3 09:12:28 2010 -0400
+
+    rm header between separate t/fastraw.t tests
+
+ t/fastraw.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 55cbeaefc4c7b009db123e9bffbd2724d7b226bc
+Merge: 2f72dff... d543632...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Oct 2 10:18:18 2010 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 2f72dff24851bf4c2eee42aa8e881d7f4dea5229
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Oct 2 10:05:06 2010 -0400
+
+    Rearrange code to reduce line size
+    
+    The current codefold routine fails to correctly continue
+    lines containing quoted strings.  I've moved the filename
+    to a line by itself to give it the maximum possible number
+    of characters to work with.
+
+ t/flexraw_fortran.t |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit d543632b0d8ad56e6bbf95888a1cf03f0da27bb6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 1 08:38:40 2010 -0400
+
+    Add PERLDOC_PAGER check for pdldoc pager
+    
+    Now the pager used by the pdldoc command is: the value
+    of PERLDOC_PAGER if defined, then the value of PAGER if
+    defined, and finally the value of $Config{pager}.
+    
+    NOTE: we should probably add some detection for whether
+    or not the indicated pager program is actually present.
+
+ Doc/Doc/Config.pm.PL |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit f17c6bfdf4c37d1ceb129065dd3b2044d66767b6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Sep 28 12:42:19 2010 -0400
+
+    Fix typo in imag2d docs in Graphics.pm
+
+ Graphics/Graphics2D.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ac2d45a8b82a47b2b433cb0fc0bee7104db38cc7
+Merge: 39c30ff... fa06ea1...
+Author: Craig DeForest <zowie@dhcp-10-120.boulder.swri.edu>
+Date:   Tue Sep 28 09:18:54 2010 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 39c30ff4a9d3ba03186b9add9e14ec7aa41ec66a
+Author: Craig DeForest <zowie@dhcp-10-120.boulder.swri.edu>
+Date:   Tue Sep 28 09:18:25 2010 -0600
+
+    updated FITS.pm to handle BSCALE/BZERO correctly for tile-compressed images
+
+ IO/FITS/FITS.pm |   37 +++++++++++++++++++++++++------------
+ 1 files changed, 25 insertions(+), 12 deletions(-)
+
+commit fa06ea12dfb12a63da25eebb15d36691dd48af91
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Sep 27 10:42:52 2010 -0400
+
+    Fix uniqind bug #3076570
+    
+    If uniqind were given a degenerate pdl as input (all the same
+    value), it should return the single value and not Empty.
+
+ Basic/Primitive/primitive.pd |    8 +++++++-
+ t/primitive.t                |   13 ++++++++++++-
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+
+commit 2a3f1f716915754571aeb65c851e1b2c493a7c8f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Sep 21 18:09:03 2010 -0400
+
+    Update TODO and Perldl2/TODO
+    
+    This is a partial clean up of the current lists in light
+    of the current development status and what is needed or
+    desired.
+
+ Perldl2/TODO |    6 ++-
+ TODO         |   99 ++++++++++++++++++++-------------------------------------
+ 2 files changed, 39 insertions(+), 66 deletions(-)
+
+commit cbb82658491fe7302f9231faaae5db432fbbeb83
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Sep 20 18:14:50 2010 -0400
+
+    Add xtra space from TAB completion to known probs
+
+ Known_problems |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit f40a497ef8938d68ed3dbe9d51c23dcc0968c48f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Sep 14 09:02:40 2010 -0400
+
+    Update Known_problems with current bugs
+
+ Known_problems |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 826edf1f913b713adff4c99be24bae28846d69c1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Sep 14 08:09:46 2010 -0400
+
+    Clean up t/fastraw.t files on exit
+
+ t/fastraw.t |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 287ec94034786db4b86c6402423772f0c12db057
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Sep 14 08:04:32 2010 -0400
+
+    Add $$ to randomize headerfile name
+    
+    Some CPAN testers have reported problems with creating
+    the file which may be due to other instances of the
+    smoker being run.
+
+ t/fastraw.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 6b3b856fa96ccd8e41f784754402191abb70de1c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Sep 14 08:03:53 2010 -0400
+
+    Add TODO notes in logo3d.pdl comments
+
+ Perldl2/logo3d.pdl |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
+
+commit 05abb2c89f6402695b6f450fc7bf9b9b9680bf3f
+Merge: ee4ae3d... f46596f...
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sun Sep 12 15:37:33 2010 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit f46596f6681e37b5000a6cc2e5aa99e523a732e9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 3 12:57:01 2010 -0400
+
+    Fix minor POD glitch in Graphics2D.pm
+
+ Graphics/Graphics2D.pm |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit c7cf78cc37dea525a18bae5406e3234f1151e593
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 3 12:44:17 2010 -0400
+
+    Changed PDL> to pdl> in pdl2 POD for consistency
+
+ Perldl2/Plugin/NiceSlice.pm    |    8 ++++----
+ Perldl2/Plugin/PrintControl.pm |   10 +++++-----
+ Perldl2/pdl2                   |    4 ++--
+ 3 files changed, 11 insertions(+), 11 deletions(-)
+
+commit 305563b12e96bd71fb6eb263707f4431bc73426d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 31 13:05:43 2010 -0400
+
+    Add win32 workaround for pdl2->perldl exec
+    
+    Now win32 just exits pdl2 with a warning to run perldl
+    rather than trying the broken exec.
+
+ Perldl2/pdl2 |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
+
+commit c092edacc1806a092c343e62a691e23d20f26b3a
+Merge: b50537d... 6d0a15e...
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 31 10:05:20 2010 -0400
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 6d0a15eb742f460ef79345a219a801ce94d58829
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Aug 30 12:41:20 2010 -0400
+
+    Add pdl2->perldl win32 bug to Known_problems
+    
+    On win32, you need to call perldl explicitly since win32
+    exec (i.e. fork) isn't equivalent to the unix exec in perl.
+
+ Known_problems |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
+
+commit 57caff9d8b35555878f553120cabc06d4fa11154
+Author: sisyphus <sisyphus1@optusnet.com.au>
+Date:   Mon Aug 23 16:05:39 2010 +1000
+
+    Demos/Cartography_demo.pm - /xw replaced by /GW (MS Windows only)
+    
+    There were 2 hardcoded occurrences of /xw that need to be
+    replaced with /GW for MS Windows. (There are still problems
+    with this demo as PGPLOT is apparently incapable of opening
+    a second grwnd.exe window - even if the first grwnd.exe
+    window has been closed.)
+
+ Demos/Cartography_demo.pm |   10 +++++++---
+ 1 files changed, 7 insertions(+), 3 deletions(-)
+
+commit d6a9f9af23a1cee6905a725a3b40b6bdabaee029
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Aug 22 18:59:57 2010 +0200
+
+    fix 2 POD errors (=item outside =over..=back)
+
+ IO/FastRaw/FastRaw.pm |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit ddd75e02ddd6c3d5c02221c6acc035dedf74e262
+Author: sisyphus <sisyphus1@optusnet.com.au>
+Date:   Sun Aug 22 21:18:27 2010 +1000
+
+    Demos/Transform_demo.pm - /xw replaced by /GW (MS Windows only)
+    
+    There were 3 hardcoded occurrences of /xw that need to be
+    replaced with /GW for MS Windows. (There are still problems
+    with this demo as PGPLOT is apparently incapable of opening
+    a second grwnd.exe window - even if the first grwnd.exe
+    window has been closed.)
+
+ Demos/Transform_demo.pm |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
+
+commit b50537dda498b5b86d422247d6581072705a1057
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Aug 19 14:52:40 2010 -0400
+
+    Update Known_problems, etc for development
+    
+    Fix references to $PDL::VERSION value and unset the
+    SKIP_KNOWN_PROBLEMS option in the perldl.conf.  Now
+    that this is back to a development tree, we want
+    problems to show until fixed.
+
+ Known_problems |    2 +-
+ Release_Notes  |   16 ++++++++++++++++
+ perldl.conf    |    2 +-
+ 3 files changed, 18 insertions(+), 2 deletions(-)
+
+commit 0a882cbc5e0d02804e0e58d2be0e4ab7db19361d
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Aug 19 14:05:30 2010 +0200
+
+    debian changelog from 2.4.7+dfsg-1 upload
+
+ debian/changelog |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 5867398315d3c245e059d78b308c9728a11dce6b
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Aug 19 11:55:39 2010 +0200
+
+    sync old changelog entries with debian pkg
+    
+    leave only the most recent version entry without +dfsg suffix
+
+ debian/changelog |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
+
+commit e8be4ad4a8a0382f4d130142390e6b2c41c06728
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Aug 19 11:49:52 2010 +0200
+
+    force-set locale to C during the test suite runs
+
+ debian/rules |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit cfbb93ee5e89c787557c11d01082c8e0896586e9
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Aug 19 11:38:13 2010 +0200
+
+    change testsuite running logic
+    
+    - make one non-verbose and one verbose run
+    - mark both runs with begin/end block statements
+    - filter 'make test' output with debian/filter-test.pl
+
+ debian/rules |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+commit 0cdf9334b96e902112bef164ca08f04df8e26732
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Aug 19 10:17:11 2010 +0200
+
+    script filtering relevant parts of test suite runs
+
+ debian/filter-test.pl |   23 +++++++++++++++++++++++
+ 1 files changed, 23 insertions(+), 0 deletions(-)
+
+commit 6ef22feb99ff24234aa3625fe10d8de11a978e73
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu Aug 19 10:16:22 2010 +0200
+
+    unexport DISPLAY in debian/rules
+
+ debian/rules |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 199f87dc2106bddeec2af8e075754b817b6da4f4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Aug 18 21:39:24 2010 -0400
+
+    Modify some files so the CPAN indexer doesn't barf
+    
+    There is no easy way to tell the CPAN indexer not to index
+    a package in a distribution.  Supposedly, if you split the
+    offending package declaration across 2 lines then the indexer
+    will not index it and thus no warning.
+
+ Basic/Gen/Inline/MakePdlppInstallable.pm |    4 +++-
+ Graphics/TriD/TriD/VRML.pm               |    4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+commit 59dbbd4bf474af1e9aaf48bb575b43ea7e90e4fc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Aug 18 20:57:09 2010 -0400
+
+    Update VERSION to 2.4.7_001 for new development
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit fcec32c20bf203239500507672c0c82ab9b95369
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Aug 18 20:55:52 2010 -0400
+
+    Final pre-PDL-2.4.7 edits...
+
+ Basic/PDL.pm   |    2 +-
+ Release_Notes  |   48 ++++++++++++++++++++++++--
+ TODO           |  106 ++++++++++++++++++++++++++-----------------------------
+ cygwin/INSTALL |   23 +++++++-----
+ 4 files changed, 109 insertions(+), 70 deletions(-)
+
 commit 6155d20969a9307ae234e71efa87377d58d400b8
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Aug 18 17:48:01 2010 -0400
@@ -1013,6 +1383,42 @@ Date:   Sun Aug 1 19:59:53 2010 +1000
  win32/INSTALL |  108 +++++++++++++++-----------------------------------------
  1 files changed, 29 insertions(+), 79 deletions(-)
 
+commit ee4ae3db83a2c58a353162518bc627d298bd9620
+Merge: 24e935e... 0a1aa5b...
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sun Aug 1 02:41:48 2010 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 24e935e8af5f77254bef8ad1f9eb028acc8e8789
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sun Aug 1 02:36:49 2010 -0600
+
+    Finally, a fix to the pdl permissive-constructor bug.  Two separate problems:
+    	* an off-by-one error in indexing the dim list of the target led to
+    	  indexing the -1 element of the dim list in certain cases; this generally
+              caused heisenbugs by forcing the null padding loop to wander off into
+              hyperspace;
+            * Most of the time av_fetch returns a valid element; sometimes it
+    	  returns a pointer to 0, and sometimes it returns 0.  We were always
+    	  dereferencing it, so in the rare cases where it returned 0 we were
+              throwing a bus error.
+    
+    Tests:
+    
+      The multiple-PDLs-in-a-list bug:
+    	$c[0][0] = pdl([1]);
+            $c[1][0] = pdl([2]);
+    	$d = pdl(@c);
+    
+      The unrelated crash-on-undef-first-element bug:
+            $c[0][0] = pdl([1]);
+    	$c[1][0] = pdl([2]);
+    	$c[2][2] = 5;
+
+ Basic/Core/pdlcore.c.PL |   59 ++++++++++++++++++++++++++++++----------------
+ 1 files changed, 38 insertions(+), 21 deletions(-)
+
 commit 0a1aa5bbbeeb3e77d7d17d0ba3297e2da5a16eff
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Jul 31 15:12:41 2010 -0400
@@ -1525,6 +1931,25 @@ Date:   Sun Jul 18 14:55:27 2010 -0400
 
  TODO |  519 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  1 files changed, 519 insertions(+), 0 deletions(-)
+
+commit 4f7d19dfd5187075be2b235a1ce034e7cc6ce54b
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sun Jul 18 09:48:01 2010 +0200
+
+    More minor doc tweaks in rfits()
+
+ IO/FITS/FITS.pm |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
+
+commit 94c6f196614ce5017a6e5a03f07e64605209aaf9
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Sun Jul 18 09:45:52 2010 +0200
+
+    Updated documentation for FITS compressed format; fixed an edge case in Rice compression.
+
+ IO/FITS/FITS.pm                |    7 +++----
+ Lib/Compression/compression.pd |    2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
 commit a0a803e9ebe27759e283f4d31bf8430530baef52
 Merge: 95fc475... 74c034e...

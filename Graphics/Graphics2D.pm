@@ -613,7 +613,7 @@ the sub, only the imag2d() windows will update correctly.
 
 =for example
 
-  use PDL::Graphics2d;     # imports imag2d() and twiddle()
+  use PDL::Graphics2D;     # imports imag2d() and twiddle()
 
   $a = sequence(64,48,3);  # make test RGB image
   $a = $a->mv(2,0);        # color must be dim(0) with size [0..4]
@@ -636,9 +636,10 @@ the sub, only the imag2d() windows will update correctly.
     
     Runs the FreeGLUT event loop so window GUI operations
     such as resize, expose, mouse click,.. work
-    
+
 =cut
-  
+
+
 sub imag2d {
    my ($img, $name, $zoom, $off_r, $off_c) = (undef,"Figure $cur_fig_num", undef, 0, 0);
 

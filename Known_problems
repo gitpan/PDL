@@ -26,6 +26,17 @@ The following issues have been reported with this version of PDL:
   have the ability to create the bug to fix it...).  Thanks.
 
 
+- On Strawberry Perl and ActiveState Perl the pdl2 fallback to
+  perldl when Devel::REPL and Term::ReadLine::Perl are not
+  installed is broken due to win32 issues.
+  
+  If you get stuck in the pdl2 shell, just type
+  quit<Enter>quit<Enter> which issues the quit command to both
+  the pdl2-now-perldl shell and the CMD shell.  You'll need to
+  call perldl explicitly for now (or install Devel::REPL
+  and Term::ReadLine::Perl to use the new pdl2 goodness...).
+
+
 - The demo 3d and 3d2 windows do not close (can not be closed)
   after the demo finishes.  You need to exit the perldl shell
   to have the window close.
@@ -44,14 +55,19 @@ The following issues have been reported with this version of PDL:
 
 - If you have a pre-existing PDL install in your perl @INC path,
   mysterious failures have been observed in some tests due to
-  unintentionally pulling in the wrong version of PDL.  The
-  'perl Makefile.PL' stage now checks for this and prompts to
-  continue so you'll know the potential problem exists.
+  unintentionally pulling in a previous version of PDL.  The
+  'perl Makefile.PL' stage now checks for this and asks if you
+  wish to continue.
+  
+  Usually, continuing with another PDL in the path will work
+  BUT if you get mysterious test failures, try removing the
+  previous PDL install files and build again.
 
 
 - Various make command issues during build:
 
   - Using parallel make causes the build to fail; so don't use -j # options.
+
   - make fails with message like.
       "*** No rule to make target `pptemplate', needed by `pptemplate.pod'.  Stop."
     The cause is unknown.  If you have this problem, *please* let the developers
@@ -62,24 +78,39 @@ The following issues have been reported with this version of PDL:
   the configure-build-test process.
 
 
-- PDL on Cygwin has a 300MB process memory limit which can
-  cause out of memory crashes with large data sets.
+- Directory completion in the interactive PDL shells (perldl and pdl2)
+  using Term::ReadLine::Perl adds a space after each directory expansion.
+  To continue to complete, one must delete the space before typing <TAB>
+  again.  The problem has been reported to the Term::ReadLine::Perl
+  bug tracker.
+
+- PDL on Cygwin has a 300MB process memory limit which can cause out
+  of memory crashes with large data sets.
 
 
 - The following SourceForge bugs are outstanding at time of the
-  PDL-2.4.7 release:
+  PDL-2.4.7_001 release:
 
+  3079844    t/flexraw_fortran.t fails with long temp directory name
+  3059083    Problems with FITS header handling
+  3057542    wmpeg doesn't error on missing ffmpeg
+  3056142    pdl2 fallback to perldl broken on win32
   3042201    t/dumper.t fails mysteriously
   3031068    PDL::IO::FlexRaw mapflex memory mapping fails
   3018731    NiceSlice affects code where it should not
   3011879    pdl() constructor crashes for mixed array ref/piddle args
+
+               NOTE: A partial fix is in PDL-2.4.7_001.
+	       The constructor no longer crashes perl
+	       however 3 constructor tests fail.  Work
+	       is underway to resolve these.
+
   2995500    perl -d chokes on lvalue functions
   2153898    default PDL build output too long
   1994584    PDL Has no signed 8-bit integer data type
   1507054    closing TriD window kills perldl shell
   1435189    Installation with cpan2rpm
   1205359    PGPLOT Window does not store full state info
-  1059020    Problem with FFTW version 3.0.1
 
 
 For more information on these and other PDL issues, and for
