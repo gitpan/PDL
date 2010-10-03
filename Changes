@@ -1,3 +1,89 @@
+commit bbda12d8bab868e3b5ad3d1e6451568891260bb9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 3 16:39:02 2010 -0400
+
+    Updata Release_Notes for 2.4.7_002 release
+
+ Release_Notes |   16 +++++++++-------
+ 1 files changed, 9 insertions(+), 7 deletions(-)
+
+commit 7b05a3c81c981eeac63b756f37e03b6c516ea6f1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 3 16:30:58 2010 -0400
+
+    Make t/flexraw.t a "TODO" test
+    
+    Trying to come up with a standard for using CPAN Testers
+    to help diagnose PDL bugs.  The Test::More TODO capability
+    allows one to have tests corresponding to development TODOs.
+    Unless the $TODO is defined, then the test acts as normal.
+    
+    By default, $TODO is defined if SKIP_KNOWN_PROBLEMS is set
+    in either the environment or the perldl.conf file.  However,
+    it isn't useful to generate fail messages for bugs that are
+    not being worked on (e.g. without a developer assigned to
+    the ticket).
+    
+    If no developer is assigned, the default is to set the
+    local $TODO always.  If the ticket has an assigned developer,
+    then the setting will obey the SKIP_KNOWN_PROBLEMS options:
+    on for official releases, off for development releases.
+    
+    If you are an assigned developer and wish to have test FAILs
+    ignored for your TODO items, just edit the local $TODO line
+    and remove/comment out the test for SKIP_KNOWN_PROBLEMS.
+
+ t/flexraw.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 2393740f286f40334fecf9a269859cef0e881f40
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 3 16:13:19 2010 -0400
+
+    Add back SKIP_KNOWN_PROBLEMS detection with TODO
+    
+    Using the Test::More TODO capability, you can switch
+    from test mode to todo mode for the Known_problems by
+    setting the SKIP_KNOWN_PROBLEMS environment variable
+    or perldl.conf config option.
+
+ Release_Notes   |    6 +++++-
+ t/complex.t     |    3 ++-
+ t/config.t      |    2 +-
+ t/constructor.t |    2 +-
+ t/core.t        |    4 ++--
+ t/flexraw.t     |    2 +-
+ 6 files changed, 12 insertions(+), 7 deletions(-)
+
+commit 7175ee0fecd3e0b75d8882f50fb8794c07779af5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 3 15:22:28 2010 -0400
+
+    Replace SKIP with TODO for Known_problems in tests
+    
+    Thanks to David Mertens for originally pointing out that
+    Test::More capability.  Now that I had time to go back and
+    investigate further, it seems to do exactly what I wanted
+    for the SKIP_KNOWN_PROBLEMS---but better.
+
+ t/complex.t     |    9 ++----
+ t/config.t      |    8 +----
+ t/constructor.t |    6 ++--
+ t/core.t        |   34 +++++++++++++--------
+ t/flexraw.t     |   90 ++++++++++++++++++++++++++++---------------------------
+ 5 files changed, 75 insertions(+), 72 deletions(-)
+
+commit 688c93c12169f2ca10399e72a62d4247fa0bbfc7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 3 13:29:12 2010 -0400
+
+    Update VERSION to 2.4.7_002 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 2 deletions(-)
+
 commit acf0c2c7f1bc1a555d6f151c64cffe52a4ad82d5
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Oct 3 12:46:33 2010 -0400
