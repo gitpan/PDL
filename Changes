@@ -1,3 +1,322 @@
+commit db2b83d1d25b0b9f575e1ec0dc7c81ba50a900a8
+Author: Craig DeForest <zowie@dhcp-10-120.boulder.swri.edu>
+Date:   Thu Nov 4 13:50:08 2010 -0600
+
+    re-add changes originally commited to "lib" instead of "Lib" - problems with
+    nonlinear header transform support in t_fits (now announces it's ignoring them),
+    and a typo in PCi_j interpretation.
+
+ Lib/Transform/transform.pd |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
+
+commit eae79722b9a64d84a0a1422c578025143db7a2c6
+Author: Craig DeForest <zowie@z7.boulder.swri.edu>
+Date:   Thu Nov 4 13:43:01 2010 -0600
+
+    Deleted bad commit typo due to evil Mac case-insensitivity
+
+ lib/Transform/Cartography/Cartography.pm | 2909 ------------------------
+ lib/Transform/transform.pd               | 3644 ------------------------------
+ 2 files changed, 0 insertions(+), 6553 deletions(-)
+
+commit 06f129f88d72fae13870b50bee3f7f6f827808ba
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 4 09:14:30 2010 -0400
+
+    Minor change to try to fix bad commit
+    
+    win32 doesn't have a case sensitive file system so
+    the use of incorrect case for git is a problem.
+    I'm not sure how it worked anyway unless the push
+    was from another case insensitive platform and the
+    path name was corrupted to lower case...
+
+ lib/Transform/transform.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 7f517382c0324a3f6d92f75a0348b95a881e50d1
+Merge: 1327520 7c580b0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 4 08:58:49 2010 -0400
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 7c580b035410f9073b4437dc7e11cedd6aef0425
+Merge: c10f108 de98972
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Thu Nov 4 02:54:29 2010 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit c10f1087d09f0e3649b289b7b75aa8bd0a18585c
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Thu Nov 4 02:53:42 2010 -0600
+
+    Repair t_fits (oops) - stub for nonlinear transformations was causing it to return 1 instead of the transformation.
+
+ lib/Transform/transform.pd | 3644 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 3644 insertions(+), 0 deletions(-)
+
+commit 9cf9e49b396f854aeedd6889cd5a854fa2030e22
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Thu Nov 4 01:12:06 2010 -0600
+
+    Add synonym t_zenithal to t_vertical in Cartography.pm
+
+ Lib/Transform/Cartography/Cartography.pm |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
+
+commit 6fd867b32707b91f3cc36c814d944a92d0a9b503
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Thu Nov 4 01:11:28 2010 -0600
+
+    Correct typo in test description (picky, picky)
+
+ t/core.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 0e2908562177b778df43c6aa1cc3eabcede068dd
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Thu Nov 4 01:11:09 2010 -0600
+
+    Add t_cubic to transform.pd; add t_zenithal synonym to t_vertical
+    in Cartography.pm
+
+ Lib/Transform/transform.pd               |  181 ++-
+ lib/Transform/Cartography/Cartography.pm | 2909 ++++++++++++++++++++++++++++++
+ 2 files changed, 3082 insertions(+), 8 deletions(-)
+
+commit de989722228d5e6f7e65a0660fe10a7f23fd1770
+Merge: a3a95e4 ff3ca09
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Wed Nov 3 21:43:52 2010 -0600
+
+    Merge branch 'master' of ssh://lambd@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 132752061dd08d92996627ba377fae3570b16cc4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Nov 3 13:13:42 2010 -0400
+
+    Add parens to pdl constructor call
+    
+    This makes cut and paste easier into the pdl2 shell
+    as the default multiline support there does not handle
+    continued strings well.
+
+ Example/IO/wmpeg.pl |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit ff3ca09de00f681753c3b8ed62210a8fa41d2765
+Merge: 80db076 5766720
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Wed Nov 3 03:00:46 2010 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 80db076828b31c92aba9cef3773b73ca01db9c05
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Wed Nov 3 02:58:28 2010 -0600
+
+    Fixed error messages in obscure cases.
+
+ IO/Dumper.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit c1e833bfc3da7e61589c973c077e8c82d6dfc36a
+Author: Craig DeForest <zowie@Clio.local>
+Date:   Wed Nov 3 02:57:25 2010 -0600
+
+    Finally fixed the constructor bug -- passes all tests, seems to never crash.
+
+ Basic/Core/pdlcore.c.PL |  356 ++++++++++++++++++++++++++++++++++++----------
+ 1 files changed, 278 insertions(+), 78 deletions(-)
+
+commit a3a95e43ff79d4ec4bd86f7e338f32ed1cce84b7
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Nov 2 23:28:19 2010 -0600
+
+    Fix minor typo in Modules.pod
+
+ Basic/Pod/Modules.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 576672029512eeba861cdfcb374137d24069b531
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Nov 2 22:58:38 2010 -0600
+
+    Fix POD formatting and typos in complex.pd
+
+ Basic/Complex/complex.pd |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit cf573670b5eb6ae3de41c1bbb91458090d12a8dd
+Merge: 7924750 bc637c5
+Author: cosmic operator <cosmicops@arcana.cosmic.ucar.edu>
+Date:   Wed Oct 27 12:51:10 2010 -0600
+
+    Merge remote branch 'origin/master'
+
+commit 792475011ec9f5ed73ef8f0a37160c2337342c32
+Author: cosmic operator <cosmicops@arcana.cosmic.ucar.edu>
+Date:   Wed Oct 27 11:59:57 2010 -0600
+
+    Jason Lin's change to GSL/INTERP to turn off the default GSL error handler.
+    This permits errors in interpolation codes to be caught by a perl exception
+    handler.
+
+ Lib/GSL/INTERP/gslerr.h |    4 +++-
+ t/gsl_interp.t          |    9 ++++++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+commit bc637c5ce981b1ce8f0948459110a3813a1b9b02
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 26 17:56:46 2010 -0400
+
+    Update Perldl2/TODO with more issues
+    
+    These are mostly some compatability items and nice-to-haves
+    that could be useful in pdl2.
+
+ Perldl2/TODO |   30 +++++++++++++++++++++++++++++-
+ 1 files changed, 29 insertions(+), 1 deletions(-)
+
+commit 4905e4b79819d2217fbe4105364693eb5c7f6a6e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 26 17:56:14 2010 -0400
+
+    Update cygwin tmalloc.pl with optional sleep arg
+
+ cygwin/tmalloc.pl |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 7cdec40665013178ef2a187e7640e9b3cf60b359
+Author: sisyphus <sisyphus1@optusnet.com.au>
+Date:   Fri Oct 15 17:56:06 2010 +1100
+
+    t/plplot.t - replace "perl" with "$^X" in system commands
+    
+    Win32 only - makes it easier for my Win32 ppm build script
+    to successfully create ppm packages for the various perl
+    builds ... please pardon the self-indulgence.
+
+ t/plplot.t | 1048 ++++++++++++++++++++++++++++++------------------------------
+ 1 files changed, 524 insertions(+), 524 deletions(-)
+
+commit 8113c93dca843b9bacf0123b10aa8055fb17e351
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 12 19:50:24 2010 -0400
+
+    Update cygwin/INSTALL and README files
+    
+    With some information from a clean build for cygwin 1.5.25....
+
+ cygwin/INSTALL |    7 +++++--
+ cygwin/README  |    6 ++++++
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+commit 047ae5bd137ba89d0590f8ba06308960fa7b7404
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 7 12:43:47 2010 -0400
+
+    Update Perldl2/TODO
+
+ Perldl2/TODO |   39 ++++++++++++++++++++++++++-------------
+ 1 files changed, 26 insertions(+), 13 deletions(-)
+
+commit 91fbba5b956166516da855b8ac6f2c67da0a8c7a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 7 09:17:24 2010 -0400
+
+    Replace print by diag to avoid messing up test
+
+ t/core.t |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
+
+commit 87d2f486a149197861e9256b26aa1a9699701ab2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 6 10:53:34 2010 -0400
+
+    Add diag to t/dumper.t and update Perldl2/TODO
+
+ Perldl2/TODO |    5 ++++-
+ t/dumper.t   |    1 +
+ 2 files changed, 5 insertions(+), 1 deletions(-)
+
+commit 9ec22f7bf228af9220d79d2166794785eb1ab918
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 5 19:20:38 2010 -0400
+
+    Consolidate skip tests for t/flexraw_fortran.t
+    
+    Now they are all in one multi-choice conditional.  Also
+    added a check for too long $PDL::Config{TEMPDIR} and we
+    give up on this f77-format based test.
+
+ t/flexraw_fortran.t |   22 +++++++++++++---------
+ 1 files changed, 13 insertions(+), 9 deletions(-)
+
+commit b3b9eed214441560f3e797e3abf50cbcbe85085a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 5 10:04:58 2010 -0400
+
+    Missed some fixes for line length problems
+    
+    Now all uses of the possibly very long temp
+    file names are on a single fortran line.
+    The remaining work is to add test skips if
+    the fortran files still can't be compiled and
+    run to create the data...
+
+ t/flexraw_fortran.t |   12 ++++++++----
+ 1 files changed, 8 insertions(+), 4 deletions(-)
+
+commit f6e608e221fbf17fa4731065b00724e795a6336b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 5 10:04:33 2010 -0400
+
+    Update Known_problems with t/dumper.t info
+
+ Known_problems |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 48ce66f2bdf5efe4845870f2f297d7126318d5be
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 5 09:05:21 2010 -0400
+
+    Update Perldl2/TODO with completions stuff
+    
+    Recording the various idiosyncracies of Term::ReadLine::Perl
+    completion versus Term::ReadLine::Gnu completion, especially
+    as regards working on win32.
+
+ Perldl2/TODO |   15 ++++++++++++++-
+ 1 files changed, 14 insertions(+), 1 deletions(-)
+
+commit ba381bb024e3554787836b2fe08eef4e4346ef9d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 3 19:21:37 2010 -0400
+
+    Add POD to utils/perldlpp.pl
+    
+    At least we document the usage until someone gets around to
+    implementing the make option for install-time filtering...
+
+ utils/perldlpp.pl |   42 ++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 42 insertions(+), 0 deletions(-)
+
+commit a681fc7b11b97639471367b1cf4fb999a7da3c54
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 3 17:00:45 2010 -0400
+
+    Update VERSION and READMEs to 2.4.7_003
+    
+    ...for more development.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    3 ++-
+ Release_Notes  |   33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 2 deletions(-)
+
 commit bbda12d8bab868e3b5ad3d1e6451568891260bb9
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Oct 3 16:39:02 2010 -0400
@@ -108,7 +427,7 @@ Date:   Sun Oct 3 09:12:28 2010 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit 55cbeaefc4c7b009db123e9bffbd2724d7b226bc
-Merge: 2f72dff... d543632...
+Merge: 2f72dff d543632
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Oct 2 10:18:18 2010 -0400
 
@@ -154,7 +473,7 @@ Date:   Tue Sep 28 12:42:19 2010 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit ac2d45a8b82a47b2b433cb0fc0bee7104db38cc7
-Merge: 39c30ff... fa06ea1...
+Merge: 39c30ff fa06ea1
 Author: Craig DeForest <zowie@dhcp-10-120.boulder.swri.edu>
 Date:   Tue Sep 28 09:18:54 2010 -0600
 
@@ -246,7 +565,7 @@ Date:   Tue Sep 14 08:03:53 2010 -0400
  1 files changed, 8 insertions(+), 2 deletions(-)
 
 commit 05abb2c89f6402695b6f450fc7bf9b9b9680bf3f
-Merge: ee4ae3d... f46596f...
+Merge: ee4ae3d f46596f
 Author: Craig DeForest <zowie@Clio.local>
 Date:   Sun Sep 12 15:37:33 2010 -0600
 
@@ -285,7 +604,7 @@ Date:   Tue Aug 31 13:05:43 2010 -0400
  1 files changed, 6 insertions(+), 2 deletions(-)
 
 commit c092edacc1806a092c343e62a691e23d20f26b3a
-Merge: b50537d... 6d0a15e...
+Merge: b50537d 6d0a15e
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Aug 31 10:05:20 2010 -0400
 
@@ -791,7 +1110,7 @@ Date:   Sat Aug 14 15:51:48 2010 +0200
  1 files changed, 13 insertions(+), 6 deletions(-)
 
 commit 1b44f2ceec0d69ab8d429ed4b6a97325923ae415
-Merge: a6c0fe6... 3bd74f8...
+Merge: a6c0fe6 3bd74f8
 Author: Daniel Carrera <dcarrera@gmail.com>
 Date:   Sat Aug 14 15:24:00 2010 +0200
 
@@ -859,7 +1178,7 @@ Date:   Fri Aug 13 20:29:07 2010 -0400
  2 files changed, 11 insertions(+), 3 deletions(-)
 
 commit 95d13842030ddb488cc32f081205a513d9df64c1
-Merge: 9d13be7... 0833506...
+Merge: 9d13be7 0833506
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Aug 13 20:07:49 2010 -0400
 
@@ -888,7 +1207,7 @@ Date:   Fri Aug 13 20:05:35 2010 -0400
  1 files changed, 6 insertions(+), 5 deletions(-)
 
 commit 0833506d056417f267c1fc16ae615ec4e2c79adf
-Merge: aabc2a7... e26d3f1...
+Merge: aabc2a7 e26d3f1
 Author: Daniel Carrera <dcarrera@gmail.com>
 Date:   Sat Aug 14 01:43:42 2010 +0200
 
@@ -967,7 +1286,7 @@ Date:   Fri Aug 13 21:29:54 2010 +0200
  1 files changed, 3 insertions(+), 3 deletions(-)
 
 commit 65e61fb4383f8ef7b8c81daad4fa3f2b60297c38
-Merge: 1b8c7f5... 0e2bcaa...
+Merge: 1b8c7f5 0e2bcaa
 Author: Daniel Carrera <dcarrera@gmail.com>
 Date:   Fri Aug 13 21:17:00 2010 +0200
 
@@ -1015,7 +1334,7 @@ Date:   Fri Aug 13 18:26:10 2010 +0200
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit e889192e3a28ce3a7b2964bb02170a4672ef4ab2
-Merge: ecfc596... bf50b41...
+Merge: ecfc596 bf50b41
 Author: Daniel Carrera <dcarrera@gmail.com>
 Date:   Fri Aug 13 17:13:04 2010 +0200
 
@@ -1032,7 +1351,7 @@ Date:   Fri Aug 13 17:09:43 2010 +0200
  2 files changed, 503 insertions(+), 0 deletions(-)
 
 commit bf50b41f70d0dafdbdfecf925a806c3745e08620
-Merge: 62eae7e... eb48bab...
+Merge: 62eae7e eb48bab
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Aug 13 09:35:47 2010 -0400
 
@@ -1110,7 +1429,7 @@ Date:   Fri Aug 13 02:26:20 2010 +0200
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit 998656aacc7694378ca3e7b220a1e94392a0115b
-Merge: 105239f... 1d98566...
+Merge: 105239f 1d98566
 Author: Daniel Carrera <dcarrera@gmail.com>
 Date:   Fri Aug 13 02:23:23 2010 +0200
 
@@ -1470,7 +1789,7 @@ Date:   Sun Aug 1 19:59:53 2010 +1000
  1 files changed, 29 insertions(+), 79 deletions(-)
 
 commit ee4ae3db83a2c58a353162518bc627d298bd9620
-Merge: 24e935e... 0a1aa5b...
+Merge: 24e935e 0a1aa5b
 Author: Craig DeForest <zowie@Clio.local>
 Date:   Sun Aug 1 02:41:48 2010 -0600
 
@@ -2038,7 +2357,7 @@ Date:   Sun Jul 18 09:45:52 2010 +0200
  2 files changed, 4 insertions(+), 5 deletions(-)
 
 commit a0a803e9ebe27759e283f4d31bf8430530baef52
-Merge: 95fc475... 74c034e...
+Merge: 95fc475 74c034e
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Jul 17 20:38:29 2010 -0400
 
@@ -2079,7 +2398,7 @@ Date:   Sat Jul 17 13:58:00 2010 -0400
  2 files changed, 25 insertions(+), 0 deletions(-)
 
 commit 0e3bd24be00f0402c550b8fb1ceb591522fac22a
-Merge: f5dca19... 702a41f...
+Merge: f5dca19 702a41f
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu Jul 15 18:07:58 2010 -0400
 
@@ -2163,7 +2482,7 @@ Date:   Tue Jul 13 22:22:06 2010 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit ca9427a203bf187d9923690e9dab4d7f6eb00642
-Merge: 7451ff4... 8527c77...
+Merge: 7451ff4 8527c77
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Jul 13 22:20:38 2010 -0400
 
@@ -2206,7 +2525,7 @@ Date:   Sun Jul 11 14:47:06 2010 -0400
  2 files changed, 7 insertions(+), 4 deletions(-)
 
 commit 030351960f77947ed7e7bcbe0beeb41b7ec5697d
-Merge: 1819dfe... c751ef6...
+Merge: 1819dfe c751ef6
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Jul 11 10:16:36 2010 -0400
 
@@ -3209,7 +3528,7 @@ Date:   Thu Jun 10 21:59:02 2010 -0400
  1 files changed, 2 insertions(+), 1 deletions(-)
 
 commit 9423fef79712c83bcc1db2b2877b07d3de91a59a
-Merge: 4943472... 79b6146...
+Merge: 4943472 79b6146
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu Jun 10 20:08:42 2010 -0400
 
@@ -3374,7 +3693,7 @@ Date:   Thu Jun 3 19:03:04 2010 +1000
  1 files changed, 1 insertions(+), 5 deletions(-)
 
 commit 6da87ac6c32cfd0d7b620e72ee6591f061c2dc40
-Merge: 2b812b2... b9cffa4...
+Merge: 2b812b2 b9cffa4
 Author: Matthew Kenworthy <mattk@Matthew-Kenworthys-MacBook-Pro.local>
 Date:   Tue Jun 1 23:33:33 2010 +0200
 
@@ -4122,7 +4441,7 @@ Date:   Mon May 17 13:00:17 2010 +0200
  5 files changed, 1680 insertions(+), 1714 deletions(-)
 
 commit 5789093253079406e974cd391de9900d94e7b6ce
-Merge: 19cbde7... 92a971f...
+Merge: 19cbde7 92a971f
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon May 17 06:27:26 2010 -0400
 
@@ -4175,7 +4494,7 @@ Date:   Sun May 16 18:34:11 2010 -0400
  1 files changed, 5 insertions(+), 5 deletions(-)
 
 commit 15d78ce70aa721cfd0c670ef8d9e4aa29c78f6ac
-Merge: 0b98645... e3c50c1...
+Merge: 0b98645 e3c50c1
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun May 16 15:33:57 2010 -0400
 
@@ -4250,7 +4569,7 @@ Date:   Sat May 15 14:52:14 2010 -0400
  2 files changed, 1 insertions(+), 433 deletions(-)
 
 commit 31e0c88be9a8381da4cf6f978a6642f3d8b7890d
-Merge: a21804a... e2001f6...
+Merge: a21804a e2001f6
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat May 15 13:37:01 2010 -0400
 
@@ -4621,7 +4940,7 @@ Date:   Tue May 11 12:53:22 2010 -0400
  1 files changed, 11 insertions(+), 12 deletions(-)
 
 commit 5df9e244450b07bb118ee25a3f30445c3626c94f
-Merge: 4ff1dcd... 25cfae8...
+Merge: 4ff1dcd 25cfae8
 Author: David Mertens <dcmertens@gmail.com>
 Date:   Mon May 10 20:54:29 2010 -0500
 
@@ -4870,7 +5189,7 @@ Date:   Thu May 6 19:27:31 2010 +0200
  1 files changed, 26 insertions(+), 1 deletions(-)
 
 commit f5a1aba6ff80c628b8383b0eca9198164f85d819
-Merge: 53f4a4e... 31c8016...
+Merge: 53f4a4e 31c8016
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Thu May 6 11:44:28 2010 -0500
 
@@ -5064,7 +5383,7 @@ Date:   Sat May 1 12:53:33 2010 -0400
  2 files changed, 28 insertions(+), 16 deletions(-)
 
 commit cbf21ab20848ee1241930cf3e1fad282093ff02b
-Merge: 071eb86... d4a1fc4...
+Merge: 071eb86 d4a1fc4
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Apr 30 17:36:20 2010 -0400
 
@@ -5148,14 +5467,14 @@ Date:   Fri Apr 30 13:38:54 2010 -0400
  28 files changed, 4 insertions(+), 60 deletions(-)
 
 commit 31ed9b68203076d17c3dacae10f938208d42795f
-Merge: 266f1f8... 19047be...
+Merge: 266f1f8 19047be
 Author: Derek Lamb <lambd@users.sourceforge.net>
 Date:   Fri Apr 30 13:36:09 2010 -0400
 
     Merge branch 'master' of ssh://lambd@pdl.git.sourceforge.net/gitroot/pdl/pdl
 
 commit 19047beba630700b30ecd89fa6e2048859a30ea7
-Merge: bb96a70... ba65d3d...
+Merge: bb96a70 ba65d3d
 Author: Craig DeForest <zowie@Clio.local>
 Date:   Thu Apr 29 23:59:22 2010 -0600
 
@@ -5171,7 +5490,7 @@ Date:   Fri Apr 30 00:58:15 2010 -0500
  1 files changed, 93 insertions(+), 79 deletions(-)
 
 commit bb96a70629fc75e4e1e40cb89aa824924da80f2a
-Merge: 17430ad... 7501237...
+Merge: 17430ad 7501237
 Author: Craig DeForest <zowie@Clio.local>
 Date:   Thu Apr 29 23:51:20 2010 -0600
 
@@ -5332,7 +5651,7 @@ Date:   Sat Apr 24 08:51:36 2010 -0400
  1 files changed, 3 insertions(+), 0 deletions(-)
 
 commit 81d3b73f93cacb4c2f1969ca8e391dcc2e5223ba
-Merge: 66a90be... 47f525d...
+Merge: 66a90be 47f525d
 Author: Craig DeForest <zowie@Clio.local>
 Date:   Sat Apr 24 00:41:10 2010 -0700
 
@@ -5371,7 +5690,7 @@ Date:   Thu Apr 22 14:31:19 2010 -0400
  1 files changed, 15 insertions(+), 1 deletions(-)
 
 commit 4bef4ee7afc61660064d79e012ac94a9efb197ff
-Merge: 94eaa00... 4f23e3f...
+Merge: 94eaa00 4f23e3f
 Author: Craig DeForest <zowie@pcp057117pcs.wireless.calpoly.edu>
 Date:   Wed Apr 21 16:21:16 2010 -0700
 
@@ -5481,7 +5800,7 @@ Date:   Sun Apr 18 21:56:00 2010 -0400
  3 files changed, 40 insertions(+), 7 deletions(-)
 
 commit ad7d299b075e133f6b97425f08ca4f01bcb5b17b
-Merge: 3334ff5... 4061e08...
+Merge: 3334ff5 4061e08
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Apr 18 17:55:50 2010 -0400
 
@@ -6101,7 +6420,7 @@ Date:   Thu Feb 11 21:47:25 2010 -0600
  2 files changed, 122 insertions(+), 25 deletions(-)
 
 commit 5011f4d63e91d6857b6132e74e9c16afcb07b432
-Merge: 54532da... ff8da8b...
+Merge: 54532da ff8da8b
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Thu Feb 11 17:43:20 2010 -0600
 
@@ -6141,7 +6460,7 @@ Date:   Thu Feb 11 12:50:24 2010 -0600
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit edd3668e64379c6a0ad7acbfa471713e7918b3b3
-Merge: 806c75e... a6f4018...
+Merge: 806c75e a6f4018
 Author: David Mertens <david@david-laptop.(none)>
 Date:   Thu Feb 11 09:15:34 2010 -0600
 
@@ -6181,7 +6500,7 @@ Date:   Wed Feb 10 14:42:39 2010 -0500
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit aa7f2a2bac6e446c99491e4bcf660cad0123ea7d
-Merge: 114701c... 7afd98a...
+Merge: 114701c 7afd98a
 Author: data.collection <data.collection@BELVNB0361NV007.nae.ds.army.mil>
 Date:   Wed Feb 10 14:41:20 2010 -0500
 
@@ -6467,7 +6786,7 @@ Date:   Wed Jan 20 16:42:21 2010 -0600
  1 files changed, 2 insertions(+), 2 deletions(-)
 
 commit 109e4e916e3c3380f6f6bcfff3a9876f92d9826a
-Merge: 812c36e... 2e38dad...
+Merge: 812c36e 2e38dad
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Wed Jan 20 15:28:05 2010 -0600
 
@@ -6483,7 +6802,7 @@ Date:   Wed Jan 20 15:27:36 2010 -0600
  1 files changed, 22 insertions(+), 23 deletions(-)
 
 commit 2e38dadc8ce6fbc499fbd0db8af570f0efe666f1
-Merge: 7a56efd... d34aae6...
+Merge: 7a56efd d34aae6
 Author: Derek Lamb <lambd@users.sourceforge.net>
 Date:   Wed Jan 20 15:50:58 2010 -0500
 
@@ -6659,7 +6978,7 @@ Date:   Fri Jan 8 11:19:50 2010 -0500
  1 files changed, 2 insertions(+), 0 deletions(-)
 
 commit 5dea5c793e92e75cb419746d3d55d4906a60bc62
-Merge: e738fa2... 87a1e84...
+Merge: e738fa2 87a1e84
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Jan 6 13:31:21 2010 -0500
 
@@ -6696,7 +7015,7 @@ Date:   Tue Jan 5 13:42:05 2010 -0600
  1 files changed, 2 insertions(+), 1 deletions(-)
 
 commit 7acbb1a20e4163650b6e62d26cf63f1a4c1b043e
-Merge: 30d1c7b... 0ccd029...
+Merge: 30d1c7b 0ccd029
 Author: David Mertens <david@david-laptop.(none)>
 Date:   Tue Jan 5 13:37:00 2010 -0600
 
@@ -6740,7 +7059,7 @@ Date:   Tue Jan 5 12:04:45 2010 -0500
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit d0b54635a76de7e1625f6088445415630da00125
-Merge: a2da5ac... 3aaab11...
+Merge: a2da5ac 3aaab11
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Tue Jan 5 07:48:57 2010 -0600
 
@@ -7039,7 +7358,7 @@ Date:   Wed Dec 30 23:09:00 2009 -0500
  1 files changed, 6 insertions(+), 0 deletions(-)
 
 commit 117d1cdc9b1efeafd12d063315c3c01dda8d7da8
-Merge: 35321ff... bb3d913...
+Merge: 35321ff bb3d913
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Dec 30 21:30:31 2009 -0500
 
@@ -7077,7 +7396,7 @@ Date:   Tue Dec 29 11:10:41 2009 -0500
  2 files changed, 37 insertions(+), 1 deletions(-)
 
 commit 35321ff5103616716b6b02c2cf8ca1258c2559c0
-Merge: 25cf2c6... 7c31c35...
+Merge: 25cf2c6 7c31c35
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Dec 28 20:16:51 2009 -0500
 
@@ -7106,7 +7425,7 @@ Date:   Mon Dec 28 15:34:45 2009 -0500
  1 files changed, 42 insertions(+), 43 deletions(-)
 
 commit f11bd26d75d4241e9102fabfc64591bfc0c3f77d
-Merge: d0bd1af... ae53283...
+Merge: d0bd1af ae53283
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Dec 28 10:42:32 2009 -0500
 
@@ -7507,14 +7826,14 @@ Date:   Sat Dec 19 16:46:51 2009 -0500
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit a2da5ac4c70c66abd7d5205481256ff2aeb98c94
-Merge: 2df55ef... 319c72b...
+Merge: 2df55ef 319c72b
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Mon Dec 14 12:56:45 2009 -0600
 
     Merge branch 'master' of git://pdl.git.sourceforge.net/gitroot/pdl/pdl
 
 commit d0bd1af56add57a397e3dd16019bcc3d59dedbc9
-Merge: 9fb93f8... 319c72b...
+Merge: 9fb93f8 319c72b
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Dec 11 10:07:39 2009 -0500
 
@@ -7595,8 +7914,8 @@ Date:   Wed Dec 9 16:29:41 2009 -0500
 
     Update to v3.14 of ppport.h portability
 
- Basic/Core/ppport.h | 3870 +++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 files changed, 3722 insertions(+), 148 deletions(-)
+ Basic/Core/ppport.h | 3888 ++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 files changed, 3731 insertions(+), 157 deletions(-)
 
 commit affe0cc052580600bfc5bd93245fd0d14a9de6a2
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -8038,7 +8357,7 @@ Date:   Fri Oct 23 11:41:17 2009 +0200
  1 files changed, 0 insertions(+), 38 deletions(-)
 
 commit bd209c53d51fde9b0a73463657083518b2a6f4bc
-Merge: da9b755... 6b71df5...
+Merge: da9b755 6b71df5
 Author: Henning Glawe <glaweh@debian.org>
 Date:   Fri Oct 23 10:57:18 2009 +0200
 
@@ -8329,7 +8648,7 @@ Date:   Wed Oct 14 18:09:53 2009 -0400
  2 files changed, 5 insertions(+), 1 deletions(-)
 
 commit 2df55ef32ba5b858841dea766e91b99a033c7e17
-Merge: dd4e079... e93558b...
+Merge: dd4e079 e93558b
 Author: David Mertens <david@david-desktop.(none)>
 Date:   Wed Oct 14 17:06:24 2009 -0500
 
@@ -8459,7 +8778,7 @@ Date:   Wed Oct 7 17:45:43 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit 6ded129679883ead13525027aca72a91630e0b72
-Merge: 246324f... b5243ae...
+Merge: 246324f b5243ae
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Oct 7 17:35:09 2009 -0400
 
@@ -9295,7 +9614,7 @@ Date:   Wed Sep 23 16:51:26 2009 -0400
  6 files changed, 69 insertions(+), 114 deletions(-)
 
 commit 1f9a74d944f8fcf09e3d8bbf5f87133bf1d0867b
-Merge: 5fedb91... 2e3fcf6...
+Merge: 5fedb91 2e3fcf6
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 16:44:00 2009 -0400
 
@@ -9311,7 +9630,7 @@ Date:   Wed Sep 23 16:36:20 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit 5fedb919b3b95e42b0acb39b62df45d25693a3e0
-Merge: dd01556... 7677f77...
+Merge: dd01556 7677f77
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 16:10:48 2009 -0400
 
@@ -9330,7 +9649,7 @@ Date:   Wed Sep 23 16:07:08 2009 -0400
  1 files changed, 13 insertions(+), 0 deletions(-)
 
 commit dd01556cd99467dba79c1c4f24456e2e8dd91627
-Merge: 9b6b1f9... 3084dba...
+Merge: 9b6b1f9 3084dba
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 14:27:36 2009 -0400
 
@@ -9348,7 +9667,7 @@ Date:   Wed Sep 23 14:26:42 2009 -0400
  3 files changed, 10 insertions(+), 8 deletions(-)
 
 commit 9b6b1f9d1f4a2880ab179e430211af2856f71dab
-Merge: 205d5b9... 6743108...
+Merge: 205d5b9 6743108
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Sep 23 14:24:21 2009 -0400
 
@@ -10146,7 +10465,7 @@ Date:   Fri Jul 10 15:27:16 2009 -0400
  1 files changed, 2 insertions(+), 2 deletions(-)
 
 commit 100a3114b05e4afeb156485d94f89320861b697a
-Merge: 1401619... 2146da8...
+Merge: 1401619 2146da8
 Author: Chris Marshall <chm@alum.mit.edu>
 Date:   Fri Jul 10 11:25:57 2009 -0400
 
@@ -10184,7 +10503,7 @@ Date:   Thu Jul 9 22:11:39 2009 -0400
  1 files changed, 4 insertions(+), 2 deletions(-)
 
 commit 822c0e08c0243b054d6f87dcd61841083d745c46
-Merge: b1270b4... 5b15c19...
+Merge: b1270b4 5b15c19
 Author: Chris Marshall <marshallch@users.sourceforge.net>
 Date:   Thu Jul 9 21:53:00 2009 -0400
 
@@ -10221,7 +10540,7 @@ Date:   Thu Jul 9 13:09:16 2009 -0400
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit b1270b46b05019ab859b7e730eeef8a5cde34a09
-Merge: b1c7bd8... 479e8a3...
+Merge: b1c7bd8 479e8a3
 Author: Chris Marshall <marshallch@users.sourceforge.net>
 Date:   Tue Jun 30 23:17:12 2009 -0400
 
