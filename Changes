@@ -1,3 +1,106 @@
+commit 5368b77235b6cb8a795d75397dbf5f3f9e1c9f4e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 11 21:41:10 2010 -0500
+
+    Add POD for wmpeg status return values.
+
+ IO/Pnm/Pic.pm |   27 +++++++++++++++------------
+ 1 files changed, 15 insertions(+), 12 deletions(-)
+
+commit 9bdea705cef06c2e788212cae9107e59651d502e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 11 21:32:38 2010 -0500
+
+    Update Known_problems/Release_Notes for #3057542
+
+ Known_problems |    1 -
+ Release_Notes  |    4 ++++
+ 2 files changed, 4 insertions(+), 1 deletions(-)
+
+commit c7ed1fb2b46e9b597ce9052fdac1e7e4243efe8e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 11 21:25:56 2010 -0500
+
+    Make wmpeg() return/complain if no ffmpeg
+    
+    Now check if an ffmpeg executable is in PATH before
+    trying to open a pipe command to generate the output.
+    I'm not sure what is going on with the error return
+    from the open call but this seems to work ok.
+
+ IO/Pnm/Pic.pm |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+commit 027ca9c56ad6a13d1074702094a859b5fd5c413b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 11 18:24:54 2010 -0500
+
+    Move mapflex tests out of TODO in flexraw.t
+    
+    Once these tests pass, the problem is resolved.
+    They seem to pass already but just making sure...
+
+ t/flexraw.t |   85 ++++++++++++++++++++++++++++++-----------------------------
+ 1 files changed, 43 insertions(+), 42 deletions(-)
+
+commit d43f2be9213bd10296c8eace9c80b0d092a7fb2c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 11 18:16:46 2010 -0500
+
+    Update Known_problems and Release_Notes w progress
+
+ Known_problems |   11 -----------
+ Release_Notes  |   11 ++++++++++-
+ 2 files changed, 10 insertions(+), 12 deletions(-)
+
+commit e28e335bcb841fafbe5bec2c601295e3fb50af9f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 11 18:14:48 2010 -0500
+
+    Create $PDL::toolongtoprint package parameter
+    
+    This determines the largest pdl that will be printed
+    by the pdl->string routines.  Default is 10000.  Added
+    POD to Core.pm for all the PDL global params defined
+    there.
+
+ Basic/Complex/complex.pd |    2 +-
+ Basic/Core/Core.pm.PL    |   59 +++++++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 57 insertions(+), 4 deletions(-)
+
+commit f527679a006136524899f34ffff7d16a9450df8a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 11 18:12:19 2010 -0500
+
+    proj_transform.t skips all if bad PROJ4 detected
+
+ t/proj_transform.t |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+commit 21b54e604af9e4e6bc7cf0959b90a310054fd4a0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 11 17:02:03 2010 -0500
+
+    proj_transform2.t skips all if bad PROJ4 detected
+    
+    Probably should mark the PDL Proj bindings as not correctly
+    built but the warnings here might suggest a solution for
+    users with this problem.
+
+ t/proj_transform2.t |   14 +++++++++-----
+ 1 files changed, 9 insertions(+), 5 deletions(-)
+
+commit 39e64e6182872cbff18f82e8626ce875f69921c2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 11 16:20:47 2010 -0500
+
+    VERSION->2.4.7_006 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    7 ++++++-
+ Release_Notes  |   36 ++++++++++++++++++++++++++++++++++--
+ 3 files changed, 41 insertions(+), 4 deletions(-)
+
 commit 706361bd525585480ac5edbb7d395fb5d157cc79
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu Nov 11 15:46:17 2010 -0500
