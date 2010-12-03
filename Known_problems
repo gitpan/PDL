@@ -18,12 +18,6 @@ The following issues have been reported with this version of PDL:
   100% effective---but ugly.
 
 
-- On Strawberry Perl and ActiveState Perl: the pdl2 fallback to
-  perldl is broken due to win32 issues.  If you don't have
-  Devel::REPL you'll need to run perldl directly.  pdl2 will
-  warn you if you try to run it with those perls.
-
-
 - The demo 3d and 3d2 windows do not close (can not be closed)
   after the demo finishes.  You need to exit the perldl shell
   to have the window close.
@@ -48,7 +42,7 @@ The following issues have been reported with this version of PDL:
   
   *Usually* continuing with another PDL in the path will work
   BUT if you get mysterious test failures, try removing the
-  previous PDL install files and build again.
+  previous PDL install files and test/build again.
 
 
 - Various make command issues during build:
@@ -76,12 +70,12 @@ The following issues have been reported with this version of PDL:
 
 
 - The following SourceForge bugs are outstanding at time of the
-  PDL-2.4.7_006 release:
+  PDL-2.4.7_007 release:
 
   3080505    PLplot segfaults on plshades call on OS X
   3059083    Problems with FITS header handling
-  3056142    pdl2 fallback to perldl broken on win32
   3018731    NiceSlice affects code where it should not
+  3011879    pdl() constructor crashes perl for mixed ref/piddle args
   2995500    perl -d chokes on lvalue functions
   2153898    default PDL build output too long
   1994584    PDL Has no signed 8-bit integer data type

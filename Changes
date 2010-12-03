@@ -1,3 +1,216 @@
+commit f06102311eeff6b3f274f537845f7c0b099eda1e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Nov 30 10:43:46 2010 -0500
+
+    Create inc/ folder for local module copies
+    
+    I ran the use-devel-checklib command to create
+    a PDL/inc folder for local modules used by PDL.
+    It starts with a copy of Devel::CheckLib with
+    the package line munged so it will not be indexed
+    by PAUSE/CPAN indexers.
+    
+    The intent is to use this local inc/ folder to
+    develop the needed Alien::XXX modules for PDL
+    portability.  We can munge the package lines so
+    that they are not indexed until they are stable
+    and ready for release.  The first step will be
+    to implement detection functionality.  The next
+    step would be to implement install functionality.
+
+ MANIFEST              |    1 +
+ Makefile.PL           |   11 ++
+ inc/Devel/CheckLib.pm |  452 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 464 insertions(+), 0 deletions(-)
+
+commit 73eafc35f8992705f042f5864169449195def8b0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Nov 30 10:38:48 2010 -0500
+
+    Update Perldl2/TODO list for clarity
+    
+    Some tasks were done and others were confusing.  I
+    hope this rework helps with organizing any PDL-2.4.8
+    release priorities with the pdl2 shell.
+
+ Perldl2/TODO |  204 +++++++++++++++++++++++++--------------------------------
+ 1 files changed, 90 insertions(+), 114 deletions(-)
+
+commit fe981e602557a8ea0e667975c02148b532bc4d71
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 29 10:27:55 2010 -0500
+
+    Update Known_problems and Release_Notes
+
+ Known_problems |    7 -------
+ Release_Notes  |   26 +++++++++++++++++++++++++-
+ 2 files changed, 25 insertions(+), 8 deletions(-)
+
+commit 7f2764bae6655564dff4c27d229d178e89e5ea30
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 28 18:58:22 2010 -0500
+
+    Add do_print command to pdl2 shell
+    
+    Now you don't have to type $_REPL->do_print to
+    change the print output mode.
+
+ Perldl2/Plugin/PrintControl.pm |    3 +++
+ Perldl2/Profile/Perldl2.pm     |    4 ++++
+ Perldl2/TODO                   |    4 ----
+ 3 files changed, 7 insertions(+), 4 deletions(-)
+
+commit 249a5410ae778df784e5668e0d114ad8511ab01e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 28 02:03:44 2010 -0500
+
+    Update lu_decomp/lu_decomp2 documentation
+    
+    Now that lu_decomp is threaded, there is not as much
+    use for lu_decomp2.  lu_decomp2 has runs faster but
+    is more likely to fail in the decomposition process.
+
+ Basic/MatrixOps/matrixops.pd |   43 ++++++++++++-----------------------------
+ 1 files changed, 13 insertions(+), 30 deletions(-)
+
+commit e2eed63217830e7e762defba908ec3421237b864
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 27 19:16:06 2010 -0500
+
+    Make pdldoc display all matches
+    
+    This changes the default for pdldoc and the help command
+    from showing only the first matching topic to showing
+    them all in order.  The numeric selection syntax topic[$n]
+    still works, you can just page through if you want now...
+    without another help command.
+
+ Doc/Doc/Perldl.pm |   71 ++++++++++++++++++++++++++++++----------------------
+ 1 files changed, 41 insertions(+), 30 deletions(-)
+
+commit 77f54aeec496dee35e0b10ce9f935f8a24ef9c04
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 27 17:55:52 2010 -0500
+
+    Fix pdl2 fallback to perldl on win32 systems
+    
+    This is sf.net #3056142.  The problem appears
+    to be with running exec on win32 and the weak
+    cmd shell environment.  The file handles of
+    the original pdl2 script did not seem to get
+    passed to the newly exec-d perldl but opened
+    again instead.  That resulted in interleaved
+    IO between the two instances.
+    
+    The fix was to replace the exec call by a
+    do filename call instead so perl handles the
+    new program rather than the shell getting
+    involved.
+
+ Perldl2/pdl2 |   11 ++++-------
+ 1 files changed, 4 insertions(+), 7 deletions(-)
+
+commit 5a18339b35b4214ed94a1d3dab258acc492394ae
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 27 16:45:52 2010 -0500
+
+    Fix PDL::hist usage documentation
+    
+    The use of unix manpage-style [] for optional arguments
+    is confusing for perl where [] are valid language constructs.
+
+ Basic/Core/Basic.pm |   17 ++++++++++++++---
+ 1 files changed, 14 insertions(+), 3 deletions(-)
+
+commit 9367ca2000f2056bbb43f702e99d73a55ce824ce
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Nov 16 11:57:12 2010 +1100
+
+    t/plplot.t - fix up line endings
+    
+    Were window-ized from last commit
+
+ t/plplot.t | 1048 ++++++++++++++++++++++++++++++------------------------------
+ 1 files changed, 524 insertions(+), 524 deletions(-)
+
+commit 2514a2b059e5e8812e89e34c51ed0963a595a36c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 14 14:36:51 2010 -0500
+
+    Rename $PDL::FlexRaw::writeflexhdr/verbose
+    
+    Fixed the case where the $verbose and $writeflexhdr parameters
+    in the PDL::IO::FlexRaw package were actually defined in the
+    PDL::FlexRaw namespace.  This looks like legacy from when these
+    routines were at the top level PDL namespace.  Now they are
+    proper PDL::IO::FlexRaw variables.
+
+ IO/FlexRaw/FlexRaw.pm |   16 ++++++++--------
+ 1 files changed, 8 insertions(+), 8 deletions(-)
+
+commit ed1d5bef4e2230c10acfc15a5d71d6187d0d3044
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 14 14:04:54 2010 -0500
+
+    Add writeflexhdr() support to writeflex
+    
+    If the $PDL::FlexRaw::writeflexhdr is true (false by default)
+    and the file argument to writeflex() is a *file name" and not
+    a handle, writeflexhdr() will be called automatically.  I
+    think this should be the default but for back compatability
+    we have the $PDL::FlexRaw::writeflexhdr setting.
+
+ IO/FlexRaw/FlexRaw.pm |   88 +++++++++++++++++++++++++++++++-----------------
+ 1 files changed, 57 insertions(+), 31 deletions(-)
+
+commit 378b97edd477ca065d870ed25548e175df23be6e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 12 17:29:06 2010 -0500
+
+    Change info memory display units to KB and MB
+    
+    There was confusion with the previous Kb and Mb since
+    that notation usually means bits or baud rather than
+    bytes.  The capital B is clearer.
+
+ Basic/Core/Core.pm.PL |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 8c6b33be717951051f0fa47955df1b29882a2b8a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 12 15:15:18 2010 -0500
+
+    Make t/dumper.t diag output conditional
+    
+    Now that the bug appears to be fixed, we don't
+    need the diagnostics to print unless there is
+    a problem...
+
+ t/dumper.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit ad0edd267b0370996a7f01f968456c1496e69c11
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 12 10:53:08 2010 -0500
+
+    Update VERSION to 2.4.7_007 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 2 deletions(-)
+
+commit 51f1246eb4eeac9efdcff5140777abea66afb116
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 12 10:49:31 2010 -0500
+
+    Update READMEs for CPAN 2.4.7_006 release
+
+ Known_problems |   19 +++----------------
+ README         |    2 +-
+ TODO           |   15 ++++++++-------
+ 3 files changed, 12 insertions(+), 24 deletions(-)
+
 commit 5368b77235b6cb8a795d75397dbf5f3f9e1c9f4e
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu Nov 11 21:41:10 2010 -0500
