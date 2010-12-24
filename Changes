@@ -1,3 +1,119 @@
+commit 2e83d6bcd22c0d63c474306bb0ad4347c2447b17
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 18 08:26:12 2010 -0500
+
+    sf.net bug #3139697 fixed imag2d error on Mac OS X
+    
+    The imag2d() routine was using FreeGLUT-specific macros:
+    GLUT_ACTION_ON_WINDOW_CLOSE and GLUT_ACTION_CONTINUE_EXECUTION
+    which was a problem on OS X which does not support them.
+    Added check for FreeGLUT to conditionalize their use.
+
+ Graphics/Graphics2D.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 2956eab032c3ef5408ad50d9cb248eb1ccc8bb0b
+Author: Doug Hunt <dhunt@arcana.cosmic.ucar.edu>
+Date:   Wed Dec 15 14:55:56 2010 -0700
+
+    Merged PDL version of Graphics/PLplot with the stand-alone package from CPAN, version 0.53.
+    Fixed segfault in plplot.t by avoiding the problem:  pdl($pdl->sclr).  Calls to
+    pdl() with arguments that are themselves PDLs still fails.
+
+ Graphics/PLplot/Changes     |   49 +++++++++++++++++++++++++++++++++++++++++++
+ Graphics/PLplot/Makefile.PL |   18 +++++++++++++++-
+ Graphics/PLplot/plplot.pd   |   48 +++++++++++++++++++++++++++++++++++++++--
+ t/plplot.t                  |   38 +++++++++++++++++---------------
+ 4 files changed, 131 insertions(+), 22 deletions(-)
+
+commit b1376a7cb9e1ab315f3b4c5555e4b76dd53e4d46
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 11 15:11:33 2010 -0500
+
+    Update PDL::IO::FlexRaw POD for writeflex
+
+ IO/FlexRaw/FlexRaw.pm |   28 +++++++++++++++++-----------
+ 1 files changed, 17 insertions(+), 11 deletions(-)
+
+commit b44ecaac0efc81aadc66fdff825c6358f142ad7a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 11 14:21:25 2010 -0500
+
+    Add open MODE support to writeflex "filename"
+    
+    writeflex is documented to take as argument either a "filename"
+    or a FILEHANDLE however if passed something like ">filename" as
+    the file argument, it would quietly (and unexpectedly) open the
+    file ">$name" which would then be ">>filename" and the data would
+    be appended to the file rather than overwriting it.
+    
+    This modifies the "filename" option to be used explicitly if
+    passed a perl open type MODE+filename expression which might
+    avoid someone's utter confusion in the future...
+
+ IO/FlexRaw/FlexRaw.pm |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit f7f49ebb6b7e868b35d43177c5799ad480de54f0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 10 13:44:19 2010 -0500
+
+    Add working Makefile.PL for Alien::Proj4
+    
+    This is based on the existing probes for PDL::GIS::Proj
+    and PDL::Transform::Proj4 and is being converted to use
+    Devel::CheckLib as the test engine.  Once the tests are
+    working, the plan is to roll it up into an Alien::Proj4
+    module.
+
+ inc/Alien/Proj4/Makefile.PL |   94 +++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 94 insertions(+), 0 deletions(-)
+
+commit 1018f6b6743cc70d45a86b350f49e3ab48eae776
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Dec 9 13:52:22 2010 -0500
+
+    Fix inc/Devel/CheckLib ASPerl issues
+    
+    There were problems with Devel::CheckLib and ActiveState Perl.
+    
+     (1) require Devel::CheckLib fails with an error about
+         %Config::Confg being a read only value
+    
+     (2) backslashes in the windows paths were deleted making
+         the resulting @flags incorrect and unusable.
+    
+    This fix makes an explicit working copy of the needed %Config
+    entries in the _findcc() routine which should resolve the
+    compile failure.  It also sets the $keep option to the
+    quotewords() routine to true which appears to fix the bad
+    win32 paths in the option @flags.  The fixes will be pushed
+    upstream but are here in the local copy so things work.
+
+ inc/Devel/CheckLib.pm |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 976a4615e8df5bfd344efc74ad3f7c905a2b421b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 3 14:00:35 2010 -0500
+
+    Update VERSION to 2.4.7_008 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit 74726314c26b9a906087c7be062d323384e91f68
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 3 13:57:38 2010 -0500
+
+    Update Known_problems and README for CPAN
+
+ Known_problems |    3 ++-
+ README         |    1 +
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+
 commit f06102311eeff6b3f274f537845f7c0b099eda1e
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Nov 30 10:43:46 2010 -0500
