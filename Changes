@@ -1,3 +1,271 @@
+commit b75c8263b0325db2a3ecf775eba2f8cffbb5bd14
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Feb 13 13:18:55 2011 -0500
+
+    Fix plan in t/matrixops.t, update Release_Notes
+    
+    Forgot to change the number of tests to match
+    the new ones from the inv() threading bug.
+    Also updated Release_Notes in preparation
+    for a CPAN developers release.
+
+ Release_Notes |   34 +++++++++++++++++++++++++++++++---
+ t/matrixops.t |    2 +-
+ 2 files changed, 32 insertions(+), 4 deletions(-)
+
+commit 8f4c755aa477051be72b066addbadf1c649d6dec
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Feb 12 17:27:54 2011 -0500
+
+    Update Known_problems, Perldl2/TODO, Release_Notes
+    
+    Added the latest bug information and updated the TODO
+    and Release_Note regarding the resolved issue of unclosed
+    q{} operators not being detected for multiline entry.
+
+ Known_problems |    6 ------
+ Perldl2/TODO   |    8 +-------
+ Release_Notes  |    4 ++++
+ 3 files changed, 5 insertions(+), 13 deletions(-)
+
+commit 8ce5dae60367797062e5005a3492ca7bf2a7481e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Feb 12 15:54:52 2011 -0500
+
+    Update docs for lu_decomp, lu_decomp2, lu_backsub
+    
+    Partial update to the lu_* routines to document the
+    new threading and capabilities.  It would be useful
+    to review all the PDL::MatrixOps documentation to
+    verify that it is clear and matches the implementation.
+
+ Basic/MatrixOps/matrixops.pd |   70 ++++++++++++++++++++++--------------------
+ 1 files changed, 37 insertions(+), 33 deletions(-)
+
+commit c1007c40c025be98c496f4569307e58de6877398
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 10 17:12:04 2011 -0500
+
+    Add comment re anim GIF file output for wmpeg
+
+ Example/IO/wmpeg.pl |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 36190b0f32385bc1de73dc80417f2854b5966219
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 10 16:37:51 2011 -0500
+
+    Add test for inv() threading (sf.net #3172882)
+    
+    And clean up another debugging print statement.  To view
+    them, just set the $PDL::debug variable.
+
+ Basic/MatrixOps/matrixops.pd |    2 +-
+ t/matrixops.t                |   19 +++++++++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletions(-)
+
+commit 036b6b5cd24edcc0fba99be6059b9634f54e8235
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 10 12:49:46 2011 -0500
+
+    Make lu_backsug() diags conditional on $PDL::debug
+    
+    Missed one in the original commit...
+
+ Basic/MatrixOps/matrixops.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit fd71fa4d2dc6cbd735e9e26c97faa7cbaecf82ff
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 10 10:15:30 2011 -0500
+
+    Fix sf.net bug #3172882 re broken threading in inv
+    
+    Fixes to various other threading issues in the lu_decomp()
+    and lu_decomp2() appear to have cause the threading support
+    in PDL::MatrixOps::inv to break (presumably it relied on
+    some feature of the original threading implementation).
+    
+    This fixes the underlying lu_backsub() routine to handle
+    the implicit threading requirements for inv() and, I
+    believe, to correctly handle *fully* specified threading
+    with appropriate dummy dims for the input args.
+    
+    Still todo: add test cases, document threading usage, and
+    verify for more complicated combination of array sizes.
+
+ Basic/MatrixOps/matrixops.pd |   69 ++++++++++++++++++++++++++++++++++++++----
+ 1 files changed, 63 insertions(+), 6 deletions(-)
+
+commit 6914c2d4c78139186b7a8fd44658045036de1db9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Feb 6 13:18:26 2011 -0500
+
+    Update Known_problems w sf.net bug #3172882
+    
+    lu_backsub() threading is broken when both the LU
+    array and the right hand side columns to solve for
+    have their own threading dimensions.  This breaks
+    the threading for the inv() routine in PDL::MatrixOps
+
+ Known_problems |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+commit 84b86c056d9dc6036655f9b515e82d739465127a
+Merge: 4961d6e 29ddbc1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 3 17:39:19 2011 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 4961d6e0b0ad2598c3f98dfcce86df4c43cc0aa7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 3 17:36:15 2011 -0500
+
+    Fix imag2d not to exit on ESC in pdl2/perldl
+    
+    The ESC key makes imag2d() exit by default.  This adds
+    a check and just stops twiddling instead if imag2d()
+    is being run from the pdl2 or perldl shell.
+
+ Graphics/Graphics2D.pm |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
+
+commit 29ddbc1f59b275348d94d6eb344c252e1cad06b9
+Author: djerius@cfa.harvard.edu <none@none>
+Date:   Mon Jan 31 18:08:11 2011 -0500
+
+    clean up tests for PLplot functions
+    
+    * common code in tests for PLplot functions has been abstracted
+    * plsfont & plgfont interfaces are now conditional on their existence
+      (otherwise tests fail on Debian Lenny)
+    
+    * OPTIONS! file is now Perl code.
+    * all conditional code API code is now based on presence of a feature
+      rather than version
+
+ Graphics/PLplot/Makefile.PL |  101 +++++++++++++++++-------------------------
+ Graphics/PLplot/plplot.pd   |   38 +++++-----------
+ 2 files changed, 53 insertions(+), 86 deletions(-)
+
+commit afa2986b45924ffb066686ca9bfdbd9a3e98df71
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jan 30 19:38:47 2011 -0500
+
+    Clean up PAUSE/STEP key controls for imag2d()
+    
+    There are preliminary key bindings for the default
+    imag2d() windows to support SPACE to toggle pause,
+    [ . or > ] to step/move forward, and [ , or < ] to
+    move backward through frame data.
+
+ Graphics/Graphics2D.pm |   38 +++++++++++++++++++++++++++++++-------
+ 1 files changed, 31 insertions(+), 7 deletions(-)
+
+commit aef7ecb55f966814e8f086119c9c626a3df45cb0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 29 15:33:48 2011 -0500
+
+    readenvi doc/code cleanup, ignore case in hdr keys
+
+ IO/ENVI/readenvi.pdl |   38 ++++++++++++++++++++++++--------------
+ 1 files changed, 24 insertions(+), 14 deletions(-)
+
+commit efc53c9cb060973601eb3462cd04bf093c11464b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 29 15:30:58 2011 -0500
+
+    Add imag2d_update to EXPORT_OK and fix bug
+    
+    Graphics/Graphics2D.pm now has the imag2d() routine in
+    it.  Fixed a problem with imag2d_update() and realized
+    that it needed to be added to EXPORT_OK too.
+
+ Graphics/Graphics2D.pm |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 38aec698b12e5a6deb65714f5c357a9030428c29
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 18 21:35:50 2011 -0500
+
+    Update cygwin/INSTALL with ffmpeg/gifsicle notes
+    
+    This is a partial update for the instructions for
+    getting/building these two dependencies for wmpeg.
+    ffmpeg is the encoder.  gifsicle can be used to
+    optimized animated GIF file sizes.
+
+ cygwin/INSTALL |   30 +++++++++++++++++++++++++++---
+ 1 files changed, 27 insertions(+), 3 deletions(-)
+
+commit 5604cf01cead59ea53091897907407ded74cd9b0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 18 17:31:26 2011 -0500
+
+    Add uncompressed GIF animations to wmpeg docs
+    
+    It turns out that the ffmpeg "engine" will produce
+    animated GIFs if given .gif as the file extension
+    of the output file.  Who knew?  The GIF is *not*
+    compressed so is very big.  Work will need to be
+    done to optimize the file size in this case...
+
+ Example/IO/wmpeg.pl |    7 ++++-
+ IO/Pnm/Pic.pm       |   62 ++++++++++++++++++++++++++++----------------------
+ 2 files changed, 40 insertions(+), 29 deletions(-)
+
+commit 1480663584807d820c496dc74d1e997045b67612
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 18 15:42:24 2011 -0500
+
+    Update wmpeg docs re encoding MPEG vs MP4 video
+    
+    Windows Media Player has problems displaying MPEG
+    videos.  The current wmpeg implementation uses the
+    file extension to determine the encoding used.
+    As a result, it can also generate MPEG-4 files
+    which may be better displayed via WMP.  Other
+    extensions supported by ffmpeg may work as well.
+
+ IO/Pnm/Pic.pm |   22 ++++++++++++++++------
+ 1 files changed, 16 insertions(+), 6 deletions(-)
+
+commit 83d737ed8a6451d2cddc5ec07570a2416fb14117
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 4 17:27:24 2011 -0500
+
+    Add notes on PERL_MM_USE_DEFAULT environment var..
+    
+    . to INSTALL and Known_problems so folks who wish
+    to always take the default options can do so with
+    less searching.
+
+ INSTALL        |    5 +++++
+ Known_problems |   34 +++++++++++++++++++++++-----------
+ 2 files changed, 28 insertions(+), 11 deletions(-)
+
+commit ed355188636c7cdf8513ec7071016e4438549e95
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 24 09:51:07 2010 -0500
+
+    Update VERSION to 2.4.7_009 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit ac6d5f5ae77ed3a17767bc18c3759046b0c7c411
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 24 09:44:54 2010 -0500
+
+    Update Known_problems and Release_Notes
+
+ Known_problems |    1 +
+ Release_Notes  |   26 +++++++++++++++++++++++++-
+ 2 files changed, 26 insertions(+), 1 deletions(-)
+
 commit 2e83d6bcd22c0d63c474306bb0ad4347c2447b17
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Dec 18 08:26:12 2010 -0500
