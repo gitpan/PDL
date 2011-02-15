@@ -1,3 +1,130 @@
+commit 270825bdabd8c9bcda1e48d8f01927d9dd1c138b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 15 08:44:46 2011 -0500
+
+    Fix sf.net #3171702 re: missing podselect command
+    
+    Added Pod::Parser and Pod::Select to the PDL prerequisites
+    (they are in perl5 Core modules since v5.6 so this should
+    not be a problem).  Then replaced call to podselect script
+    by calling the podselect() function in Pod::Select directly.
+    
+    This should help with the many solaris FAILs on CPAN
+    testers and set the way to port PDL::Doc and others to
+    use the Core Pod modules rather than the PDL::Pod::*
+    snapshot with special fixes.
+
+ Basic/Gen/Makefile.PL |   11 +++--------
+ Basic/Pod/Makefile.PL |   11 +++--------
+ Makefile.PL           |   19 ++++++-------------
+ 3 files changed, 12 insertions(+), 29 deletions(-)
+
+commit 9749f58cce8386c14bf4f20bfc2b3afa347593a3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Feb 13 18:35:04 2011 -0500
+
+    Fix many POD errors in *.pd files
+    
+    The http://search.cpan.org site processes distribution
+    files for POD to generate their on-line docs.  Our PP
+    files actually generate the final POD in the corresponding
+    PM files.  However, the POD constructs are detected and
+    processed in the .pd files anyway.
+    
+    I ran podchecker on all the .pd files in the PDL
+    source tree and fixed almost all of the errors
+    (mainly =cut and =back without a surrounding blank
+    line).  Although the PP generators would produce
+    valid POD in the final PM output, adding the extra
+    newlines in the .pd file makes the search.cpan.org
+    processing work (better).
+    
+    The remaining POD errors that were not fixed were
+    from unresolved local links that would be resolved
+    by the generated POD.  With luck the search.cpan.org
+    conversion won't complain too much (although there
+    would be dead link in the page).
+
+ Basic/Complex/complex.pd                     |    2 +
+ Basic/Ufunc/ufunc.pd                         |   10 ++-
+ Graphics/IIS/iis.pd                          |    4 +
+ Graphics/Karma/karma.pd                      |    2 +
+ Graphics/PLplot/plplot.pd                    |   14 ++++
+ Graphics/TriD/OpenGL/opengl.pd               |    1 +
+ Graphics/TriD/OpenGLQ/openglq.pd             |    2 +
+ Graphics/TriD/Rout/rout.pd                   |    8 ++
+ IO/Browser/browser.pd                        |    6 ++
+ IO/GD/GD.pd                                  |   41 +++++++++++
+ IO/HDF/SD/SD.pd                              |   48 ++++++++++++
+ IO/HDF/VS/VS.pd                              |    2 +
+ IO/Pnm/pnm.pd                                |    8 ++
+ Lib/Compression/compression.pd               |    6 ++
+ Lib/FFTW/fftw.pd                             |    7 ++
+ Lib/GIS/Proj/Proj.pd                         |    8 ++
+ Lib/GSL/INTEG/gsl_integ.pd                   |   44 +++---------
+ Lib/GSL/INTERP/gsl_interp.pd                 |   25 ++-----
+ Lib/GSL/RNG/gsl_random.pd                    |    2 +
+ Lib/GSL/SF/airy/gsl_sf_airy.pd               |    4 +
+ Lib/GSL/SF/bessel/gsl_sf_bessel.pd           |    4 +
+ Lib/GSL/SF/clausen/gsl_sf_clausen.pd         |    4 +
+ Lib/GSL/SF/coulomb/gsl_sf_coulomb.pd         |    4 +
+ Lib/GSL/SF/coupling/gsl_sf_coupling.pd       |    4 +
+ Lib/GSL/SF/dawson/gsl_sf_dawson.pd           |    4 +
+ Lib/GSL/SF/debye/gsl_sf_debye.pd             |    4 +
+ Lib/GSL/SF/dilog/gsl_sf_dilog.pd             |    4 +
+ Lib/GSL/SF/elementary/gsl_sf_elementary.pd   |    4 +
+ Lib/GSL/SF/ellint/gsl_sf_ellint.pd           |    4 +
+ Lib/GSL/SF/elljac/gsl_sf_elljac.pd           |    4 +
+ Lib/GSL/SF/erf/gsl_sf_erf.pd                 |    4 +
+ Lib/GSL/SF/exp/gsl_sf_exp.pd                 |    4 +
+ Lib/GSL/SF/expint/gsl_sf_expint.pd           |    4 +
+ Lib/GSL/SF/fermi_dirac/gsl_sf_fermi_dirac.pd |    4 +
+ Lib/GSL/SF/gamma/gsl_sf_gamma.pd             |    4 +
+ Lib/GSL/SF/gegenbauer/gsl_sf_gegenbauer.pd   |    4 +
+ Lib/GSL/SF/hyperg/gsl_sf_hyperg.pd           |    4 +
+ Lib/GSL/SF/laguerre/gsl_sf_laguerre.pd       |    4 +
+ Lib/GSL/SF/legendre/gsl_sf_legendre.pd       |    4 +
+ Lib/GSL/SF/log/gsl_sf_log.pd                 |    4 +
+ Lib/GSL/SF/poly/gsl_sf_poly.pd               |    4 +
+ Lib/GSL/SF/pow_int/gsl_sf_pow_int.pd         |    4 +
+ Lib/GSL/SF/psi/gsl_sf_psi.pd                 |    4 +
+ Lib/GSL/SF/synchrotron/gsl_sf_synchrotron.pd |    4 +
+ Lib/GSL/SF/transport/gsl_sf_transport.pd     |    4 +
+ Lib/GSL/SF/trig/gsl_sf_trig.pd               |    4 +
+ Lib/GSL/SF/zeta/gsl_sf_zeta.pd               |    4 +
+ Lib/ImageND/imagend.pd                       |   10 +++
+ Lib/ImageRGB/imagergb.pd                     |    2 +
+ Lib/Slatec/slatec.pd                         |   17 ++++-
+ Lib/Transform/Proj4/Proj4.pd                 |    7 ++
+ Lib/Transform/transform.pd                   |  100 +++++++++++++-------------
+ 52 files changed, 384 insertions(+), 104 deletions(-)
+
+commit 652fcc2644234e0a62bd9e8ad443aa1277dad4d3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Feb 13 17:16:09 2011 -0500
+
+    Fix matrixops.pd POD to work with perldoc
+    
+    This basically involves adding =cut and a couple
+    of new lines at the end of each string in the
+    Doc section of the pp_def() routines.  I also
+    ran podchecker on the file to ensure there were
+    not other problems
+
+ Basic/MatrixOps/matrixops.pd |   29 ++++++++++++++++++++++-------
+ 1 files changed, 22 insertions(+), 7 deletions(-)
+
+commit 47b6083f7274e3e1f4c893859dca9b904bd4f871
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Feb 13 13:39:12 2011 -0500
+
+    Update VERSION to 2.4.7_010 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit b75c8263b0325db2a3ecf775eba2f8cffbb5bd14
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Feb 13 13:18:55 2011 -0500

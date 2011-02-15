@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               PDL
-version:            2.4.7_009
+version:            2.4.7_010
 abstract:           Perl Data Language
 author:
     - PerlDL Developers (perldl@jach.hawaii.edu)
@@ -18,6 +18,8 @@ requires:
     Filter::Util::Call:   0
     Inline:               0.43
     OpenGL:               0.63
+    Pod::Parser:          0
+    Pod::Select:          0
     Storable:             1.03
     Text::Balanced:       0
 no_index:
