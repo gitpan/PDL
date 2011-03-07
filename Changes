@@ -1,3 +1,175 @@
+commit bb3b3bba1dd9cb473918c8e82777f461d3ec96db
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 7 15:06:09 2011 -0500
+
+    Update Release_Notes for CPAN 2.4.7_011 release
+
+ Release_Notes |   15 ++++++++++++++-
+ 1 files changed, 14 insertions(+), 1 deletions(-)
+
+commit 77e675967f3865b809ffaa413f2f65a52ff4a2ab
+Author: Judd Taylor <judd@black.qos.loc>
+Date:   Mon Feb 28 21:26:07 2011 +0000
+
+    Fixed test library issues when a previous version of PDL is in the path.
+
+ t/gd_oo_tests.t     |   22 ++++++++++++-----
+ t/gd_tests.t        |   18 ++++++++++----
+ t/gis_proj.t        |   21 +++++++++++-----
+ t/hdf_sd.t          |   20 +++++++++++----
+ t/hdf_vdata.t       |   20 +++++++++++----
+ t/hdf_vgroup.t      |   18 ++++++++++----
+ t/proj_transform.t  |   64 ++++++++++++++++++++++++++++++++------------------
+ t/proj_transform2.t |   28 +++++++++++++++-------
+ 8 files changed, 143 insertions(+), 68 deletions(-)
+
+commit ea6bb9d44ac0d8cad817a62dfac13dabd0db9f02
+Author: Judd Taylor <judd@black.qos.loc>
+Date:   Fri Feb 25 19:19:44 2011 +0000
+
+    See my last commit... I forgot to save the test file before I committed it...
+
+ t/gd_oo_tests.t |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 511cea0633717956e8c41d5dd1659cd38c35a285
+Author: Judd Taylor <judd@black.qos.loc>
+Date:   Fri Feb 25 19:14:36 2011 +0000
+
+    Added some new functions to the PDL::IO::GD OO interface. These
+    functions allow you to extract a binary blob of image data in a
+    particular format and use it elsewhere (like Qt::Image, hopefully).
+    
+    Also added a new test for this functionality, and merged in some
+    additional changes I found I had laying around on my dev version
+    here. These include some better error handling in new(), as well
+    as a fix for creating the image objects from image blobs.
+
+ IO/GD/GD.pd     |  153 +++++++++++++++++++++++++++++++++++++++++++++++++++----
+ t/gd_oo_tests.t |    9 +++-
+ 2 files changed, 149 insertions(+), 13 deletions(-)
+
+commit 0d7c8093903e3f57b14ed683f2b2b5c91c1bba01
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 24 14:18:09 2011 -0500
+
+    Docs clean up and update with clarification
+
+ INSTALL        |    7 ++--
+ Known_problems |   36 +++++--------------
+ TODO           |  103 +-------------------------------------------------------
+ 3 files changed, 15 insertions(+), 131 deletions(-)
+
+commit fe6a1ddd3c401134195d84565add79e3838a846c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 24 14:17:43 2011 -0500
+
+    Update in/Devel/CheckLib.pm to latest CPAN version
+
+ inc/Devel/CheckLib.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ab858b1f4155f81b2323ca27b0473d814a676e8f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 18 14:56:40 2011 -0500
+
+    Update MANIFEST and MANIFEST.SKIP
+    
+    Removed the unused and unimplemented TriD modules and
+    added some filter lines to MANIFEST.SKIP.
+
+ MANIFEST      |  283 ++++++++++++++++++++++++++++-----------------------------
+ MANIFEST.SKIP |   15 +++
+ 2 files changed, 155 insertions(+), 143 deletions(-)
+
+commit 06b9de6cb847bf9e1bb7cd1cd45e96897d30d349
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 18 14:41:29 2011 -0500
+
+    Clean out unimplemented TriD classes
+    
+    Geomview.pm, GraphBox.pm and Pyramid.pm were all stubs in
+    the TriD/ directory with no implementation nor any usage
+    elsewhere in PDL.  Deleting the PM files to avoid confusion
+    in the future (i.e., rediscovering that they are stubs).
+
+ Graphics/TriD/TriD.pm          |    1 +
+ Graphics/TriD/TriD/Geomview.pm |    2 --
+ Graphics/TriD/TriD/GraphBox.pm |   18 ------------------
+ Graphics/TriD/TriD/Pyramid.pm  |   13 -------------
+ 4 files changed, 1 insertions(+), 33 deletions(-)
+
+commit 3e55f2c809ea1ee71beabcf5567cedf6982505f6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 18 11:07:57 2011 -0500
+
+    Remove prompt when duplicate PDL is in path
+    
+    The Makefile.PL checks for another PDL installation and
+    would ask to continue.  The warning message is now formatted
+    to be more visible and the user is not prompted.  It was
+    a bit annoying since any PDL upgrade or test would result
+    in the prompt.
+
+ Makefile.PL |   30 +++++++++++++++---------------
+ 1 files changed, 15 insertions(+), 15 deletions(-)
+
+commit b84c25fd652526ec1aedf973ebed5c809a6f9c9d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 18 10:37:38 2011 -0500
+
+    Minor update to Perldl2/README
+
+ Perldl2/README |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
+
+commit dc647ebce5bb9ea84b922523627385a55f147c34
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 18 10:28:29 2011 -0500
+
+    Fix sf.net bug #3185864 (bad adev in statsover)
+    
+    statsover() gave an incorrect result for ADEV for
+    non-badvalue pdls.  This fixes the output to match
+    the bad value code and the documentation.
+
+ Basic/Primitive/primitive.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 65b6ee69ce24959d24e794b5cf5564e8b932e4da
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 15 13:00:36 2011 -0500
+
+    Minor POD cleanup for lu_XXX routines
+
+ Basic/MatrixOps/matrixops.pd |   36 +++++++++++++++---------------------
+ 1 files changed, 15 insertions(+), 21 deletions(-)
+
+commit 06368197ce2b2291bd62efe2464f54b8a7547978
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 15 10:22:46 2011 -0500
+
+    Update DEPENDENCIES, Known_problems, README
+    
+    Minor wording changes and updated information
+    regarding Pod::Parser and Pod::Select dependencies.
+
+ DEPENDENCIES   |   18 +++++++++---------
+ Known_problems |    6 ------
+ README         |    6 +++---
+ 3 files changed, 12 insertions(+), 18 deletions(-)
+
+commit cfbc72e1b33da15c0b46c330de4aa00dcec93e5a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 15 09:05:53 2011 -0500
+
+    Update VERSION to 2.4.7_011 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   35 ++++++++++++++++++++++++++++++++++-
+ 3 files changed, 36 insertions(+), 3 deletions(-)
+
 commit 270825bdabd8c9bcda1e48d8f01927d9dd1c138b
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Feb 15 08:44:46 2011 -0500
