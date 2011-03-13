@@ -1,5 +1,10 @@
 #!/usr/local/bin/perl
 #
+# This is an example program from the legacy TriD/OpenGL/examples
+# directory moved here for reference.  It only uses OpenGL features
+# so can probably be deprecated in favor of the Perl OpenGL
+# examples eventually.
+#
 #     clip
 #
 # This program demonstrates arbitrary clipping planes.
@@ -23,18 +28,8 @@
 #        i.e. elements of a list are put on the call stack
 # 
 
-
-# The following "use blib" line is needed so that "use" is 
-# able to find the built OpenGL module (the one created by doing
-# a "make" in the above directory).
-# Comment it out if you are using/testing the "installed" module.
-# i.e. if you did a "make install" then you dont need to look in ../blib
-#
-
-use blib "../../../..";
-
-use PDL::Graphics::OpenGL;
-
+use PDL::Graphics::OpenGL::Perl::OpenGL;
+use OpenGL qw(:all);
 
 sub tacky_cube {
     local($s) = @_;
@@ -72,7 +67,7 @@ sub add_clip_plane {
     # give the plane a slight tilt-away to prove we're not just
     # clipping against the view volume
     @eqn = (0.0, -0.3, -1.0, 1.2);
-    glpClipPlane(GL_CLIP_PLANE0, @eqn);
+    OpenGL::glpClipPlane(GL_CLIP_PLANE0, @eqn);
     glEnable(GL_CLIP_PLANE0);
 }
 
@@ -96,7 +91,7 @@ sub myReshape {
     glLoadIdentity ();
 }
 
-glpOpenWindow(width => 400, height => 400,
+OpenGL::glpOpenWindow(width => 400, height => 400,
 	      attributes => [GLX_RGBA,GLX_DOUBLEBUFFER]);
 glClearColor(0,0,0,1);
 glShadeModel (GL_FLAT);
@@ -109,7 +104,7 @@ glTranslatef (0.0, 0.0, -5.0);
 add_clip_plane;
 
 # test glGetClipPlane()
-($a,$b,$c,$d)=glpGetClipPlane(GL_CLIP_PLANE0);
+($a,$b,$c,$d)=OpenGL::glpGetClipPlane(GL_CLIP_PLANE0);
 print "Clipping plane (a,b,c,d) = ($a,$b,$c,$d)\n";
 
 $spin=0;

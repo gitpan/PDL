@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               PDL
-version:            2.4.7_011
+version:            2.4.7_012
 abstract:           Perl Data Language
 author:
     - PerlDL Developers (perldl@jach.hawaii.edu)

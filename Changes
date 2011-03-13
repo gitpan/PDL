@@ -1,3 +1,190 @@
+commit afa5dbcf51e3b167938320b2f10bbbec70b37f9f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 13 11:15:28 2011 -0400
+
+    Update MANIFEST for PDL-2.4.7_012 release
+
+ MANIFEST |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
+
+commit 2faff446cb4eaa3bb7f43358070ce42b2cfb1d10
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 13 11:13:07 2011 -0400
+
+    Update Known_problems and Release_Notes for CPAN
+    
+    This is the for the CHM/PDL-2.4.7_012.tar.gz developers
+    release.
+
+ Known_problems |   13 +++++++++++++
+ README         |    6 ++++--
+ Release_Notes  |   40 +++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 56 insertions(+), 3 deletions(-)
+
+commit 7bc60f05ae2e98445269b3fa41d5f682c354d2c7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 12 14:28:00 2011 -0500
+
+    Mv clip from TriD/OpenGL/examples to Example/TriD/
+
+ Example/TriD/clip.pl |  111 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 111 insertions(+), 0 deletions(-)
+
+commit 3e8677ce1905c878ac06cb89ccf93aa86cd7c892
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 12 14:13:53 2011 -0500
+
+    Update MANIFEST with TriD/OpenGL removal
+
+ MANIFEST |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 9d36b0f013e1f58865f244b66050cc7176d50957
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 12 14:08:26 2011 -0500
+
+    Added INTERNATIONALIZATION file with i18n notes
+    
+    PDL does not have internationalization support beyond
+    that provided by perl itself.  In fact, some of the
+    code may be specific to English and ASCII for file names
+    and strings.
+
+ INTERNATIONALIZATION |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
+
+commit cb3c29ed09232ee4abbc242451237087bd330fc9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 12 14:04:51 2011 -0500
+
+    Remove deprecated TriD OpenGL build code
+    
+    The legacy X11+PP build of TriD OpenGL bindings has been
+    removed.  You'll need to use the new Perl OpenGL based
+    build which has proven to be more portable and reliable.
+    This prepares TriD graphics development for the next
+    stage of refactoring for support and functionality.
+    
+    The t/opengl.t was updated not to run if the TriD graphics
+    had not been built.
+
+ Graphics/Makefile.PL               |  189 +------
+ Graphics/TriD/Makefile.PL          |   65 +--
+ Graphics/TriD/OpenGL/Makefile.PL   |   37 --
+ Graphics/TriD/OpenGL/README        |   22 -
+ Graphics/TriD/OpenGL/examples/clip |  116 ----
+ Graphics/TriD/OpenGL/opengl.pd     | 1076 ------------------------------------
+ Makefile.PL                        |    1 -
+ t/opengl.t                         |   36 +-
+ 8 files changed, 51 insertions(+), 1491 deletions(-)
+
+commit 2a6b211deb18281766182674bad0445cc7bfa67d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 12 01:46:07 2011 -0500
+
+    Skip GSL tests if WITH_GSL=>0
+    
+    NOTE: need to update t/gsl_rng.t to use Test::More at some point.
+
+ Lib/GSL/Makefile.PL |   17 ++++++++++-------
+ t/gsl_diff.t        |   25 ++++++++++++++-----------
+ t/gsl_integ.t       |   26 ++++++++++++++------------
+ t/gsl_interp.t      |   20 +++++++++++++-------
+ t/gsl_mroot.t       |   25 +++++++++++++------------
+ t/gsl_rng.t         |    5 +++--
+ t/gsl_sf.t          |   27 +++++++++++++++------------
+ 7 files changed, 82 insertions(+), 63 deletions(-)
+
+commit c974e38b0aeb6019d4eb127cae0213a43eb84b98
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 12 01:45:38 2011 -0500
+
+    Update MANIFEST to remove Karma
+
+ MANIFEST |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
+
+commit 69eb0c8a23fc2da7218bc9819fa6849ebc50dcaf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 11 20:59:57 2011 -0500
+
+    Remove Karma from PDL distribution
+    
+    The last stable CPAN distribution with Karma code
+    in it will be PDL-2.4.7.
+
+ DEPENDENCIES               |    7 +-
+ Graphics/Karma/Makefile.PL |   97 -----
+ Graphics/Karma/karma.pd    |  836 --------------------------------------------
+ Graphics/Makefile.PL       |    2 +-
+ 4 files changed, 3 insertions(+), 939 deletions(-)
+
+commit 5999e96d671b006538c710fc0b55d31949514dd3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 10 14:10:17 2011 -0500
+
+    Update Known_problems, Release_Notes, Perldl2/TODO
+
+ Known_problems |    1 +
+ Perldl2/TODO   |   16 +++++++++++-----
+ Release_Notes  |   54 +++++++++++++++++++++++++++---------------------------
+ 3 files changed, 39 insertions(+), 32 deletions(-)
+
+commit 5d23fb4ab0059cbfb11b09a6148393b33f6537fb
+Merge: 38deba8 3a9d10d
+Author: Craig DeForest <zowie@dhcp-10-158.boulder.swri.edu>
+Date:   Wed Mar 9 16:11:49 2011 -0700
+
+    Merge branch 'master' of ssh://zowie@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 38deba8b92bd1b742e7373d36f43a053699f199c
+Author: Craig DeForest <zowie@dhcp-10-158.boulder.swri.edu>
+Date:   Wed Mar 9 16:11:09 2011 -0700
+
+    fix constructor bugs, include a larger and hopefully more-complete set of tests.
+
+ Basic/Core/Core.pm.PL   |    7 +-
+ Basic/Core/pdlcore.c.PL |  330 ++++++++++++++++++++++++++++++-----------------
+ t/constructor.t         |  194 ++++++++++++++++++++++++++--
+ 3 files changed, 397 insertions(+), 134 deletions(-)
+
+commit 3a9d10df78b122a495ee92824cb2108424d539f8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 7 18:51:20 2011 -0500
+
+    Doc updates to perldl and the FAQ
+
+ Basic/Pod/FAQ.pod |  136 +++++++++++++++++++++++++++--------------------------
+ perldl.PL         |    2 +-
+ 2 files changed, 70 insertions(+), 68 deletions(-)
+
+commit 15f0bf528629e70ea5097106ae1f2a6d0bc6b7b9
+Merge: 33628d2 7f92a5b
+Author: Craig DeForest <zowie@dhcp-10-158.boulder.swri.edu>
+Date:   Mon Mar 7 14:30:54 2011 -0700
+
+    Merge branch 'master' of ssh://zowie@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 33628d2a7ac7b897f14739008a51758f71ccc2d3
+Author: Craig DeForest <zowie@dhcp-10-158.boulder.swri.edu>
+Date:   Mon Mar 7 14:30:27 2011 -0700
+
+    commented out some debugging lines
+
+ Lib/Transform/transform.pd |  159 +++++++++++++++++++++++++++++++++++++++-----
+ 1 files changed, 142 insertions(+), 17 deletions(-)
+
+commit 7f92a5b7f77d8eb38c09604aace73a85a4946ca9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 7 15:37:49 2011 -0500
+
+    Update VERSION to 2.4.7_012 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   74 ++++++++++++++++++++++++++++++++++++++++----------------
+ 3 files changed, 55 insertions(+), 23 deletions(-)
+
 commit bb3b3bba1dd9cb473918c8e82777f461d3ec96db
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Mar 7 15:06:09 2011 -0500

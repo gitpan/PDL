@@ -1,4 +1,4 @@
-Release notes for PDL 2.4.7_011 --------------------------
+Release Notes for PDL 2.4.7_012 --------------------------
 
 General Notes:
 
@@ -8,7 +8,7 @@ General Notes:
      and everything may not work correctly or have complete
      documentation.
 
-   - These Release Notes may not be fully complete.  Please
+   - These release notes may not be fully complete.  Please
      see Changes (from the git log) for full details.
 
    - All tests may not pass, especially ones corresponding
@@ -18,10 +18,80 @@ General Notes:
      cpan shell may be used by specifying the distribution
      path rather than just the module name, e.g.:
 
-       cpan> get  CHM/PDL-2.4.7_011.tar.gz
-       cpan> make CHM/PDL-2.4.7_011.tar.gz
-       cpan> test CHM/PDL-2.4.7_011.tar.gz
-       cpan> look CHM/PDL-2.4.7_011.tar.gz
+       cpan> get  chm/pdl-2.4.7_012.tar.gz
+       cpan> make chm/pdl-2.4.7_012.tar.gz
+       cpan> test chm/pdl-2.4.7_012.tar.gz
+       cpan> look chm/pdl-2.4.7_012.tar.gz
+
+
+Highlights:
+
+ * Fixed pdl constructor bugs
+
+   - Include a larger and more-complete set of tests.
+
+   - Fixes SF.net bugs: #3011879, #3080505, and #3139088.
+
+   - Please test and verify.
+
+ * Legacy (deprecated) X11+PP build of TriD OpenGL bindings
+   has been removed
+
+     You must use the new Perl OpenGL based build which has
+     proven to be more portable and reliable.  This prepares
+     TriD graphics development for the next stage of refactoring
+     for support and functionality.
+
+ * More tests have been updated to not run unless the feature
+   they test was actually built.  This addresses the possible
+   mysterious test failures caused by previous PDL installs
+   in the perl path at build time.
+
+   - t/opengl.t will not run if TriD graphics have not been built
+
+   - t/gsl*.t tests will not run if WITH_GSL => 0
+
+ * Remove Karma support code from PDL distribution
+    
+     The last stable CPAN distribution with Karma code
+     in it (though deprecated) will be PDL-2.4.7.
+
+ * Added INTERNATIONALIZATION file with i18n notes
+
+     PDL does not have internationalization support beyond
+     that provided by perl itself.  In fact, some of the
+     code may be specific to English and ASCII for file names
+     and strings.  This file is a place holder and reminder
+     to address these issues.
+
+ * Some documentation and FAQ updates.
+
+
+    
+Release Notes for PDL 2.4.7_011 --------------------------
+
+General Notes:
+
+ * This is a developers release!
+ 
+   - It is a snapshot of the current git development tree
+     and everything may not work correctly or have complete
+     documentation.
+
+   - These release notes may not be fully complete.  Please
+     see Changes (from the git log) for full details.
+
+   - All tests may not pass, especially ones corresponding
+     to issues in Known_problems.
+   
+   - Manual build/install is recommended although the
+     cpan shell may be used by specifying the distribution
+     path rather than just the module name, e.g.:
+
+       cpan> get  chm/pdl-2.4.7_011.tar.gz
+       cpan> make chm/pdl-2.4.7_011.tar.gz
+       cpan> test chm/pdl-2.4.7_011.tar.gz
+       cpan> look chm/pdl-2.4.7_011.tar.gz
 
 
 Highlights:
@@ -31,12 +101,12 @@ Highlights:
  
  * New binary blob support in PDL::IO::GD::OO
 
- * Changed interactive prompt when duplicate PDL is
-   found at PDL config time.  Now just warn.
+ * Changed from interactive prompt when duplicate PDL is
+   found at PDL config time.  Now we just warn.
  
  * Fixed sf.net bug #3185864 (bad adev in statsover)
 
- * Minor POD cleanup for lu_XXX routines in PDL::MatrixOps
+ * Minor pod cleanup for lu_xxx routines in PDL::MatrixOps
 
  * Spot fixes to usual README, docs,..
 
