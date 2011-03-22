@@ -1,3 +1,64 @@
+Release Notes for PDL 2.4.7_013 --------------------------
+
+General Notes:
+
+ * Last developers release before the 2.4.8 pre-release
+
+ * This is a developers release!
+ 
+   - It is a snapshot of the current git development tree
+     and everything may not work correctly or have complete
+     documentation.
+
+   - These release notes may not be fully complete.  Please
+     see Changes (from the git log) for full details.
+
+   - All tests may not pass, especially ones corresponding
+     to issues in Known_problems.
+   
+   - Manual build/install is recommended although the
+     cpan shell may be used by specifying the distribution
+     path rather than just the module name, e.g.:
+
+       cpan> get  chm/pdl-2.4.7_013.tar.gz
+       cpan> make chm/pdl-2.4.7_013.tar.gz
+       cpan> test chm/pdl-2.4.7_013.tar.gz
+       cpan> look chm/pdl-2.4.7_013.tar.gz
+
+
+Highlights:
+
+ * readflex/writeflex/mapflex now support reading and writing
+   piddles with bad value support enabled.  This was sf.net
+   feature request #3028127, "add badvalue support to FlexRaw".
+   
+   On writeflex, a piddle with badflag==1 will have a keyword
+   badvalue added to the header file and an additional value
+   if badvalue is != orig_badvalue for that type.
+   
+   On readflex, a piddle with the badvalue header will
+   automatically have its badflag set and its badvalue as well
+   if it is not the default.
+
+ * New PDL::Constants module providing PI and E
+
+ * New refresh.pdl in Example/PLplot.  This provides
+   some of the same functionality as in the PDL
+   PGPLOT graphics.
+
+ * Inplace support added for PDL::Complex operations
+
+ * OPENGL_LIBS, OPENGL_INC and OPENGL_DEFINE
+   no longer used in perldl.conf as the Perl
+   OpenGL binding is now required for TriD graphics.
+ 
+ * Additional code clean up now that PDL::Karma
+   graphics are no longer provided.
+ 
+ * Various bug and documentation fixes.
+
+
+    
 Release Notes for PDL 2.4.7_012 --------------------------
 
 General Notes:

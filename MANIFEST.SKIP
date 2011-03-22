@@ -92,6 +92,8 @@ RCS
 ^Basic/Ufunc/Ufunc\.xs
 ^Demos/BAD2_demo.pm$
 ^Demos/BAD_demo.pm$
+^Demos/TkTriD_demo.pm$
+^Demos/TriD/test6.p$
 ^Doc/Doc/Config.pm$
 ^Doc/Pod/pod2usage$
 ^Doc/Pod/podselect$
@@ -100,8 +102,6 @@ RCS
 ^Doc/pdlhead2item$
 ^Gen
 ^Graphics/IIS/IIS\..*
-^Graphics/Karma/Karma\..*
-^Graphics/Karma/\.tx\.defaults
 ^Graphics/PGPLOT/PGPLOT.c
 ^Graphics/PGPLOT/Window/Window.c
 ^Graphics/PLplot/OPTIONS!
@@ -122,6 +122,7 @@ RCS
 ^Graphics/TriD/OpenGLQ/OpenGLQ\.*
 ^Graphics/TriD/OpenGLQ/blib
 ^Graphics/TriD/Rout/Rout\.*
+^Graphics/TriD/TriD/Tk.pm$
 ^IO/Browser/Browser\..*
 ^IO/GD/GD\.c
 ^IO/GD/GD\.pm
@@ -251,3 +252,8 @@ subdirs
 ^debian/filter-test.pl
 ^inc/Alien/Proj4/Makefile.PL
 ^inv-data.pl
+.exe$
+^chm-notes/.*
+^Graphics/TriD/OpenGLQ/oglq-expand.pl$
+^Lib/Transform/Proj4/Makefile.PL-gis$
+^Perldl2/trgnu-ctrl-c.txt$

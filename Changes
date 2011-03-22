@@ -1,3 +1,377 @@
+commit dba8d97abc94741dde9d88e49e4497e559c17262
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Mar 21 16:43:41 2011 -0600
+
+    Cleanup of PLplot's Makefile.PL
+    
+    'my'd some variables. Also changed the LDDLFLAGS entry so that it works on OS X, and should not impact other systems.
+
+ Graphics/PLplot/Makefile.PL |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 9107f758dd54f96f435ac4ecd0a4b599cfe3b3a7
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Mar 21 16:12:26 2011 -0600
+
+    Help HDF find libsz on non-linux architectures.
+    
+    Newer versions of hdf need libsz.  Makefile.PL was hardcoded to look for libsz.so.  I added .dylib and .dll suffixes for OSX and mswin32 respectively. The default remains to look for .so, so we're no worse off than before. Probably there is a better way to do that, though.
+
+ IO/HDF/Makefile.PL |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
+
+commit 95162ecb090f75384eecdbc8272bad0228065c4d
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Mar 21 15:01:58 2011 -0600
+
+    Patches for PDL::Opt::Simplex
+    
+    InSuk Joung provided some patches for PDL::Opt::Simplex and the second Example back in July 2009 on the mailing list. Just recently also provided a test file simplex.t.  Tests pass just fine on my machine.
+    Add test, package patch, and Example patch for PDL::Opt::Simplex, all from InSuk Joung
+
+ Example/Simplex/tsimp2.pl  |   14 ++-
+ Lib/Opt/Simplex/Simplex.pm |  201 +++++++++++++++++++++++++------------------
+ t/simplex.t                |   51 +++++++++++
+ 3 files changed, 178 insertions(+), 88 deletions(-)
+
+commit 7fe662dd50bc7609f24d15467f109a2102196880
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Mar 21 14:04:25 2011 -0600
+
+    Applied Christian Soeller's patch for FFTW on 64-bit systems.
+
+ Lib/FFTW/fftw.pd |   20 ++++++++++----------
+ 1 files changed, 10 insertions(+), 10 deletions(-)
+
+commit 170e231167ac0bab0957200fb73b4127c65a1c1c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 21 00:02:14 2011 -0400
+
+    Move pdl from string tests to pdl_from_string.t
+    
+    We still need some more exhaustive tests but splitting
+    these into a separate file will help clean things up.
+
+ t/core.t            |   99 +-------------------------------------------------
+ t/pdl_from_string.t |  100 ++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 100 insertions(+), 99 deletions(-)
+
+commit 746c9370ca2263a7d3fa4649311f5bce5b0d1393
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 23:47:07 2011 -0400
+
+    Update Release_Notes with FlexRaw badvalue support
+
+ Release_Notes |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
+
+commit 3ccdc66b5421e5355a28788b1b1db63ebf7f77fe
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 22:49:15 2011 -0400
+
+    Fix FlexRaw bad value support
+    
+    There were some problems in the _read_flexhdr() state machine
+    which failed on t/flexraw_fortran.t.  This completes the basic
+    implemenation of feature request on sf.net #3028127,
+    "add badvalue support to FlexRaw".  Yet to do: add some tests,
+    documentation, handle/verify works with NaNs for bad values
+    and for float/double badvalue()'s.
+
+ IO/FlexRaw/FlexRaw.pm |   49 ++++++++++++++++++++++++++++++++-----------------
+ 1 files changed, 32 insertions(+), 17 deletions(-)
+
+commit c36b3f92a411f1d08dcfa2e0c3c1e31e06915400
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 19:06:14 2011 -0400
+
+    Add bad value support to PDL::IO::FlexRaw
+    
+    Still need to add some tests but the idea is that after
+    the Dims in the FlexRaw header, on the same line, if
+    $pdl->badflag then the token 'badvalue' is added.  If
+    the $pdl->badvalue is not the $pdl->orig_badvalue then
+    that value is added afterwards.  This is a workaround
+    to the problem of uniquely saving and restoring a float
+    or double value from a string.  Until that code is
+    in, we just support defaults.  NOTE: need to add a
+    test (and possibly code) to handle the NaN as bad value
+    case...
+
+ IO/FlexRaw/FlexRaw.pm |   35 +++++++++++++++++++++++++++--------
+ 1 files changed, 27 insertions(+), 8 deletions(-)
+
+commit 00348bd331a858a01c82ac1a2c4ca875c4ec1a00
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 15:12:23 2011 -0400
+
+    Add CPAN Testers information to FAQ
+    
+    Still need a 1-click way for folks to test PDL
+    and get their reports sent in but at least the
+    reference is a start.
+
+ Basic/Pod/FAQ.pod |   12 ++++++++++--
+ 1 files changed, 10 insertions(+), 2 deletions(-)
+
+commit 4cf835f53313900f38ec6746e4758afa7f9dcb28
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 12:57:22 2011 -0400
+
+    Add cygwin UG ref for memory problems
+    
+    The Cygwin users guide has a section on changing the maximum
+    memory limits for cygwin.  Added the URL to Known_problems
+    and cygwin/INSTALL to help cygwin users work around the problem.
+
+ Known_problems |    4 +++-
+ cygwin/INSTALL |    4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+commit 5cbd6693d12dce7737e83b412a13c89285709aad
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 12:54:00 2011 -0400
+
+    Add TODO note on how to fix q alias and multiline
+
+ Perldl2/TODO |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit 49495fe4acdda5e68c7033790234ce041667c154
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 12:24:25 2011 -0400
+
+    Add $PDL::toolongtoprint to default .perldlrc
+    
+    By putting this in the default.perldlrc and including
+    comments for the definitions of the other key parameters
+    from PDL::Core, it is hoped that these will be easier
+    to find when someone needs to change them.
+
+ Basic/default.perldlrc |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
+
+commit ea8e589cea00352442fec37e4701ccbbad4720b5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 12:08:38 2011 -0400
+
+    Remove final Tk refs in PDL modules
+    
+    The current Perl OpenGL TriD interface is platform
+    neutral and uses GLUT/FreeGLUT to provide the OS and
+    user interactivity.  This does not support specific
+    X11 windows nor the legacy PDL::Graphics::TriD::Tk
+    widget.  Following the PDL-2.4.8 release, it is
+    planned to refactor the remaing TriD code to allow
+    for PDL TriD graphics to be embedded in multiple
+    widget sets: Qt4, wxWidgets, Tk, and others.
+    
+    This completes the removal of the Tk refs in other
+    code and documentation.  The Tk demo source, example
+    program and Graphics/TriD/TriD/Tk.pm files have been
+    added to MANIFEST.SKIP and thus removed from the
+    source distribution.  The files remain under PDL git
+    looking toward the next stage of the refactoring.
+
+ Graphics/TriD/POGL/OpenGL.pm |    7 ++-----
+ Perldl2/Profile/Perldl2.pm   |    2 --
+ perldl.PL                    |    2 --
+ 3 files changed, 2 insertions(+), 9 deletions(-)
+
+commit 0b680f2b01a4a5ee25ec5b5399bddc7d69f03cfc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 12:01:29 2011 -0400
+
+    Update readmes and MANIFEST for upcoming release
+    
+    Trying to keep Known_problems and Release_Notes
+    up to date before the release.  Also updated
+    MANIFEST.SKIP and then MANIFEST with the new
+    examples and modules.
+
+ Known_problems |   12 ++++++++++++
+ MANIFEST       |    8 ++++----
+ MANIFEST.SKIP  |    8 ++++++++
+ Release_Notes  |   19 ++++++++++++++++++-
+ 4 files changed, 42 insertions(+), 5 deletions(-)
+
+commit 0dd160bc336734aaab3368e0beb0c8e420d7ca95
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 11:09:22 2011 -0400
+
+    Prevent warning message on Ctrl-D exit from shell.
+
+ Perldl2/Plugin/PDLCommands.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 504a771c2a43c4b3fa08e954ac515463d7dc29a6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 20 09:29:05 2011 -0400
+
+    Start to add tile display of thread images
+    
+    Added code from PDL::Graphics::TriD::Image to
+    flatten an N-D image to a 2-D one for display.
+    Still need to work on the update strategy and
+    any piddle linkages.
+
+ Graphics/Graphics2D.pm |   92 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 90 insertions(+), 2 deletions(-)
+
+commit 006eec4fcc96803dea51073c2dda7d3ca9c2748e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 19 12:55:42 2011 -0400
+
+    Implement PDL::Constants module
+    
+    This uses the constant pragma to implement
+    PI and E constants.  There has been discussion
+    on a number of other constant values that would
+    be of use but it seemed simpler to start with
+    the basics.  This addresses sf.net feature request
+    ticket #2787823, "add math constants to PDL: pi, e,.."
+
+ Basic/Constants.pm |   41 +++++++++++++++++++++++++++++++++++++++++
+ Basic/Makefile.PL  |    2 +-
+ t/constants.t      |   17 +++++++++++++++++
+ 3 files changed, 59 insertions(+), 1 deletions(-)
+
+commit 1bf5dec4ea334d992a57da1d827dbb058fb60cac
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 18 17:51:50 2011 -0400
+
+    Fix comment in IO/GD/Makefile.PL
+
+ IO/GD/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit a05e7efd6660777b45c2b4e4c6f36cfca9bb304f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 18 11:57:20 2011 -0400
+
+    Add refresh.pdl to Example/PLplot
+    
+    This is from the sf.net patches tracker #3024385,
+    for an "imag routine for PLplot".  Until/if it is
+    folded into the PDL::Graphics::PLplot module, it
+    seemed to make sense having it as an example.
+    
+    Please try it out if you have PLplot and be sure
+    to update or add documentation or usage notes
+    with any issues that arise.  I am not able to test
+    the routines since no PLplot on cygwin yet...
+
+ Example/PLplot/refresh.pdl |  190 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 190 insertions(+), 0 deletions(-)
+
+commit 5ed84f288edacc246985dbdb4448bce00d4b8d15
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 18 11:38:36 2011 -0400
+
+    Add inplace support for PDL::Complex operations
+    
+    Applied sf.net patch #1579745 by "nobody" to complex.pd.
+    It appears that the code was actually inplace-safe but
+    not flagged as such.  This patch fixes that problem.
+
+ Basic/Complex/complex.pd |   52 +++++++++++++++++++++++++++++++---------------
+ 1 files changed, 35 insertions(+), 17 deletions(-)
+
+commit 2a6fd3d6e6f907b80fe0fd5669c71eac584ad970
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 16 12:37:53 2011 -0400
+
+    Reduce t/config.t tests since have no WITH_KARMA
+
+ t/config.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit e522cd25d302b8445b3755ffd488699fb306318e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 16 12:01:23 2011 -0400
+
+    Deprecate OPENGL_LIBS, OPENGL_INC, OPENGL_DEFINE
+    
+    These are not used for the OpenGL bindings as that is now
+    supported completely via the Perl OpenGL module.  Comments
+    have been left in the code for reference.  In general,
+    issues relating to the installation and use of OpenGL
+    with PDL should be referred to the Perl OpenGL module
+    "up stream."
+
+ Graphics/TriD/OpenGLQ/Makefile.PL |    7 ++++---
+ perldl.conf                       |   11 ++++++++---
+ 2 files changed, 12 insertions(+), 6 deletions(-)
+
+commit 6ece4e060665b62c48e8397373ecbc8acf23a1d6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 16 11:46:23 2011 -0400
+
+    Various Karma cleanup in docs and config files
+    
+    I left the commented out WITH_KARMA section in the perldl.conf
+    in case someone looks for the module.  The plan is to keep it
+    there for a couple of releases just in case.  NOTE: it should
+    be straightforward to make a CPAN module of the Karma interface
+    if it is needed again...
+
+ Basic/Pod/BadValues.pod      |    2 +-
+ Basic/Pod/QuickStart.pod     |    8 +++-----
+ DEPENDENCIES                 |    4 ++--
+ Lib/Fit/Gaussian/gaussian.pd |    2 --
+ MANIFEST.SKIP                |    2 --
+ perldl.conf                  |   15 ++++++++++-----
+ 6 files changed, 16 insertions(+), 17 deletions(-)
+
+commit 6e7d33cbe0d3bb850d84d84683db4a802c17b259
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Mar 15 18:11:32 2011 -0400
+
+    Implement new TriD STrigrid objects
+    
+    New features by John Kirk implementing PDL::Graphics::TriD::STrigrid
+    and PDL::Graphics::TriD::STrigrid_S along with the routines
+    STrigrid_S_imag3d  and STrigrid_imag3d.
+
+ Graphics/TriD/TriD.pm         |   12 ++++++
+ Graphics/TriD/TriD/GL.pm      |   49 +++++++++++++++++++++++
+ Graphics/TriD/TriD/Objects.pm |   86 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 147 insertions(+), 0 deletions(-)
+
+commit 6449c716d1e3a0ab627dd1d4dc6cff0c1770f97a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 13 16:15:00 2011 -0400
+
+    Minor POD fixes for Core.pm.PL
+    
+    There were some glitches in the CPAN search.cpan.org on-line
+    docs so I fixed the outstanding items in Core.pm.PL in the
+    hopes that it will resolve the problem.  The only podchecker
+    error was:
+    
+      *** ERROR: unterminated T<...> at line 2480 in file Core.pm.PL
+    
+    coming from a line line:
+    
+      print OUT<<'!NO!SUBS!';
+    
+    where the OUT<< was apparently being interpreted as a OU
+    followed by a T< ... construct.
+
+ Basic/Core/Core.pm.PL |   20 ++++++++++----------
+ 1 files changed, 10 insertions(+), 10 deletions(-)
+
+commit 6ad2923d2d3151287dc90ce0454fcb3a8ab6143f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 13 12:06:41 2011 -0400
+
+    Update VERSION to 2.4.7_013 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit afa5dbcf51e3b167938320b2f10bbbec70b37f9f
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Mar 13 11:15:28 2011 -0400
@@ -12186,26 +12560,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
-
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)

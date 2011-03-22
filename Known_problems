@@ -5,6 +5,11 @@ The following issues have been reported with this version of PDL:
   unintentionally pulling in a previous version of PDL.  The
   'perl Makefile.PL' stage now checks for this and warns you.
 
+  NOTE: many tests for modules with external dependencies now
+  check if the module was actually built before running the
+  tests.  The warning is left in as a reminder until all module
+  test files have been so updated.
+
 
 - The PDL build process also checks for white space in the build
   directory as that is known to cause problems for some modules
@@ -26,6 +31,13 @@ The following issues have been reported with this version of PDL:
   The problem is understood and it is hoped that an official
   fix will become available.  NOTE: the work around is 100%
   effective---but ugly.
+
+
+- Multiline q'' constructs in the pdl2 shell now work correctly
+  but you'll need to avoid using the q abbreviation for quit
+  in pdl2 (at least until the multiline plugin in Devel::REPL
+  can be updated appropriately.  If you do get "stuck" in a q
+  quit attempt, just type Ctrl-D to exit the shell.
 
 
 - The demo 3d and 3d2 windows do not close (can not be closed)
@@ -55,11 +67,13 @@ The following issues have been reported with this version of PDL:
 
 
 - PDL on Cygwin has (by default) a 300MB process memory limit which can
-  cause out of memory crashes with large data sets.
+  cause out of memory crashes with large data sets.  See the cygwin users
+  guide: http://www.cygwin.com/cygwin-ug-net/setup-maxmem.html for how
+  to fix.
 
 
 - The following SourceForge bugs are outstanding at time of the
-  PDL-2.4.7_012 release:
+  PDL-2.4.7_013 release:
 
   3203480    t/fftw.t fails on 64-bit systems
   3190227    PDL build fails with parallel GNU make -j3 -j3
