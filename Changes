@@ -1,3 +1,57 @@
+commit d1057d7fb80888d8f1685f0c9755becea201f0f3
+Merge: b970575 e47693a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 24 20:02:29 2011 -0400
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit e47693a4759dda351cc01e5752399afc23bf9dd6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 24 11:48:52 2011 -0400
+
+    Update VERSION to 2.4.7_991 for final prep
+    
+    This will be the PDL-2.4.8 pre-release 1.  If no problems
+    are encountered, it will be pushed again as the official
+    PDL-2.4.8 release.  Please test, check docs,...  Thanks.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit 658fdc402084848422fd3f554eaf9fe6d5e25828
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 24 11:33:12 2011 -0400
+
+    Add t/simplex.t to the MANIFEST
+
+ MANIFEST |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 6dd8330badf137cee84ac16fd464e848b0f94dd3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 24 11:31:10 2011 -0400
+
+    Fix build problem with new Proj detection
+    
+    An earlier version of the code had modified a return call
+    to an exit for testing.  This removes that change and stops
+    the mysterious failure on win32.
+
+ Lib/GIS/Proj/Makefile.PL        |    4 ++--
+ Lib/Transform/Proj4/Makefile.PL |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+commit b9705750f1695bca25e16b6aeb2b24ccd80114a1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 23 21:36:11 2011 -0400
+
+    Add t/simplex.t to MANIFEST
+
+ MANIFEST |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
 commit 99e2c0b91d2c9900206ea0b3f1fc67963ef3ddd5
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Mar 23 19:07:23 2011 -0400
@@ -12698,26 +12752,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
-
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
