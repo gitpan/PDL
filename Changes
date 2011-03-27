@@ -1,3 +1,131 @@
+commit b090be74b3c79d3e133c01422e4a8cda992ac2ee
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 27 16:10:19 2011 -0400
+
+    More updates for PDL-2.4.8 pre-release 1
+
+ Release_Notes                   |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
+
+commit 302975c1f6c1ded3bad25b4f79667ae85483c673
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 27 16:01:19 2011 -0400
+
+    Finish Release_Notes for 2.4.8 pre-release
+    
+    Following this release, we'll have final testing
+    and documentation updates.  No more code freezes.
+
+ Release_Notes |  179 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 177 insertions(+), 2 deletions(-)
+
+commit fb95f2ca0b0a955a9df96c11a2c14bcb60da4160
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sat Mar 26 15:50:54 2011 +1100
+
+    win32/INSTALL - mention mp4 and animated gif cpability
+    
+    Enabled by installing ffmpeg
+
+ win32/INSTALL |   25 ++++++++++++++++++++++++-
+ 1 files changed, 24 insertions(+), 1 deletions(-)
+
+commit fc8ebbec8fc0d500d00bcc47a9b2d26f35a065a6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 25 19:47:37 2011 -0400
+
+    Clean up patch for new TriD additions
+
+ Graphics/TriD/TriD/GL.pm |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+commit ae4f1bffdc9be1207b92d56c7320ba9162f8dc9a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 25 17:40:38 2011 -0400
+
+    Update FAQ and perldl/pdl2 POD for 2.4.8
+
+ Basic/Pod/FAQ.pod |   32 +++++++++++++-------------------
+ Perldl2/pdl2      |   13 +++++++++++++
+ perldl.PL         |    9 +++++++++
+ 3 files changed, 35 insertions(+), 19 deletions(-)
+
+commit 38c646be50fe1493b94ef73d4ddbad86f6757e86
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 25 17:11:05 2011 -0400
+
+    Update directions and rm checkargs from demo 3d*
+    
+    Put the instructions on how to stop twiddling on
+    each page of the TriD demos.  Also, modify the
+    checkargs() call to only print output if the
+    $PDL::Graphics::TriD::verbose flag is set.
+
+ Demos/TriD1.pm        |   14 ++++++++++++++
+ Demos/TriD2.pm        |    9 ++++++++-
+ Graphics/TriD/TriD.pm |    2 +-
+ 3 files changed, 23 insertions(+), 2 deletions(-)
+
+commit 91f121193844e4333a5d78bd69d0c3f210d72579
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 25 16:17:52 2011 -0400
+
+    POD cleanup to matrixops.pd for PDL-2.4.8 release
+
+ Basic/MatrixOps/matrixops.pd |  112 +++++++++++++++++++++---------------------
+ 1 files changed, 56 insertions(+), 56 deletions(-)
+
+commit 7a7f099b53eb86ce47c89452454f5363be820b02
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 25 15:52:53 2011 -0400
+
+    POD updates for upcoming 2.4.8 release
+
+ IO/FlexRaw/FlexRaw.pm |  270 ++++++++++++++++++++++++++++---------------------
+ Perldl2/pdl2          |   53 ++++++++--
+ perldl.PL             |    7 +-
+ utils/perldlpp.pl     |   12 +-
+ 4 files changed, 206 insertions(+), 136 deletions(-)
+
+commit 8c473d30ac04b56b7891990223fadc4209036833
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Fri Mar 25 22:11:39 2011 +1100
+
+    win32/INSTALL - update for 2.4.8 release
+
+ win32/INSTALL |   68 ++++++++++++++++++++++++++++++--------------------------
+ 1 files changed, 36 insertions(+), 32 deletions(-)
+
+commit 0b238627ee10e26672a6f9a2b0e58eff8fa2b787
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 24 21:23:14 2011 -0400
+
+    VERSION to 2.4.7_991 for pre-release 2.4.8
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit 7f095589cbed33a45641ef5863205d06e42b6dd5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 24 20:13:41 2011 -0400
+
+    Fix missing PDL::Core::Dev with Makefile.PL's
+    
+    Another problem with the Lib/GIT/Proj/Makefile.PL and the
+    Lib/Transform/Proj4/Makefile.PL.  Returned to using import
+    rather than use to enable PDL::Core::Dev to work in the
+    build process.  Otherwise the location needs to be added
+    to the @LIB search path.
+
+ Basic/PDL.pm                    |    2 +-
+ Known_problems                  |    2 +-
+ Lib/GIS/Proj/Makefile.PL        |    3 +--
+ Lib/Transform/Proj4/Makefile.PL |    3 +--
+ Release_Notes                   |   15 ++++++++-------
+ 5 files changed, 12 insertions(+), 13 deletions(-)
+
 commit d1057d7fb80888d8f1685f0c9755becea201f0f3
 Merge: b970575 e47693a
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -12752,3 +12880,26 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:51:04 2009 -0400
+
+    Added the Changes for the t/pic_16bit.t commit.
+
+ Changes |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:44:35 2009 -0400
+
+    Fix sf.net bug 2784016
+    
+    This fixes sourceforge.net bug number 2784016 originally reported
+    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
+    with a very english specific test.  The test has been modified to
+    be less english specific.  This is still far from full i8n of PDL.
+
+ t/pic_16bit.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
