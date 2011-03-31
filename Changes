@@ -1,3 +1,136 @@
+commit ee8df719ee75eebfb2e857cdc75783c5b0091bca
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Mar 29 17:12:41 2011 -0400
+
+    More Release_Notes edits for PDL-2.4.8 release
+
+ Release_Notes |   70 ++++++++++++++++++++++++++++----------------------------
+ 1 files changed, 35 insertions(+), 35 deletions(-)
+
+commit 281e02d0ce77f2d643d6a82a3755b5d05e47272a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Mar 29 14:42:47 2011 -0400
+
+    Update TODO for PDL-2.4.8 release
+
+ TODO |  419 +++++++++++++++++++++++++++++-------------------------------------
+ 1 files changed, 183 insertions(+), 236 deletions(-)
+
+commit 6c207fc7c2a1708af6ceee28fcf1c337199dbab1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Mar 29 12:51:12 2011 -0400
+
+    VERSION bumps for PDL-2.4.8 release
+    
+    IO/Dumper.pm, IO/FITS/FITS.pm, and Perldl2/Profile/Perldl2.pm
+    each had changes since PDL-2.4.7 and they have their own
+    version numbering.  Increased to indicate that the various
+    modules have changed.
+
+ IO/Dumper.pm               |    2 +-
+ IO/FITS/FITS.pm            |    2 +-
+ Perldl2/Profile/Perldl2.pm |    4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 2905370692535fd70e62882119930930700b195c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Mar 29 10:23:32 2011 -0400
+
+    Put new Empty pdl tests in TODO block
+    
+    There appears to be a problem in t/slice.t with BSD systems.
+    I'm putting the new tests in a TODO block to mark them for
+    followup after the 2.4.8 release.
+
+ t/slice.t |   26 +++++++++++++++-----------
+ 1 files changed, 15 insertions(+), 11 deletions(-)
+
+commit ffcbecfc943e2581ccebd709b2cf687e4d66163b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 28 11:44:41 2011 -0400
+
+    More wordsmithing the Release_Notes
+
+ Release_Notes |   54 +++++++++++++++++++++++++++++-------------------------
+ 1 files changed, 29 insertions(+), 25 deletions(-)
+
+commit b3555dd9c96072d117c19e141a77c3ddd99aff50
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 27 23:55:28 2011 -0400
+
+    Update cygwin/INSTALL with ffmpeg build notes
+    
+    Right now you need to build from the git version
+    because needed fixes have not propagated into the
+    release branch.  Also made a couple of minor POD
+    fixes to Graphics2D.pm and perldlpp.pl.
+
+ Graphics/Graphics2D.pm |    6 ++--
+ cygwin/INSTALL         |   78 +++++++++++++++++++++++++++++++++---------------
+ utils/perldlpp.pl      |    2 +-
+ 3 files changed, 58 insertions(+), 28 deletions(-)
+
+commit 24a2e038fea8ec3bc47477d87ab56a4f0fd21d8d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 27 19:16:34 2011 -0400
+
+    Fix POD error in IO/FlexRaw/FlexRaw.pm
+
+ IO/FlexRaw/FlexRaw.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit e7b17f322eaa4b028fb4045119f34642b75718ce
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 27 18:20:48 2011 -0400
+
+    Fix FAQ.pod typo.
+
+ Basic/Pod/FAQ.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit c4bb881dcc6c22f27fbbedf04a0edf73b5f8db5c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 27 18:16:17 2011 -0400
+
+    Fix POD typo in TriD.pm
+
+ Graphics/TriD/TriD.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f504875f5cc09ba92479b5f4f069e87196563ada
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 27 17:58:52 2011 -0400
+
+    Fix use of $PDL::toolongtoprint in Release_Notes
+    
+    Mistakenly called the variable $PDL::toobigtoprint.
+
+ Release_Notes |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 8d24b2c43bd27ce9f4f703112edf054ffe59f30f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 27 17:54:53 2011 -0400
+
+    Fix error wmpeg is in PDL::IO::Pic and not Misc
+
+ Release_Notes |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 3c6cc4b37187551dabd6f2468ab04cf104e283c9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 27 17:07:14 2011 -0400
+
+    Update version to 2.4.8 for final prep
+    
+    Only documentation and readme/install notes from
+    now until the official PDL-2.4.8 release.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   35 +++++++++++++----------------------
+ 3 files changed, 15 insertions(+), 24 deletions(-)
+
 commit b090be74b3c79d3e133c01422e4a8cda992ac2ee
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Mar 27 16:10:19 2011 -0400
@@ -12880,26 +13013,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
-
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
