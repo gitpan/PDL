@@ -1,3 +1,107 @@
+commit fb76559e9ba5eb4a3fa30d6951075166f233d6a2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 3 18:49:04 2011 -0400
+
+    use POSIX::tmpnam() to make tempfile for uuencode
+    
+    It appears that an invalid temporary file name may
+    be the last issue with the t/dumper.t test.  Perhaps
+    we should consider adding File::Temp to the list of
+    PDL dependencies and standardize on that.
+
+ IO/Dumper.pm |    4 +++-
+ t/dumper.t   |   14 +++++++-------
+ 2 files changed, 10 insertions(+), 8 deletions(-)
+
+commit 656392920b7f91189cf9b676f2771e875ed12811
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 3 16:18:19 2011 -0400
+
+    Apply Chad Davis patch for 'make -j3 -j3' bug
+    
+    This adds a few explicit dependencies in Basic/Core/Makefile.PL
+    that appear to resolve the problem with GNU make parallel options.
+    Thanks, Chad!
+
+ Basic/Core/Makefile.PL |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
+
+commit 895797a2d50fccd198c4a04dfb2d4f3041014861
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sun Apr 3 20:49:10 2011 +1000
+
+    Makefile.PL - clean up .xfig test files
+    
+    The .xfig files written to the top level
+    directory by t/plplot.t were not being
+    cleaned up by 'make clean'.
+
+ Makefile.PL |   53 +++++++++++++++++++++++++++--------------------------
+ 1 files changed, 27 insertions(+), 26 deletions(-)
+
+commit 8a8f64cfacf309738017fe3b76c51ee88918a310
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 2 19:45:28 2011 -0400
+
+    Add Test::More conversion to TODO list
+
+ TODO |   32 ++++++++++++++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
+
+commit 1f9dc165ead2f38f8b95ec495c6e4b32e7cf00f7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 2 19:37:57 2011 -0400
+
+    Remove diag print from t/iotypes.t
+
+ t/iotypes.t |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit 55cf3b1566b21cc039e81296ed45931c81087b93
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 2 19:36:00 2011 -0400
+
+    Update iotypes.t to use real tmpnam() file name
+    
+    This should reduce collisions when multiple smokers
+    are running at the same time...  Need to look at
+    using File::Temp instead.  Is that a Core module now?
+
+ t/iotypes.t |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+commit 834d8ac0b5e70d472f28bb2847f687f4e687be5c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 2 17:06:46 2011 -0400
+
+    Update tmalloc.pl diagnostic output
+
+ cygwin/tmalloc.pl |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 11b4528674fc2fb6f90755b59586e161617d199f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 2 15:17:54 2011 -0400
+
+    Update VERSION to 2.4.8_002 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit e4812dd30c3d9f11d2b52f990abe46f8f50a3703
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 2 15:14:36 2011 -0400
+
+    Update Release_Notes for 2.4.8_001 devel release
+    
+    This includes the fix for the t/slices.t bug causing
+    FAILs in BSD systems.
+
+ Release_Notes |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
 commit 5ed9256b6b6d0477b31dbf3077e9b4290ea836b5
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Apr 2 13:48:44 2011 -0400
@@ -13059,26 +13163,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
-
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
