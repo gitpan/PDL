@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               PDL
-version:            2.4.8_002
+version:            2.4.8_003
 abstract:           Perl Data Language
 author:
     - PerlDL Developers (perldl@jach.hawaii.edu)
@@ -15,6 +15,7 @@ requires:
     Convert::UU:          0
     Data::Dumper:         2.121
     File::Spec:           0.6
+    File::Temp:           0
     Filter::Util::Call:   0
     Inline:               0.43
     OpenGL:               0.63
@@ -26,7 +27,7 @@ no_index:
     directory:
         - t
         - inc
-generated_by:       ExtUtils::MakeMaker version 6.56
+generated_by:       ExtUtils::MakeMaker version 6.55_02
 meta-spec:
     url:      http://module-build.sourceforge.net/META-spec-v1.4.html
     version:  1.4

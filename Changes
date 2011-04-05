@@ -1,3 +1,72 @@
+commit 345350cb5162e1ce36ef0575a97e8af7cf0d3a38
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 5 10:05:45 2011 -0400
+
+    Update Known_problems/Release_Notes for CPAN
+
+ Known_problems |    6 +-----
+ Release_Notes  |   12 ++++++++++--
+ 2 files changed, 11 insertions(+), 7 deletions(-)
+
+commit 935cc4fc7dfe3ee267ba58f0f958a3265be51599
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Apr 4 18:47:57 2011 -0400
+
+    Update TODO list post 2.4.8 release
+
+ TODO |   25 +++++++++++++++++++++----
+ 1 files changed, 21 insertions(+), 4 deletions(-)
+
+commit bcc8e650709e0e7299be9413b5e29b92d70f7957
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Apr 4 11:59:09 2011 -0400
+
+    Move new t/slice.t tests out of TODO block
+
+ t/slice.t |   25 ++++++++++---------------
+ 1 files changed, 10 insertions(+), 15 deletions(-)
+
+commit d5a90f99c50c1f9ecbb239be743754759c7ae84c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Apr 4 11:32:47 2011 -0400
+
+    Replace POSIX::tmpnam with File::Temp::tmpnam
+    
+    The POSIX::tmpnam failed on a win32 perl (presumably
+    because of an issue with the environment).  I just
+    checked and File::Temp is in the Core modules since
+    5.8.8 (at least) so using it to generate the filenames
+    should not add unavailable dependencies.
+
+ IO/Dumper.pm |    4 ++--
+ Makefile.PL  |    1 +
+ t/iotypes.t  |    4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
+
+commit bd8c58615d7a34f540933f0a74a0b630814acc3b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 3 20:00:18 2011 -0400
+
+    Update VERSION to 2.4.8_003 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit b06513a3d80f66e6f719957443dad8f3df66f70f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 3 19:57:38 2011 -0400
+
+    Update Known_problems and Release_Notes for CPAN
+    
+    This is the 2.4.8_002 developers release to verify
+    a number of bug fixes since the PDL-2.4.8 official release.
+
+ Known_problems |    3 +++
+ Release_Notes  |    7 ++++++-
+ 2 files changed, 9 insertions(+), 1 deletions(-)
+
 commit fb76559e9ba5eb4a3fa30d6951075166f233d6a2
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Apr 3 18:49:04 2011 -0400
@@ -13163,3 +13232,26 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:51:04 2009 -0400
+
+    Added the Changes for the t/pic_16bit.t commit.
+
+ Changes |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:44:35 2009 -0400
+
+    Fix sf.net bug 2784016
+    
+    This fixes sourceforge.net bug number 2784016 originally reported
+    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
+    with a very english specific test.  The test has been modified to
+    be less english specific.  This is still far from full i8n of PDL.
+
+ t/pic_16bit.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
