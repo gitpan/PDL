@@ -5,7 +5,7 @@ PDL::FAQ - Frequently asked questions about PDL
 
 =head1 VERSION
 
-Current FAQ version:  0.98
+Current FAQ version:  0.99
 
 
 =head1 DESCRIPTION
@@ -412,7 +412,7 @@ I<very> good reason for doing that.
 =head2 Q: 3.3    What is the current version of PDL ?  
 
 
-As of this writing (FAQ version 0.98 of 31 March 2011) the latest stable version
+As of this writing (FAQ version 0.99 of 07 April 2011) the latest stable version
 is 2.4.8.  The latest stable version should always be available from a CPAN
 mirror site near you (see L<Question 2.7|"Q: 2.7    Where do I get it?"> for
 info on where to get PDL.

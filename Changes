@@ -1,3 +1,20 @@
+commit 8d541744a07d59905b1cc01f1cfc5f3e3eadc2ba
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Apr 6 09:59:18 2011 -0400
+
+    Force Convert::UU for BSD to fix t/dumper.t FAIL
+    
+    I think the problem is that the system uuencode/uudecode
+    command is being used for the sdump() call which needs
+    the -s option on some systems.  Update Release_Notes and
+    Known_problems to VERSION 2.4.8_004 for development.
+
+ Basic/PDL.pm   |    2 +-
+ IO/Dumper.pm   |    5 ++++-
+ Known_problems |    2 +-
+ Release_Notes  |   36 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 42 insertions(+), 3 deletions(-)
+
 commit 345350cb5162e1ce36ef0575a97e8af7cf0d3a38
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Apr 5 10:05:45 2011 -0400
