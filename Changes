@@ -1,3 +1,35 @@
+commit 66a4db3f270e3478800850858ad97471e2135468
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 9 10:05:43 2011 -0400
+
+    Fix FAQ version number inconsistency for 2.4.9
+
+ Basic/Pod/FAQ.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ac8bb0bc983abd99b2ba85fcc911cae948fe8c7f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 9 09:55:28 2011 -0400
+
+    Update INSTALL for 2.4.9 release
+
+ INSTALL |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
+
+commit 083a2fdf28a2aa2423f9569a040ca686180d0fe0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Apr 7 16:08:15 2011 -0400
+
+    Update VERSION and readme/notes for 2.4.9
+    
+    The PDL-2.4.9 release is planned for 10 April 2011.
+
+ Basic/PDL.pm      |    2 +-
+ Basic/Pod/FAQ.pod |   14 +++++-----
+ Known_problems    |    2 +-
+ Release_Notes     |   77 ++++++++++++++++++-----------------------------------
+ 4 files changed, 35 insertions(+), 60 deletions(-)
+
 commit 8d541744a07d59905b1cc01f1cfc5f3e3eadc2ba
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Apr 6 09:59:18 2011 -0400
