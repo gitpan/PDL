@@ -58,6 +58,7 @@ unless ($found_plplot) {
 
 my ($plplot_lib_path, $plplot_include_path);
 foreach my $libdir (
+		    $PDL::Config{WHERE_PLPLOT_LIBS}, #user pref overrides all
 		    '/usr/local/plplot/lib64',
                     '/usr/local/plplot/lib',
 		    '/usr/local/lib64',
@@ -69,7 +70,7 @@ foreach my $libdir (
 		    '/opt/lib',
 		    '/ops/tools/lib',
                     '/sw/lib/',    # default FINK installation
-		    $PDL::Config{WHERE_PLPLOT_LIBS},
+		    split(/ /, $Config{libpth}),
 		                  # Add new library paths here!!
 		    ) {
 
@@ -92,6 +93,7 @@ unless (defined ($plplot_lib_path)) {
 }
 
 foreach my $incdir (
+		    $PDL::Config{WHERE_PLPLOT_INCLUDE}, #user pref overrides all
                     '/usr/local/plplot/include',
                     '/usr/local/plplot/include/plplot',
 		    '/usr/local/include/plplot',
@@ -103,7 +105,7 @@ foreach my $incdir (
 		    '/ops/tools/include/plplot',
 		    '/ops/tools/include',
                     '/sw/include/plplot/',    # default FINK installation
-		    $PDL::Config{WHERE_PLPLOT_INCLUDE},
+		    $Config{usrinc}.'/plplot',
 		                  # Add new header paths here!!
 		    ) {
 

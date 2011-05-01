@@ -26,7 +26,7 @@ support for 2-D graphics (via PLplot) and 3-D graphics
   Each item has some task description based on the
   current status.
 
-   Update task list after PDL-2.4.8 release.
+   Update task list after PDL-2.4.x release.
 
   
 
@@ -92,6 +92,42 @@ support for 2-D graphics (via PLplot) and 3-D graphics
    * Add any issues to Known_problems
 
 
+   These modules aren't tested by CPAN Testers because of dependencies:
+   * PDL::FFTW
+     - FFTW2 is out-of-date and not typically installed
+     - need to migrate to FFTW3
+     - Alien::FFTW
+   * PDL::Slatec
+   * PDL::Minuit
+     - need Fortran compilter and ExtUtils::F77
+     - f2c conversion of code
+   * PDL::IO::GD
+     - needs libgd
+     - Alien::GD
+   * PDL::IO::HDF
+     - based on HDF4
+     - need to migrate to allow HDF5
+     - Alien::HDF5
+     - add binding to libhdf5
+   * PDL::GSL::XXX
+     - need more complete libgsl bindings
+     - Alien::GSL
+   * PDL::GIS::Proj
+   * PDL::Transform::Proj4
+     - Alien::Proj4
+   * PDL::Graphics::TriD
+     - Alien::OpenGL, GLU, GLEW, GLUT, GLUI...
+     - test with pixel buffer context(?)
+   * PDL::Graphics::PGPLOT
+     - needs portable driver (OpenGL)
+     - Alien::PGPLOT
+     - apply/update RGB color patches to current
+   * PDL::Graphics::PLplot
+     - need portable driver (OpenGL)
+     - Alien::PLplot
+     - need low-level PLplot interface
+
+
    Add support for Known_problems to tests
    * Implemented via the Test::More TODO {} block feature
    * Ignores FAIL for tests flagged as TODO
@@ -154,7 +190,7 @@ support for 2-D graphics (via PLplot) and 3-D graphics
    
 
    Review current documentation (underway)
-   * Verify correctness and consistency with PDL-2.4.8+
+   * Verify correctness and consistency with PDL-2.4.9+
    * Update documentation where needed.
    * Add web searchable versions of the docs.
    * Maybe a wiki format could be used to improve docs 
@@ -221,7 +257,7 @@ support for 2-D graphics (via PLplot) and 3-D graphics
    
 
    Update PDL Book (in progress)
-   * Needs updating to match PDL-2.4.8 from PDL-2.4.3
+   * Needs updating to match PDL-2.4.9 from PDL-2.4.3
    * make a web version available on-line if possible
    
      Matt Kenworthy has been working on web-izing
@@ -259,6 +295,7 @@ support for 2-D graphics (via PLplot) and 3-D graphics
    * Windows: Strawberry Perl Professional, ActivePerl
    * Unix OSes: Various package managers
    
+
 T  Clean up build output from make process to reduce cruft
    * Collect build output into build log file by default
    * Add an output filter to the text collected from the
@@ -278,7 +315,7 @@ T  Clean up build output from make process to reduce cruft
    Fix the test problems with preexisting PDL installs
    * Develop test methodology
    * Add PDL::Core::Dev utility to perform check
-   * Automate detection/test skip if not build logic
+   * Automate detection/test skip if not built logic
 
    
    Check/set perldl.conf options before the build

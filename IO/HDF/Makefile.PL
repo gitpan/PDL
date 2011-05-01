@@ -35,7 +35,8 @@ BEGIN
         '/opt/local/lib',
         '/usr/lib',
         '/usr/lib/hdf',
-        '/opt/lib'
+        '/opt/lib',
+	split(/ /, $Config{libpth}),
     );
     @HDF_inc_locations = (
         '/usr/local/include',
@@ -43,7 +44,8 @@ BEGIN
         '/opt/local/include',
         '/usr/include',
         '/usr/include/hdf',
-        '/opt/include'
+        '/opt/include',
+	$Config{usrinc},
     ); 
     
     # get locations from perldl.conf, if specified there:
@@ -79,14 +81,10 @@ BEGIN
     
         # Look for the szip library, which HDF >= 4.2r0 needs, but older versions don't!
 
-	my $suffix = $^O eq 'darwin' ? 'dylib' : 
-	    ($^O =~ /mswin/i ? 'dll' : 
-	     ($^O eq 'linux' ? 'so' : 'so')); #insert other OS's here. We assume that if it's not OS X or Windows, that '.so' will work.
-
-        if (-e "$libdir/libsz.$suffix" && !$found_sz) 
+        if (-e "$libdir/libsz.$Config{so}" && !$found_sz) 
         {
             $found_sz = 1;
-            print "Found libsz.$suffix at $libdir/libsz.$suffix\n";
+            print "Found libsz.$Config{so} at $libdir/libsz.$Config{so}\n";
         }
     } # foreach $libdir...
 

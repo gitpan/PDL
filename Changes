@@ -1,3 +1,235 @@
+commit a3792d776522a6022d2e48c75bd2f4562d8a2f39
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 1 14:47:08 2011 -0400
+
+    Update readme-type files for CPAN dev release
+
+ Known_problems |    5 +++++
+ Release_Notes  |   14 +++++++++++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
+
+commit 5c3420f1efdfe44c0efee08050022bf19bc6f9a9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 1 11:45:33 2011 -0400
+
+    Update Known_problems from sf.net bug list
+
+ Known_problems |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 6cd3314fc890e6e348c316c76543cff9c6e39c49
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 30 15:08:38 2011 -0400
+
+    Fix for IO::Misc for handles that are not files
+    
+    This is sf.net patch #3287853.  One addition was a
+    check that the result of the Scalar::Utils::reftype test
+    is defined to avoid warnings when run with -w on.
+
+ IO/Misc/misc.pd |   17 ++++++++++++++---
+ t/misc.t        |   13 ++++++++++++-
+ 2 files changed, 26 insertions(+), 4 deletions(-)
+
+commit b69a5671fbb137f2952053d5998ab3ad4546391a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 29 14:38:23 2011 -0400
+
+    Fix =begin html/=end html usage in PP.pod
+    
+    It looks like an edit was only partially done but the
+    result was that only the HTML docs for PP had the headings
+    for the various pp_xxx routine descriptions.  This made
+    normal non-html output difficult to understand or search.
+    
+    I just removed the extraneous =begin html/=end html pairs
+    so the pp_xxx function heading appear in all versions of
+    the documentation.
+
+ Basic/Pod/PP.pod |   41 -----------------------------------------
+ 1 files changed, 0 insertions(+), 41 deletions(-)
+
+commit 390363a565a9a8894b7eb8dc3d70ed81f9c9c39f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 29 14:12:47 2011 -0400
+
+    Merge in PP.pod updates from John Lapeyre
+    
+    These were posted to the pdl-porters list in Sep 2006
+    but never made it into the PP.pod, thanks John.
+
+ Basic/Pod/PP.pod |  129 ++++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 files changed, 121 insertions(+), 8 deletions(-)
+
+commit b5eaaf6401bb8a657953e15e0690daf32d85bf3f
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Apr 29 00:58:37 2011 -0600
+
+    A small POD-formatting change in transform.pd
+
+ Lib/Transform/transform.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit a63b8196c1e45c59c749e2856104e83e47a97054
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Apr 29 00:56:38 2011 -0600
+
+    HDF: improve the logic for finding libsz in Makefile.PL
+    
+    I didn't know about $Conf{so} when I wrote the original. This is much cleaner.
+
+ IO/HDF/Makefile.PL |    8 ++------
+ 1 files changed, 2 insertions(+), 6 deletions(-)
+
+commit 43ef710fd81063b2a1e06d4a6ae39eac3866c5cd
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Apr 29 00:54:24 2011 -0600
+
+    Make a no-badval-handling warning message a little more helpful.
+
+ Basic/Gen/PP.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 9bc3d74d4d98e88c94650532d301ff4c33a4d146
+Merge: 51774e3 3f58c66
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Apr 29 00:52:27 2011 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 51774e3a8c2757a7046863a10a188691e2f754ce
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Apr 29 00:48:29 2011 -0600
+
+    PLplot: user prefs for library and include file locations take precedence over defaults
+    
+    The locations $PDL::Config{WHERE_PLPLOT_LIBS} and {WHERE_PLPLOT_INCLUDES} were at the end of the list of paths to search. I moved them to the beginning of the list so that if there is more than one installed on the system the desired library/includes can be specified.
+
+ Graphics/PLplot/Makefile.PL |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 3f58c664b8b9adcee55016cb1e91be1177bd60b7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 26 15:51:59 2011 -0400
+
+    Update cygwin/INSTALL re rebaseall
+    
+    Discusion on the cygwin-xfree mailing list
+    suggests specifying a different (higher) base
+    address might alleviate some of the situations
+    when rebaseall fails to work.  This could be
+    a problem though for PDL/perl since there are
+    large numbers of DLLs which could lead to the
+    addresses trampling high memory stuff.
+
+ cygwin/INSTALL |   14 +++++++++++++-
+ 1 files changed, 13 insertions(+), 1 deletions(-)
+
+commit 675f384d7bbb3cb4582303f76b393328c32b2bda
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 19 10:25:37 2011 -0400
+
+    Apply kmx patch for ext detection logic
+    
+    This patch by kmx improves the detection logic search
+    locations for a number of the PDL external dependencies.
+    We'll need to incorporate this in the coming Alien::*
+    refactoring.  Thanks again, kmx!
+
+ Graphics/PLplot/Makefile.PL     |    2 ++
+ IO/GD/Makefile.PL               |    3 +++
+ IO/HDF/Makefile.PL              |    6 ++++--
+ Lib/FFTW/Makefile.PL            |    5 +++--
+ Lib/GIS/Proj/Makefile.PL        |    7 +++++--
+ Lib/Transform/Proj4/Makefile.PL |    6 ++++--
+ 6 files changed, 21 insertions(+), 8 deletions(-)
+
+commit 055cbc1066def2e851d8bd457581fbdbe3a86787
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 19 10:13:33 2011 -0400
+
+    Add META.yml information for PDL
+    
+    This is based on a patch from kmx.  The result is that the
+    PDL distribution META.yml file will now have information
+    on how to submit bugs and where our git repository is...
+
+ Makefile.PL |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
+
+commit 3d08df88d7ae782a3d429376184e3f6981f5ed7a
+Author: Craig DeForest <zowie@dhcp-10-158.boulder.swri.edu>
+Date:   Wed Apr 13 12:07:41 2011 -0600
+
+    fixed double-bscale bug for rice-compressed images
+
+ IO/FITS/FITS.pm |   11 +++++------
+ 1 files changed, 5 insertions(+), 6 deletions(-)
+
+commit b0f9301553e8af562678598ec76942deb5bdd398
+Merge: 1c2a60f d92235d
+Author: Craig DeForest <zowie@dhcp-10-158.boulder.swri.edu>
+Date:   Wed Apr 13 11:36:57 2011 -0600
+
+    Merge branch 'master' of ssh://zowie@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit d92235de1897ad558a4658f9db2b4d2fb452a189
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Apr 13 12:52:10 2011 -0400
+
+    Make GSL::MROOT quieter on success...
+    
+    This addresses feature request #3285520 "status message from
+    gslmroot_fsolver" with the patch from the original submitter.
+
+ Lib/GSL/MROOT/FUNC.c |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 74945cc2321c4243ff0540e71423ee5a1cc62910
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 12 10:28:26 2011 -0400
+
+    Update TODO with dependency issues
+    
+    CPAN Testers are not comprehensive because a number
+    of PDL modules require external libraries to function
+    and, by default, we have no support for installing missing
+    libraries to support the PDL build process.
+
+ TODO |   36 ++++++++++++++++++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
+
+commit e71940e5289898c6dddaf9df5da9f2db013f31df
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 12 09:26:57 2011 -0400
+
+    Use File::Temp::tempfile for t/bad.t filename
+    
+    Without a unique, per-process tempfile name, the test can
+    fail if another test is being run at the same time as can
+    happen with CPAN smoke testers.
+
+ t/bad.t |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 3dff9d0cdeea709acd131f47a3ae00c6f23ac7b1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 9 12:24:33 2011 -0400
+
+    Update VERSION and readmes to 2.4.9_001 for devel
+    
+    The PDL-2.4.9 distribution is in freeze and is being
+    processed for binary builds.  The release is expected
+    to CPAN 10 or 11 April 2011.  Development in the main
+    branch can now continue.
+
+ Basic/PDL.pm   |    2 +-
+ DEPENDENCIES   |   11 +++--------
+ Known_problems |   16 +++-------------
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ TODO           |    9 +++++----
+ 5 files changed, 44 insertions(+), 26 deletions(-)
+
 commit 66a4db3f270e3478800850858ad97471e2135468
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Apr 9 10:05:43 2011 -0400
@@ -685,6 +917,17 @@ Date:   Tue Mar 22 14:59:42 2011 -0400
  IO/HDF/SD/SD.pd    |   63 +++++++++++++++++++---------------------
  t/hdf_sd.t         |   82 +++++++++++++++++++++++++++++++++------------------
  3 files changed, 84 insertions(+), 62 deletions(-)
+
+commit 1c2a60f1854d01221160266ee9d5e46ce7e90ad7
+Author: Craig DeForest <zowie@Clio-2.local>
+Date:   Tue Mar 22 03:42:28 2011 -0600
+
+    Fixed handling of empty and scalar values by whichND (also
+    fixes bug 3234024)
+
+ Basic/Primitive/primitive.pd |   15 ++++++++++++---
+ t/primitive.t                |   12 +++++++++++-
+ 2 files changed, 23 insertions(+), 4 deletions(-)
 
 commit d04e98726eb46bc5e2b54f0b455a795940507fa6
 Author: Craig DeForest <zowie@Clio-2.local>
