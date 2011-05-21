@@ -1,3 +1,226 @@
+commit 059697b3a4ae2eda3573a9804ba1d421f92a3a71
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 21 09:11:27 2011 -0400
+
+    Update MANIFEST with new ParallelCPU files
+
+ MANIFEST |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 3e5e5d21c9cd6823bd9890cd5588e1d09f00f685
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 21 09:08:28 2011 -0400
+
+    Update Release_Notes for CPAN devel release
+
+ Release_Notes |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 701a9bb9a5f5ee31e0bff6fe39f7aebfaa2e6538
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 19 22:38:57 2011 -0400
+
+    Fix warning message from File::Temp usage
+    
+    It made it sound as if there was something dangerous going
+    on in the PDL test suite.  Turned off warnings to quiet.
+
+ t/bad.t |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+commit ac639236321cbe5ee9830877085311a916136fec
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 19 09:51:53 2011 -0400
+
+    Update Known_problems and Release_Notes
+    
+    NiceSlice bugs were closed, new support for
+    parallel CPU computation to improve performance,
+    docs and distribution improvements...
+
+ Known_problems |    3 +--
+ Release_Notes  |   11 ++++++++++-
+ 2 files changed, 11 insertions(+), 3 deletions(-)
+
+commit d5ec4edccbe0df0625186b5ea93b30853c1c9944
+Author: John Cerney <cerney@ntxlt0182636.(none)>
+Date:   Wed May 18 21:21:27 2011 -0500
+
+    Fixed complilation problems with no pthreads enabled.
+    But was introduced in the ParallelCPU patch.
+
+ Basic/Core/pdlmagic.c |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 4d0eaeafc7c848bd716d068c264e9f773750eca3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed May 18 16:03:21 2011 -0400
+
+    Fix sf.net #3295544 NiceSlice parsing bug
+    
+    This was a failure to call findslice() recursively for
+    the argument for a where modifier (it is possible that
+    the condition could contain NiceSlice constructs).
+
+ Basic/SourceFilter/NiceSlice.pm |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit bdc715bd3a0dea4daeb67568cf91c975330122ee
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed May 18 15:07:28 2011 -0400
+
+    Fix bug #3300467 NiceSlice asterisk parsing issue
+    
+    Improved some of the debug output strings to better
+    show when passed whitespace or empty args and added
+    a pattern to catch leading whitespace for '*' args.
+
+ Basic/SourceFilter/NiceSlice.pm |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 47ed11547e472539935b387edd051a0ae7e2d1ed
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed May 18 07:06:19 2011 -0400
+
+    Apply Dima Kogan fix for wcols args regression
+    
+    This appears to have been introduced with sf.net
+    patch #3287853.  Thanks for catching this...
+
+ IO/Misc/misc.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit d721f8d76fbcde09eae65708d3085021b2ca139a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 12 10:19:57 2011 -0400
+
+    Update Known_problems and cygwin/README
+    
+    Add current sf.net bugs and update the cygwin
+    README file with information on HDF5 support.
+
+ Known_problems |    8 +++-----
+ cygwin/README  |    8 ++++++--
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+commit d46a8a4478e6d6c4adacc76773b67be34f550864
+Author: John Cerney <cerney@ntxlt0182636.(none)>
+Date:   Wed May 11 21:23:01 2011 -0500
+
+    Add support for splitting up numerical processing between multiple
+    parallel processor threads (or pthreads) using new functions "set_autopthread_targ"
+    and "set_autopthread_targ". This can improve processing performance (by greater than
+    2-4X in most cases) by taking advantage of multi-core and/or multi-processor machines.
+    
+    See the new file Basic/Pod/ParallelCPU.pod for details.
+
+ Basic/Core/Core.pm.PL        |  137 ++++++++++++++++++++-
+ Basic/Core/Core.xs.PL        |   55 ++++++++-
+ Basic/Core/pdl.h.PL          |   13 ++
+ Basic/Core/pdlapi.c          |    4 +-
+ Basic/Core/pdlcore.c.PL      |   49 +++++++-
+ Basic/Core/pdlcore.h.PL      |   28 +++-
+ Basic/Core/pdlmagic.c        |  278 ++++++++++++++++++++++++++++++++++++++++--
+ Basic/Core/pdlmagic.h        |    9 ++-
+ Basic/Core/pdlthread.c       |  244 +++++++++++++++++++++++++++++++++----
+ Basic/Gen/PP.pm              |   15 ++-
+ Basic/Gen/PP/PDLCode.pm      |   59 ++++++++--
+ Basic/Pod/API.pod            |   16 +++
+ Basic/Pod/PP.pod             |   19 +++
+ Basic/Pod/ParallelCPU.pod    |  151 +++++++++++++++++++++++
+ Basic/Primitive/primitive.pd |    2 +
+ IO/Pnm/pnm.pd                |    1 +
+ Lib/FFT/fft.pd               |    2 +
+ Lib/GSL/INTEG/gsl_integ.pd   |    4 +
+ t/pthread.t                  |   89 +++++++++++++-
+ t/pthreadBarf.t              |   97 +++++++++++++++
+ t/pthread_auto.t             |  117 ++++++++++++++++++
+ 21 files changed, 1326 insertions(+), 63 deletions(-)
+
+commit 47437d7a19a3861fc754f371c558acfc38040a9e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed May 11 14:06:48 2011 -0400
+
+    Fix inconsistent/missing =for sig in documentation
+    
+    I noticed from a recent mailing list post that the clip()
+    routine was missing a signature definition.  While I was
+    updating that, it was apparent that there were a number
+    of routines missing the =for sig to mark the Signature
+    information for the PDL::Doc to use.  This fixes all the
+    ones that I found.
+
+ Basic/MatrixOps/matrixops.pd |    2 +-
+ Basic/Primitive/primitive.pd |   50 ++++++++++++++++++++++++++++++++++++++++++
+ Lib/Fit/LM.pm                |    3 +-
+ Lib/Fit/Linfit.pm            |    4 +-
+ Lib/Fit/Polynomial.pm        |    4 +-
+ 5 files changed, 56 insertions(+), 7 deletions(-)
+
+commit c16dd1d7effd0e34f4d86c32a530c2c94819935f
+Author: Craig DeForest <zowie@z5.boulder.swri.edu>
+Date:   Thu May 5 12:38:09 2011 -0600
+
+    fixed regexp to not get confused when more than one PCi_j system is present in the header
+
+ Lib/Transform/transform.pd |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 01f90e3b5b9fd532463ee091ebfebbb4d270719f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 2 14:54:00 2011 -0400
+
+    Fix CPAN devel instructions in Release_Notes
+    
+    Had incorrect capitalization in the cpan shell build
+    instructions which might cause problems when users
+    tried to follow them.
+
+ Release_Notes |   72 ++++++++++++++++++++++++++++----------------------------
+ 1 files changed, 36 insertions(+), 36 deletions(-)
+
+commit 80f19de69fe35090874bf9928ad0652742671864
+Author: Doug Hunt <dhunt@ucar.edu>
+Date:   Mon May 2 10:04:42 2011 -0600
+
+    Updated FAQ 6.18 to say that PDL::NetCDF works with the most recent PDL.
+
+ Basic/Pod/FAQ.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 8ca4ad497689ab71e60f0cba92e4341b5a7a8bad
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 1 18:05:04 2011 -0400
+
+    Fix META_MERGE options in Makefile.PL
+    
+    I used the documented functionality but search.cpan.org did
+    not appear to understand the syntax.  Going back to the original
+    syntax as suggested by kmx.
+
+ Makefile.PL |   10 ++--------
+ 1 files changed, 2 insertions(+), 8 deletions(-)
+
+commit 78c67883162c843ea4f49032219d335880238b1c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 1 15:30:51 2011 -0400
+
+    Update version to 2.4.9_002 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   33 ++++++++++++++++++++++++++++++++-
+ 3 files changed, 34 insertions(+), 3 deletions(-)
+
+commit 269cb0ece73584930a3fc76ac971237d3afa4fcd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 1 15:27:08 2011 -0400
+
+    Apply sf.net patch #3295787 to quiet warnings
+
+ IO/Misc/misc.pd |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
 commit a3792d776522a6022d2e48c75bd2f4562d8a2f39
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun May 1 14:47:08 2011 -0400
