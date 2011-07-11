@@ -1,3 +1,488 @@
+commit 5bbc29575c98fb781d65d28a006e6e2ff61b9a36
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 10 14:53:19 2011 -0400
+
+    Update to Known_problems adn Release_Notes
+
+ Known_problems |    1 +
+ Release_Notes  |    7 +++++++
+ 2 files changed, 8 insertions(+), 0 deletions(-)
+
+commit 904fb6f1727869f73a4c5e630035e53a9299de61
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 8 17:56:58 2011 -0400
+
+    Minor clean-up to t/slice.t
+    
+    Replaced print by diag for message output and added a
+    test name to make it clear that the error was being
+    checked for.
+
+ t/slice.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 580a2b31d9d7d1dc7b5b990d9e670d01c3d616b0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jul 7 16:59:25 2011 -0400
+
+    Fix PDL TriD to work with cygwin+w32api POGL
+    
+    The bug in the cygwin POGL support for w32api/WGL OpenGL
+    has been fixed, this fixes t/opengl.t to work with that
+    option enabled.
+
+ Graphics/TriD/POGL/OpenGL.pm |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit a39ee9889a32bbbb8aeca0e673bee7524e61c918
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 1 15:27:27 2011 -0400
+
+    add badvalue support to pctover and oddpctover
+    
+    This is sf.net feature tracker item #3328001,
+    "add badvalue support to pctover and oddpctover"
+
+ Basic/Ufunc/ufunc.pd |  111 ++++++++++++++++++++++++++++----------------------
+ 1 files changed, 62 insertions(+), 49 deletions(-)
+
+commit 10dceb490e1ad291944e4c521dab2dc698ec7a34
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jun 28 15:35:21 2011 -0400
+
+    Update Release_Notes for 2.4.9_003...
+    
+    ...and clarify the OpenGL requirement (needed only for
+    PDL::Graphics::TriD support, otherwise not a requirement).
+
+ Release_Notes |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
+
+commit b47d8661df0e7b9b560e10b44d2849a446e56125
+Merge: 35ee86b 3945bd5
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sun Jun 26 09:14:41 2011 -0500
+
+    Merge remote-tracking branch 'Dima/better_barf_withthreads'
+    
+    Conflicts:
+    	Basic/Core/pdlmagic.c
+    
+    Finally pulled in Dima's edits. They pass all tests, though
+    we don't have lots of tests of the barfing behavior. Still,
+    there are some barf tests for cat, and they pass. Also the
+    pthreads tests pass.
+    
+    The only modification I had to make was in pdlmagic.c, which
+    did not merge cleanly for some reason.
+
+commit 35ee86b89ca27d8c88a2d1b0566a5cfdbe5ede79
+Merge: 39c2c77 12078c6
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sat Jun 25 22:21:48 2011 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 12078c6b6b0ab676cd24f2fcbb27a434f1050abd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jun 24 13:18:59 2011 -0400
+
+    Update pctover and oddpctover re badval status
+    
+    Neither routine handles bad values currently.
+    Added the HandleBad => 0 to the pp_def routines
+    and a few TODO tests in t/ufunc.t to show when
+    things a fixed.
+    
+    See sf.net feature request #3328001 for details.
+
+ Basic/Ufunc/ufunc.pd |    2 ++
+ t/ufunc.t            |   26 +++++++++++++++++++++++++-
+ 2 files changed, 27 insertions(+), 1 deletions(-)
+
+commit b155d2657c3b1decea2b5eefee88018cbeff4a38
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jun 19 16:12:51 2011 -0400
+
+    Update PDL::FAQ
+    
+    Bringing things in-line with current PDL-2.4.9 usages.
+    Still to fix:
+      (1) Missing list of inplace-safe functions for Q: 6.6.
+      (2) Is "Q: 6.12 What is a null pdl?" up to date re Empty pdls?
+      (3) What about dataflow and Q: 6.15?
+
+ Basic/Pod/FAQ.pod |   60 ++++++++++++++++++++++++++++------------------------
+ 1 files changed, 32 insertions(+), 28 deletions(-)
+
+commit e51453767a03a2d73c1f40bf7ea8bf991b1ccff2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jun 14 10:19:41 2011 -0400
+
+    Update TODO and Perldl2/TODO for ref
+
+ Perldl2/TODO |    8 ++++++--
+ TODO         |   12 +++++++-----
+ 2 files changed, 13 insertions(+), 7 deletions(-)
+
+commit ad4c25777f104960dd6e4a3218101564704c0b39
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jun 12 20:17:39 2011 -0400
+
+    Quiet warnings from PDL_NICESLICE_ENGINE
+    
+    The implementation is simple and generates *lots* of
+    messages if run with warnings on.  Added a no warnings
+    directive until things can be sorted out better.
+
+ Basic/SourceFilter/NiceSlice.pm |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit f9b6e8e3c72a4cb5ba61058a9a38f409b347bf8c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jun 12 16:01:56 2011 -0400
+
+    Add PDL_NICESLICE_ENGINE env variable
+    
+    If you set PDL_NICESLICE_ENGINE to 'PDL::NiceSlice2' then
+    that module will be loaded to provide niceslice functionality
+    instead of the original one.  This should make it easier to
+    try things out...
+
+ Basic/SourceFilter/NiceSlice.pm |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
+
+commit 68a6f4bc993630ee0db213316c8da0696af15b62
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jun 12 13:06:52 2011 -0400
+
+    Appear to have working PDL::NiceSlice2
+    
+    With a workaround to a Filter::Simple bug and a hack
+    to workaround a missing feature in Text::Balanced, we
+    now have a trial implementation of an improved
+    PDL::NiceSlice filter.  To try out, just replace your
+    exising NiceSlice.pm file with this one.
+    
+    NOTE: We will still to implement similar processing for
+          pdl2/perldl as sourcefilters don't work with evals..
+
+ Basic/SourceFilter/NiceSlice2.pm |   58 +++++++++++++++++++++++++++++--------
+ 1 files changed, 45 insertions(+), 13 deletions(-)
+
+commit 3692c9c65e1782e7c6dacd3d2deb36be36bdc628
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jun 12 11:38:56 2011 -0400
+
+    Add =pod to workaround Filter::Simple bug
+    
+    The current Filter::Simple regex for $pod_or_DATA has a
+    glitch for =begin =end pod blocks.  By adding an =pod before
+    the =begin (which is a no-op as far as pod processing goes)
+    we workaround the problem.
+
+ IO/FITS/FITS.pm |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 1eea47187f667db384b2953c57fe42412b4754f2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jun 12 11:13:58 2011 -0400
+
+    Add comments with nslice_if_pdl() to findslice
+    
+    Left these in place but commented out to in case someone
+    wanted to continue down this development line.  I assumed
+    that since the modifier syntax is not valid perl that
+    the only place where nslice would need to be changed
+    to nslice_if_pdl would be in the filter section for slices
+    with no modifiers present.
+
+ Basic/SourceFilter/NiceSlice.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 174cabe6b5bfcd60110901f4c66337c8c4aa1c4d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jun 11 19:18:58 2011 -0400
+
+    Fix PDL::nslice_if_pdl to use CODE refs
+    
+    This finishes the basic implementation for version of
+    nslice that can call a code reference or the standard
+    PDL::nslice routine depended on whether $self is a
+    CODE ref or a PDL ref.  Making a UNIVERSAL::nslice_if_pdl
+    handles other blessed objects but not a raw CODE ref.
+
+ Basic/Core/Core.pm.PL |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit da4d4b3de86097b05b80ba062027f90dc09d747b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jun 11 17:35:31 2011 -0400
+
+    Add nslice_if_pdl variant of nslice
+    
+    This routine is the same as nslice but it takes
+    an extra argument from the PDL::NiceSlice filter
+    process, a string of the original args before
+    processing.  The idea is to allow a code reference
+    to be called if the $self is not a piddle.
+    
+    This works provided $self is a blessed object.
+    Then we could use UNIVERSAL::nslice_if_pdl to
+    catch that.  We need to investigate the limitations
+    of method call syntax.  Maybe a { } block with
+    the CODE check there could work...
+    
+    Only a partial solution since a method call can
+    only be made if the $self is a blessed object.
+
+ Basic/Core/Core.pm.PL           |   29 ++++++++++++++
+ Basic/Lvalue.pm                 |    2 +-
+ Basic/SourceFilter/NiceSlice.pm |   82 +++++----------------------------------
+ 3 files changed, 40 insertions(+), 73 deletions(-)
+
+commit 5918de8737644bfa0503c5167df0988af64d13dc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jun 11 12:36:05 2011 -0400
+
+    Update Known_problems and Release_Notes
+    
+    Now include the current sf.net bugs and added
+    the update for the Text::Balanced version to the
+    Release_Notes.
+
+ Known_problems |    1 +
+ Release_Notes  |    5 +++++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
+
+commit d9a17f5f22a0801ee88886ebf5fed2c202342a1f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jun 11 12:27:45 2011 -0400
+
+    Update Text::Balanced min version to 1.89
+    
+    This is the version in perl 5.8.0 so the change in
+    requirement won't affect any of the current PDL
+    platforms.  The version bump is required to enhance
+    the PDL::NiceSlice filter which requires a workaround
+    using the current Text::Balanced implementation.
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 0f4cefe2478543e2d0e9080a5239d9870083bf03
+Merge: ad14f3f 2004d1e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jun 7 22:12:13 2011 -0400
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit ad14f3f4467bcd12945449c472ca9cfca71491aa
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jun 7 22:08:41 2011 -0400
+
+    Refactor PDL::NiceSlice to use Filter::Simple
+    
+    This allows for nslice() filtering to only be applied outside
+    of POD, comments, and quotelike strings.  Unfortunately, running
+    the PDL modules through the Filter::Simple framework exposed
+    a bug in Filter::Simple and in Text::Balanced (which is called
+    by Filter::Simple to do much of its work).
+
+ Basic/SourceFilter/NiceSlice2.pm | 1073 ++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 1073 insertions(+), 0 deletions(-)
+
+commit 2004d1e65e5798025cbed62435dd60c7121692a0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jun 6 13:37:16 2011 -0400
+
+    Add comment for way forward w code refs and nslice
+    
+    Plan to rewrite the nslice() method to detect when
+    we have the CODE ref usage.  In that case, UNIVERSAL::nslice()
+    would be called which would construct the desired CODE ref
+    method call using the original pre-NiceSlice version of the
+    nslice() arguments which would be stashed by the source filter
+    during the original processing.
+    
+    NOTE: This has potential to collide with another UNIVERSAL::nslice()
+    method declaration.
+
+ Basic/Core/Core.pm.PL |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+commit 7b732c23f42e8d6aac0a3696a366c98275fb7bd1
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Jun 4 11:57:31 2011 +0200
+
+    use autodetection for TriD build
+    
+    Now, there is only one line different from the usual perldl.conf
+
+ debian/perldl.conf |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit bd248f50e2b5f06939e4e8309058b86a42bb7e15
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat Jun 4 11:52:08 2011 +0200
+
+    merge changes to perldl.conf into debian/perldl.conf
+
+ debian/perldl.conf |  149 +++++++++++++++++++++++++++++++++-------------------
+ 1 files changed, 94 insertions(+), 55 deletions(-)
+
+commit 353a74423aabbf3f3205eb44c290dab3045862f0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jun 1 17:50:10 2011 -0400
+
+    Update sf.net bug list in Known_problems file
+
+ Known_problems |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit b611cfd457c4cb0a0118596b6ed908d8c8ee3f3d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 31 16:23:33 2011 -0400
+
+    Add CODE ref detection and barf to PDL::nslice()
+    
+    This is in preparation for refactoring the PDL::NiceSlice
+    module to handle this case correctly via runtime detection
+    of CODE reference args.  To do so, the source filter needs
+    to be modified to pass through a copy of the original args
+    as a string for later eval.
+
+ Basic/Core/Core.pm.PL |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit cffcc7f10bd6e25a3f01f9a4b1a5cc1050572cbf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 31 14:02:35 2011 -0400
+
+    Update TODO list items
+
+ TODO |   60 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++----
+ 1 files changed, 56 insertions(+), 4 deletions(-)
+
+commit 1c477a90a1bb3808419b95332733efbea789583d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 31 10:22:35 2011 -0400
+
+    Add null SIGPIPE handler to output pipes
+    
+    This should make PDL "SIGPIPE safe" by not exiting when a
+    PDL piped IO output process quits.  At some point we may
+    wish to add an eval+die handler to report failures better.
+
+ Doc/Doc.pm                 |    1 +
+ Doc/Doc/Perldl.pm          |    2 ++
+ Graphics/TriD/TriD/OOGL.pm |   27 +++++++++++++++++----------
+ IO/Dumper.pm               |    1 +
+ IO/FITS/FITS.pm            |    4 ++++
+ IO/Pnm/Pic.pm              |    5 +++--
+ 6 files changed, 28 insertions(+), 12 deletions(-)
+
+commit ac9b0f924272d8ab4e6b3f7ea75451d47f0e1aa6
+Author: John Cerney <cerney@ntxlt0182636.(none)>
+Date:   Mon May 30 11:44:40 2011 -0500
+
+    Fixed segfaults in t/pthreadBarf.t when running with perl 5.13, 5.14
+
+ t/pthreadBarf.t |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 7bdc5b66ebe1f9e302782c77775e86ed767f3b83
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri May 27 16:59:34 2011 -0400
+
+    quiet whichND deprecation warnings in tests
+    
+    Rework t/primitive2.t and t/subclass3.t to not use the
+    planned-to-be-deprecated whichND list context output.
+
+ t/primitive2.t |    4 +++-
+ t/subclass3.t  |    7 +++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+commit 6f54e1d48030128f659d5c701e0a14569aa50a08
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri May 27 16:28:28 2011 -0400
+
+    Add $SIG{PIPE} = 'IGNORE' for pipe to ffmpeg
+    
+    This should keep perldl/pdl2 from exiting if a SIGPIPE
+    is returned for some reason.  This may fix sf.net bug #3307121
+    "wmpeg sometimes kills perldl if file already exists".
+
+ IO/Pnm/Pic.pm |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 26f35983b8630e746fcd99f0e2bcf32609aa1db6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri May 27 16:27:40 2011 -0400
+
+    Add full package name to isbigendian() call
+
+ Basic/Core/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 3d5d980d49b495fc70992b0984aca5fba89ed09a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu May 26 18:42:39 2011 -0400
+
+    Add note re PERL_SIGNALS=unsafe to Known_problems
+
+ Known_problems |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit 2241bf3b16b2413a263665bddf11e5a3b387618f
+Merge: 9acb63f f02d33c
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue May 24 12:59:32 2011 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 9acb63f27cd1c0e4ae4ec5df358a46a231f55d00
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue May 24 12:57:01 2011 -0600
+
+    Use $Config::Config{usrinc} to search for pthread.h instead of hard-coding /usr/include.
+
+ Basic/Core/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f02d33c5dc837f744e1443fe0ad5173398fe43e9
+Author: Craig DeForest <zowie@z4.boulder.swri.edu>
+Date:   Mon May 23 23:29:59 2011 -0600
+
+    I can't believe I'm still supporting this.  Must ... migrate ... to ... PLPlot.
+    Fixed bug with Justify option in fits_imag -- a typo in the Justify logic
+    prevented non-unity aspect ratios with the justify command in _fits_foo.
+
+ Graphics/PGPLOT/Window/Window.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit bfe7d4ed83914ef96ff3497913c4df630f01bb25
+Author: Craig DeForest <zowie@z5.boulder.swri.edu>
+Date:   Sun May 22 23:16:11 2011 -0600
+
+    add map() fix for nonlinear FITS headers (remove tags when copying header
+    to output variable)
+
+ Lib/Transform/transform.pd |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
+
+commit ce7827dead6fc3084f9800e6a0141804f785beba
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 21 10:06:19 2011 -0400
+
+    Update VERSION to 2.4.9_003 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit 059697b3a4ae2eda3573a9804ba1d421f92a3a71
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat May 21 09:11:27 2011 -0400
@@ -27,6 +512,19 @@ Date:   Thu May 19 22:38:57 2011 -0400
 
  t/bad.t |    6 +++++-
  1 files changed, 5 insertions(+), 1 deletions(-)
+
+commit 39c2c77cd8404b44a6bf4140613bddabf79ab103
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu May 19 16:08:19 2011 -0500
+
+    Added by-line for John Cerney in ParallelCPU docs.
+    
+    Daniel pointed out last summer that we have many docs that do not
+    specify any sort of copyright. John didn't add a copyright to his
+    ParallelCPU docs, so I added one for him.
+
+ Basic/Pod/ParallelCPU.pod |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
 commit ac639236321cbe5ee9830877085311a916136fec
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -89,6 +587,97 @@ Date:   Wed May 18 07:06:19 2011 -0400
 
  IO/Misc/misc.pd |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 3945bd570f48bb0b67b6f3859e435582920acf29
+Author: Dima Kogan <dkogan@cds.caltech.edu>
+Date:   Sun May 15 15:32:58 2011 -0700
+
+    tabified reworked barfing functions for more consistent style. Whitespace-only patch
+
+ Basic/Core/pdlmagic.c |  124 ++++++++++++++++++++++++------------------------
+ 1 files changed, 62 insertions(+), 62 deletions(-)
+
+commit eba3b37d8ae7525e29323446ccb19413a74d58b4
+Author: Dima Kogan <dkogan@cds.caltech.edu>
+Date:   Sun May 15 04:02:51 2011 -0700
+
+    Reworked deferred error message storage to remove duplicate code and to simplify the flow
+
+ Basic/Core/pdlcore.c.PL |    2 +-
+ Basic/Core/pdlmagic.c   |  201 ++++++++++++++++-------------------------------
+ Basic/Core/pdlmagic.h   |    3 -
+ 3 files changed, 69 insertions(+), 137 deletions(-)
+
+commit 4edb173e0cff6c4c1a30c18f809627575e70085a
+Author: Dima Kogan <dkogan@cds.caltech.edu>
+Date:   Sun May 15 03:05:07 2011 -0700
+
+    Unified the barfing/warning code. Removed code duplication
+
+ Basic/Core/pdlcore.c.PL |   96 ++++++++++++++------------------------
+ Basic/Core/pdlmagic.c   |  117 ++++++++++++++++++----------------------------
+ Basic/Core/pdlmagic.h   |    3 +-
+ 3 files changed, 82 insertions(+), 134 deletions(-)
+
+commit c5e9937244131d81f43006b2e0719629ff75412d
+Author: Dima Kogan <dkogan@cds.caltech.edu>
+Date:   Sun May 15 02:16:58 2011 -0700
+
+    added PDL::cluck as an analog of Carp::cluck (as PDL::barf is an analog of Carp::confess)
+
+ Basic/Core/Core.pm.PL |   12 +++++-------
+ 1 files changed, 5 insertions(+), 7 deletions(-)
+
+commit cd9886de21a8eb288e3dc20b1bb11684bee01294
+Author: Dima Kogan <dkogan@cds.caltech.edu>
+Date:   Mon May 9 00:45:44 2011 -0700
+
+    barf() is now defined in both PDL::Core and in PDL. Moved barf() definition to
+    the top of Core.pm
+
+ Basic/Core/Core.pm.PL |   79 +++++++++++++++++++++++++------------------------
+ 1 files changed, 40 insertions(+), 39 deletions(-)
+
+commit 1d58f618eb43545a6ea86f5844f69b46e8d1ad08
+Author: Dima Kogan <dkogan@cds.caltech.edu>
+Date:   Sun May 8 23:56:02 2011 -0700
+
+    removed unneeded extra 'use Carp'
+
+ Basic/Core/Core.pm.PL |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit 8755f7a20f043abf367d28d258d1bc8e65301841
+Author: Dima Kogan <dkogan@cds.caltech.edu>
+Date:   Sun May 8 23:19:23 2011 -0700
+
+    pdl_croak_param() cleaned up and rewritten to work with the new barf()
+
+ Basic/Core/pdlcore.h.PL |    2 +-
+ Basic/Core/pdlthread.c  |  115 ++++++++++++++++++++++-------------------------
+ 2 files changed, 55 insertions(+), 62 deletions(-)
+
+commit 0caf3f03d7d3f7c693f1f1f35ae086f56ad30207
+Author: Dima Kogan <dkogan@cds.caltech.edu>
+Date:   Sat Apr 30 21:29:15 2011 -0700
+
+    PP now generates PDL->pdl_barf() instead of plain barf()
+
+ Basic/Gen/PP.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 6031f27eebdfca23bbfcd7c02f1f78e2492facc7
+Author: Dima Kogan <dkogan@cds.caltech.edu>
+Date:   Sat Apr 30 18:27:01 2011 -0700
+
+    barf() now generates a stack trace by hooking into Carp::confess(). This is done on both the perl
+    and C sides
+
+ Basic/Core/Core.pm.PL   |   47 ++----------------------
+ Basic/Core/pdlcore.c.PL |   90 ++++++++++-------------------------------------
+ Basic/Core/pdlcore.h.PL |   13 ++-----
+ Basic/Gen/PP.pm         |    5 ---
+ 4 files changed, 27 insertions(+), 128 deletions(-)
 
 commit d721f8d76fbcde09eae65708d3085021b2ca139a
 Author: Chris Marshall <devel.chm.01@gmail.com>

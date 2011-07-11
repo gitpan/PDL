@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               PDL
-version:            2.4.9_002
+version:            2.4.9_003
 abstract:           Perl Data Language
 author:
     - PerlDL Developers (perldl@jach.hawaii.edu)
@@ -22,7 +22,7 @@ requires:
     Pod::Parser:          0
     Pod::Select:          0
     Storable:             1.03
-    Text::Balanced:       0
+    Text::Balanced:       1.89
 resources:
     bugtracker:  http://sourceforge.net/tracker/?func=browse&group_id=612&atid=100612
     homepage:    http://pdl.perl.org/
@@ -31,7 +31,7 @@ no_index:
     directory:
         - t
         - inc
-generated_by:       ExtUtils::MakeMaker version 6.56
+generated_by:       ExtUtils::MakeMaker version 6.55_02
 meta-spec:
     url:      http://module-build.sourceforge.net/META-spec-v1.4.html
     version:  1.4
