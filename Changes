@@ -1,3 +1,368 @@
+commit e538a2f8b14ab00d0151486b67c0d1d0209e97ad
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 13 13:17:57 2011 -0400
+
+    Update Release_Notes for CPAN devel release
+
+ MANIFEST.SKIP |    1 +
+ Release_Notes |   24 +++++++++++++++++++++---
+ 2 files changed, 22 insertions(+), 3 deletions(-)
+
+commit 5097f70403e8439cbe28a9cec8c041ec27bfc94c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 13 13:05:07 2011 -0400
+
+    Add PDL::AutoLoader support to pdldoc
+    
+    Now, by default, it will return the same results
+    as the interactive help/apropos commands within the pdl2
+    and perldl shells.  A new perldl.conf option
+    PDLDOC_IGNORE_AUTOLOADER has been added in case a user
+    prefers the previous behavior.
+
+ pdldoc.PL |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
+
+commit f3d74c986baf35bd962a2c6bd63853ec5c75e347
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 13 13:03:32 2011 -0400
+
+    Add new fields to perldl.conf
+    
+    Added PDL_CONFIG_VERSION to track PDL-visible changes
+    in the configuration information and PDLDOC_IGNORE_AUTOLOADER
+    to allow users to make pdldoc ignore searching the @PDLLIB
+    path for PDL::AutoLoader file with POD.
+
+ perldl.conf |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
+
+commit 0542cb645af17974385dc191f4775e922a66b147
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 12 19:30:39 2011 -0400
+
+    Fix some typos in POD for FFTW complex stuff
+
+ Lib/FFTW/fftw.pd |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit f08d4de334cae6b58597ee3f6ce4d797966b11f6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 12 15:06:47 2011 -0400
+
+    Update Release_Notes and TODO
+
+ Release_Notes |    4 ++++
+ TODO          |    4 ----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+commit c78966001daaa834d763ceee71379c8cc3ee1742
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 12 14:53:55 2011 -0400
+
+    added whereND to PDL::Primitive w tests
+    
+    This is sf.net feature #3390043.
+
+ Basic/Primitive/primitive.pd |   84 ++++++++++++++++++++++++++++++++++++++++--
+ t/primitive.t                |    9 ++--
+ 2 files changed, 85 insertions(+), 8 deletions(-)
+
+commit bdfdf41a8ac2624df1f02df243de0b05be1af274
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 12 13:15:18 2011 -0400
+
+    Add whereND tests to t/primitive.t
+    
+    The tests will be skipped if there is no whereND defined
+    in the current package.
+
+ t/primitive.t |   80 +++++++++++++++++++++++++++++++++++++++------------------
+ 1 files changed, 55 insertions(+), 25 deletions(-)
+
+commit cf1ee2a91917aabcbd356b9c487f1ebd3f3987ed
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 12 11:16:04 2011 -0400
+
+    Convert primitive.t to use Test::More
+
+ t/primitive.t |   84 +++++++++++++++++++++++++++++---------------------------
+ 1 files changed, 43 insertions(+), 41 deletions(-)
+
+commit e4b144690b35181dbe75e20529e08aeffcb40c54
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 12 10:27:10 2011 -0400
+
+    Fix minor syntax issue for f2c conversion
+
+ Lib/Minuit/minuitlib/futils.f |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit c3aaaa2a7e0e699008fad97ffc95c0657c7d149e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Aug 11 13:08:27 2011 -0400
+
+    Fix POD in pp_def() for perldoc
+
+ Lib/FFTW/fftw.pd |   58 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 58 insertions(+), 0 deletions(-)
+
+commit a8b8acf757193b23517abd871e2ac1613f197486
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 9 14:20:40 2011 -0400
+
+    Remove unused Tridiag routine
+    
+    This is in response to problem report #3388862 at sf.net.
+    Neither the problem or the fix were able to be reproduced
+    but the code is actually unused.  See the routines under
+    'pdldoc -a solve' to locate current linear equation solvers
+    in PDL.
+
+ Basic/MatrixOps/matrix.c |   28 ----------------------------
+ Basic/MatrixOps/matrix.h |    7 ++-----
+ 2 files changed, 2 insertions(+), 33 deletions(-)
+
+commit 34f77b5c39cc88f163e3db1b26101e19557bbbe3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Aug 8 14:40:07 2011 -0400
+
+    Update inc/Devel/CheckLib.pm to 0.93
+
+ inc/Devel/CheckLib.pm |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
+
+commit 87967f0d2521fba64ca682763039970363d66be6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Aug 8 14:19:31 2011 -0400
+
+    conditionalize diag() message in t/slice.t
+    
+    Now the message is only displayed if the test fails.
+
+ t/slice.t |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
+
+commit 54c1111fbbfd52b4945d0cc96ca56e301d236cde
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 7 13:54:33 2011 -0400
+
+    Update Known_problems and Release_Notes
+
+ Known_problems |    4 ++--
+ Release_Notes  |    5 +++++
+ TODO           |    2 ++
+ 3 files changed, 9 insertions(+), 2 deletions(-)
+
+commit b7319a1c34a0aeb9835fb2dc6855f36f941596c2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 7 13:44:10 2011 -0400
+
+    Add support for pdls larger than 2GiB
+    
+    This commit applies the fix from Jarle Brinchmann
+    for pdl_grow() and a similar one for pdl_malloc()
+    replacing the use of int type for nbytes by the
+    use of STRLEN.  On 64bit platforms, this allows for
+    pdls larger than 2**31 bytes.
+    
+    NOTE: The total number of elements in a piddle
+    is still limited to 2**31.
+    
+    NOTE: Eventually we need to change the usage of
+    smalloc (a.k.a. pdl_malloc) and grow (a.k.a. pdl_grow)
+    to use STRLEN arguments instead.
+
+ Basic/Core/pdlconv.c.PL |    2 +-
+ Basic/Core/pdlcore.c.PL |    2 +-
+ Basic/Core/pdlcore.h.PL |    2 +-
+ Basic/Core/pdlhash.c    |    6 +++---
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+
+commit bdb08a07c202c14c8dea72fce1f0d77f204e80e7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 6 18:53:00 2011 -0400
+
+    Update perldl POD docs a bit
+
+ perldl.PL |   22 ++++++++++++----------
+ 1 files changed, 12 insertions(+), 10 deletions(-)
+
+commit 5e38a35cffc161f3d992985b30f1ba02007ead8d
+Merge: 4a9c452 dbd0aa0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 6 18:37:53 2011 -0400
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 4a9c452ca3768910d873a48258ce94e4dce090c7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 6 18:35:31 2011 -0400
+
+    Update Perldl2/TODO re error filters
+    
+    Errors in the shells can generate *huge* nested
+    reports.  Added a list of items that could be
+    filtered out without removing the relevant PDL
+    errors.
+
+ Perldl2/TODO |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
+
+commit dbd0aa08821215867e123eee1dd35859ff27c972
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 29 13:45:15 2011 -0400
+
+    Add 'use PDL::Constants' to default.perldlrc
+    
+    This is the first step for adding 'use PDL::Constants' to the
+    list of modules loaded by 'use PDL'.
+
+ Basic/default.perldlrc |    3 ++-
+ Release_Notes          |    6 ++++++
+ 2 files changed, 8 insertions(+), 1 deletions(-)
+
+commit 367cef28004bcbb5d3979872764241cd7d1d1294
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 23 16:58:18 2011 -0400
+
+    Fix sf.net bug #3375837 "_read_flexhdr ... fails"
+    
+    readflex() failed in the _read_flexhdr() routine when
+    a multi-pdl data file was read *and* the first pdl had
+    2 or mor dimensions.
+
+ IO/FlexRaw/FlexRaw.pm |  152 +++++++++++++++++++++++++------------------------
+ t/flexraw.t           |   37 +++++++++---
+ 2 files changed, 105 insertions(+), 84 deletions(-)
+
+commit ce45095457be68779817a3e0aae67189a4068957
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jul 22 14:46:58 2011 -0400
+
+    Set $PDL::IO::FlexRaw::writeflexhdr=1 in PDL shell
+    
+    Enable writeflex() to call writeflexhdr() automatically
+    when a filename is given as the output destination.  This
+    matches the behavior of writefraw() but is different than
+    the previous behavior so only enable the new default in
+    the interactive shells for now.
+
+ Basic/default.perldlrc |    1 +
+ IO/FlexRaw/FlexRaw.pm  |    7 ++++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+commit 30f92c90f3af00b72921e9f5854a6d97572f04bc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 20 17:59:51 2011 -0400
+
+    Fix mv() examples in Indexing.pod
+
+ Basic/Pod/Indexing.pod |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit c7f1df6985e88e7be8b3d37d46096600ff738c6c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 20 12:58:15 2011 -0400
+
+    Update Indexing.pod re lvalue subs and slicing
+
+ Basic/Pod/Indexing.pod |   22 +++++++++++++---------
+ 1 files changed, 13 insertions(+), 9 deletions(-)
+
+commit fee11b9ecf2b574e60c6a8205a217eb551501037
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jul 20 11:10:18 2011 -0400
+
+    Minor doc fixes to QuickStart.pod
+
+ Basic/Pod/QuickStart.pod |   36 ++++++++++++++++++------------------
+ 1 files changed, 18 insertions(+), 18 deletions(-)
+
+commit 14b4834f07a8a4f180f4995529a9943879f647dd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 17 14:54:24 2011 -0400
+
+    Add MYMETA.yml and MYMETA.json to .gitignore
+    
+    All of a sudden, the build process is spitting out one
+    of each of these files for each directory with a Makefile.PL
+    in it---or so it appears.  This may be related to a recent
+    upgrade to the version of EU::MM to 6.58.
+
+ .gitignore |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 0d215b8c6eeab8311ef1569a99d9e85da3d4cc50
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 17 14:52:58 2011 -0400
+
+    Add diagnostics of system() call to make_Type_pm
+    
+    There was a CPAN Testers failure for this call.  By printing
+    what the system() call was, it is hoped to determine the cause.
+
+ Makefile.PL |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+commit 704e0a615e536ce19f1ef7aed1d967df1bc7d87b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 17 14:45:29 2011 -0400
+
+    Fix sf.net bug #3368883 t/opengl.t fails...
+    
+    Added a die to the PDL::Graphics::OpenGL::OO->new() constructor
+    and an eval to catch and skip the create window tests if no
+    workable display mode was found.
+
+ Graphics/TriD/POGL/OpenGL.pm |    3 +--
+ t/opengl.t                   |    8 ++++++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+commit 63090307e73ac26b1fc366fd37ded88d1b9c5be9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 16 15:34:15 2011 -0400
+
+    Add 16-bit image IO byteorder to Known_problems
+
+ Known_problems |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
+
+commit 35854efe735d1a200bd9a42cc22a2c68702955f1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 16 15:12:55 2011 -0400
+
+    Rm IO/Pnm/converters from MANIFEST
+    
+    The current PDL requires 16bit support in the NetPBM routines
+    so these local copies are very out-of-date and redundant to
+    ones that would work.  Taking them out of the distribution
+    in preparation for removing them from the release.
+
+ MANIFEST      |    3 ---
+ MANIFEST.SKIP |    4 ++++
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+commit d4fcf12676d36724370a6c49137e58272a85ca8a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 11 12:26:17 2011 -0400
+
+    Update VERSION info to 2.4.9_004 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit e1b3c25ec58f329df2aa121ed08580391810bcc9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 11 12:23:04 2011 -0400
+
+    Update Release_Notes for 2.4.9_003 release
+
+ Release_Notes |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
 commit 5bbc29575c98fb781d65d28a006e6e2ff61b9a36
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Jul 10 14:53:19 2011 -0400

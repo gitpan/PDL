@@ -1,3 +1,68 @@
+Release Notes for PDL 2.4.9_004 --------------------------
+
+General Notes:
+
+ * Another quick CPAN developers release
+ 
+   - It is a snapshot of the current git development tree
+     and everything may not work correctly or have complete
+     documentation.
+
+   - These release notes may not be fully complete.  Please
+     see Changes (from the git log) for full details.
+
+   - All tests may not pass, especially ones corresponding
+     to issues in Known_problems.
+   
+   - Manual build/install is recommended although the
+     cpan shell may be used by specifying the distribution
+     path rather than just the module name, e.g.:
+
+       cpan> get  CHM/PDL-2.4.9_004.tar.gz
+       cpan> make CHM/PDL-2.4.9_004.tar.gz
+       cpan> test CHM/PDL-2.4.9_004.tar.gz
+       cpan> look CHM/PDL-2.4.9_004.tar.gz
+
+
+Highlights:
+
+ * Add 'use PDL::Constants' to default.perldl in preparation
+   for eventual inclusion for 'use PDL'.  The PDL::Constants
+   module only defines PI and E at the moment.  I would like
+   to see a few more standard ones added such as I or J for
+   the imaginary unit value.
+
+ * Set $PDL::IO::FlexRaw::writeflexhdr=1 in PDL shell.  This
+   enables writeflex() to call writeflexhdr() automatically
+   when a filename is given as the output destination.  This
+   matches the behavior of writefraw() but is different than
+   the previous behavior so only enable the new default in
+   the interactive shells (for now).
+
+
+ * Preliminary support for pdls larger than 2GiB (but still
+   with less than 2**31 *elements*) is in the PDL core.
+   It is believed that this modification should be
+   transparent.  Please test.
+
+ * New whereND() routine added to PDL::Primitive.  Like
+   where but it properly threads the mask over higher
+   data dimensions.  This was sf.net feature #3390043.
+ 
+ * pdldoc now searches for *.pdl files in your @PDLLIB
+   path for docs on PDL::AutoLoader routines.  To disable
+   the new behavior, just set the new perldl.conf option
+   PDLDOC_IGNORE_AUTOLOADER to true.  This was sf.net
+   feature #3390042.
+
+ * Documentation fixes
+
+ * SF.net bugs fixed:
+   - 3388862  tiny bug in PDL-2.4.3. May apply to 2.4.9
+   - 3375837  _read_flexhdr state machine fails
+   - 3368883  t/opengl.t fails if display type not available
+
+
 Release Notes for PDL 2.4.9_003 --------------------------
 
 General Notes:

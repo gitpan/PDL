@@ -389,9 +389,6 @@ IO/Misc/Makefile.PL
 IO/Misc/misc.pd
 IO/NDF/Makefile.PL
 IO/NDF/NDF.pm.PL
-IO/Pnm/converters/pnmtotiff.c
-IO/Pnm/converters/README
-IO/Pnm/converters/tifftopnm.c
 IO/Pnm/Makefile.PL
 IO/Pnm/Pic.pm
 IO/Pnm/pnm.pd
@@ -807,4 +804,5 @@ TODO
 utils/perldlpp.pl
 win32/INSTALL
 win32/win32f77.pl
-META.yml                                 Module meta-data (added by MakeMaker)
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)
