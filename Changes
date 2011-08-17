@@ -1,3 +1,97 @@
+commit d410920521eddd0645cc4e0e89ce791fb022b1ef
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 16 20:08:26 2011 -0400
+
+    Add PDL_Long * typemap for sf.net bug #3377113
+
+ Basic/Core/typemap |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 9e635d72317647320897a8fd62bf1e7ed1601aea
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Aug 16 13:37:43 2011 +1000
+
+    Rearrange code in Basic/Core/pdlthread.c
+    
+    Rearrange the code so that older Microsoft
+    compilers can parse it.
+
+ Basic/Core/pdlthread.c |  114 ++++++++++++++++++++++++-----------------------
+ 1 files changed, 58 insertions(+), 56 deletions(-)
+
+commit cab63972505d5242b2b33d863ed04c74edf0ac91
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Aug 16 13:37:42 2011 +1000
+
+    Rearrange C code in Basic/Core/pdlcore.c.PL
+    
+    Rearrange the code so that older Microsoft
+    compilers can parse it.
+
+ Basic/Core/pdlcore.c.PL |  166 ++++++++++++++++++++++++-----------------------
+ 1 files changed, 84 insertions(+), 82 deletions(-)
+
+commit 7634dc3d0987b15f6b2e99c74f72cd3665ce05b1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Aug 15 14:45:53 2011 -0400
+
+    Docs fix for whereND in primitive.pd
+
+ Basic/Primitive/primitive.pd |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
+
+commit 1bbd43cc64a2df3ea749f9b5a3ccf2b000efd90b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 14 15:16:16 2011 -0400
+
+    Add MARK BAKER m4ls to demo 3dgal
+
+ Demos/TriDGallery.pm |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
+
+commit b716dbf0b4f0d5c5d7d5d25abd6322a9c2846e8b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 14 14:24:35 2011 -0400
+
+    Add TODO tests for sf.net bug # 3234141
+    
+    The problem is an inconsistent treatment of NaN values
+    depending on whether or not it is the first one along
+    the dimension.  The results should be the same no matter
+    what order the elements are in.
+
+ t/ufunc.t |   36 ++++++++++++++++++++++--------------
+ 1 files changed, 22 insertions(+), 14 deletions(-)
+
+commit ba94371d501e6f8424b050fe0b1032258d0abc88
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 14 13:07:28 2011 -0400
+
+    Update bugs list in Known_problems
+
+ Known_problems |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 5b1770756a601a1dcefe8fca573e6f7ef690f68a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 14 12:52:07 2011 -0400
+
+    Update VERSION and pod for pdldoc
+
+ pdldoc.PL |   16 ++++++++++++----
+ 1 files changed, 12 insertions(+), 4 deletions(-)
+
+commit 5a86c06d4d4112067a88aa5b2f9fdaece1de6126
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 13 13:57:09 2011 -0400
+
+    Update VERSION to 2.4.9_005 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit e538a2f8b14ab00d0151486b67c0d1d0209e97ad
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Aug 13 13:17:57 2011 -0400
@@ -14701,26 +14795,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
-
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
