@@ -1,3 +1,76 @@
+commit 68e92867ef55db36bd7255b5008d0b50652097d1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 21 11:00:12 2011 -0400
+
+    Update readme-type files for 2.4.9_007 release
+
+ Known_problems |    8 ++++++++
+ Release_Notes  |   16 +++++++++++++++-
+ TODO           |    3 ++-
+ 3 files changed, 25 insertions(+), 2 deletions(-)
+
+commit e3614859dcca4183d4b64080dd6df1c6be275dda
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 21 10:50:37 2011 -0400
+
+    Add fix to FITS.pm for sf.net bug #3394327
+    
+    It seems like localizing $/ to undef is the right thing
+    to do.  I would feel better if someone who knows FITS and the
+    FITS.pm code could come up with a test to reproduce the original
+    problem.
+
+ IO/FITS/FITS.pm |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit d864f548da7ed02772257ee7f11339fac4c6b4f2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 21 10:48:49 2011 -0400
+
+    Revert to original code
+    
+    The quick fix of using the non-badvalue code all the time appears
+    to resolve the min*/max* routines problem with NaNs.  Reverting
+    for now.  Needs more investigation before assuming as a fix.
+    Mostly, we need to test on a non-badvalue PDL install...
+
+ Basic/Ufunc/ufunc.pd |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit c63222860d99fafdfb86ae4e63f8873a7a13ac6f
+Author: John Cerney <john.cerney@gmail.com>
+Date:   Sun Aug 21 09:12:28 2011 -0500
+
+    Fixed bug where t/pthreadBarf.t test case segfaults
+    
+    Bug ID 3392972
+    Recent changes (between 2.4.9_004 and 2.4.9_005) caused the pthreadBarf.t
+    test case to fail. Moved the dSP; call in pdl_barf_or_warn to fix the
+    problem.
+
+ Basic/Core/pdlcore.c.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit db635b2584593e154b3e53fc835d336dbe56d6b9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 20 22:37:41 2011 -0400
+
+    Update Release_Notes
+
+ Release_Notes |   40 ++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 40 insertions(+), 0 deletions(-)
+
+commit 4e4cedee2ff80baab2ecadbef010a0704c5d705d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 20 22:30:08 2011 -0400
+
+    Update VERSION to 2.4.9_007 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   22 ++++++----------------
+ 3 files changed, 8 insertions(+), 18 deletions(-)
+
 commit d145a343e046bdcb734431b7975f90f350bcfeff
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Aug 20 21:40:12 2011 -0400
@@ -14869,3 +14942,26 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:51:04 2009 -0400
+
+    Added the Changes for the t/pic_16bit.t commit.
+
+ Changes |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:44:35 2009 -0400
+
+    Fix sf.net bug 2784016
+    
+    This fixes sourceforge.net bug number 2784016 originally reported
+    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
+    with a very english specific test.  The test has been modified to
+    be less english specific.  This is still far from full i8n of PDL.
+
+ t/pic_16bit.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
