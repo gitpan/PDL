@@ -1,3 +1,77 @@
+commit d145a343e046bdcb734431b7975f90f350bcfeff
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 20 21:40:12 2011 -0400
+
+    Update Known_problems/Release_Notes for 2.4.9_006
+
+ Known_problems |    5 +++++
+ Release_Notes  |   12 +++++++++++-
+ 2 files changed, 16 insertions(+), 1 deletions(-)
+
+commit b485f30b712b8a426b3f7752bb2429a210bf2ce4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 20 09:30:38 2011 -0400
+
+    Update t/pthreadBarf.t to use Test::More
+    
+    Test::More is the standard test package for on-going PDL
+    development (the right combination of features and
+    availability---it is part of the perl Core module set).
+    
+    Also, the test should pass with and without pthreads being
+    enabled so I've allowed that with a message output for when
+    pthreads is not enabled.
+
+ t/pthreadBarf.t |  136 +++++++++++++++++++++----------------------------------
+ 1 files changed, 52 insertions(+), 84 deletions(-)
+
+commit 0f40cffc73ae80526ea12487d50b1abc26178bc0
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sat Aug 20 18:21:10 2011 +1000
+
+    Remove 'PDL_Long *' from Basic/Core/typemap
+    
+    The 'PDL_Long *' typemapping was introduced to fix
+    breakages reported in SF Bug 3377113.
+    This typemapping was inappropriate, and is hopefully
+    no longer necessary now that Core.xs.PL has been
+    amended.
+
+ Basic/Core/typemap |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit e54b0f0174f2f8f297479cceb38edb7e4cec6880
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sat Aug 20 18:21:09 2011 +1000
+
+    Fix some coding issues in Core.xs.PL (SF Bug 3377113)
+    
+    Fixes some breakages caused by poor coding practice, not
+    caught until version 3 of ExtUtils::ParseXS was introduced.
+
+ Basic/Core/Core.xs.PL |  186 +++++++++++++++++++++++++++---------------------
+ 1 files changed, 105 insertions(+), 81 deletions(-)
+
+commit 87dbc8eaccd3e73cbc583e8011718e6c3e0c4f21
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Aug 17 09:38:58 2011 -0400
+
+    Update Known_problems for 2.4.9_006 development
+
+ Known_problems |   11 +++++++----
+ 1 files changed, 7 insertions(+), 4 deletions(-)
+
+commit e308a0311f5deb7f6f7ac01bb1ad13209ac26816
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 16 21:45:42 2011 -0400
+
+    Update VERSION to 2.4.9_006 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    1 -
+ Release_Notes  |   34 +++++++++++++++++++++++++++++++++-
+ 3 files changed, 34 insertions(+), 3 deletions(-)
+
 commit d410920521eddd0645cc4e0e89ce791fb022b1ef
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Aug 16 20:08:26 2011 -0400
