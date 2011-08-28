@@ -1,3 +1,119 @@
+commit c8335d8e7a8db78e96bf12189be0c2cfc1d4532f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 28 12:19:01 2011 -0400
+
+    Update Release_Notes for PDL-2.4.9_008 release
+    
+    This is a roll-up of the PDL bugs fixed to date.
+
+ Known_problems |   10 ++++++++++
+ Release_Notes  |    7 ++++++-
+ 2 files changed, 16 insertions(+), 1 deletions(-)
+
+commit a3359f2f33cb5c41801ac0bf03ff7bac0753abc3
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Aug 26 15:06:41 2011 -0500
+
+    Added NoPthread to all low-level PLplot functions
+
+ Graphics/PLplot/plplot.pd |   57 ++++++++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 56 insertions(+), 1 deletions(-)
+
+commit 59a8e2806870abbf90f2059366134a7706098552
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 26 12:44:37 2011 -0400
+
+    Correct fix to FITS.pm for sf.net bug #3394327
+    
+    Need to localize the *output* record separator, and not
+    the input record separator.
+
+ IO/FITS/FITS.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit e94f81e83a5d1d6ff02f76bb52616825dd1e4c3b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Aug 25 18:20:32 2011 -0400
+
+    Fix test count in t/pnm.t
+
+ t/pnm.t |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+commit bba589f6a6b6794060dcfff94da403cc90e4e8fd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Aug 25 13:52:38 2011 -0400
+
+    More clean-up to pdlcore.c.PL re dSP
+    
+    Added some indentation and moved the SV *sv declaration
+    into the same block as the dSP since that is where the
+    pointer is used.
+
+ Basic/Core/pdlcore.c.PL |   87 +++++++++++++++++++++++++---------------------
+ 1 files changed, 47 insertions(+), 40 deletions(-)
+
+commit 8a7484dc42bbcab3ea5aa4b8b07a84ffb4a65a69
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu Aug 25 10:06:13 2011 +1000
+
+    Better fix (for MicroSoft Compilers) to pdlcore.c.PL
+    
+    Use scope block instead of "#ifdef" to solve the
+    problem re "dSP" declaration.
+
+ Basic/Core/pdlcore.c.PL |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
+
+commit 0bf6152018c38797e86ac870ba152267db542ac6
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Aug 23 12:11:29 2011 +1000
+
+    Minor fix (for MicroSoft Compilers) to pdlcore.c.PL
+    
+    "dSP;" needs to be declared early for older MS
+    compilers
+
+ Basic/Core/pdlcore.c.PL |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+commit 70f7b22fe14d50bee3238b7d914cbe145ff0a512
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Aug 22 09:15:18 2011 -0400
+
+    Update readme-type files
+
+ Known_problems |    2 --
+ Perldl2/TODO   |    2 +-
+ Release_Notes  |    5 +++++
+ TODO           |    8 ++++++--
+ 4 files changed, 12 insertions(+), 5 deletions(-)
+
+commit aab760e8ccfcc31d875e143c47075e3a56033d80
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 21 15:34:17 2011 -0400
+
+    Enable tests for more converters
+    
+    Some of these tests were commented out a while ago because of
+    "buggy" pnmtoxxx converters.  I'm not sure that is the case
+    so am enabling these tests to evaluate more fully.
+
+ t/picrgb.t |   14 ++++++++------
+ t/pnm.t    |   12 +++++++-----
+ 2 files changed, 15 insertions(+), 11 deletions(-)
+
+commit 81ca9e6613f9c6cd1f994e9fc257b406799c3991
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 21 11:49:25 2011 -0400
+
+    Update VERSION to 2.4.9_008 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |   14 +-------------
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 14 deletions(-)
+
 commit 68e92867ef55db36bd7255b5008d0b50652097d1
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Aug 21 11:00:12 2011 -0400
