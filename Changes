@@ -1,3 +1,826 @@
+commit 50cf216d9a85e13143b99ad7234b81d392ded5b2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 11 13:01:59 2011 -0400
+
+    Update readme-type files for 2.4.9_009 release
+
+ Known_problems |    5 +++++
+ Release_Notes  |   10 ++++++----
+ cygwin/INSTALL |    9 ++++++++-
+ cygwin/README  |   16 +++++++++++++++-
+ 4 files changed, 34 insertions(+), 6 deletions(-)
+
+commit 6b8777d9adeaedd05e42aa2ae59182c42e14c647
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Oct 10 17:02:53 2011 -0400
+
+    Fix badvalue processing edge case for readflex()
+
+ IO/FlexRaw/FlexRaw.pm |   17 +++++++++--------
+ 1 files changed, 9 insertions(+), 8 deletions(-)
+
+commit e70e158dcbb27bb7068b2048b9bf8526c6b7a1c6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Oct 10 14:06:40 2011 -0400
+
+    Update Release_Notes for PDL::NiceSlice work
+
+ Release_Notes |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+commit 60511d8de8d1fae1e34a0aaac52a0ba7d5f20071
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 9 22:59:03 2011 -0400
+
+    Fix syntax error from typo
+    
+    This utility does not appear to work with the new
+    Filter::Simple based PDL::NiceSlice engine.  We
+    will need to sort out what is going on before an
+    official release.
+
+ utils/perldlpp.pl |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 1eb1b2d115528d692839e4cfc24c51300696a7bc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Oct 9 22:14:21 2011 -0400
+
+    Improved PDL::NiceSlice filter engine (finally!)
+    
+    PDL::NiceSlice has been refactored to use "engines" for
+    the filters and there are now 2 to choose from.  The
+    original functionality via Filter::Util::Call and the
+    new and improved version based on Filter::Simple.
+
+ Basic/SourceFilter/FilterSimple.pm   |   16 +
+ Basic/SourceFilter/FilterUtilCall.pm |   53 ++
+ Basic/SourceFilter/Makefile.PL       |   21 +-
+ Basic/SourceFilter/NiceSlice.pm      |  117 ++--
+ Basic/SourceFilter/NiceSlice2.pm     | 1105 ----------------------------------
+ Known_problems                       |    4 +
+ Release_Notes                        |   17 +
+ 7 files changed, 158 insertions(+), 1175 deletions(-)
+
+commit 71f79d89a4ebfa98500e1980d3aa90e665f439a4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 6 18:03:31 2011 -0400
+
+    Don't call twiddle() in imag2d if glutRunning==1
+    
+    If the FreeGLUT/GLUT event loop support is present and enabled
+    in ReadLine::Term then we don't call twiddle after displaying
+    the images since it is not needed.
+
+ Graphics/Graphics2D.pm |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 198b9b56b709ca9acaa1fda1ceff599bd28295f5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 5 18:57:17 2011 -0400
+
+    Fix rcols to use same convention as wcols
+    
+    Now dim0 is always the data dimension and dim1 corresponds
+    to the columns read for 2D pdls.  This makes rcols now the
+    reverse operation of wcols.
+
+ IO/Misc/misc.pd |   49 +++++++++++++++++++++++++++++++++----------------
+ Known_problems  |    1 -
+ Release_Notes   |   18 ++++++++++++++++++
+ 3 files changed, 51 insertions(+), 17 deletions(-)
+
+commit c0accab0b98490a80bf48d3d117d03e763f88404
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 4 12:44:34 2011 -0400
+
+    Create pdl2.pod (but pdldoc still doesn't show!)
+    
+    I'm not sure why scantree() is not finding the documentation
+    for pdl2 and adding it to the online database.
+
+ Perldl2/Makefile.PL |   20 ++++++++++++++++++--
+ 1 files changed, 18 insertions(+), 2 deletions(-)
+
+commit 794ab90b1f0e62a108f0d59931370056973b25de
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Oct 1 09:31:50 2011 -0400
+
+    Missing fix for whereND zeroes mask bug
+    
+    I think I "fixed" the Primitive.pm file and forgot
+    to propagate things to the primitive.pd file.
+
+ Basic/Primitive/primitive.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 3407d0d686fb08c3a015f5142fdf9799a53f8a63
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 30 18:52:49 2011 -0400
+
+    Fix wcols to handle 2D pdl data
+    
+    Now wcols can write out columns of data from 1D piddles,
+    2D piddles, or 1D listrefs (pure perl array data).  Still
+    need to sort out which "column dimension" to use.  The
+    current implementation has wcols using dim(0) and rcols
+    using dim(1) which makes things inconsistent between the
+    two...
+
+ IO/Misc/misc.pd |   29 +++++++++++++++++++++--------
+ 1 files changed, 21 insertions(+), 8 deletions(-)
+
+commit ea80886189430b5118e8da7f3dcbe60ff3bbca70
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 29 18:28:16 2011 -0400
+
+    Fix sf.net bug #3415115, whereND of all-zeros mask
+    
+    Added a test to t/primitive.t for the problem and a
+    test for 0 or undef dimensions so splitdim is not
+    called for this case.
+
+ Basic/Primitive/primitive.pd |    3 ++-
+ t/primitive.t                |    9 +++++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+commit 7a95c9d779e29a925b6ac3522b05d85fa40ffb77
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 29 16:49:20 2011 -0400
+
+    Update bug list in Known_problems
+
+ Known_problems |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit be42308fae53972a146441fd7c683cd3896e564a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 29 16:14:26 2011 -0400
+
+    Tweak fix to empty-file bug for rcols
+    
+    With the addition of a check for defined, I was able
+    to keep the original construction while retaining the
+    fix.  Thanks, David!  This keeps the file-read and pdl
+    extending operations in a contiguous region of code.
+
+ IO/Misc/misc.pd |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+commit bdff5d36ef4c5e977153aaf7c0a1bff90e13a7c2
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Sep 29 14:07:03 2011 -0500
+
+    Fixed rcols.
+    
+    The previous patch included a failing test for rcols. This patch
+    includes a modification of IO/Misc/misc.pd that fixes the problem
+    by moving the edge-condition-checking code to a location *before*
+    the last-line cleanup code.
+
+ IO/Misc/misc.pd |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+commit a9b81eb3e2afc52de7135486b8a469d9e9c0cdf1
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Sep 29 14:02:09 2011 -0500
+
+    Found a bug with rcols, here's the test.
+    
+    This commit includes a test which exposes a bug with rcols. Some code
+    that immediately followed the file-read loop did one last operation,
+    cleaning up the last line, so to speak. The next block of code checked
+    if nothing was read in by the file. Problem is, the code that does the
+    clean-up assumed that some variables had a special structure that
+    required at least a single pass through the while loop, and an empty
+    file handle would never go through the loop. So, if you inadvertently
+    fed an empty file handle to rcols, it would die a sad death saying
+    
+    Can't use an undefined value as an ARRAY reference at /path/to/PDL/IO/Misc.pm line 676
+    
+    That's a bug if ever I've seen one, and this test checks for it.
+
+ t/misc.t |   13 ++++++++++++-
+ 1 files changed, 12 insertions(+), 1 deletions(-)
+
+commit b3adaf911dc949f39808b731a2478a6c661fe151
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Sep 28 14:26:30 2011 -0500
+
+    More work on describing different rules in PDL::PP.
+    
+    I've created an automated doc string for the InsertName rule. I had
+    created an automated doc string for PDL::PP::Rule::Returns, but
+    decided that was either not very helpful (i.e. Returns::One) or
+    had bad edge cases (i.e. an empty hash).
+
+ Basic/Gen/PP.pm |   11 +++++++++--
+ 1 files changed, 9 insertions(+), 2 deletions(-)
+
+commit f9102c50242a78fb579769ff7df4c9a87e7c53c0
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Sep 28 12:14:37 2011 -0500
+
+    Added an appendix to PP.pod with every function from PDL::PP
+    
+    PDL::PP exports a lot of functions. I've tried to document all of
+    them in a new Appendix C. I think it mostly gets things right,
+    although some input from others would be helpful.
+    
+    I also documented PMCode and PMFunc. I proposed some documentation
+    back in May because I wasn't quite sure about it, but I am now
+    quite confident in my understanding of these.
+    
+    Furthermore, I finally updated the copyright policy on this documentation.
+    In my correspondence with Toumas a few years back, he implied that
+    he did not care what kind of copyright we applied to the text. As
+    such, I am changing it. I take full responsibility for this change.
+
+ Basic/Pod/PP.pod |  277 +++++++++++++++++++++++++++++++++++++++++++++++++-----
+ 1 files changed, 251 insertions(+), 26 deletions(-)
+
+commit 5b5462a936fb001329070d60eb9a324d1bc218aa
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Sep 28 10:38:56 2011 -0500
+
+    Improved and CPANififed some documentation.
+    
+    Types.pm is generated from a .pm.PL file which, as is very common,
+    was never formatted to have its pod directly parsed and displayed.
+    This means that, when viewed on CPAN, the badvalue documentation
+    was messed up. I've corrected that.
+    
+    Furthermore, I updated PP's documentation to reflect that we have
+    support for a long-long type, with the single-character Q. I also
+    cleaned up PP's examples that used GenericTypes, which used Perl's
+    default bareword-to-string interpretation that croaks under strictures.
+    The modified code makes the processing of GenericTypes clearer, I
+    hope.
+
+ Basic/Core/Types.pm.PL |   73 +++++++++++++++++++++++++++++++++++++----------
+ Basic/Pod/PP.pod       |   29 ++++++++++++------
+ 2 files changed, 76 insertions(+), 26 deletions(-)
+
+commit deafde901f45a511a885edb7d8a3ddfd689aea7a
+Author: Doug Hunt <dhunt@ucar.edu>
+Date:   Mon Sep 26 09:45:25 2011 -0600
+
+    Added build option for Darwin.  Also added fix to plplot.pd which permits building of
+    more plplot functions if pllegend is not found.
+
+ Graphics/PLplot/Makefile.PL |   11 ++++++++++-
+ Graphics/PLplot/plplot.pd   |    7 +++----
+ 2 files changed, 13 insertions(+), 5 deletions(-)
+
+commit c663d48e5776d317c4ea0c2432847eb2fefd89a5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 23 18:04:48 2011 -0400
+
+    Edits to DEPENDENCIES and Known_problems
+
+ DEPENDENCIES   |    2 +-
+ Known_problems |    5 -----
+ 2 files changed, 1 insertions(+), 6 deletions(-)
+
+commit c58346976deaf78f909ecfd00492d03f72a8c6e7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Sep 18 12:50:25 2011 -0400
+
+    Make use Benchmark :hireswallclock conditional
+    
+    Removed it from t/pthread.t and made it conditional
+    on perl version number for t/pthread_auto.t.  Skipped
+    for perl versions earlier than 5.8.8 which is documented
+    as having a Core Benchmark module supporting the feature.
+
+ t/pthread.t      |    2 +-
+ t/pthread_auto.t |   15 ++++++++++++---
+ 2 files changed, 13 insertions(+), 4 deletions(-)
+
+commit 2c28ad9400f2c2946ddd5f775307328d1a81f4ec
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 17 10:03:41 2011 -0400
+
+    Update bug list in Known_problems
+    
+    And added the fixed segfault bugs to the Release_Notes
+    for the next developers release which is planned for
+    when CPAN Testers comes back on-line or when it is
+    requested---whichever comes sooner.
+
+ Known_problems |   12 ++----------
+ Release_Notes  |    8 +++++++-
+ 2 files changed, 9 insertions(+), 11 deletions(-)
+
+commit 7962130878aa97423b807660d278b6226c83b526
+Merge: 62ae31d bd8cc55
+Author: Craig DeForest <zowie@z7.boulder.swri.edu>
+Date:   Sat Sep 17 01:41:05 2011 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 62ae31d4677a50d874f4e9acd0302fb74f98f4a6
+Author: Craig DeForest <zowie@z7.boulder.swri.edu>
+Date:   Sat Sep 17 01:34:32 2011 -0600
+
+    fixes bugs 3307613 and 3294808 (problems with range in the
+    case where the index variable is Empty)
+
+ Basic/Slices/slices.pd |   32 +++++++++++++++-----------------
+ t/slice.t              |   10 +++++++++-
+ 2 files changed, 24 insertions(+), 18 deletions(-)
+
+commit bd8cc5558824cda07e7716ef5f5372882cd214ef
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sat Sep 17 17:33:29 2011 +1000
+
+    Make Basic/Core/pdlmagic.c C89-compliant
+    
+    Needed for older Microsoft Compilers.
+
+ Basic/Core/pdlmagic.c |   84 +++++++++++++++++++++++++-----------------------
+ 1 files changed, 44 insertions(+), 40 deletions(-)
+
+commit fb79fb7831ea222428334520265d7d9350300859
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 16 20:18:54 2011 -0400
+
+    Make t/pthread_auto.t more computationally intense
+    
+    That will make the computation times more representative
+    of the speed up one would get with multiple core CPUs.
+
+ t/pthread_auto.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 5b8ff1e8e2436a5ad085feac7c8e5d7a74ff09b9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Sep 14 12:49:45 2011 -0400
+
+    Rearrange POSIX threads params in perldl.conf
+
+ perldl.conf |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ce1d92c78fb036d2d60d4f63391607fe0e4e4d3a
+Merge: b22dcb1 2429d37
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Sep 13 17:23:42 2011 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit b22dcb149024c789d7f7cba232b6bffe7b5b50e9
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Sep 13 17:22:05 2011 -0500
+
+    Improved variable name parsing with ISBAD, etc.
+    
+    I discovered a weak (i.e. erroneous) regex to identify variable
+    names with keys such as $ISBAD, $ISGOOD, etc, but only for the
+    bad-value handling. I've fixed it, so now you can use variables
+    with numbers in your PP code.
+
+ Basic/Gen/PP/PDLCode.pm |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit d6a649f00267f0642738522266ee0b491c4cf561
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Sep 13 16:48:41 2011 -0500
+
+    Improved indentation in seperate_code
+
+ Basic/Gen/PP/PDLCode.pm |   88 +++++++++++++++++++++++-----------------------
+ 1 files changed, 44 insertions(+), 44 deletions(-)
+
+commit 2429d37e4a000a008e521ab9e648d2c61271a4de
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Sep 13 09:40:11 2011 -0400
+
+    Update Inline and pthreads in DEPENDENCIES
+    
+    Inline is a CPAN requirement for PDL but is not required
+    for a manual build.  Added a note about work towards win32
+    support for pthreads.
+
+ DEPENDENCIES |   14 +++++++++++---
+ 1 files changed, 11 insertions(+), 3 deletions(-)
+
+commit 519832c448588937a6b737e0928185cc67049611
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Sep 12 12:01:22 2011 -0500
+
+    Remove unnecessary HASP2Child key.
+    
+    The HASP2Child key was essentially a value for P2Child that had the
+    same boolean evaluation but was guaranteed to be defined as a numeric
+    value of either 0 or 1. However, the value of HASP2Child was never
+    used in any arithmetic, only in boolean context. Since undef evaluates
+    to false, all references to HASP2Child can be replaced by _P2Child
+    with impunity. I believe that is much clearer. It says, "If the user
+    indicated a value for P2Child, pass that, otherwise pass the undefined
+    value." It clearly points back to a user-level key, which I believe
+    is preferable to an internally defined key derived directly from the
+    user-level one.
+
+ Basic/Gen/PP.pm |   40 ++++++++++++++++++++++++----------------
+ 1 files changed, 24 insertions(+), 16 deletions(-)
+
+commit 638fbf5f750462d51e37c7da22464b78b123769b
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Sep 12 12:00:29 2011 -0500
+
+    Added doc strings to some rules.
+    
+    I'm working to understand the workings of each of the rules. Adding
+    doc-strings is a good practice, and it helps me build an automated
+    documentation system, too.
+
+ Basic/Gen/PP.pm |   18 ++++++++++++++----
+ 1 files changed, 14 insertions(+), 4 deletions(-)
+
+commit baee6b8830da70898ebb718630217b1cf6360854
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Sep 12 10:33:43 2011 -0500
+
+    Moved PMFunc logic from pp_def into a Rule.
+    
+    The handling of PMFunc was inserted by-hand into pp_def. Given that
+    all of the optional argument handling is supposed to be done with
+    Rules, I moved this into its own Rule at the end of the Rule table.
+    Now we are guaranteed that the key PMFunc will have a meaningful
+    value if the user did not supply one.
+
+ Basic/Gen/PP.pm |   18 ++++++++++++------
+ 1 files changed, 12 insertions(+), 6 deletions(-)
+
+commit 3ab2e3f4c30f9eb2af7532712092e7c1720f858d
+Merge: eb75424 6186085
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Sep 12 09:59:52 2011 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit eb75424ff777eee2043618b96a5adc17fed12a8e
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Sep 12 09:51:18 2011 -0500
+
+    Made some PP.pm code more legible.
+    
+    The XS C Header variable in mkxscat and mkVarArgsxscat was named
+    chdrs, which made me think "Change Directories", not "C Headers".
+    So, I renamed it to xs_c_headers for clarity. I also renamed prel
+    to prelude. It doesn't tell you what kind of prelude it is, but at
+    least you know it's something that comes before something else,
+    which I hope helps.
+    
+    Also, and this may just be a style thing, I revised the code that
+    constructs the prelude string. It may be just me, but joining a
+    bunch of members in an array by surrounding the array with quotes
+    (i.e. $joined = "@seperate") really threw me off. Instead, I used
+    the join operator, with a suggestive use of the fat comma:
+    
+     join $with_this_seperator => (@these_items);
+    
+    I hope that makes the meaning of the code clearer to anybody else
+    who comes along.
+
+ Basic/Gen/PP.pm |   24 ++++++++++++------------
+ 1 files changed, 12 insertions(+), 12 deletions(-)
+
+commit 61860854b356fccc0b5268861b450cb514416214
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Sep 12 10:27:20 2011 -0400
+
+    Switch to use Benchmark ':hireswallclock' timings
+    
+    This allows the total time to be reported with small
+    enough granularity to see whether there is a performance
+    improvement from use of pthreads.  It would be nice if
+    there were a Benchmark variant that was more useful for
+    showing speedup information.  Thanks to Dima Kogan for
+    sorting this out and the fix.
+
+ t/pthread.t      |    2 +-
+ t/pthread_auto.t |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 0aafe68eac4bfa6e2fd41a9f2447e9bea11f2ffe
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Sep 11 10:07:47 2011 -0400
+
+    Fix t/pthread_auto.t unthreaded case
+    
+    The benchmark between threaded and unthreaded failed
+    to disable the threads for the unthreaded test.  Set
+    target to 0 for comparison to unthreaded as in:
+    set_autopthread_targ(0), it used to be 10 here.
+
+ t/pthread_auto.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit a05af9300a0f6ce24efb86ddd2334b6832000ee3
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sat Sep 10 22:43:29 2011 -0500
+
+    Removed unnecessary rule for DefaultFlow in PP.pm.
+    
+    The pp_def key DefaultFlow is only used in two rules. The first
+    ensures that DefaultFlow has a default value of zero and the
+    second rule uses that boolean value to set up a code fragment.
+    However, the first rule can be subsumed by the second rule by
+    using the optional-condition syntax (an underscore in front of
+    the condition name). So, I fixed it.
+
+ Basic/Gen/PP.pm |    8 ++------
+ 1 files changed, 2 insertions(+), 6 deletions(-)
+
+commit 64d7802a38d3cba77f51dc5682d41472bbf6d6f9
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sat Sep 10 21:42:48 2011 -0500
+
+    Cleaned up PP.pm's first rule for the BadFlag.
+    
+    The original rule passed "_HandleBad" in an array ref. It worked,
+    but was unnecessary and confusing to anybody trying to figure out
+    what the heck rules are and how they work.
+
+ Basic/Gen/PP.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 384165bf48ce6e76c3f6e7889fe07e8241713029
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sat Sep 10 21:35:59 2011 -0500
+
+    Fixed indentation in PDL::PP::Rule::new()
+
+ Basic/Gen/PP.pm |   26 +++++++++++++-------------
+ 1 files changed, 13 insertions(+), 13 deletions(-)
+
+commit 88ae249b395d8b79391d602aba659681ff632b73
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sat Sep 10 21:26:32 2011 -0500
+
+    Made extract_args in PP.pm more legible.
+    
+    Some of the function's content was not nicely indented and it was
+    defensive against an auto-vivification that would never occur. It
+    also used substr in an obfuscating fashion rather than a simple
+    s/// regex.
+
+ Basic/Gen/PP.pm |   31 ++++++++++---------------------
+ 1 files changed, 10 insertions(+), 21 deletions(-)
+
+commit 05404d3a2ab19cb3d0306049664e4fead714bd06
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 10 19:05:23 2011 -0400
+
+    Clean up POSIX_THREADS_INC and _LIBS handling
+    
+    Now the INC is the string for the include directory to
+    add to the search path and the LIBS string is the one
+    to add the library directory and library option to the
+    build path.
+
+ Basic/Core/Makefile.PL |   11 +++++------
+ perldl.conf            |    5 +++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+commit 65a4af0b4dc90cb5b7db5d57b10380daf492101c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 10 12:25:46 2011 -0400
+
+    Remove attempts to printf pthread_t objects
+    
+    I've commented out the incorrect attempts to print pthread_t
+    objects (by definition are to be opaque).  For debugging
+    purposes, someone might wish to implement a thread specific
+    variable so we could print the number of the thread from the
+    pthread_t information.
+
+ Basic/Core/pdlmagic.c |   33 +++++++++++++++------------------
+ 1 files changed, 15 insertions(+), 18 deletions(-)
+
+commit 9b73c281e8c47f724aa1e678684e4145d9aff6e9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 10 10:54:18 2011 -0400
+
+    Fix data type for done_pdl_main_pthreadID_init
+    
+    The idea was to *not* use pthread_t here.  Still to do,
+    fix printf attempts for pthread_t objects.
+
+ Basic/Core/pdlmagic.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 28f5347f69098fbabb2ef8a9e97b970be4e150a9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 10 09:28:45 2011 -0400
+
+    Fix whitespace error in generated code
+    
+    Editor white space changes affected strings with
+    newlines and tabs.  This broke generated Makefiles.
+    It would be nice if we had a less whitespace fragile
+    way to include the makefile content.  Thanks for the
+    catch, Rob.
+
+ Basic/Core/Makefile.PL |  329 +++++++++++++++++++++++-------------------------
+ 1 files changed, 160 insertions(+), 169 deletions(-)
+
+commit e3dd3dc548732247370552880b1558b3e42c710a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 9 16:14:51 2011 -0400
+
+    Remove IO/Pnm/converters
+    
+    These were old, patched versions of NetPBG TIFF conversion
+    routines.  They are not used nor needed with current NetPBM
+    releases.
+
+ IO/Pnm/converters/README      |   11 --
+ IO/Pnm/converters/pnmtotiff.c |  372 ----------------------------------------
+ IO/Pnm/converters/tifftopnm.c |  376 -----------------------------------------
+ 3 files changed, 0 insertions(+), 759 deletions(-)
+
+commit 7c836ff58933ebc9d67bd789d1f933f0ff4ae0e9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 9 14:42:44 2011 -0400
+
+    Add support for POSIX_THREADS_(INC|LIBS)
+    
+    The new perldl.conf parameters: POSIX_THREADS_INC and
+    POSIX_THREADS_LIBS may now be used to specify the include
+    and library locations to build PDL with pthreads support.
+    This fix works for cygwin but there are a few issues with
+    path separators and possible library format options that
+    would need to be modified to support win32 builds.
+
+ Basic/Core/Makefile.PL |  337 +++++++++++++++++++++++++-----------------------
+ 1 files changed, 178 insertions(+), 159 deletions(-)
+
+commit ea501f9c3382ec73dd9f328a9c3c954e55ca6db6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 9 10:30:05 2011 -0400
+
+    Add t/pgplot.t hang info to Known_problems
+    
+    And add directions to read that file if there are build
+    issues to README and INSTALL.
+
+ INSTALL        |    4 +++-
+ Known_problems |    5 +++++
+ README         |    3 ++-
+ 3 files changed, 10 insertions(+), 2 deletions(-)
+
+commit e2d5ac73121da70357cdd91eeca28a7ea0cade48
+Merge: a0b318d d892049
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 2 22:24:18 2011 -0400
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit a0b318d304c04764f6404a232f39547d801bad99
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 2 22:22:17 2011 -0400
+
+    Update $pdl_core_version for large pdl support
+    
+    We've been making a lot of changes to the core
+    PDL code and probably should have been updating
+    the $pdl_core_version all along---at least I know
+    I didn't.
+
+ Basic/Core/pdlcore.h.PL |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit d892049f49d1eea0f3d0edc226f7c16020af4fa7
+Author: Doug Hunt <dhunt@ucar.edu>
+Date:   Fri Sep 2 09:18:24 2011 -0600
+
+    Per Sisyphus's suggestion, duplicated $flags before and after temp.c:
+    system "$cc $ccflags $flags temp.c $flags -o temp > $devnull 2>&1";
+    in Makefile.PL.  This is done because some systems need $flags in one
+    place, some systems in the other.
+
+ Graphics/PLplot/Makefile.PL |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+commit b62a0f0ba3760130688a5ae0af20a9de88412235
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 2 09:45:27 2011 -0400
+
+    Add pthreads to DEPENDENCIES
+    
+    Make explicit mention of pthreads being needed to support
+    the new PDL::ParallelCPU capability.
+
+ DEPENDENCIES |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+commit 9701049e6287a68580a79720e79d63885395089e
+Merge: 8753d83 0a28652
+Author: Doug Hunt <dhunt@ucar.edu>
+Date:   Thu Sep 1 12:38:31 2011 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 8753d83c1a37459228f230a7c3e58a6f14fb1f80
+Author: Doug Hunt <dhunt@ucar.edu>
+Date:   Thu Sep 1 12:37:20 2011 -0600
+
+    Added back some of Sisyphus's changes for Windows to plplot.pd and Makefile.PL
+
+ Graphics/PLplot/Makefile.PL |    2 +-
+ Graphics/PLplot/plplot.pd   |   10 ++++++----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+
+commit 0a28652c958482e4553655f4f088ad0aa9c51cb7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 1 14:13:26 2011 -0400
+
+    Add LIBS and INC options for pthreads
+    
+    Add the ability to specify POSIX_THREADS_LIBS and POSIX_THREADS_INC
+    in perldl.conf as a way to simplify the correct build of pthreads
+    in PDL.  This should not be needed once the full detection is
+    sorted out.
+
+ perldl.conf |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit ea00c841f8e7ca0d54b080016f8672405c1ed0a9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 1 14:00:43 2011 -0400
+
+    Clean up pthread_t access in pdlmagic.c
+    
+    This is a partial fix for platform specific coding using the
+    pthreads API.  Still to do, fix the detection of the pthreads
+    library in Basic/Core/Makefile.PL and rework the print
+    statements in pdlmagic.c which assume that a pthread_t can
+    be printed out as an integer (not true for all platforms and
+    bad coding style regardless).  The good news is if I hardwire
+    the pthreads library and includes on cygwin it all appears to
+    build and test ok....
+
+ Basic/Core/pdlmagic.c |   25 ++++++++++++++-----------
+ 1 files changed, 14 insertions(+), 11 deletions(-)
+
+commit c27168f4fbee1771cb97c7211a1c389be9d2ed72
+Author: Doug Hunt <dhunt@ucar.edu>
+Date:   Wed Aug 31 09:22:27 2011 -0600
+
+    Give credit to Sisyphus for the OPTIONS! file processing changes.
+
+ Graphics/PLplot/Changes |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 73a90bdd7687047933afc2a0355bb40ca8295930
+Author: Doug Hunt <dhunt@ucar.edu>
+Date:   Tue Aug 30 15:41:08 2011 -0600
+
+    Updated to latest version of PDL::Graphics::PLplot.  Merged in David Mertens
+    changes to Makefile.PL and plplot.pd.  Added new test to PLplot.t--David's
+    'nopthreads' failure test.
+
+ Graphics/PLplot/Changes     |   14 +
+ Graphics/PLplot/Makefile.PL |   95 +-
+ Graphics/PLplot/plplot.pd   | 3882 ++++++++++++++++++++++++++++---------------
+ MANIFEST                    |    1 +
+ t/plplot.t                  |   65 +-
+ 5 files changed, 2640 insertions(+), 1417 deletions(-)
+
+commit 1fb573a6454fa580d848b664965c29ee396b469f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Aug 29 17:09:00 2011 -0400
+
+    Fix offs declaration in listref_c
+    
+    offs was misdeclared as a (PDL_Long *) rather than (PDL_Long)
+    in PDL/Basic/Core/Core.xs.  Also fixed the mismatch between
+    the smalloc in pdl.h and the new prototype for pdl_malloc.
+
+ Basic/Core/Core.xs.PL      |    2 +-
+ Basic/Core/pdlcore.h.PL    |    2 +-
+ Basic/Slices/slices.pd     |    4 ++--
+ IO/Storable/storable.pd    |    2 +-
+ Lib/GSL/MROOT/FUNC.c       |    2 +-
+ Lib/ImageND/imagend.pd     |    6 +++---
+ Lib/Minuit/FCN.c           |    2 +-
+ Lib/Transform/transform.pd |    6 +++---
+ 8 files changed, 13 insertions(+), 13 deletions(-)
+
+commit 3d03943a2386e6d92231839fb014b7d83951cdfb
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Aug 28 13:34:51 2011 -0400
+
+    Update VERSION to 2.4.9_009 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit c8335d8e7a8db78e96bf12189be0c2cfc1d4532f
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Aug 28 12:19:01 2011 -0400

@@ -224,9 +224,12 @@ arrays (also see L</rgrep()>).
 
 For each column number specified, a 1D output PDL will be
 generated.  Anonymous arrays of column numbers generate
-multicolumn output piddles.  An empty anonymous array as
-column specification will produce a single output data
-piddle with dim(0) equal to the number of columns available.
+2D output piddles with dim0 for the column data and dim1
+equal to the number of colums in the anonymous array(s).
+
+An empty anonymous array as column specification will
+produce a single output data piddle with dim(1) equal
+to the number of columns available.
 
 There are two calling conventions - the old version, where a
 pattern can be specified after the filename/handle, and the
@@ -329,7 +332,7 @@ e.g.,
   ($name,$x,$y) = rcols 'file4', 0, 1, 2, { PERLCOLS => [ 0 ] };
 
   # read in the first column as a perl array returned first followed by the
-  # the next two data columns in the file as a single 2-column piddle 
+  # the next two data columns in the file as a single Nx2 piddle 
   ($name,$xy) = rcols 'file4', 0, [1, 2], { PERLCOLS => [ 0 ] };
 
 
@@ -338,15 +341,19 @@ e.g.,
   1. Quotes are required on patterns or use the qr{} quote regexp syntax.
   
   2. Columns are separated by whitespace by default, use the COLSEP option
-  separator to specify an alternate split pattern or string or specify an
-  alternate default separator by setting C<$PDL::IO::Misc::defcolsep> .
+     separator to specify an alternate split pattern or string or specify an
+     alternate default separator by setting C<$PDL::IO::Misc::defcolsep> .
   
   3. Legacy support is present to use C<$PDL::IO::Misc::colsep> to set the
-  column separator but C<$PDL::IO::Misc::colsep> is not defined by default.
-  If you set the variable to a defined value it will get picked up.
+     column separator but C<$PDL::IO::Misc::colsep> is not defined by default.
+     If you set the variable to a defined value it will get picked up.
   
   4. LINES => '-1:0:3' may not work as you expect, since lines are skipped
-  when read in, then the whole array reversed.
+     when read in, then the whole array reversed.
+
+  5. For consistancy with wcols and rcols 1D usage, column data is loaded
+     into the rows of the pdls (i.e., dim(0) is the elements read per column
+     in the file and dim(1) is the number of columns of data read.
 
 =cut
 
@@ -649,7 +656,7 @@ close($fh) unless $is_handle;
 # burp one final time if needed and 
 # clean out additional ARRAY ref level for @ret
 for (@ret, $line_store) {
-   _burp_1D($_,$index) if scalar @{$_->[1]};
+   _burp_1D($_,$index) if defined $_ and scalar @{$_->[1]};
    $_ = $_->[0];
 }
 
@@ -676,7 +683,8 @@ if ( $index == -1 ) {
 # then we can skip the following nastiness
 if ( $line_rev == 0 and $index_start >= 0 and $index_end >= -1 ) {
    for (@ret) {
-      $_ = $_->mv(-1,0)->slice("0:${index}")->mv(0,-1) unless ref($_) eq 'ARRAY';
+      ## $_ = $_->mv(-1,0)->slice("0:${index}")->mv(0,-1) unless ref($_) eq 'ARRAY';
+      $_ = $_->mv(-1,0)->slice("0:${index}") unless ref($_) eq 'ARRAY';  # cols are dim(0)
    };
    if ( $options->{VERBOSE} ) {
       if ( ref($ret[0]) eq 'ARRAY' ) {
@@ -753,6 +761,12 @@ if ( $options->{VERBOSE} ) {
    }
 }
 
+# fix 2D pdls to match what wcols generates
+foreach my $col (@ret) {
+   next if ref($col) eq "ARRAY";
+   $col = $col->mv(0,1) if $col->ndims == 2;
+}
+
 wantarray ? return(@ret) : return $ret[0];
 }
 
@@ -761,7 +775,7 @@ wantarray ? return(@ret) : return $ret[0];
 
 =for ref
 
-  Write ASCII columns into file from 1D piddles or listrefs efficiently.
+  Write ASCII columns into file from 1D or 2D piddles and/or 1D listrefs efficiently.
 
 Can take file name or *HANDLE, and if no file/filehandle is given defaults to STDOUT.
 
@@ -777,8 +791,10 @@ Can take file name or *HANDLE, and if no file/filehandle is given defaults to ST
 
  Usage: wcols $data1, $data2, $data3,..., *HANDLE|"outfile", [\%options];
 
-   where the $dataN args are either 1D piddles or 1D perl array refs
-   as might be returned from rcols() using the PERLCOLS option.
+   where the $dataN args are either 1D piddles, 1D perl array refs,
+   or 2D piddles as might be returned from rcols() with the [] column
+   syntax and/or using the PERLCOLS option.  dim(0) of all piddles
+   written must be the same size.
 
 e.g.,
 
@@ -800,6 +816,10 @@ e.g.,
   wcols $a,$b, { Header => "#   a   b", Colsep => ', ' };  # case insensitive option names!
   wcols " %4.1f  %4.1f  %s",$a,$b,$units, { header => "# Day  Time  Units" };
 
+  $a52 = sequence(5,2); $b = ones(5); $c = [ 1, 2, 4 ];
+  wcols $a52;         # now can write out 2D pdls (2 columns data in output)
+  wcols $b, $a52, $c  # ...and mix and match with 1D listrefs as well
+
   NOTES:
   
   1. Columns are separated by whitespace by default, use
@@ -810,6 +830,9 @@ e.g.,
      of PDL-2.4.6 and earlier is maintained but the initial value
      of the global is undef until you set it.  The value will be
      then be picked up and used as if defcolsep were specified.
+
+  3. Dim 0 corresponds to the data dimension for both rcols and
+     wcols.  This makes wcols the reverse operation to rcols.
 
 =cut
 
@@ -864,12 +887,19 @@ sub PDL::wcols {
    }
 
    my @p = @_;
-   my $n = (ref $p[0] eq 'ARRAY') ? $#{$p[0]}+1 : $p[0]->nelem;
+   my $n = (ref $p[0] eq 'ARRAY') ? $#{$p[0]}+1 : $p[0]->dim(0);
+   my @dogp = ();  # need to break 2D pdls into a their 1D pdl components
    for (@p) {
       if ( ref $_ eq 'ARRAY' ) {
          barf "wcols: 1D args must have same number of elements\n" if scalar(@{$_}) != $n;
+         push @dogp, $_;
       } else {
-         barf "wcols: 1D args must have same number of elements\n" if $_->nelem != $n or $_->getndims!=1;
+         barf "wcols: 1D args must have same number of elements\n" if $_->dim(0) != $n or $_->getndims > 2;
+         if ( $_->getndims == 2 ) {
+            push @dogp, $_->dog;
+         } else {
+            push @dogp, $_;
+         }
       }
    }
    if ( defined $header ) {
@@ -877,12 +907,12 @@ sub PDL::wcols {
        print $fh $header;
    }
    my $i;
-   my $pcnt = scalar @p;
+   my $pcnt = scalar @dogp;
    for ($i=0; $i<$n; $i++) {
        if ($format_string) {
            my @d;
 	   my $pdone = 0;
-           for (@p) {
+           for (@dogp) {
                push @d,_at_1D($_,$i); $pdone++;
                if (@d == $step) {
                    printf $fh $format_string,@d;
@@ -892,8 +922,8 @@ sub PDL::wcols {
            }
            if (@d && !$i) {
                my $str;
-               if ($#p>0) {
-                   $str = ($#p+1).' columns don\'t';
+               if ($#dogp>0) {
+                   $str = ($#dogp+1).' columns don\'t';
                } else {
                    $str = '1 column doesn\'t';
                }
@@ -905,7 +935,7 @@ sub PDL::wcols {
            }
        } else {
 	   my $pdone = 0;
-           for (@p) {
+           for (@dogp) {
 	       $pdone++;
                print $fh _at_1D($_,$i) . ( ($pdone==$pcnt) ? '' : $usecolsep );
            }
