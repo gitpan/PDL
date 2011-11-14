@@ -629,6 +629,7 @@ Lib/Transform/transform.pd
 MANIFEST			This list of files
 MANIFEST.SKIP
 Makefile.PL
+PDLdb.pl
 Perldl2/Makefile.PL
 Perldl2/Plugin/Makefile.PL
 Perldl2/Plugin/NiceSlice.pm
@@ -806,4 +807,5 @@ t/xvals.t
 utils/perldlpp.pl
 win32/INSTALL
 win32/win32f77.pl
-META.yml                                 Module meta-data (added by MakeMaker)
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)

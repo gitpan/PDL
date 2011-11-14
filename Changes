@@ -1,3 +1,625 @@
+commit 71ce6dd44c6343227cd1dfa700c6462fcde85747
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 12 13:06:55 2011 -0500
+
+    Update Release_Notes and Known_problems
+
+ Known_problems |    3 +--
+ Release_Notes  |   13 +++++++++----
+ 2 files changed, 10 insertions(+), 6 deletions(-)
+
+commit 23d22709b66ab63dbe422825b5098587bd0dfeb0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 12 12:42:36 2011 -0500
+
+    Fix PDL::Core::convert return type confusion
+    
+    This was sf.net feature #3396738, "PDL::Core::convert default return
+    type" where the type argument for the convert() routine is a
+    type *number* which caused mysterious results when a string like
+    "long" was passed in (instead of long(), for example).  atof on
+    the string gives 0 which is the byte type.  This cleans up the
+    documentation and adds a barf if the type is not a number.
+    Later cleanup could include allowing for strings of type names
+    instead.
+
+ Basic/Core/Core.pm.PL |   17 +++++++++--------
+ 1 files changed, 9 insertions(+), 8 deletions(-)
+
+commit cef9be6a77ca5a57b39e74ce42160db6a513a8c1
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sat Nov 12 04:46:12 2011 -0600
+
+    Updated Release_Notes acknowledging printf fixes
+
+ Release_Notes |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 414c56330c2ed44d932bc510a9f5e25245c5a137
+Author: Tim Haines <communist.goatboy@gmail.com>
+Date:   Sat Nov 12 04:20:53 2011 -0600
+
+    Fixed numerous prinft errors.
+    
+    The source had many prinft format errors that were causing compilers
+    to spew lots of warning messages. For details, see sf bug #3391645.
+    
+    Here is Tim's original email that included the patch:
+    
+    --------%<--------
+    Core.xs.PL, pdlapi.c, pdlthread.c, pdlconv.c.PL, pdlmagic.c:
+    updated printf format flags for printing pointers
+    
+    pdlcore.c.PL: printf on line 920 had argument specifiers, but no
+    arguments
+    
+    Core.xs.PL: ftruncate was compiled with attribute warn_unused_result,
+    but return value was unchecked. I added a capture of the return value,
+    and croaked if it was bad. I didn't parse the errno returned since I
+    didn't want to taint the #include space with errno.h and string.h (I
+    had seen some comments about strndup causing conflicts in one of the
+    other files.)
+    
+    I am also getting the following warnings for Lib/Slatec/slatec/snrm2.f.
+    
+    snrm2.f:87.72:
+    
+       10 ASSIGN 30 TO NEXT
+                                                                            1
+    Warning: Deleted feature: ASSIGN statement at (1)
+    slatec/snrm2.f:94.19:
+    
+       20    GO TO NEXT,(30, 50, 70, 110)
+                       1
+    Warning: Deleted feature: Assigned GOTO statement at (1)
+    slatec/snrm2.f:96.72:
+    
+          ASSIGN 50 TO NEXT
+                                                                            1
+    Warning: Deleted feature: ASSIGN statement at (1)
+    slatec/snrm2.f:106.72:
+    
+          ASSIGN 70 TO NEXT
+                                                                            1
+    Warning: Deleted feature: ASSIGN statement at (1)
+    slatec/snrm2.f:112.72:
+    
+          ASSIGN 110 TO NEXT
+                                                                            1
+    Warning: Deleted feature: ASSIGN statement at (1)
+    
+    I don't know much about Fortran, so I didn't change any of these.
+    
+    I did a successful build and test after making the modifications above
+    using gcc 4.5.2 and glibc 2.13 on Ubuntu 11.04.
+    -------->%--------
+    
+    Signed-off-by: David Mertens <dcmertens.perl@gmail.com>
+
+ Basic/Core/Core.xs.PL   |   21 ++++++++--
+ Basic/Core/pdlapi.c     |  104 +++++++++++++++++++++++-----------------------
+ Basic/Core/pdlconv.c.PL |    2 +-
+ Basic/Core/pdlcore.c.PL |    2 +-
+ Basic/Core/pdlmagic.c   |    2 +-
+ Basic/Core/pdlthread.c  |   16 ++++----
+ 6 files changed, 80 insertions(+), 67 deletions(-)
+
+commit e3b6377a771cc6be639e374553598e1c50fe4703
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 11 14:33:23 2011 -0500
+
+    Add docs for rvals
+    
+    The implementation of rvals() shows wraparound for integer
+    data types when the value of r**2 is greater than the capacity
+    of the datatype.  Also, if a center is not specified, the one
+    used is rounded down to an exact pixel location.  I've
+    documented these features in response to sf.net feature
+    request tracker item 3396761 "fix rvals arithmetic wrap-around
+    for byte types".  Modifying the implementation to do differently
+    without costing memory or compatibility was problematic.  At
+    some point better diagnostics would help but I'm leary of
+    slowing down fundamental operations for every call to catch
+    the occaisional oops.  Maybe we could implement a verbose
+    option that could be conditionally compiled.
+
+ Basic/Core/Basic.pm |   14 +++++++++++++-
+ 1 files changed, 13 insertions(+), 1 deletions(-)
+
+commit 0002d5096bb3ab34e98886df6c2e61418a31bf4e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 11 12:39:42 2011 -0500
+
+    Update Release_Notes bugs fixed list
+
+ Release_Notes |   15 +++++++--------
+ 1 files changed, 7 insertions(+), 8 deletions(-)
+
+commit fbe6e15dcabbfb8033dca445ef64f53fe60b3d0f
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Nov 10 16:10:05 2011 -0600
+
+    Added release notes for changes to new_pdl_from_string.
+
+ Release_Notes |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
+
+commit 30ef00f415e99015ee769d57ebe4184cee54e6bf
+Merge: 04c3ff4 7c6c2ef
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Nov 8 06:39:40 2011 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 04c3ff47306c8abee9c975e16586b2fa19d69abf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Nov 8 06:37:55 2011 -0500
+
+    Fix sf.net bug #3434842 in GSL::SF
+
+ Lib/GSL/SF/laguerre/gsl_sf_laguerre.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 7c6c2ef9282b2d04f62502cc60bb106b52ba51c8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 7 15:34:11 2011 -0500
+
+    Minor updates to TODO and Perldl2/TODO
+
+ Perldl2/TODO |    4 ++--
+ TODO         |    9 +++++----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+commit 74a5659be167ef28d9e0cbaa61a43da3b86df5b7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 7 15:15:51 2011 -0500
+
+    Update to .gitignore
+
+ .gitignore |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit abc48560ced8aacb3f71f2c8a25c4cd7f7c452dc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 7 14:37:08 2011 -0500
+
+    Add fix for perl-vs-pthreads namespace pollution
+    
+    This is a workaround to a perl CORE "feature" where
+    they define a macro PTHREAD_CREATE_JOINABLE with the
+    same name as a POSIX threads identifier which works
+    ok...as long as the implementation of POSIX threads
+    also uses cpp macros.  As is, the use of the same
+    names breaks on including the win32 pthreads.h where
+    the identifiers are enums and not #defines
+
+ Basic/Core/pdlmagic.h |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+
+commit daf8cd025890c3e0f3ba8aa6b9183186e1913103
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 6 20:09:07 2011 -0500
+
+    Add new_pdl_from_string features to Release_Notes
+
+ Release_Notes |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
+
+commit 4e34a83a493b151c3bb2049467138cba96f025e6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 6 16:13:14 2011 -0500
+
+    Update included Devel::CheckLib to latest
+
+ inc/Devel/CheckLib.pm |   19 +++++++++++++++++--
+ 1 files changed, 17 insertions(+), 2 deletions(-)
+
+commit 770b577e42c3c7bb34c72e828abb0fda727e8e74
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 3 14:20:10 2011 -0400
+
+    Add version and header customization to PDLdb.pl
+
+ PDLdb.pl |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 57b8589a797987b61f91d1ba9575e698714d1e6c
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Nov 1 14:39:35 2011 -0500
+
+    Reverted and improved looks_like_number check.
+    
+    Consider the following code:
+    
+     $data = pdl '1.234';
+    
+    Removing the looks_like_number check to get pdl-from-string to
+    work cross-platform had a huge (x10) impact on the time it takes to
+    execute that code. This was deemed unacceptable, so the
+    looks_like_number check was reinstated. However, a check for the
+    strings 'nan' and 'inf' was added to short-circuit the logic of
+    looks_like_number. The current code is about 4.5% slower than the
+    original code for converting a single numeric string to a piddle,
+    but it gives the correct results for nan and inf strings on all
+    platforms.
+
+ Basic/Core/Core.pm.PL |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
+
+commit 37f6eadece7602b980e01ca63ff8d8a1c963b31c
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Nov 1 12:57:22 2011 -0500
+
+    Removed looks_like_number check, fixing pdl-from-string issue on Windows
+
+ Basic/Core/Core.pm.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 9abd837f440e849dcc591e23e5d82199a4d6e92b
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Nov 1 12:13:09 2011 -0500
+
+    Clarified another test for pdl-from-string inf
+
+ t/pdl_from_string.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 7ba56f4a7676f8287822027c3a8d7e4e84adb5cc
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Nov 1 12:10:18 2011 -0500
+
+    More and better tests for pdl-from-string inf and nan
+
+ t/pdl_from_string.t |   31 ++++++++++++++++++++-----------
+ 1 files changed, 20 insertions(+), 11 deletions(-)
+
+commit 6dbfa6fe28a0ba9acc634c4abc714124b7b02197
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Nov 1 09:45:57 2011 -0500
+
+    Removed two spurious functions in PDL::Core
+    
+    I had introduced PDL::Core::e and PDL::Core::E when I was trying to
+    make the eval version of pdl-from-string more secure. They're not
+    necessary anymore and I've removed them.
+
+ Basic/Core/Core.pm.PL |    9 ---------
+ 1 files changed, 0 insertions(+), 9 deletions(-)
+
+commit 269fd90bd795081707b18587fbfb4b3901f40df8
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Nov 1 09:43:55 2011 -0500
+
+    Fixed annoying warnings with pdl-from-string
+    
+    The test suite and the code for PDL::Core::new_pdl_from_string  were
+    causing hard-coded warnings (ala fprintf in C code). I've revised
+    the test and the function to avoid those warnings.
+
+ Basic/Core/Core.pm.PL |   14 +++++++-------
+ t/pdl_from_string.t   |    9 +++++----
+ 2 files changed, 12 insertions(+), 11 deletions(-)
+
+commit d730bdb80fdef471476f6398fa38df1ae939a708
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sun Oct 30 23:27:00 2011 -0500
+
+    Added proper parser error handling for pdl-from-string.
+    
+    The parser assumed that warnings were on, but they were not. I've
+    lexically added them to PDL::Core::parse_basic_string.
+    
+    In replacing the string-eval with the parser, I stopped catching
+    exceptions, but parse_basic_string throws them. So, I've wrapped
+    the call to parse_basic_string in an eval *block*, so as to catch
+    those exceptions.
+    
+    The error reporting when an exception is caught used to make
+    reference to an eval. Such a reference is no longer necessary.
+
+ Basic/Core/Core.pm.PL |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
+
+commit cf5637006bdd31027bd22b1fc0d844c86f7cdaf5
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sun Oct 30 23:12:31 2011 -0500
+
+    Wrote parser for pdl-from-string.
+    
+    Rather than argue that my eval-based method for pdl-from-string
+    functionality was secure, I decided to replace the eval step with
+    a parser. At this point, the pdl-from-string code is very complex
+    and should be redone. But, at least it is now secure.
+
+ Basic/Core/Core.pm.PL |  136 +++++++++++++++++++++++++++++++++++++++++-------
+ t/pdl_from_string.t   |   22 +++++---
+ 2 files changed, 129 insertions(+), 29 deletions(-)
+
+commit efadca1fdbb767f3958c568e660e8bd1b375fa9b
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Oct 26 15:33:12 2011 -0500
+
+    A few semi-cosmetic updates to PDL::Primitive.
+    
+    A line in PDL::Primitive said
+    
+      ... unless UNIVERSAL::isa($b, 'PDL');
+    
+    That's frowned upon because it prevents isa from being overloaded.
+    The correct way to say this is as follows:
+    
+      ... unless eval { $b->isa('PDL') };
+    
+    That will return false if $b is not a blessed reference or if it is
+    a blessed reference that is not a PDL.
+
+ Basic/Primitive/primitive.pd |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 9b7d4dcc1534778304c70999db14e62ac34267e1
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Oct 26 15:31:46 2011 -0500
+
+    Fixed pdl-from-string typos and errors.
+    
+    My last push wouldn't compile because I missed a parenthesis. I've
+    fixed that. I also added tests for the Windows expressions for inf
+    and nan and discovered an ordering problem that I also fixed in
+    PDL::Core.
+
+ Basic/Core/Core.pm.PL |    7 ++++---
+ t/pdl_from_string.t   |   34 ++++++++++++++++++++--------------
+ 2 files changed, 24 insertions(+), 17 deletions(-)
+
+commit 748c0700bf34138d7f41aa33e286f698eee3b1c2
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Oct 26 15:13:01 2011 -0500
+
+    Fixed typo in cross-product signature
+
+ Basic/Primitive/primitive.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit dee2d86bcc08ad0d278b1bf43933535a3f104ff0
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Oct 26 15:10:20 2011 -0500
+
+    Fixed pdl-from-string for Strawberry Perl.
+    
+    I discovered that Strawberry Perl (and all Windows?) print inf as
+    1.#INF. Similar strangeness also occurrs with nan. I've added code
+    in PDL::Core::new_pdl_from_string to properly process these strings.
+    Since they're on all platforms, this means that a user can paste
+    the output of their Windows box on a mailing list, and Linux users
+    can paste it into their editors and shells and it should work.
+
+ Basic/Core/Core.pm.PL |   14 ++++++++++++--
+ 1 files changed, 12 insertions(+), 2 deletions(-)
+
+commit 508da690846ac17d71481b4d5b088fe10552c40e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 26 11:16:49 2011 -0400
+
+    Update sf.net bugs list in Known_problems
+
+ Known_problems |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 09f928f5b2d6c2bf9bfa5abf7ddfeecd2ec9e04c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Oct 26 11:05:35 2011 -0400
+
+    Add WITH_NEW_PDL_FROM_STRING to perldl.conf
+    
+    And update t/config.t to match.  This setting should probably
+    be used as the default value of an internal parameter, like
+    $PDL::with_new_pdl_from_string and then conditionalize on
+    that in the constructor.  This allows for users/developers
+    to override the default setting if desired.
+
+ perldl.conf |   10 +++++++++-
+ t/config.t  |    2 +-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+commit 6c210f635c24ba54cd0e5bc9987e4c47f2a7e3e7
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Oct 25 15:57:57 2011 -0500
+
+    Improved checking and tests for pdl-from-string.
+    
+    Judd Taylor pointed out that functions called e123() could get
+    past the previous checking in PDL::Core::new_pdl_from_strin, so
+    I've added a check for that, as well as checks for various other
+    behaviors.
+
+ Basic/Core/Core.pm.PL |   10 ++++++++--
+ t/pdl_from_string.t   |   43 +++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 43 insertions(+), 10 deletions(-)
+
+commit 44aa2808bbfe3cfb637a2cec4347e7734807b478
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Oct 25 12:49:49 2011 -0500
+
+    Better barfing on disallowed characters in pdl-from-string
+    
+    Motivated by a cryptic message, I modified the barfing message
+    when an invalid character is sent to PDL::Core::new_pdl_from_string.
+    It now tells you about the first string of invalid characters that
+    it finds so that it's easier to track down your problem.
+
+ Basic/Core/Core.pm.PL |   13 +++++++------
+ t/pdl_from_string.t   |   18 +++++++++++++++---
+ 2 files changed, 22 insertions(+), 9 deletions(-)
+
+commit 0643a33c68e17f51aece1af09c4a0312bc888762
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Oct 25 11:46:06 2011 -0500
+
+    Stronger and more flexible PDL:Core::new_pdl_from_string
+    
+    The new function *always* installs PDL::Core::E and PDL::Core::e
+    so that there is absolutely no way for other-specified code to be
+    run during the eval portion of the function. I set them up to use
+    exp(1) as the replacement value, and also added support for the
+    strings pi, Pi, PI, and pI, so
+    
+    my $pdl = pdl q[ 1 2 pi]
+    
+    does what you mean.
+
+ Basic/Core/Core.pm.PL |   79 +++++++++++++++++++++++++++----------
+ t/pdl_from_string.t   |  103 ++++++++++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 155 insertions(+), 27 deletions(-)
+
+commit 36b2c2fce0a60f93ff6424c3228e0d12e60589b5
+Merge: cbfd1cb 364f278
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Oct 25 10:08:32 2011 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit cbfd1cbad1e4f547861fbc8bfbc87322bf04df2e
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Oct 25 10:06:40 2011 -0500
+
+    More tests for PDL::Core::new_pdl_from_string.
+    
+    I added some checks for checking inf and -inf, as well as checking
+    that the function croaks when not-allowed symbols are used in the
+    string.
+
+ t/pdl_from_string.t |   16 ++++++++++++++--
+ 1 files changed, 14 insertions(+), 2 deletions(-)
+
+commit 364f2784865dee03a6e2d36a8aa3a6a02f68fe56
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Oct 24 14:32:07 2011 -0400
+
+    Update FAQ, Known_problems, Release_Notes
+
+ Basic/Pod/FAQ.pod |   38 +++++++++++++++++++-------------------
+ Known_problems    |    1 -
+ Release_Notes     |    6 ++++++
+ 3 files changed, 25 insertions(+), 20 deletions(-)
+
+commit 37792ba9f2a2eea8d5732ada8d1a1ce77b4eeb2f
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Oct 24 11:28:56 2011 -0500
+
+    PDL::Core::pdl_from_string more secure, handles bad/inf
+    
+    I've revised how pdl_from_string handles its input. Per the
+    discussion on the PDL porters list, the only characters it accepts
+    now are whitespace, numbers, and
+    
+     [ ] . , ; + - e E
+    
+    with three important exceptions. The strings 'inf', 'nan', and 'bad'
+    all Do What You Mean now. It even goes so far as to check that
+    your datatype supports inf and croaks if it does not (for integers).
+    It warns if you try to use nan on an integer datatype and converts
+    it to a bad value.
+    
+    This patch also includes a few doc updates and added tests. I also
+    took the opportunity to organize the test file in a way that is
+    easier to follow (I hope).
+
+ Basic/Core/Core.pm.PL |  108 +++++++++++++++++++++++++++++++------------------
+ t/pdl_from_string.t   |   87 ++++++++++++++++++++++++++++++---------
+ 2 files changed, 136 insertions(+), 59 deletions(-)
+
+commit 3a54fcc6a88833f28ca1e3e0de1adb7ec84c0858
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Oct 22 18:18:56 2011 -0400
+
+    Fix PDL::Doc stuff so pdl2 is found by pdldoc
+    
+    Changed the pattern matching shell|script names in Doc/Doc.pm
+    from [a-z]+ to [a-z][a-z0-9]* so that pdl2 would match.  Then
+    made sure to install the pdl2.pod in lib/PDL rather than
+    script/PDL so that the scantree would find it...
+
+ Doc/Doc.pm          |    4 ++--
+ Perldl2/Makefile.PL |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit ac9f12582c4d4f0799331bd906a670b3b7b8eaff
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Oct 21 17:51:52 2011 -0500
+
+    Improved pdl_from_string, more secure, handles BAD string.
+    
+    I started digging into the just-named function because I thought
+    it would be handy to add support for things like:
+    
+     $a = pdl q[1 2 bad 4]
+    
+    and have it supply a BAD value instead of zero. I got that working,
+    but then I realized there are some security holes in the
+    constructor. I've added some additional checking and barfing for
+    the most agregious cases, but it's still possible to do damage and
+    we should look more closely into how to properly perform
+    pdl_from_string.
+
+ Basic/Core/Core.pm.PL |   44 +++++++++++++++++++++++++++++++++++++++-----
+ 1 files changed, 39 insertions(+), 5 deletions(-)
+
+commit d37f60faabdda8842474fe84354d10dc45f35d4e
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Oct 21 16:26:41 2011 -0500
+
+    Added docs for PDL::Types::mapfld
+    
+    The documentation for mapfld was completely useless. I've added a
+    few more sentences and some working examples that I hope illustrate
+    how to use it. The docs for PDL::Types still need a lot of work,
+    though.
+
+ Basic/Core/Types.pm.PL |   27 +++++++++++++++++++++++----
+ 1 files changed, 23 insertions(+), 4 deletions(-)
+
+commit 03ef9ab4975ff754bf61bb917d0feb53f411bd3d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 20 14:59:14 2011 -0400
+
+    Experimental PDLdb.pl for perl -d support
+    
+    Per the request from Karl, I've hacked up a custom
+    version of the perl debugger that supports PDL::NiceSlice
+    syntax.  To use, just put the PDLdb.pl file in your
+    perl @INC path somewhere and set the PERL5DB environment
+    variable to 'BEGIN { require "PDLdb.pl" }' or whatever
+    your platform quotes are...
+
+ PDLdb.pl      | 9545 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Release_Notes |    9 +-
+ 2 files changed, 9553 insertions(+), 1 deletions(-)
+
+commit b67993b9d6c8710a170c0dd67fc7581c84417d5d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Oct 15 20:37:44 2011 -0400
+
+    Update pod and add FORMAT opt to wcols
+    
+    Some cleanup and (I hope) clarification of the pod
+    for rcols and wcols.  Also, added a FORMAT option to
+    wcols as an alternative to the $format_string syntax.
+
+ IO/Misc/misc.pd |   54 ++++++++++++++++++++++++++++++------------------------
+ 1 files changed, 30 insertions(+), 24 deletions(-)
+
+commit 89e48229be2d0f8e1d19c48ea22760d30a4eed9e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Oct 11 13:46:25 2011 -0400
+
+    Update VERSION to 2.4.9_010 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ MANIFEST       |  273 ++++++++++++++++++++++++++++----------------------------
+ Release_Notes  |   32 +++++++
+ 4 files changed, 171 insertions(+), 138 deletions(-)
+
 commit 50cf216d9a85e13143b99ad7234b81d392ded5b2
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Oct 11 13:01:59 2011 -0400
@@ -15881,26 +16503,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
-
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
