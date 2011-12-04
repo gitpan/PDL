@@ -1,3 +1,608 @@
+commit 4e4f99b98b98066e213b4567abd0a5f83698a37b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 2 13:15:52 2011 -0500
+
+    Add no warnings qw(misc); to tests
+    
+    This should quiet warnings introduced in recent perls for
+    lvalue sub usage found in PDL.  In the future, we should
+    make the warnings control more specific to the exact code
+    sections/modules with the problem.  We'll need someone with
+    the latest version of perl to track these down.
+
+ t/aaa_load.t               |    1 +
+ t/argtest.t                |    1 +
+ t/autoload.t               |    1 +
+ t/bad.t                    |    1 +
+ t/basic.t                  |    1 +
+ t/bess.t                   |    1 +
+ t/bool.t                   |    1 +
+ t/callext.t                |    1 +
+ t/clump.t                  |    1 +
+ t/complex.t                |    1 +
+ t/config.t                 |    1 +
+ t/constants.t              |    1 +
+ t/constructor.t            |    1 +
+ t/conv.t                   |    1 +
+ t/core.t                   |    1 +
+ t/croak.t                  |    1 +
+ t/diskcache.t              |    1 +
+ t/dumper.t                 |    1 +
+ t/erf.t                    |    1 +
+ t/erfi.t                   |    1 +
+ t/familyfree.t             |    1 +
+ t/fastraw.t                |    1 +
+ t/fft.t                    |    1 +
+ t/fftw.t                   |    1 +
+ t/fits.t                   |    1 +
+ t/flexraw.t                |    1 +
+ t/flexraw_fortran.t        |    1 +
+ t/flow.t                   |    1 +
+ t/foo.t                    |    1 +
+ t/func.t                   |    1 +
+ t/gauss.t                  |    1 +
+ t/gd_oo_tests.t            |    1 +
+ t/gd_tests.t               |    1 +
+ t/gis_proj.t               |    1 +
+ t/gsl_diff.t               |    1 +
+ t/gsl_integ.t              |    1 +
+ t/gsl_interp.t             |    1 +
+ t/gsl_mroot.t              |    1 +
+ t/gsl_rng.t                |    1 +
+ t/gsl_sf.t                 |    1 +
+ t/hdf_sd.t                 |    1 +
+ t/hdf_vdata.t              |    1 +
+ t/hdf_vgroup.t             |    1 +
+ t/hdrs.t                   |    1 +
+ t/hist.t                   |    1 +
+ t/howbig.t                 |    1 +
+ t/ica.t                    |    1 +
+ t/image2d.t                |    1 +
+ t/imagend.t                |    1 +
+ t/imagergb.t               |    1 +
+ t/inlinepdlpp.t            |    1 +
+ t/interp.t                 |    1 +
+ t/interp_slatec.t          |    1 +
+ t/interpol.t               |    1 +
+ t/iotypes.t                |    1 +
+ t/limits_00.t              |    1 +
+ t/limits_errb.t            |    1 +
+ t/limits_keyspecs.t        |    1 +
+ t/limits_normalize_dsets.t |    1 +
+ t/limits_range.t           |    1 +
+ t/limits_round.t           |    1 +
+ t/limits_trans.t           |    1 +
+ t/limits_trans_err.t       |    1 +
+ t/limits_ulimits.t         |    1 +
+ t/linfit.t                 |    1 +
+ t/lut.t                    |    1 +
+ t/lvalue.t                 |    1 +
+ t/magic.t                  |    1 +
+ t/matmult.t                |    3 ++-
+ t/matrix.t                 |    1 +
+ t/matrixops.t              |    1 +
+ t/minuit.t                 |    1 +
+ t/misc.t                   |    1 +
+ t/ndf.t                    |    1 +
+ t/niceslice.t              |    1 +
+ t/nsdatahandle.t           |    1 +
+ t/ones.t                   |    1 +
+ t/opengl.t                 |    1 +
+ t/ops.t                    |    1 +
+ t/pdl_from_string.t        |    1 +
+ t/pdlchar.t                |    1 +
+ t/pgplot.t                 |    1 +
+ t/physical.t               |    1 +
+ t/pic_16bit.t              |    3 ++-
+ t/picnorgb.t               |    1 +
+ t/picrgb.t                 |    1 +
+ t/plplot.t                 |    1 +
+ t/pnm.t                    |    1 +
+ t/poly.t                   |    1 +
+ t/polyroots.t              |    1 +
+ t/pp_croaking.t            |    1 +
+ t/pptest.t                 |    1 +
+ t/primitive.t              |    1 +
+ t/primitive2.t             |    1 +
+ t/proj_transform.t         |    1 +
+ t/proj_transform2.t        |    1 +
+ t/pthread.t                |    1 +
+ t/pthreadBarf.t            |    1 +
+ t/pthread_auto.t           |    1 +
+ t/reduce.t                 |    1 +
+ t/refs.t                   |    1 +
+ t/requiredmods.t           |    1 +
+ t/round.t                  |    1 +
+ t/scope.t                  |    1 +
+ t/segfault.t               |    1 +
+ t/simplex.t                |    1 +
+ t/slatec.t                 |    1 +
+ t/slice.t                  |    1 +
+ t/storable.t               |    1 +
+ t/subclass.t               |    1 +
+ t/subclass2.t              |    1 +
+ t/subclass3.t              |    1 +
+ t/subclass4.t              |    1 +
+ t/thread.t                 |    1 +
+ t/thread_def.t             |    1 +
+ t/transform.t              |    1 +
+ t/trig.t                   |    1 +
+ t/ufunc.t                  |    1 +
+ t/vaffine.t                |    1 +
+ t/xvals.t                  |    1 +
+ 120 files changed, 122 insertions(+), 2 deletions(-)
+
+commit 9ff2161e320fc3c3bdc3d6571072a7ee7c2fe2ba
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Dec 2 11:42:32 2011 -0600
+
+    Added tests for PDL::PP croaking.
+    
+    As I am making an effort to add better error messages, I needed to
+    add tests for those messages. These are they.
+
+ t/pp_croaking.t |   31 +++++++++++++++++++++++++++++++
+ 1 files changed, 31 insertions(+), 0 deletions(-)
+
+commit b110134a21c4ebf2a81e45f5cdb93e016414bbc9
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Dec 2 11:23:28 2011 -0600
+
+    Basic error messages for malformed PDL::PP.
+    
+    PDL::PP does a bad job checking for and reporting errors of
+    omission. A simple example that really tripped me up (and delayed
+    my working on something else for about a week) is this:
+    
+      loop %{
+          ....
+      %}
+    
+    Notice the error there? I forgot to specify the dimension over
+    which to loop. Before these changes, PDL::PP would croak out on an
+    incorrect array access, because it never added the left-hand %{.
+    Talk about confusing, the error wasn't even the start of being
+    useful.
+    
+    Now, that particular error gets caught. Certain others can hopefully
+    be added as they arise.
+
+ Basic/Gen/PP.pm         |    7 +++++
+ Basic/Gen/PP/PDLCode.pm |   64 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 70 insertions(+), 1 deletions(-)
+
+commit d8a08242cc6b8de39839871891fa1e97b86cc811
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Dec 2 11:19:43 2011 -0600
+
+    Minor modernization of pptest.t
+
+ t/pptest.t |   34 ++++++++++++++++------------------
+ 1 files changed, 16 insertions(+), 18 deletions(-)
+
+commit 1ba5ee69543c263ee8cde76d5cc32107b38df776
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Dec 2 11:10:26 2011 -0600
+
+    Fixed two weird variable interpolations in PDL::PP
+    
+    There was some code to generate text in PDL::PP that did not properly
+    escape the variables being interpolated. That is, it *improperly*
+    escaped them, but in a way that worked. Here's an example of the error:
+    
+     my $a = 'counter';
+     my $string = "  int $a\_int = 0;\n";
+    
+    When run with warnings, Perl complains that it doesn't know what you
+    mean by "\_", and it ends up just ignoring the "\" character to
+    give you this string
+    
+     "  int counter_int = 0;\n"
+    
+    The proper way to do this (which does not produce warnings) is like so:
+    
+     my $string = "  int ${a}_int = 0;\n";
+    
+    I fixed that in a couple of places.
+
+ Basic/Gen/PP.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 5b99a323e18b44736ad0b744fdd85dc83fea1477
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Dec 1 15:43:56 2011 -0600
+
+    Fixed bug in PDL::PP verbose reporting.
+    
+    First, a section of code was not clearly indented. I fixed that.
+    
+    Second, PDL::PP::Rule defined a function called report() that is
+    meant to simplify the reporting of output when verbose output is
+    requested. (You request verbose output by setting $::PP_VERBOSE to
+    a true value in your .pd file.) However, it was written as a
+    function, not an object method; in other words, PDL::PP::Rule
+    simply called report() with a string to print, like this:
+    
+      report('Something useful');
+    
+    This meant that subclasses of PDL::PP::Rule could not call the
+    function without explicitly naming the function package.
+    Unfortunately, they were doing just that. PDL::PP::Rule::Returns
+    had code like this:
+    
+      $self->report('Something useful');
+    
+    Perl correctly resolved the method to the one defined in
+    PDL::PP::Rule, but that function simply printed the first argument,
+    i.e. *the Rule object*. To make matters more confusing, Rules have
+    a method for stringification, so it was not entirely clear where
+    this error had crept in. The only real trigger was the lack of
+    newlines where I expected to see them.
+    
+    My solution to this problem is to turn report() into a bona fide
+    method, and to call it as a method wherever it is used. With this
+    change in place, the verbose reporting finally works correctly.
+
+ Basic/Gen/PP.pm |   40 +++++++++++++++++++++-------------------
+ 1 files changed, 21 insertions(+), 19 deletions(-)
+
+commit 5037b713094ef26a0afb9bf8be6158c357b083fb
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Nov 29 10:00:38 2011 -0500
+
+    Update Release_Notes and Known_problems
+
+ Known_problems |    5 +----
+ Release_Notes  |   18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+), 4 deletions(-)
+
+commit 5086f3c74824e36f4669291510a351b64b2e54d8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Nov 29 10:00:07 2011 -0500
+
+    Fix syntax error in readenvi.pdl
+
+ IO/ENVI/readenvi.pdl |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 6b3c21478f476119bfc8fcb37378999aafa9fd28
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Nov 29 09:57:24 2011 -0500
+
+    Fix forcebuild option for PROJ4 modules
+    
+    The Lib/GIS/Proj/Makefile.PL and Lib/Transform/Proj4/Makefile.PL
+    would set the $forcebuild option if WITH_PROJ was set in the
+    perldl.conf file but then would stop the build if auto-detection
+    failed.  That would give the user no way to work around a problem
+    in the library detection.  This solution allows the user to
+    force a build no matter what.  If the options are correct, the
+    modules will work.
+
+ Lib/GIS/Proj/Makefile.PL        |    4 ++--
+ Lib/Transform/Proj4/Makefile.PL |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 65b37a6849122fe6b09978c997b7d52f1cd66dc2
+Merge: be698f0 0d4e3a5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 27 13:53:16 2011 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit be698f06d0fe043940310b447ddb0f7120f6afe4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 27 13:51:12 2011 -0500
+
+    Remove vestigial *.pl files in t/
+    
+    These appear to have been from the original development
+    of the corresponding t/picnorgb.t and t/picrgb.t tests
+    but were not cleaned up after the corrected names.
+
+ MANIFEST      |    2 -
+ t/picnorgb.pl |   96 ---------------------------------------------------------
+ t/picrgb.pl   |   74 --------------------------------------------
+ 3 files changed, 0 insertions(+), 172 deletions(-)
+
+commit 0d4e3a5410d9764d4b943001e9875132016fc0e1
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Fri Nov 25 11:25:48 2011 +1100
+
+    pdlmagic.c - Win32 fix to pdl_pthread_barf_or_warn()
+    
+    On Windows, pdl_pthread_barf_or_warn() needs to use
+    system realloc() instead of perl's realloc macro. Fix
+    currently seems to work fine - not guaranteed to do
+    so forever.
+
+ Basic/Core/pdlmagic.c |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
+
+commit dd5fa1e72ec55ebf88ec26661445896e55273e61
+Merge: c294ccf d80c895
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Mon Nov 21 15:22:44 2011 -0700
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit c294ccf3452ef88e6f4850e14889ed00bb499be5
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Mon Nov 21 11:25:59 2011 -0700
+
+    add test for bug 3299611.
+
+ t/fits.t |   19 ++++++++++++++++++-
+ 1 files changed, 18 insertions(+), 1 deletions(-)
+
+commit d80c8959e0603dcce12f42800444fdd3cdc652ce
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 21 09:06:41 2011 -0500
+
+    Make t/pic_16bit.t and t/storable.t use strict
+    
+    This fixes some test fails for recent perls where apparently
+    'use strict' was forced by the test harness.  The fix was to
+    add the needed my () declarations.
+
+ t/pic_16bit.t |    5 ++++-
+ t/storable.t  |    3 ++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+commit 1fce6d43ac87bca690e8581c6291a55af235020f
+Author: Craig DeForest <zowie@Clio-2.local>
+Date:   Sat Nov 19 23:30:04 2011 -0700
+
+    Fixes bug 3299611 - obscure fits I/O bug.  Replaced a simple "clump(-1)" operation with
+    a slightly-more-expensive "->copy->reshape($p->nelem)" operation, which forces
+    regularization in memory.  Since disk I/O is (thought to be) slower than memory operations,
+    and since clump often copies memory anyway, this seems a small price to pay.  The alternative
+    would be to dive into XS and access the dimincs fields of the subject pdl directly, but
+    it is not clear there would be a significant performance advantage in the usual case.
+
+ IO/FITS/FITS.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 6dfce88bd66b88381198381413296d54fb12023d
+Author: Craig DeForest <zowie@Clio-2.local>
+Date:   Sat Nov 19 23:12:22 2011 -0700
+
+    Fixes bug 3428356: PDL::Transform::map output FITS header is slightly off
+    The problem was an operation order:  a half-pixel coordinate offset (used to
+    find the pixel coordinate of the corner of the outermost image pixels) was
+    happening *before* the subsample scaling operation (a multiplication) rather
+    than *after* it.  Fixed.
+    
+    Thanks to Derek for finding and reporting this.
+
+ Lib/Transform/transform.pd |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit d5f447263f778abf5dfd16e9dd4ad27d951b85fb
+Author: Craig DeForest <zowie@Clio-2.local>
+Date:   Sat Nov 19 22:50:45 2011 -0700
+
+    Fixes bug 3059083 - esoteric problems with writing certain buggy FITS
+    headers straight from a hash.  Solution is to detect the condition and
+    generate an Astro::FITS::Header object (where possible).
+
+ IO/FITS/FITS.pm |   41 ++++++++++++++++++++++++++++++++++++++---
+ 1 files changed, 38 insertions(+), 3 deletions(-)
+
+commit de94944d7cb86ddcd11f0a01e44f9e51fdf733c6
+Merge: 6aa6992 403096b
+Author: Craig DeForest <zowie@Clio-2.local>
+Date:   Sat Nov 19 22:04:55 2011 -0700
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 403096b84ea8be68fc8a1ed3f1a3503e58d07544
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Nov 18 16:01:50 2011 -0700
+
+    Add note in PGPLOT/Window.pm that default for bin()'s CENTRE option is true.
+
+ Graphics/PGPLOT/Window/Window.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit cad271bc164ae0f5ba8a9e45a1c976f261d53154
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Nov 18 12:05:54 2011 -0700
+
+    Quiet compile-time message for PLplot
+    
+    Was getting a warning "PLplot.xs: In function ‘labelfunc_callback’:
+    warning: format not a string literal and no format arguments" referring
+    to the snprintf line. snprintf should be called like:
+    snprintf(dest,length,format,src,...), but we had no format string.
+
+ Graphics/PLplot/plplot.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 93a69142e277b9e11d46a8e3668d303636fcee55
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 18 11:21:26 2011 -0500
+
+    Fix breakage with previous $Config fix
+    
+    Reverting the PDL data type line as correct and putting
+    the entries there on the $int_ptr_type line since that is
+    where they should be.  We shouldn't be relying on definition
+    or not of non-standard types like I32 or I64.
+
+ Graphics/PLplot/plplot.pd |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 3b719c82a905509617f8b32713eef39f2e209ce3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Nov 18 10:36:18 2011 -0500
+
+    Update ptrsize and ptrtype to use $Config
+    
+    There are explicit perl config values for ptrsize, i32size,
+    i64size, i32type, and i64type.  I've modified the detection
+    code to use these values rather than hardwired values.
+
+ Graphics/PLplot/plplot.pd |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit ced088bcd01ba59de11329c5e8f389f83c82ab0f
+Merge: 8e9cf2d 4cca587
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Nov 17 15:46:14 2011 -0700
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 4cca58711fcd604b5c27ee0170ff8616b0e282db
+Author: dhunt <dhunt@cosmic-dhcp128.cosmic.ucar.edu>
+Date:   Thu Nov 17 15:34:18 2011 -0700
+
+    Fix bug in plplot for Mac.  plAllocGrid and plAlloc2dGrid were passing
+    back 32 bit pointers because the pp_def/Pars were 'int', not 'longlong'.
+    I don't know why this did not fail on Linux--likely the memory layout was such
+    that the pointer value was less than 2*32.
+
+ Graphics/PLplot/plplot.pd |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+commit 8e9cf2d08c1e596c9a76d422dee7f78e10bb81b1
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Nov 17 15:28:24 2011 -0700
+
+    Correction to statsover
+    
+    The ADEV calculation had an erroneous sqrt in the good code, the
+    bad code, and the docs.  Removed, since the consensus was
+    that that was plain wrong.  Changed the label in the docs to AADEV,
+    because what we are really calculating is the _average_ absolute
+    deviation.  Also reordered PRMS and RMS in the docs, since they
+    were backwards from the way the function returns them.
+
+ Basic/Primitive/primitive.pd |   26 ++++++++++++--------------
+ 1 files changed, 12 insertions(+), 14 deletions(-)
+
+commit bdc632e72680e4a5c66cf7d79f233638b342c8a5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Nov 16 16:38:14 2011 -0500
+
+    Fix t/pgplot.t to run by default...
+    
+    ... when running under Test::Harness which means the driver
+    selected is /NULL which should work for all platforms with
+    PGPLOT installed.
+
+ t/pgplot.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 2854d968a72695f717ee2fad7d96a2102b6addc4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Nov 16 16:21:09 2011 -0500
+
+    Update Known_problems and Release_Notes
+
+ Known_problems |    6 ------
+ Release_Notes  |    8 +++++++-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+commit 47f123eb754680bcc8c6eb11e100fb6263d7efa5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Nov 16 15:56:17 2011 -0500
+
+    Fix sf.net bug #3410905 re hangs in t/pgplot.t
+    
+    Worked around the problem by using /null driver when the
+    test is run in a test harness and the original drivers
+    choice elsewise.
+
+ t/pgplot.t |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 5f15b4217d0cc5f2d13876e7c9a6fe46325278ba
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Nov 15 16:16:52 2011 -0700
+
+    Pod fixes for html-ifying
+    
+    In locally-made html docs, a bare link like L<PDL::FAQ> will render as
+    _the_PDL::FAQ_manpage_, which may make sense in context with the surrounding text,
+    but also may not.  Fixed a few instances of this not making sense.
+
+ Basic/Pod/FAQ.pod |   20 ++++++++++----------
+ IO/IO.pod         |    9 +++++----
+ IO/Pnm/Pic.pm     |   13 +++++++------
+ Perldl2/pdl2      |    6 +++---
+ 4 files changed, 25 insertions(+), 23 deletions(-)
+
+commit 646030335aeb3b5903d2ef2c5c70d7395395076d
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Nov 15 12:21:50 2011 -0700
+
+    minor pod changes to FlexRaw
+    
+    Bad Value Support section had a =head2 instead of =head1, so it was
+    getting picked up by ??bad. Fixed some link code so the html docs
+    there don't say "try the new _the PDL::IO::FlexRaw manpage_ bad value..."
+
+ IO/FlexRaw/FlexRaw.pm |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit d6c4086fc887c5e42f4fc5d1ead6e6faf522ff17
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Nov 14 16:00:39 2011 -0700
+
+    Perldl2/Script.pm: Wrap qw(...) in parens to deal with Perl 5.13.6 deprecation.
+    
+    Loading pdl2 gave warnings that "Use of qw(...) as parentheses is deprecated".  See http://search.cpan.org/~miyagawa/perl-5.13.6/pod/perl5135delta.pod#Deprecations
+
+ Perldl2/Script.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit b35d0cd3e418bc0d7315f5b3cfefbe111589c401
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Nov 14 15:09:42 2011 -0700
+
+    Enable hdrpcy in rfits for Rice-compressed images
+    
+    Rice-compressed images are stored in FITS files as binary table extensions. The uncompressed image reader did set the hdrcpy flag of the output piddle, but _rfits_unpack_zimage now does as well.  Also modified some debugging statements.
+
+ IO/FITS/FITS.pm |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 395d24a7dd34fccf5d5bcb504bb17e4bfc888afd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 14 14:22:21 2011 -0500
+
+    Partial fix to pthread build configuration
+    
+    Slight tweak to Basic/Core/Makefile.PL to work when perl
+    is not linked against the pthread library since PDL can
+    be so linked separately from perl.  Still need to modify
+    the configure tests to use Devel::CheckLib and actual
+    compile, link, run tests...
+
+ Basic/Core/Makefile.PL |    9 ++++++---
+ 1 files changed, 6 insertions(+), 3 deletions(-)
+
+commit 51be6f89fdbd1b07124f7599f56d1c630af4b7e6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 13 22:16:56 2011 -0500
+
+    Update VERSION to 2.4.9_011 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit b6f38b3f1d2f874507aac36fcb34cc8233df7917
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 13 22:14:23 2011 -0500
+
+    Update MANIFEST for CPAN release
+
+ MANIFEST |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
 commit 71ce6dd44c6343227cd1dfa700c6462fcde85747
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Nov 12 13:06:55 2011 -0500
@@ -1294,6 +1899,13 @@ Date:   Fri Sep 9 10:30:05 2011 -0400
  README         |    3 ++-
  3 files changed, 10 insertions(+), 2 deletions(-)
 
+commit 6aa6992aa161fc55ad53fcb870c0f25283d024c4
+Merge: 006a548 e2d5ac7
+Author: Craig DeForest <zowie@Clio-2.local>
+Date:   Sat Sep 3 23:38:22 2011 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
 commit e2d5ac73121da70357cdd91eeca28a7ea0cade48
 Merge: a0b318d d892049
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -2498,6 +3110,13 @@ Date:   Sat Jun 4 11:52:08 2011 +0200
  debian/perldl.conf |  149 +++++++++++++++++++++++++++++++++-------------------
  1 files changed, 94 insertions(+), 55 deletions(-)
 
+commit 006a5481bd4f797f19004b06b904bd9a7d3d83c9
+Merge: 1e8fb45 353a744
+Author: Craig DeForest <zowie@Clio-2.local>
+Date:   Wed Jun 1 23:23:59 2011 -0600
+
+    Merge branch 'master' of ssh://zowie@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
 commit 353a74423aabbf3f3205eb44c290dab3045862f0
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Jun 1 17:50:10 2011 -0400
@@ -2692,6 +3311,31 @@ Date:   Thu May 19 16:08:19 2011 -0500
 
  Basic/Pod/ParallelCPU.pod |    6 ++++++
  1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit 1e8fb45a0b14d5e2044c60dfc174e02642c6aafa
+Merge: afdf491 ac63923
+Author: Craig DeForest <zowie@Clio-2.local>
+Date:   Thu May 19 09:50:31 2011 -0600
+
+    Merge branch 'master' of ssh://zowie@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit afdf491905c523e61ddfad8056b3e6604382bf60
+Author: Craig DeForest <zowie@Clio-2.local>
+Date:   Thu May 19 09:49:50 2011 -0600
+
+    fix parameter parsing for t_cubic
+
+ Lib/Transform/transform.pd |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit cbd95cdbfa4b983396655df71b880a839df7b935
+Author: Craig DeForest <zowie@Clio-2.local>
+Date:   Thu May 19 09:49:29 2011 -0600
+
+    fix inverse in perspective
+
+ Lib/Transform/Cartography/Cartography.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 commit ac639236321cbe5ee9830877085311a916136fec
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -16503,3 +17147,26 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:51:04 2009 -0400
+
+    Added the Changes for the t/pic_16bit.t commit.
+
+ Changes |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:44:35 2009 -0400
+
+    Fix sf.net bug 2784016
+    
+    This fixes sourceforge.net bug number 2784016 originally reported
+    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
+    with a very english specific test.  The test has been modified to
+    be less english specific.  This is still far from full i8n of PDL.
+
+ t/pic_16bit.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)

@@ -131,6 +131,7 @@ package PDL::PP::Rule;
 use strict;
 
 use Carp;
+our @CARP_NOT;
 
 use overload ("\"\"" => \&PDL::PP::Rule::stringify);
 sub stringify {
@@ -148,7 +149,9 @@ sub stringify {
     return $str;
 }
 
-sub report ($) { print $_[0] if $::PP_VERBOSE; }
+# Takes two args: the calling object and the message, but we only care
+# about the message:
+sub report ($$) { print $_[1] if $::PP_VERBOSE; }
 
 # Very limited error checking.
 # Allow scalars for targets and conditions to be optional
@@ -210,7 +213,7 @@ sub check_if_targets_exist {
 
     foreach my $target (@$targets) {
 	if (exists $pars->{$target}) {
-	    report("--skipping since TARGET $target exists\n");
+	    $self->report("--skipping since TARGET $target exists\n");
 	    return 1;
 	}
     }
@@ -236,7 +239,7 @@ sub check_if_conditions_exist {
 	next if substr($condition,0,1) eq "_";
 
 	unless (exists $pars->{$condition}) {
-	    report("--skipping since CONDITION $condition does not exist\n");
+	    $self->report("--skipping since CONDITION $condition does not exist\n");
 	    return 0;
 	}
     }
@@ -300,7 +303,7 @@ sub apply {
     my $conditions = $self->{conditions};
     my $ref = $self->{ref};
 
-    report("Applying: $self\n");
+    $self->report("Applying: $self\n");
 
     # Is the rule valid?
     #
@@ -315,23 +318,23 @@ sub apply {
       " items and expected " . (1+$#$targets)
 	unless $#retval == $#$targets;
 
-    report "--setting:";
+    $self->report("--setting:");
     foreach my $target (@$targets) {
-	report " $target";
-	confess "Cannot have multiple meanings for target $target!"
-	  if exists $pars->{$target};
-	my $res = shift @retval;
+		$self->report(" $target");
+		confess "Cannot have multiple meanings for target $target!"
+		  if exists $pars->{$target};
+		my $res = shift @retval;
 
-	# The following test suggests that things could/should be
-	# improved in the code generation.
-	#
-	if ($res eq 'DO NOT SET!!') {
-	    report (" is 'DO NOT SET!!'");
-	} else {
-	    $pars->{$target} = $res;
+		# The following test suggests that things could/should be
+		# improved in the code generation.
+		#
+		if ($res eq 'DO NOT SET!!') {
+			$self->report (" is 'DO NOT SET!!'");
+		} else {
+			$pars->{$target} = $res;
+		}
 	}
-    }
-    report("\n");
+	$self->report("\n");
 }
 
 package PDL::PP::Rule::Returns;
@@ -339,6 +342,7 @@ package PDL::PP::Rule::Returns;
 use strict;
 
 use Carp;
+our @CARP_NOT;
 
 ##use PDL::PP::Rule;
 our @ISA = qw (PDL::PP::Rule);
@@ -449,6 +453,7 @@ package PDL::PP::Rule::InsertName;
 use strict;
 
 use Carp;
+our @CARP_NOT;
 
 ##use PDL::PP::Rule;
 our @ISA = qw (PDL::PP::Rule);
@@ -520,6 +525,7 @@ package PDL::PP::Rule::Substitute;
 use strict;
 
 use Carp;
+our @CARP_NOT;
 
 ##use PDL::PP::Rule;
 our @ISA = qw (PDL::PP::Rule);
@@ -596,6 +602,7 @@ package PDL::PP::Rule::Substitute::Usual;
 use strict;
 
 use Carp;
+our @CARP_NOT;
 
 ##use PDL::PP::Rule;
 our @ISA = qw (PDL::PP::Rule::Substitute);
@@ -656,6 +663,7 @@ package PDL::PP::Rule::MakeComp;
 use strict;
 
 use Carp;
+our @CARP_NOT;
 
 ##use PDL::PP::Rule;
 our @ISA = qw (PDL::PP::Rule);
@@ -767,6 +775,7 @@ END {
 }
 
 use Carp;
+our @CARP_NOT;
 
 # check for bad value support
 use PDL::Config;
@@ -1739,7 +1748,7 @@ sub VarArgsXSHdr {
   # Generate declarations for SV * variables corresponding to pdl * output variables.
   # These are used in creating output and temp variables.  One variable (ex: SV * outvar1_SV;)
   # is needed for each output and output create always argument
-  my $svdecls = join ("\n", map { "$ci\SV *$_\_SV;" } grep { $out{$_} || $outca{$_} || $tmp{$_} } @args);
+  my $svdecls = join ("\n", map { "${ci}SV *${_}_SV;" } grep { $out{$_} || $outca{$_} || $tmp{$_} } @args);
 
   my @create = ();  # The names of variables which need to be created by calling 
                     # the 'initialize' perl routine from the correct package.
@@ -1884,7 +1893,7 @@ sub VarArgsXSReturn {
 
     my $clause1 = '';
     foreach my $i ( 0 .. $#outs ) {
-	$clause1 .= "$ci\ST($i) = $outs[$i]\_SV;\n";
+	$clause1 .= "${ci}ST($i) = $outs[$i]_SV;\n";
     }
 
 return <<"END"

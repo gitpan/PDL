@@ -1,15 +1,19 @@
 # Created on: Fri 14 Dec 2007 07:22:09 PM 
-# Last saved: Fri 15 May 2009 09:40:50 AM 
+# Last saved: Fri 02 Dec 2011 12:55:49 PM 
 #
 # This tests the 16-bit image capabilities of the rpic() and wpic()
 # commands.  The new code works with PNM output files and PNG format
 # too.
 
 # Our new default testing framework
+use strict;
+no warnings qw(misc);
 use Test::More;
 
 use PDL;
 use PDL::NiceSlice;
+
+my ($test_pnmtopng);
 
 BEGIN {
    eval "use PDL::IO::Pic;";

@@ -1,4 +1,5 @@
 # -*-perl-*-
+no warnings qw(misc);
 BEGIN{
 	  # Set perl to not try to resolve all symbols at startup
 	  # The default behavior causes some problems because 
@@ -16,7 +17,7 @@ BEGIN{
    eval "use PDL::Graphics::PGPLOT; use PDL::Graphics::PGPLOT::Window;";
    if ($@) {
       plan skip_all => "Skipped: PDL::Graphics::PGPLOT not installed";
-   } elsif (!exists($ENV{'DISPLAY'})) {
+   } elsif ( !exists($ENV{'DISPLAY'}) and !exists($ENV{HARNESS_ACTIVE}) ) {
       # We have this after the PGPLOT module is loaded so that we test whether the
       # module will at least load, even if we do not test it's
       # functionality.
@@ -88,6 +89,8 @@ my $interactive_ctr = 0;
 ###
 
 my $dev = $ENV{'PGPLOT_DEV'} ? $ENV{'PGPLOT_DEV'} : "/xw";
+
+$dev = '/null' if exists $ENV{HARNESS_ACTIVE};
 
 my $w = PDL::Graphics::PGPLOT::Window->new(
 					   Dev => $dev,
