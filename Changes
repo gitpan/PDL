@@ -1,3 +1,34 @@
+commit 7b11ef720ca21f46fcd2b53663a56b21e113fea7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 4 11:12:58 2011 -0500
+
+    Fix t/proj_transform2.t to match fix to FITS
+
+ t/proj_transform2.t |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit dcd51f83ad8849cc7bbf205627c5b9bda79c0428
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 4 10:25:57 2011 -0500
+
+    Update VERSION to 2.4.9_012 for more devel
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit 89c60d43fd80dc258215f41b0d00b7f543886a62
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 4 10:05:44 2011 -0500
+
+    Skip pthreads build for win32 unless found...
+    
+    ...or detected or specified.
+
+ Basic/Core/Makefile.PL |   12 ++++++++----
+ 1 files changed, 8 insertions(+), 4 deletions(-)
+
 commit 4e4f99b98b98066e213b4567abd0a5f83698a37b
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Dec 2 13:15:52 2011 -0500
