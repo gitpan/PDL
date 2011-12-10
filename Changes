@@ -1,3 +1,105 @@
+commit 29f719d4408509c672fca3dca91fefb907c059cb
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 10 12:10:19 2011 -0500
+
+    Update readmes and fix pthread detect for *BSD
+
+ Basic/Core/Makefile.PL |    7 +++++++
+ Release_Notes          |    4 ++++
+ cygwin/INSTALL         |   28 ++++++++++++----------------
+ cygwin/README          |   12 ++----------
+ perldl.conf            |    2 +-
+ 5 files changed, 26 insertions(+), 27 deletions(-)
+
+commit b090441c4b3b6acb57e46ce0914a618d0360a11d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 9 15:21:57 2011 -0500
+
+    Update Known_problems and Release_Notes
+
+ Known_problems |    1 -
+ Release_Notes  |   13 ++++++++++++-
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+commit 5d6f9c07fbc489d70b09f2929722ce5348c76041
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 9 14:59:00 2011 -0500
+
+    Add diags for missing PDL::IO::Pic converters
+    
+    This can cause fails in the various t/pic*.t tests since the
+    missing converters are not always appropriately checked for
+    and skipped.  Now the tests will print the actual values
+    for the converters in case of fails so that we can try to
+    diagnose the full fix to the problem.
+
+ IO/Pnm/Pic.pm |    4 ++--
+ t/pic_16bit.t |    6 +++---
+ t/picnorgb.t  |   12 ++++++++++++
+ t/picrgb.t    |   15 ++++++++++++++-
+ 4 files changed, 31 insertions(+), 6 deletions(-)
+
+commit 0038d0855d642912fb41db55d6d1d274302b5dd2
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Dec 8 12:10:03 2011 -0700
+
+    Add a few notes to PP.pod about OtherPars and $COMP().
+    
+    Just a note in the OtherPars entry of Appendix A pointing back to
+    $COMP, which is crucial to implementing OtherPars correctly.
+
+ Basic/Pod/PP.pod |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 68a032342dbcf221ff22cd05823e8c7fd84b77f2
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Wed Dec 7 17:14:01 2011 -0700
+
+    Add connected 4-component labeling to PDL::Image2D.
+    
+    cc8compt alread existed which provided connected 8-component labeling.
+    I renamed that to ccNcompt, and added two new PDL subs cc8compt and
+    cc4compt, which just use ccNcompt as the underlying engine. The
+    difference between the cc8 and cc4 is just whether the diagonals
+    are used in the image segmentation.
+
+ Lib/Image2D/image2d.pd |   73 ++++++++++++++++++++++++++++++++++++++++++------
+ t/image2d.t            |   11 ++++++-
+ 2 files changed, 74 insertions(+), 10 deletions(-)
+
+commit 4a8e99f10efbfe792d8d49491d731c37ad2c893c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 5 10:16:17 2011 -0500
+
+    Fix t/proj_transform.t check values for FITS fix
+    
+    Now that the FITS coordinates bug has been resolved,
+    the check values for t/proj_transform.t have changed
+    slightly.  Updating with new ones.
+
+ t/proj_transform.t |  198 ++++++++++++++++++++++++++--------------------------
+ 1 files changed, 99 insertions(+), 99 deletions(-)
+
+commit f5ea09b5d3acb02027e7a134098184b456732d2a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 4 12:03:21 2011 -0500
+
+    Update VERSION to 2.4.9_013 for more devel
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit 489c6fc346821f8c48cc0dc1a1bd0b0d90ffc0a6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 4 12:01:42 2011 -0500
+
+    Update Release_Notes for 2.4.9_012 release
+
+ Release_Notes |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
 commit 7b11ef720ca21f46fcd2b53663a56b21e113fea7
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Dec 4 11:12:58 2011 -0500
