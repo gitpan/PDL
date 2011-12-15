@@ -1,3 +1,48 @@
+Release Notes for PDL 2.4.9_014 --------------------------
+
+General Notes:
+
+ * Another quick CPAN developers release
+ 
+   - It is a snapshot of the current git development tree
+     and everything may not work correctly or have complete
+     documentation.
+
+   - These release notes may not be fully complete.  Please
+     see Changes (from the git log) for full details.
+
+   - All tests may not pass, especially ones corresponding
+     to issues in Known_problems.
+   
+   - Manual build/install is recommended although the
+     cpan shell may be used by specifying the distribution
+     path rather than just the module name, e.g.:
+
+       cpan> get  CHM/PDL-2.4.9_014.tar.gz
+       cpan> make CHM/PDL-2.4.9_014.tar.gz
+       cpan> test CHM/PDL-2.4.9_014.tar.gz
+       cpan> look CHM/PDL-2.4.9_014.tar.gz
+
+
+Highlights:
+
+ * Add imaginary unit (either I and/or J) to PDL::Constants
+   and make all constants EXPORT_OK() rather than EXPORT().
+   Some documentation updates.
+
+ * Minor cleanups to PDL::PP and related modules to get rid
+   of warnings under new Perls during testing.
+ 
+ * Added pp_line_numbers to PDL::PP to improve line number
+   reporting when the compiler runs into an error with
+   PDL::PP code.
+ 
+ * Add pnpoly implementation and fixes to PDL::Image2D
+
+ * Candidate fix to PDL::Minuit Makefile.PL
+
+
+
 Release Notes for PDL 2.4.9_013 --------------------------
 
 General Notes:

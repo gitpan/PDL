@@ -313,25 +313,28 @@ sub apply {
     #
     my @args = $self->extract_args($pars);
 
-    my @retval = &{$ref}(@args);
-    confess "Internal error: rule '$self' returned " . (1+$#retval) .
-      " items and expected " . (1+$#$targets)
-	unless $#retval == $#$targets;
+    # Run this rule's subroutine:
+    my @retval = $self->{ref}(@args);
+    
+    # Check for any inconsistencies:
+    confess "Internal error: rule '$self' returned " . (1+$#retval)
+      . " items and expected " . (1+$#$targets)
+		unless $#retval == $#$targets;
 
     $self->report("--setting:");
     foreach my $target (@$targets) {
 		$self->report(" $target");
 		confess "Cannot have multiple meanings for target $target!"
 		  if exists $pars->{$target};
-		my $res = shift @retval;
+		my $result = shift @retval;
 
 		# The following test suggests that things could/should be
 		# improved in the code generation.
 		#
-		if ($res eq 'DO NOT SET!!') {
+		if (defined $result and $result eq 'DO NOT SET!!') {
 			$self->report (" is 'DO NOT SET!!'");
 		} else {
-			$pars->{$target} = $res;
+			$pars->{$target} = $result;
 		}
 	}
 	$self->report("\n");
@@ -762,7 +765,7 @@ our @ISA = qw(Exporter);
 @PDL::PP::EXPORT = qw/pp_addhdr pp_addpm pp_bless pp_def pp_done pp_add_boot
                       pp_add_exported pp_addxs pp_add_isa pp_export_nothing
 		      pp_core_importList pp_beginwrap pp_setversion
-                      pp_addbegin pp_boundscheck /;
+                      pp_addbegin pp_boundscheck pp_line_numbers/;
 
 $PP::boundscheck = 1;
 $::PP_VERBOSE    = 0;
@@ -903,6 +906,34 @@ sub pp_addxs {
 	PDL::PP->printxs("\nMODULE = $::PDLMOD PACKAGE = $::CALLPACK\n\n",
                          @_,
                          "\nMODULE = $::PDLMOD PACKAGE = $::PDLOBJ\n\n");
+}
+
+# inserts #line directives into source text. Use like this:
+#   ...
+#   FirstKey => ...,
+#   Code => pp_line_numbers (__LINE__, $a . $b . $c),
+#   OtherKey => ...
+
+sub pp_line_numbers ($$) {
+	my ($line, $string) = @_;
+	# The line needs to be incremented by one for the bookkeeping to work
+	$line++;
+	# Get the source filename using caller()
+	my (undef, $filename) = caller;
+	my @to_return = "#line $line \"$filename\"";
+	
+	# Look for threadloops and loops and add # line directives
+	foreach (split (/(\n)/, $string)) {
+		# Always add the current line.
+		push @to_return, $_;
+		
+		# If we need to add a # line directive, do so before incrementing
+		push (@to_return, "\n#line $line \"$filename\"") if (/%{/ or /%}/);
+		
+		$line++ if /\n/;
+	}
+	
+	return join('', @to_return);
 }
 
 sub printxsc {

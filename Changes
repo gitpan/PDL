@@ -1,3 +1,327 @@
+commit 056057dfc7a61668920cd315ede1924fa8c69dc6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Dec 15 16:05:33 2011 -0500
+
+    Update Known_problems for CPAN dev release
+
+ Known_problems |    3 +++
+ PDLdb.pl       |    5 +++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+commit f9c2f67f617937c5ed8005c8e256085480847324
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 14 18:56:24 2011 -0500
+
+    Candidate fix for PDL::Minuit build on FreeBSD
+
+ Lib/Minuit/Makefile.PL |   18 +++++++++---------
+ Release_Notes          |    2 ++
+ 2 files changed, 11 insertions(+), 9 deletions(-)
+
+commit 1256452cb42f186660e4f2f63d4f6e21e905a31a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 14 09:47:00 2011 -0500
+
+    Move no warnings qw(misc) to Basic/Lvalue.pm
+    
+    I originally tried to stop the Lvalue warnings from recent perl
+    test reports by putting the directive in the test files.  This
+    was incorrect because the warnings pragma has block scope and
+    does not leak across files so the pragma has been added to the
+    eval in Lvalue.pm that declares the PDL lvalue routines and I've
+    removed the previous attempt from all the t/*.t files.
+
+ Basic/Lvalue.pm            |    5 +++--
+ t/aaa_load.t               |    1 -
+ t/argtest.t                |    1 -
+ t/autoload.t               |    1 -
+ t/bad.t                    |    1 -
+ t/basic.t                  |    1 -
+ t/bess.t                   |    1 -
+ t/bool.t                   |    1 -
+ t/callext.t                |    1 -
+ t/clump.t                  |    1 -
+ t/complex.t                |    1 -
+ t/config.t                 |    1 -
+ t/constants.t              |    1 -
+ t/constructor.t            |    1 -
+ t/conv.t                   |    1 -
+ t/core.t                   |    1 -
+ t/croak.t                  |    1 -
+ t/diskcache.t              |    1 -
+ t/dumper.t                 |    1 -
+ t/erf.t                    |    1 -
+ t/erfi.t                   |    1 -
+ t/familyfree.t             |    1 -
+ t/fastraw.t                |    1 -
+ t/fft.t                    |    1 -
+ t/fftw.t                   |    1 -
+ t/fits.t                   |    1 -
+ t/flexraw.t                |    1 -
+ t/flexraw_fortran.t        |    1 -
+ t/flow.t                   |    1 -
+ t/foo.t                    |    1 -
+ t/func.t                   |    1 -
+ t/gauss.t                  |    1 -
+ t/gd_oo_tests.t            |    1 -
+ t/gd_tests.t               |    1 -
+ t/gis_proj.t               |    1 -
+ t/gsl_diff.t               |    1 -
+ t/gsl_integ.t              |    1 -
+ t/gsl_interp.t             |    1 -
+ t/gsl_mroot.t              |    1 -
+ t/gsl_rng.t                |    1 -
+ t/gsl_sf.t                 |    1 -
+ t/hdf_sd.t                 |    1 -
+ t/hdf_vdata.t              |    1 -
+ t/hdf_vgroup.t             |    1 -
+ t/hdrs.t                   |    1 -
+ t/hist.t                   |    1 -
+ t/howbig.t                 |    1 -
+ t/ica.t                    |    1 -
+ t/image2d.t                |    7 +++----
+ t/imagend.t                |    1 -
+ t/imagergb.t               |    1 -
+ t/inlinepdlpp.t            |    1 -
+ t/interp.t                 |    1 -
+ t/interp_slatec.t          |    1 -
+ t/interpol.t               |    1 -
+ t/iotypes.t                |    1 -
+ t/limits_00.t              |    1 -
+ t/limits_errb.t            |    1 -
+ t/limits_keyspecs.t        |    1 -
+ t/limits_normalize_dsets.t |    1 -
+ t/limits_range.t           |    1 -
+ t/limits_round.t           |    1 -
+ t/limits_trans.t           |    1 -
+ t/limits_trans_err.t       |    1 -
+ t/limits_ulimits.t         |    1 -
+ t/linfit.t                 |    1 -
+ t/lut.t                    |    1 -
+ t/lvalue.t                 |    1 -
+ t/magic.t                  |    1 -
+ t/matmult.t                |    1 -
+ t/matrix.t                 |    1 -
+ t/matrixops.t              |    1 -
+ t/minuit.t                 |    1 -
+ t/misc.t                   |    1 -
+ t/ndf.t                    |    1 -
+ t/niceslice.t              |    1 -
+ t/nsdatahandle.t           |    1 -
+ t/ones.t                   |    1 -
+ t/opengl.t                 |    1 -
+ t/ops.t                    |    1 -
+ t/pdl_from_string.t        |    1 -
+ t/pdlchar.t                |    1 -
+ t/pgplot.t                 |    1 -
+ t/physical.t               |    1 -
+ t/pic_16bit.t              |    1 -
+ t/picnorgb.t               |    1 -
+ t/picrgb.t                 |    1 -
+ t/plplot.t                 |    1 -
+ t/pnm.t                    |    1 -
+ t/poly.t                   |    1 -
+ t/polyroots.t              |    1 -
+ t/pp_croaking.t            |    1 -
+ t/pptest.t                 |    1 -
+ t/primitive.t              |    1 -
+ t/primitive2.t             |    1 -
+ t/proj_transform.t         |    1 -
+ t/proj_transform2.t        |    1 -
+ t/pthread.t                |    1 -
+ t/pthreadBarf.t            |    1 -
+ t/pthread_auto.t           |    1 -
+ t/reduce.t                 |    1 -
+ t/refs.t                   |    1 -
+ t/requiredmods.t           |    1 -
+ t/round.t                  |    1 -
+ t/scope.t                  |    1 -
+ t/segfault.t               |    1 -
+ t/simplex.t                |    1 -
+ t/slatec.t                 |    1 -
+ t/slice.t                  |    1 -
+ t/storable.t               |    1 -
+ t/subclass.t               |    1 -
+ t/subclass2.t              |    1 -
+ t/subclass3.t              |    1 -
+ t/subclass4.t              |    1 -
+ t/thread.t                 |    1 -
+ t/thread_def.t             |    1 -
+ t/transform.t              |    1 -
+ t/trig.t                   |    1 -
+ t/ufunc.t                  |    1 -
+ t/vaffine.t                |    1 -
+ t/xvals.t                  |    1 -
+ 121 files changed, 6 insertions(+), 125 deletions(-)
+
+commit a8274fa4fe40ec3d089de321f42fdfd14f71bcdb
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Dec 13 20:57:25 2011 -0600
+
+    Updated release notes for pp_line_numbers
+
+ Release_Notes |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 18d00e438839c9d5f770f1745584b6e007bd9066
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Dec 13 20:42:25 2011 -0600
+
+    Finished PDL::PP::pp_line_numbers!
+    
+    I've finished work on this by correcting a few minor off-by-ones
+    and by updating the PDL::PP docs. I also took the liberty of
+    changing (fixing, I hope) a few quirky stylistic flourishes in
+    the PDL::PP docs that have always irked me. Hope that doesn't
+    bother anybody.
+
+ Basic/Gen/PP.pm     |    4 +-
+ Basic/Pod/PP.pod    |  175 +++++++++++++++++++++++++++++++++-----------------
+ t/pp_line_numbers.t |   38 +++++++-----
+ 3 files changed, 139 insertions(+), 78 deletions(-)
+
+commit c4c993571e027ee62143099e7e0e13d09b09e992
+Merge: 3c72a23 e3f37ed
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Dec 13 19:33:57 2011 -0600
+
+    Merge branch 'master' into pp_line_numbers
+
+commit e3f37edb5da2e332a4d4948c9aa5eadadacf82c4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 13 17:57:22 2011 -0500
+
+    Add pnpoly implementation to PDL::Image2D
+    
+    This is from the perldl mailing list discussion at
+    http://mailman.jach.hawaii.edu/pipermail/perldl/2010-September/004489.html
+    with some fixes.  Still would be nice to have more flexibility
+    in the input piddles (number and shape).
+
+ Lib/Image2D/image2d.pd |   64 ++++++++++++++++++++++++++++++++++++++++++++++++
+ Release_Notes          |    4 +++
+ t/image2d.t            |   13 +++++++++-
+ 3 files changed, 80 insertions(+), 1 deletions(-)
+
+commit 0cd1eeee8e387d85fdd2c62e7e39b789079e269d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 13 17:56:14 2011 -0500
+
+    minor POD format fixes for PDL::IO::Misc
+
+ IO/Misc/misc.pd |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+commit 3c72a23d4f894c2706badd39ddc12c7e21374e78
+Merge: 95c9fe4 cca456b
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Dec 12 22:49:07 2011 -0600
+
+    Merge branch 'master' into pp_line_numbers
+
+commit 95c9fe489ba039971c58ad05d4510013908656e6
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Dec 12 22:47:50 2011 -0600
+
+    A nearly-working version of pp_line_numbers for PDL::PP.
+    
+    I am very close to having a working version of pp_line_numbers. I
+    am not sure about off-by-one errors, though, and it's difficult to
+    write a test for this without being certain that the tests are not
+    off by one. :-)
+
+ Basic/Gen/PP.pm     |   18 +++++++++++++++++-
+ t/pp_line_numbers.t |    6 +++---
+ 2 files changed, 20 insertions(+), 4 deletions(-)
+
+commit cca456bd42c5b5e4f2694af2796748fceca20927
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Dec 12 22:38:18 2011 -0600
+
+    Updated Release_Notes
+
+ Release_Notes |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 758c9b211142b95a1414ad1d79e9c0ecd86f7259
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Dec 12 22:31:51 2011 -0600
+
+    Cleaned up a couple of PDL::PP warnings.
+    
+    PDL::PP has begun generating warnings when run under the -w flag,
+    which happens these days under Perl 5.14. I've examined the code
+    and cleaned it up as best I can. I'm still not sue how the symbol
+    table class is used, but I'm fairly certain that the setting of
+    the Sym2Id key in add_ids() is useless since that key is never
+    used elsewhere. As it is, these changes don't break the compilation
+    of any of the core modules, so I expect that it didn't do anything
+    important.
+
+ Basic/Gen/PP.pm        |   17 ++++++++++-------
+ Basic/Gen/PP/SymTab.pm |   19 ++++++++++++++++++-
+ 2 files changed, 28 insertions(+), 8 deletions(-)
+
+commit 0b6ab203139698f8bcd3750a6338654fcd595ab3
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Dec 12 20:11:13 2011 -0600
+
+    Fixed 'my %ops' warning with PDL::PP::PDLCode.
+    
+    Lexical (i.e. 'my') variables have file scope, but they were being
+    used in PDL::PP::PDLCode as if they had package scope. The obvious
+    fix was to declare them all as 'our' variables, giving them the
+    package scope they assumed they had.
+
+ Basic/Gen/PP/PDLCode.pm |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit a08accf216efe7f8d421583fdd5cb7ce3eadf69d
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Mon Dec 12 13:12:12 2011 +1100
+
+    t/pdl_from_string.t Catch perl bug
+    
+    ActivePerl 5.8.0 (build 806) asserts that NaN == NaN, and
+    test 29 therefore fails.
+    There may be other 5.8.x builds of perl that do the same.
+    This patch aims to detect that condition and skip test 29.
+    On detection of this condition, appropriate warning messages
+    are also emitted.
+
+ t/pdl_from_string.t |   28 ++++++++++++++++++----------
+ 1 files changed, 18 insertions(+), 10 deletions(-)
+
+commit 0559b36b24e7a9d8dbec872b7606b772a68bdf50
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 10 17:33:27 2011 -0500
+
+    Add sqrt(-1) to PDL::Constants
+    
+    Changed to EXPORT_OK all constants to avoid name clashes and
+    updated the docs.  Now have the imaginary unit as well, either
+    I (for scientists) or J (for engineers).  Note: you can still
+    get i from the PDL::Complex module directly.  These are upper
+    case to make it clear that they are *constants*.
+
+ Basic/Constants.pm     |   36 ++++++++++++++++++++++++++++++++++--
+ Basic/default.perldlrc |    4 ++--
+ Release_Notes          |    4 +++-
+ perldl.conf            |    2 +-
+ t/constants.t          |    4 +++-
+ 5 files changed, 43 insertions(+), 7 deletions(-)
+
+commit 2940f07383f1c1a676e06b1885139998cb887ed9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 10 12:13:16 2011 -0500
+
+    Update VERSION to 2.4.9_014 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit 29f719d4408509c672fca3dca91fefb907c059cb
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Dec 10 12:10:19 2011 -0500
@@ -130,6 +454,13 @@ Date:   Sun Dec 4 10:05:44 2011 -0500
 
  Basic/Core/Makefile.PL |   12 ++++++++----
  1 files changed, 8 insertions(+), 4 deletions(-)
+
+commit bcc19144dbddb63b5f5829109f959ddcf1d3552c
+Merge: 90159e2 9ff2161
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Dec 2 18:22:27 2011 -0600
+
+    Merge branch 'master' into pp_line_numbers
 
 commit 4e4f99b98b98066e213b4567abd0a5f83698a37b
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -312,6 +643,20 @@ Date:   Fri Dec 2 11:19:43 2011 -0600
 
  t/pptest.t |   34 ++++++++++++++++------------------
  1 files changed, 16 insertions(+), 18 deletions(-)
+
+commit 90159e27161c78f4a1cf9fd77e9f43bea21eb66f
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Dec 2 11:17:33 2011 -0600
+
+    First set of code for PDL::PP::pp_line_numbers
+    
+    This includes the function along with a set of tests. Most of the
+    tests fail, but they are marked as TODO, so they don't break the
+    test suite.
+
+ Basic/Gen/PP.pm     |   14 ++++++++++++-
+ t/pp_line_numbers.t |   52 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 65 insertions(+), 1 deletions(-)
 
 commit 1ba5ee69543c263ee8cde76d5cc32107b38df776
 Author: David Mertens <dcmertens.perl@gmail.com>
