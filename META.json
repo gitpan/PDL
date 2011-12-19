@@ -35,6 +35,7 @@
             "Astro::FITS::Header" : 0,
             "Convert::UU" : 0,
             "Data::Dumper" : "2.121",
+            "ExtUtils::MakeMaker" : "6.31",
             "File::Spec" : "0.6",
             "File::Temp" : 0,
             "Filter::Util::Call" : 0,
@@ -57,5 +58,5 @@
          "url" : "http://pdl.git.sourceforge.net/git/gitweb.cgi?p=pdl/pdl"
       }
    },
-   "version" : "v2.4.9_014"
+   "version" : "v2.4.9_015"
 }

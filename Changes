@@ -1,3 +1,214 @@
+commit e7168826404c0c3944d96fede47ece6a680b9af5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 18 21:41:58 2011 -0500
+
+    Various POD fixes for *.pd and *.PL files
+
+ Basic/Core/Core.pm.PL        |   13 ++++++++++---
+ Basic/Ops/ops.pd             |    9 +++++++++
+ Basic/Ufunc/ufunc.pd         |   30 ++++++++++++++++++++++++++----
+ IO/NDF/NDF.pm.PL             |   14 +++++++++-----
+ Lib/FFTW/fftw.pd             |    2 --
+ Lib/Fit/Gaussian/gaussian.pd |   20 ++++++++++----------
+ Lib/Slatec/slatec.pd         |   42 +++++++++++++++++++++++++++++++-----------
+ 7 files changed, 95 insertions(+), 35 deletions(-)
+
+commit 78fbea042df9a3a9d572098daae64946b862fed3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 18 21:02:06 2011 -0500
+
+    POD cleanup for pdldoc.PL
+
+ pdldoc.PL |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
+commit 25db7f07876be9941083d23e79ed25ba03a17735
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 18 20:57:52 2011 -0500
+
+    Turn off warnings for t/pp_line_numbers.t
+
+ t/pp_line_numbers.t |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 6fa84f25936a5bd366105521a566319d1fe98746
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 18 20:27:18 2011 -0500
+
+    Add PDL_BUILD_DIR to perldl.conf
+    
+    This is a record of the directory where PDL was built.
+    It is useful for determining perl library paths without
+    messy relative ../../..  stuff.
+
+ Makefile.PL |    2 ++
+ perldl.conf |    6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+commit 0ce0e8e654fad0540bf1c5bf43b09458db47aceb
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 18 16:09:32 2011 -0500
+
+    Update EU::MM required $VERSION to 6.31
+    
+    This is the first release of ExtUtils::MakeMaker that has
+    support for INSTALL_BASE as a location for non-system module
+    repositories.  It installs in the same fashion as Module::Build's
+    --install-base option and is *much* easier to comprehend where
+    things will end up.  I've added a note to DEPENDENCIES that
+    builds using earlier versions should still be possible with
+    some minor edits.
+    
+    We'll need to update the PDL::FAQ related to this.
+
+ DEPENDENCIES  |   10 ++++++++++
+ Makefile.PL   |    3 ++-
+ Release_Notes |   12 ++++++++++++
+ 3 files changed, 24 insertions(+), 1 deletions(-)
+
+commit e1651df5088ed1f265a50f871a1da0a2e94d202b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 18 14:41:20 2011 -0500
+
+    Add VERSION to PDL::Constants and update MANIFEST.SKIP
+
+ Basic/Constants.pm |    2 ++
+ MANIFEST.SKIP      |   52 +++++++++++++++++++++++++++-------------------------
+ 2 files changed, 29 insertions(+), 25 deletions(-)
+
+commit cacd2248d889b036ad4f7f4060e806098f4c8805
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 18 14:13:14 2011 -0500
+
+    Use File::Temp->newdir in trylink
+    
+    We've been getting some mysterious fails for some CPAN testers
+    builds that I've tracked down to weak tempfile names and tempdir
+    creation and usage.  Switching to File::Temp should fix things.
+
+ Basic/Core/Dev.pm |   16 ++++++++--------
+ Release_Notes     |    5 +++++
+ 2 files changed, 13 insertions(+), 8 deletions(-)
+
+commit 2b666feabf0a080e3368115d42fccc6405598fbf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 18 13:53:00 2011 -0500
+
+    Switch tests to use File::Temp::tempdir
+
+ t/fastraw.t  |    4 +++-
+ t/flexraw.t  |    3 ++-
+ t/gd_tests.t |    3 ++-
+ 3 files changed, 7 insertions(+), 3 deletions(-)
+
+commit eaec209911314f75fd101c8bb35b480f947c9f1b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 17 14:56:45 2011 -0500
+
+    POD cleanup for image2d.pd
+    
+    We really should revisit the PDL docs generation so that
+    the docs that are shown on http://search.cpan.org look
+    right.  Maybe we could add a step in PP that modifies
+    the docs (e.g., ==head to =head) and so forth so that
+    the only docs visible would be the generated ones.
+
+ Lib/Image2D/image2d.pd |   47 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 46 insertions(+), 1 deletions(-)
+
+commit 153b93df041303cfb6f69daba9d6add9b9f9a0b4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 16 15:50:13 2011 -0500
+
+    Minor cleanup in Threading.pod
+
+ Basic/Pod/Threading.pod |   22 +++++++++++-----------
+ 1 files changed, 11 insertions(+), 11 deletions(-)
+
+commit c765d8265b069ba869cfea8ce70f9720880b184c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 16 15:32:44 2011 -0500
+
+    Update Known_problems and Release_Notes
+
+ Known_problems |    4 ++++
+ Release_Notes  |   12 +++++++++++-
+ 2 files changed, 15 insertions(+), 1 deletions(-)
+
+commit 92dfae3fa638060123cdea1b4561c7acfa1680a9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 16 15:19:37 2011 -0500
+
+    Update version number in Perldl2.pm profile
+
+ Perldl2/Profile/Perldl2.pm |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 485d13c225a7e7a2efb45d965c57f94b892dbf28
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 16 15:16:44 2011 -0500
+
+    Add new pdl2 CleanErrors plugin
+    
+    This filters out the eval, Class::MOP, Devel::REPL,
+    Lexical::Persistence, and any other non-PDL related lines from
+    the full (verbose!) error traceback.
+
+ MANIFEST                      |    1 +
+ Perldl2/Plugin/CleanErrors.pm |   59 +++++++++++++++++++++++++++++++++++++++++
+ Perldl2/Plugin/Makefile.PL    |    3 +-
+ Perldl2/Profile/Perldl2.pm    |    3 +-
+ 4 files changed, 64 insertions(+), 2 deletions(-)
+
+commit 0adfa89637c16c3e1f3590b817c079ce82b3ba7c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 16 09:48:57 2011 -0500
+
+    Use File::Temp::tempfile in t/flexraw_fortran.t
+    
+    With luck this will resolve the erratic test fails due to
+    temp file issues.
+
+ t/flexraw_fortran.t |   27 +++++++++++++--------------
+ 1 files changed, 13 insertions(+), 14 deletions(-)
+
+commit 29366c7a69db4f1527aa4505ddbb6de60a671490
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Dec 15 16:51:25 2011 -0500
+
+    Update PDL_CONFIG_VERSION for perldl.conf addition
+    
+    I forgot to bump the version information for the new
+    PDL_BUILD_VERSION key...
+
+ perldl.conf |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
+
+commit b88f28b7c29cdeefdcd7494287f6d6d02db4bd0b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Dec 15 16:48:15 2011 -0500
+
+    Add PDL_BUILD_VERSION to perldl.conf keys
+    
+    This gives us a way to check that the PDL version being
+    built corresponds to the given Config.pm file in case
+    PDL gets installed into two different locations.
+
+ Makefile.PL |    2 ++
+ perldl.conf |    2 ++
+ 2 files changed, 4 insertions(+), 0 deletions(-)
+
+commit ed9a3e8adb1bee88c0ce9653dbd649527e436425
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Dec 15 16:47:58 2011 -0500
+
+    Update VERSION to 2.4.9_015 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit 056057dfc7a61668920cd315ede1924fa8c69dc6
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu Dec 15 16:05:33 2011 -0500

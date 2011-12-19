@@ -2774,6 +2774,8 @@ occasionally useful and is provied for backwards compatibility.
    # Do something on each value...
  }
 
+=cut
+
 !NO!SUBS!
 
 if ( $bvalflag ) {
@@ -2782,11 +2784,12 @@ if ( $bvalflag ) {
 
 list converts any bad values into the string 'BAD'.
 
+=cut
+
 !NO!SUBS!
 }
 
 print OUT <<'!NO!SUBS!';
-=cut
 
 # No threading, just the ordinary dims.
 sub PDL::list{ # pdl -> @list
@@ -3149,6 +3152,8 @@ e.g.:
 
  Break => 1   Break dataflow connection (new copy)
 
+=cut
+
 !NO!SUBS!
 	if ( $bvalflag ) {
 print OUT <<'!NO!SUBS!';
@@ -3156,12 +3161,12 @@ print OUT <<'!NO!SUBS!';
 
 The output piddles are set bad if the original piddle has its bad flag set.
 
+=cut
+
 !NO!SUBS!
 } # if: $bvalflag
 
 print OUT <<'!NO!SUBS!';
-=cut
-
 sub PDL::dog {
   my $opt = pop @_ if ref($_[-1]) eq 'HASH';
   my $p = shift;

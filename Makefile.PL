@@ -13,7 +13,7 @@ check_lib_or_exit(
 
 use 5.008_000;      # explicitly require 5.8.x or above
 
-use ExtUtils::MakeMaker;
+use ExtUtils::MakeMaker 6.31;  # for INSTALL_BASE support
 
 $::PP_VERBOSE = 0; # =1 makes PP waffle a lot
 
@@ -172,6 +172,8 @@ EOD
 
   require File::Spec;
 
+  $PDL_CONFIG{PDL_BUILD_DIR} = File::Spec->rel2abs(File::Spec->curdir());
+
   $PDL_CONFIG{TEMPDIR} = $^O =~ /MSWin32/i ? 'File::Spec->tmpdir()' : File::Spec->tmpdir()
     unless exists $PDL_CONFIG{TEMPDIR} and defined $PDL_CONFIG{TEMPDIR};
 
@@ -326,6 +328,8 @@ sub myformat {
 sub make_PDL_Config_pm {
   print STDERR "Writing Basic/Core/Config.pm\n";
 
+  $PDL::Config{PDL_BUILD_VERSION} = "$PDL::VERSION";
+
   my $fh = IO::File->new( ">Basic/Core/Config.pm" )
     or die "Couldn't open Config.pm for writing";
   print $fh "
@@ -476,6 +480,7 @@ my @podpms = map { $_.".pod", '$(INST_LIBDIR)/PDL/' . $_ .".pod"}
 	   'Astro::FITS::Header' => 0,
            'Convert::UU'         => 0,         # for PDL::IO::Dumper
            'Data::Dumper'        => 2.121,     # for PDL::IO::Dumper
+           'ExtUtils::MakeMaker' => 6.31,      # for INSTALL_BASE support
 	   'File::Spec'          => 0.6,
 	   'File::Temp'          => 0,
 	   'Filter::Util::Call'  => 0,         # for PDL::NiceSlice
