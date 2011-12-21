@@ -844,14 +844,14 @@ use Scalar::Util;       # for looks_like_number test
 use Carp 'carp';        # for carping (warnings in caller's context)
 
 # This is the code that handles string arguments. It has now gotten quite large,
-# so here's the basic explanation. I want to allow expressions like 2, 1e3, 1+4,
-# bad, nan, and inf. However, I also need to protect from executing arbitrary
-# code when I run the eval. So, I croak when I find:
+# so here's the basic explanation. I want to allow expressions like 2, 1e3, +4,
+# bad, nan, inf, and more. Checking this can get tricky. This croaks when it
+# finds:
 # 1) strings of e or E that are longer than 1 character long (like eeee)
-# 2) non-supported characters
-# 3) the characer e that evaluates as a function (as in '1 2 3 e 5')
-# 4) expressions that are syntactically erroneous, like '1 2 3 ]', which has an
+# 2) non-supported characters or strings
+# 3) expressions that are syntactically erroneous, like '1 2 3 ]', which has an
 #    extra bracket
+# 4) use of inf when the data type does not support inf (i.e. the integers)
 
 sub PDL::Core::new_pdl_from_string {
    my ($new, $original_value, $this, $type) = @_;
@@ -864,9 +864,11 @@ sub PDL::Core::new_pdl_from_string {
    
    # I check for invalid characters later, but arbitrary strings of e will
    # pass that check, so I'll check for that here, first.
-   barf("PDL::Core::new_pdl_from_string: I found consecutive copies of e but\n"
-      . "  I'm not sure what you mean. You gave me $original_value")
-      if ($value =~ /ee/i);
+#   croak("PDL::Core::new_pdl_from_string: I found consecutive copies of e but\n"
+#      . "  I'm not sure what you mean. You gave me $original_value")
+#      if ($value =~ /ee/i);
+   croak("PDL::Core::new_pdl_from_string: found 'e' as part of a larger word in $original_value")
+      if $value =~ /e\p{IsAlpha}/ or $value =~ /\p{IsAlpha}e/;
    
    # Only a few characters are allowed in the expression, but we want to allow
    # expressions like 'inf' and 'bad'. As such, convert those values to internal
@@ -877,19 +879,31 @@ sub PDL::Core::new_pdl_from_string {
    #  inf => Ee
    #  pi  => eE
    # --( Bad )--
+   croak("PDL::Core::new_pdl_from_string: found 'bad' as part of a larger word in $original_value")
+      if $value =~ /bad\B/ or $value =~ /\Bbad/;
    my ($has_bad) = ($value =~ s/\bbad\b/EE/gi);
    # --( nan )--
    my ($has_nan) = 0;
+   croak("PDL::Core::new_pdl_from_string: found 'nan' as part of a larger word in $original_value")
+      if $value =~ /\Bnan/ or $value =~ /nan\B/;
    $has_nan++ if ($value =~ s/\bnan\b/ee/gi);
    # Strawberry Perl compatibility:
+   croak("PDL::Core::new_pdl_from_string: found '-1.#IND' as part of a larger word in $original_value")
+      if $value =~ /IND\B/i;
    $has_nan++ if ($value =~ s/-1\.\#IND/ee/gi);
    # --( inf )--
    my ($has_inf) = 0;
    # Strawberry Perl compatibility:
+   croak("PDL::Core::new_pdl_from_string: found '1.#INF' as part of a larger word in $original_value")
+      if $value =~ /INF\B/i;
    $has_inf++ if ($value =~ s/1\.\#INF/Ee/gi);
    # Other platforms:
+   croak("PDL::Core::new_pdl_from_string: found 'inf' as part of a larger word in $original_value")
+      if $value =~ /inf\B/ or $value =~ /\Binf/;
    $has_inf++ if ($value =~ s/\binf\b/Ee/gi);
    # --( pi )--
+   croak("PDL::Core::new_pdl_from_string: found 'pi' as part of a larger word in $original_value")
+      if $value =~ /pi\B/ or $value =~ /\Bpi/;
    $value =~ s/\bpi\b/eE/gi;
    
    # Some data types do not support nan and inf, so check for and warn or croak,
@@ -900,19 +914,19 @@ sub PDL::Core::new_pdl_from_string {
       $has_bad += $has_nan;
       $has_nan = 0;
    }
-   barf("PDL::Core::new_pdl_from_string: type $types[$type] does not support inf")
+   croak("PDL::Core::new_pdl_from_string: type $types[$type] does not support inf")
       if ($has_inf and not $types[$type]->usenan);
    
    # Make the white-space uniform and see if any not-allowed characters are
    # present:
    $value =~ s/\s+/ /g;
    if (my ($disallowed) = ($value =~ /([^\[\]\+\-0-9;,.eE ]+)/)) {
-      barf("PDL::Core::new_pdl_from_string: found disallowed character(s) '$disallowed' in $original_value");
+      croak("PDL::Core::new_pdl_from_string: found disallowed character(s) '$disallowed' in $original_value");
    }
    
    # Wrap the string in brackets [], so that the following works:
    # $a = new PDL q[1 2 3];
-   # We'll have to check for dimensions of size one after we've eval'd
+   # We'll have to check for dimensions of size one after we've parsed
    # the string and built a PDL from the resulting array.
    $value = '[' . $value . ']';
 
@@ -948,32 +962,15 @@ sub PDL::Core::new_pdl_from_string {
    # Croak on operations with bad values. It might be nice to simply replace
    # these with bad values, but that is more difficult that I like, so I'm just
    # going to disallow that here:
-   barf("PDL::Core::new_pdl_from_string: Operations with bad values are not supported")
+   croak("PDL::Core::new_pdl_from_string: Operations with bad values are not supported")
       if($value =~ /EE[+\-]/ or $value =~ /[+\-]EE/);
    
-   # Check for things that will evaluate as functions and barf if found
+   # Check for things that will evaluate as functions and croak if found
    if (my ($disallowed) = ($value =~ /((\D+|\A)[eE]\d+)/)) {
-      barf("PDL::Core::new_pdl_from_string: syntax error, looks like an improper exponentiation: $disallowed\n"
+      croak("PDL::Core::new_pdl_from_string: syntax error, looks like an improper exponentiation: $disallowed\n"
          . "You originally gave me $original_value\n");
    }
    
-   # Install the warnings handler:
-   my $old_warn_handler = $SIG{__WARN__};
-	
-   $SIG{__WARN__} = sub {
-      if ($_[0] =~ /(Argument ".*" isn't numeric)/) {
-         # Restore the old warning handler and croak:
-         $SIG{__WARN__} = $old_warn_handler;
-         die "Incorrectly formatted input: $1\n";
-      }
-      elsif ($old_warn_handler) {
-         $old_warn_handler->(@_);
-      }
-      else {
-         warn @_;
-      }
-   };
-
    # Replace the place-holder strings with strings that will evaluate to their
    # correct numerical values when we run the eval:
    $value =~ s/\bEE\b/bad/g;
@@ -984,17 +981,27 @@ sub PDL::Core::new_pdl_from_string {
    my $nan = $inf - $inf;
    $value =~ s/\beE\b/pi/g;
    
-   # Let's see if we can parse it as an array-of-arrays:
-   local $_ = $value;
-   my $val = eval { PDL::Core::parse_basic_string ($inf, $nan, $bad) };
-   
-   # Restore the old warning handler:
-   if ($old_warn_handler) {
-	   $SIG{__WARN__} = $old_warn_handler;
-   }
-   else {
-	   delete $SIG{__WARN__};
-   }
+   my $val = eval{
+      # Install the warnings handler:
+      my $old_warn_handler = $SIG{__WARN__};
+      local $SIG{__WARN__} = sub {
+         if ($_[0] =~ /(Argument ".*" isn't numeric)/) {
+            # Send the error through die. This is *always* get caught, so keep
+            # it simple.
+            die "Incorrectly formatted input: $1\n";
+         }
+         elsif ($old_warn_handler) {
+            $old_warn_handler->(@_);
+         }
+         else {
+            warn @_;
+         }
+      };
+
+      # Let's see if we can parse it as an array-of-arrays:
+      local $_ = $value;
+      return PDL::Core::parse_basic_string ($inf, $nan, $bad);
+   };
    
    if (ref $val eq 'ARRAY') {
       my $to_return = PDL::Core::pdl_avref($val,$this,$type);
@@ -1012,7 +1019,7 @@ sub PDL::Core::new_pdl_from_string {
       } else {
          push @message, "Internal error: unexpected output type ->$val<- is not ARRAY ref";
       }
-      barf join("\n  ", @message);
+      croak join("\n  ", @message);
    }
 }
 
@@ -1047,10 +1054,14 @@ sub PDL::Core::parse_basic_string {
 			next SYMBOL;
 		}
 		elsif (s/^\+//) {
+			die "Expected number but found a plus sign at ... ", substr ($_, 0, 10), "...\n"
+				if $expects_number;
 			$expects_number = 1;
 			redo SYMBOL;
 		}
 		elsif (s/^\-//) {
+			die "Expected number but found a minus sign at ... ", substr ($_, 0, 10), "...\n"
+				if $expects_number;
 			$sign = -1;
 			$expects_number = 1;
 			redo SYMBOL;
@@ -1963,7 +1974,8 @@ sub PDL::approx {
   my ($a,$b,$eps) = @_;
   $eps = $approx unless defined $eps;  # the default eps
   $approx = $eps;    # remember last eps
-  return ($a-$b)->abs < $eps;
+  # NOTE: ($a-$b)->abs breaks for non-piddle inputs
+  return abs($a-$b) < $eps;
 }
 
 =head2 mslice

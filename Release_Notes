@@ -1,3 +1,65 @@
+Release Notes for PDL 2.4.9_016 --------------------------
+
+General Notes:
+
+ * This is the final CPAN developers release for PDL
+   code changes.  The next release will be release
+   candidate 1 and all focus will be on documentation,
+   web page updates, and writing the PDL Book...
+ 
+   - It is a snapshot of the current git development tree
+     and everything may not work correctly or have complete
+     documentation.
+
+   - These release notes may not be fully complete.  Please
+     see Changes (from the git log) for full details.
+
+   - All tests may not pass, especially ones corresponding
+     to issues in Known_problems.
+   
+   - Manual build/install is recommended although the
+     cpan shell may be used by specifying the distribution
+     path rather than just the module name, e.g.:
+
+       cpan> get  CHM/PDL-2.4.9_016.tar.gz
+       cpan> make CHM/PDL-2.4.9_016.tar.gz
+       cpan> test CHM/PDL-2.4.9_016.tar.gz
+       cpan> look CHM/PDL-2.4.9_016.tar.gz
+
+
+Highlights:
+
+ * Updated win32/INSTALL instructions.
+
+ * Added curses library detection for PDL::IO::Browser using
+   Devel::CheckLib.  This is untested and disabled by
+   default but if you set WITH_IO_BROWSER => 1 in the
+   perldl.conf, it should build if your platform supports
+   curses.
+   
+   NOTE: PDL::IO:Browser is not available for win32 perls
+   since we still need to sort out an appropriate add-on
+   curses implementation and verify it works.
+ 
+ * Rework some tests to quiet warnings and to reduce
+   false fails (usually from floating point == tests).
+
+ * Better corner-case handling when creating a pdl from a string.
+   For example, this doesn't make sense:
+     pdl q[1 +-2 3]
+   but it used to give a piddle with values [1, -2, 3], basically
+   ignoring the first plus sign. That now croaks.
+   
+   Additionally, this used to croak, but the error message was
+   useless:
+     pdl q[1 pie 3]
+   The new parsing will croak with a much more useful error:
+     found 'e' as part of a larger word in 1 pie 2
+ 
+ * Improved pthread detection for windows with Devel::CheckLib
+
+
+
 Release Notes for PDL 2.4.9_015 --------------------------
 
 General Notes:

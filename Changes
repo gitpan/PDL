@@ -1,3 +1,237 @@
+commit 1622cae2a06ed4b489a176bb3b6638d239d39b4f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 21 16:36:59 2011 -0500
+
+    Update Release_Notes for 2.4.9_016 release
+
+ Release_Notes |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 2fb371d448748a51254893f1a0aab7c3443de6e5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 21 16:33:32 2011 -0500
+
+    Add pthread default detection fix
+    
+    Now we check for a working pthreads install
+    with check_lib() and if it works, just go
+    with the default.  Otherwise, on win32 or cygwin
+    platforms, we don't build.
+
+ Basic/Core/Makefile.PL |   26 +++++++++++++++++++++++---
+ IO/Browser/Makefile.PL |   13 ++++++++-----
+ 2 files changed, 31 insertions(+), 8 deletions(-)
+
+commit 633909c7b087a405709f726fcf30c439fb1be34d
+Merge: 915b36d 33cbd08
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Dec 21 13:04:42 2011 -0600
+
+    Merged Release_Notes
+
+commit 915b36d8f43ea421e629ac4928a10eef71c006bf
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Dec 21 13:03:13 2011 -0600
+
+    Updated Release_Notes for parser news
+
+ Release_Notes |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
+
+commit 0443e22d5426c80f07adf38793932a4d893b3281
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Dec 21 12:58:57 2011 -0600
+
+    Improved parsing of corner cases in pdl-from-string
+    
+    Implemented code (and tests) for edge cases that were bad but
+    previously allowed, including:
+    
+      pdl q[ 1 pie 2]
+      pdl q[1 -+2 3]
+    
+    and others.
+
+ Basic/Core/Core.pm.PL |   95 +++++++++++++++++++++++++-----------------------
+ t/pdl_from_string.t   |   44 ++++++++++++++++------
+ 2 files changed, 81 insertions(+), 58 deletions(-)
+
+commit 33cbd08e9d6b3ba1547b994c0a3cc51545507f49
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 21 13:31:50 2011 -0500
+
+    Fix FFTW detect problem for SPP
+    
+    Working code was in the Lib/FFTW/Makefile.PL but
+    the perldl.conf was setting the values explicitly
+    and so overriding the better defaults in the
+    Makefile.PL.  This should not affect builds for
+    other platforms.
+
+ Lib/FFTW/Makefile.PL |    2 +-
+ perldl.conf          |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit a5e5dc6b398ee230abe45dede26b4b1a6c626930
+Merge: 7f879b7 753b79a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 21 13:06:39 2011 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 753b79ab59d1463177de2b600b630b98f264c9a8
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Dec 21 10:57:17 2011 -0600
+
+    Added commented code, to be uncommented after 2.4.10 is released.
+    
+    I looked back over the pdl-from-string code and realized that some
+    of the parsing could be made more strict. For example, at the
+    moment, the following input:
+    
+      $piddle = pdl q[1 +-2 3];
+    
+    will be interpreted as
+    
+      $piddle = pdl q[1 -2 3];
+    
+    In othe words, the initial plus sign is simply dropped. The new
+    code includes checks for this condition and croaks if it finds it.
+
+ Basic/Core/Core.pm.PL |   20 ++++++++++++++------
+ t/pdl_from_string.t   |    8 ++++++++
+ 2 files changed, 22 insertions(+), 6 deletions(-)
+
+commit 7f879b79cc2e15ced00d2b01e265231c660d8b1c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 21 11:47:36 2011 -0500
+
+    Update release notes etc for 2.4.9_016 CPAN release
+    
+    This is the final code-change release for PDL-2.4.9.
+    The next release will be RC1 for PDL-2.4.10.
+
+ Known_problems |   12 ++++--------
+ Release_Notes  |   20 ++++++++++++++++++--
+ 2 files changed, 22 insertions(+), 10 deletions(-)
+
+commit 9c1b7fa436c946e8aabf65c6386db73f42b2f8b3
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Dec 21 22:35:16 2011 +1100
+
+    win32/INSTALL Update info/instructions
+
+ win32/INSTALL |  105 ++++++++++++++++++++++++++++++++++++++------------------
+ 1 files changed, 71 insertions(+), 34 deletions(-)
+
+commit 02b4a413ff721a15c3f4bc6f41efcc201647ee3a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 20 19:40:31 2011 -0500
+
+    Update IO::Browser detection using Devel::CheckLib
+    
+    The default is still *not* to build IO::Browser but
+    I believe the build should now work if the perldl.conf
+    option is set true.
+
+ IO/Browser/Makefile.PL |   65 ++++++++++++++++++++++++++++++++++--------------
+ IO/Browser/browse.c    |   12 ++++++---
+ IO/Makefile.PL         |   17 +++---------
+ 3 files changed, 59 insertions(+), 35 deletions(-)
+
+commit 39daec216d615094878d5dad99d2d46bd04ad668
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 20 17:50:17 2011 -0500
+
+    Had to move $^W=0 before the pp_line_number stuff
+
+ t/pp_line_numbers.t |   13 +++++++------
+ 1 files changed, 7 insertions(+), 6 deletions(-)
+
+commit 187de8e192b2e954c7048257c78a0e26ef022da2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 20 09:41:06 2011 -0500
+
+    Added TODO to t/limits_trans_err.t
+    
+    This will still allow for the tests to run but won't fail
+    if the approx() checks have not yet been implemented...
+
+ t/limits_trans_err.t |   76 +++++++++++++++++++++++---------------------------
+ 1 files changed, 35 insertions(+), 41 deletions(-)
+
+commit 81f8ece24814ba7e5e4c00dfbe1771e7c1061e30
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 20 09:17:54 2011 -0500
+
+    Use approx in limits_round.t, is_deeply in limits_trans_err.t
+    
+    It is usually a bad idea to check for floating point
+    equality as platform differences can cause fails that
+    aren't significant.  I replaced '==' by approx() in
+    t/limits_round.t and fixed the implementation of approx()
+    which was broken for non-piddle inputs.  The method call
+    syntax should not be needed as PDL::LiteF (the smallest
+    possible set of modules to run PDL) does include PDL::Ops.
+    
+    Took a look at t/limits_trans_err.t but couldn't think
+    of a good way to fix quickly but did notice that
+    eq_array() has been deprecated in favor of is_deeply()
+    by Test::More and made that change.
+
+ Basic/Core/Core.pm.PL |    3 ++-
+ t/limits_round.t      |    7 ++-----
+ t/limits_trans_err.t  |    8 ++++----
+ 3 files changed, 8 insertions(+), 10 deletions(-)
+
+commit fa3eca31a2061283d5ae7e0c5e4df105fe9bb2fd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 19 15:18:40 2011 -0500
+
+    Update FAQ 4.4: How can I install PDL in a non-standard location?
+
+ Basic/Pod/FAQ.pod |  267 ++++++++++++++++-------------------------------------
+ 1 files changed, 79 insertions(+), 188 deletions(-)
+
+commit be7ba292179dee6b14fbc6cc38cd6e5c64fe3614
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 19 11:20:40 2011 -0500
+
+    Add pp_croaking.t + pp_line_numbers.t to MANIFEST
+    
+    I noticed the tests were missing in the latest CPAN developers
+    release.
+    
+    NOTE:  If you add code such as tests to the PDL git that
+    needs to be part of the distribution.  Please add the
+    appropriate entry in MANIFEST.
+
+ MANIFEST |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 8ebfd804f64e503cb5c077c7c18c17496cfbe7de
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 19 09:47:52 2011 -0500
+
+    Update VERSION to 2.4.9_015 for more development
+    
+    It is expected that the next release will actually be
+    the first release candidate for PDL-2.4.10
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit c06185edaa79dc87510c7329a283f8315b6dffb9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 19 09:29:27 2011 -0500
+
+    Fix one too many =cut which broke Core.pm
+
+ Basic/Core/Core.pm.PL |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
+
 commit e7168826404c0c3944d96fede47ece6a680b9af5
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Dec 18 21:41:58 2011 -0500
