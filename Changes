@@ -1,3 +1,197 @@
+commit 241720b72d46b318cbd1b5cc53d8f12fb4142b9d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 24 11:58:58 2011 -0500
+
+    Update t/config.t to match perldl.conf changes
+
+ t/config.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 99ce52212d8c2bfc74ecd03bcfab2ab982066eb9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 24 10:53:33 2011 -0500
+
+    Clean up perldl.conf for release candidate 1
+    
+    Removed legacy comments for unused features and updated
+    Perl OpenGL module version required.
+
+ perldl.conf |   48 +++++-------------------------------------------
+ 1 files changed, 5 insertions(+), 43 deletions(-)
+
+commit d786c1bf3a7ae571f8ede49fe7cfa38e75b427cf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 23 14:47:42 2011 -0500
+
+    Clean-up TODO and in t/dumper.t from that
+    
+    Some TODO items were done, some needed to be added,
+    t/dumper.t edit to clean up from an already fixed bug.
+
+ TODO       |   16 ++------
+ t/dumper.t |  115 +++++++++++++++++++++++++++--------------------------------
+ 2 files changed, 57 insertions(+), 74 deletions(-)
+
+commit 6471f8d70d5507452dffdb843e757ac1bc508880
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Dec 23 10:59:02 2011 -0500
+
+    Skip IO::Browser testing for CPAN Testers
+    
+    The functionality is there and appears to work but the
+    edge cases still need to resolved for all platforms.
+    The IO::Browser module must be specifically enabled
+    now for the build to be attempted.  Will re-open for
+    testing after PDL-2.4.10
+
+ IO/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 3eb17745b27b59a847d43c52af10e9646b17d936
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Dec 22 22:14:00 2011 -0700
+
+    Revert "Add NO_MYMETA=>1 flag to most Makefile.PL's."
+    
+    This reverts commit 1b66349abb51020a76e33af7dc8e7671cfc0062c.
+    
+    Chris made the point that the NO_MYMETA attribute was introduced
+    in a version of MakeMaker (6.57_02) that is later than our minimum
+    required version (6.31). Seems likely that this would cause even
+    more ugliness for users of older EU::MMs. No time for me to fix
+    properly before holiday and release, so reverting for now. We
+    can fix properly after 2.4.10 (this is just cosmetic anyway).
+
+ Basic/Core/Dev.pm                     |    2 --
+ Basic/Core/Makefile.PL                |    1 -
+ Basic/Gen/Makefile.PL                 |    1 -
+ Basic/Makefile.PL                     |    1 -
+ Basic/Pod/Makefile.PL                 |    1 -
+ Demos/Makefile.PL                     |    3 +--
+ Doc/Makefile.PL                       |    1 -
+ Doc/Pod/Makefile.PL                   |    1 -
+ Graphics/LUT/Makefile.PL              |    1 -
+ Graphics/LUT/ramps/Makefile.PL        |    3 +--
+ Graphics/LUT/tables/Makefile.PL       |    3 +--
+ Graphics/Limits/Makefile.PL           |    1 -
+ Graphics/Makefile.PL                  |    1 -
+ Graphics/PGPLOT/Makefile.PL           |    3 +--
+ Graphics/PGPLOT/Window/Makefile.PL    |    3 +--
+ Graphics/TriD/Makefile.PL             |    1 -
+ Graphics/TriD/VRML/Makefile.PL        |    1 -
+ IO/Dicom/Makefile.PL                  |    1 -
+ IO/FITS/Makefile.PL                   |    3 +--
+ IO/FastRaw/Makefile.PL                |    1 -
+ IO/FlexRaw/Makefile.PL                |    1 -
+ IO/HDF/Makefile.PL                    |    1 -
+ IO/HDF/SD/Makefile.PL                 |    1 -
+ IO/HDF/VS/Makefile.PL                 |    1 -
+ IO/Makefile.PL                        |    1 -
+ IO/NDF/Makefile.PL                    |    1 -
+ Lib/CallExt/Makefile.PL               |    2 +-
+ Lib/Filter/Makefile.PL                |    5 ++---
+ Lib/Fit/Makefile.PL                   |    1 -
+ Lib/GIS/Makefile.PL                   |    1 -
+ Lib/GSL/Makefile.PL                   |    3 +--
+ Lib/GSL/SF/Makefile.PL                |    1 -
+ Lib/Makefile.PL                       |    1 -
+ Lib/Opt/Makefile.PL                   |    1 -
+ Lib/Opt/Simplex/Makefile.PL           |    3 +--
+ Lib/Transform/Cartography/Makefile.PL |    3 +--
+ Perldl2/Makefile.PL                   |    6 ++----
+ Perldl2/Plugin/Makefile.PL            |    1 -
+ Perldl2/Profile/Makefile.PL           |    1 -
+ 39 files changed, 14 insertions(+), 54 deletions(-)
+
+commit 339b4980ca3793cebf5d836737f2ee768b2e7c69
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Dec 22 08:01:57 2011 -0500
+
+    Fix typo in File::Temp::tempdir()
+
+ Basic/Core/Dev.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 6d50a82796558f6458d74d43e5d461c3d09f0daf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Dec 22 07:32:09 2011 -0500
+
+    Switch to use tempdir function, not OO newdir
+    
+    We still need to have robust temporary handling
+    and standardizing around File::Temp seems like
+    a good way forward.  It looks like newdir() was
+    a more recent addition.  Switching to the function
+    instead.
+
+ Basic/Core/Dev.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 1b66349abb51020a76e33af7dc8e7671cfc0062c
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Wed Dec 21 23:46:02 2011 -0700
+
+    Add NO_MYMETA=>1 flag to most Makefile.PL's.
+    
+    ExtUtils::MakeMaker 6.57_02 (2010 Sept 8) introduced the capability to automatically generate MYMETA.yml and MYMETA.json file, in order to provide CPAN metadata. But these files are created for every Makefile.PL, which doesn't make much sense in our case since most of those files were empty. I modified the pdlpp_stdargs(_int) subs in PDL::Core::Dev to include 'NO_MYMETA'=>1, which takes care of most of them, and hand edited the others.  Now there are only 4 of those file pairs created during the Makefile.PL process, 3 for submodules that actually do have specific requirements, and one pair for PDL itself, which we do actually want for CPAN.
+
+ Basic/Core/Dev.pm                     |    2 ++
+ Basic/Core/Makefile.PL                |    1 +
+ Basic/Gen/Makefile.PL                 |    1 +
+ Basic/Makefile.PL                     |    1 +
+ Basic/Pod/Makefile.PL                 |    1 +
+ Demos/Makefile.PL                     |    3 ++-
+ Doc/Makefile.PL                       |    1 +
+ Doc/Pod/Makefile.PL                   |    1 +
+ Graphics/LUT/Makefile.PL              |    1 +
+ Graphics/LUT/ramps/Makefile.PL        |    3 ++-
+ Graphics/LUT/tables/Makefile.PL       |    3 ++-
+ Graphics/Limits/Makefile.PL           |    1 +
+ Graphics/Makefile.PL                  |    1 +
+ Graphics/PGPLOT/Makefile.PL           |    3 ++-
+ Graphics/PGPLOT/Window/Makefile.PL    |    3 ++-
+ Graphics/TriD/Makefile.PL             |    1 +
+ Graphics/TriD/VRML/Makefile.PL        |    1 +
+ IO/Dicom/Makefile.PL                  |    1 +
+ IO/FITS/Makefile.PL                   |    3 ++-
+ IO/FastRaw/Makefile.PL                |    1 +
+ IO/FlexRaw/Makefile.PL                |    1 +
+ IO/HDF/Makefile.PL                    |    1 +
+ IO/HDF/SD/Makefile.PL                 |    1 +
+ IO/HDF/VS/Makefile.PL                 |    1 +
+ IO/Makefile.PL                        |    1 +
+ IO/NDF/Makefile.PL                    |    1 +
+ Lib/CallExt/Makefile.PL               |    2 +-
+ Lib/Filter/Makefile.PL                |    5 +++--
+ Lib/Fit/Makefile.PL                   |    1 +
+ Lib/GIS/Makefile.PL                   |    1 +
+ Lib/GSL/Makefile.PL                   |    3 ++-
+ Lib/GSL/SF/Makefile.PL                |    1 +
+ Lib/Makefile.PL                       |    1 +
+ Lib/Opt/Makefile.PL                   |    1 +
+ Lib/Opt/Simplex/Makefile.PL           |    3 ++-
+ Lib/Transform/Cartography/Makefile.PL |    3 ++-
+ Perldl2/Makefile.PL                   |    6 ++++--
+ Perldl2/Plugin/Makefile.PL            |    1 +
+ Perldl2/Profile/Makefile.PL           |    1 +
+ 39 files changed, 54 insertions(+), 14 deletions(-)
+
+commit 2c0617ee7de6d858cf024796a26016245c9a52cc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 21 16:42:01 2011 -0500
+
+    Update version to PDL-2.4.9_991 for RC1 edits
+    
+    The focus at this point is not on code changes.  We're in
+    feature freeze at this time.  Please test build for your
+    various platforms (with and without badvalues if possible).
+    Documentation, web page, and PDL book updates welcome!
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   25 +++++++++++++++++++++++++
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+
 commit 1622cae2a06ed4b489a176bb3b6638d239d39b4f
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Dec 21 16:36:59 2011 -0500
