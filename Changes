@@ -1,3 +1,55 @@
+commit 2ab698cabc58b5ae97fa404ed4379b9ef2564d70
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 28 10:12:43 2011 -0500
+
+    Update Known_problems and Release_Notes for RC2
+
+ Known_problems |   12 +-----------
+ Release_Notes  |    8 +++++++-
+ 2 files changed, 8 insertions(+), 12 deletions(-)
+
+commit ac91c48b0388f18eb5a28a5ecb786b2c1962e2ea
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Dec 27 15:54:22 2011 -0500
+
+    Fix IO::Browser default logic
+    
+    It should not try to build the Browser subdir Makefile
+    now.  I thought I had already fixed the problem.
+
+ IO/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 3805ec2e42b6a0e86d2359bd324b175f7765933f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Dec 26 10:10:35 2011 -0500
+
+    Remove WITH_NEW_PDL_FROM_STRING from perldl.conf
+    
+    It ended up not being used and is confusing to leave
+    in since it is not being used (and never was used).
+
+ perldl.conf |    8 --------
+ 1 files changed, 0 insertions(+), 8 deletions(-)
+
+commit 14b1788da80d14ee413944784b0c81c52112f1c1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Dec 24 12:12:36 2011 -0500
+
+    Update VERSION to 2.4.9_992 for RC2 checkout
+    
+    The focus of RC2 is to ensure that any lingering
+    code issue surprises (not expected) from RC1 are
+    addressed/documented and to allow for any POD or
+    internal doc updates to the source tree.  After
+    RC2, the remaining work should be on updates to
+    the web site and on the PDL book.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   25 +++++++++++++++++++++++++
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+
 commit 241720b72d46b318cbd1b5cc53d8f12fb4142b9d
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Dec 24 11:58:58 2011 -0500
