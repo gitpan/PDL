@@ -15,6 +15,13 @@ PDL is fast, comparable and often outperforming IDL and MATLAB in real
 world applications. PDL allows large N-dimensional data sets such as large
 images, spectra, etc to be stored efficiently and manipulated quickly. 
 
+
+=head1 VECTORIZATION 
+
+For a description of the vectorization (also called "threading"), see
+L<PDL::Core|PDL::Core>.
+
+
 =head1 INTERACTIVE SHELL
 
 The PDL package includes an interactive shell. You can learn about it,
@@ -139,7 +146,7 @@ start-up modules.
 
 
 # set the version:
-$PDL::VERSION = '2.4.9_992'; # Go to sub numbering per git push
+$PDL::VERSION = '2.4.9_993'; # Go to sub numbering per git push
 
 # Main loader of standard PDL package
 

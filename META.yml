@@ -1,38 +1,38 @@
----
-abstract: 'Perl Data Language'
+--- #YAML:1.0
+name:               PDL
+version:            2.4.9_993
+abstract:           Perl Data Language
 author:
-  - 'PerlDL Developers (perldl@jach.hawaii.edu)'
-build_requires:
-  ExtUtils::MakeMaker: 0
+    - PerlDL Developers (perldl@jach.hawaii.edu)
+license:            unknown
+distribution_type:  module
 configure_requires:
-  ExtUtils::MakeMaker: 0
-dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.58, CPAN::Meta::Converter version 2.110930001'
-license: unknown
-meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
-name: PDL
-no_index:
-  directory:
-    - t
-    - inc
+    ExtUtils::MakeMaker:  0
+build_requires:
+    ExtUtils::MakeMaker:  0
 requires:
-  Astro::FITS::Header: 0
-  Convert::UU: 0
-  Data::Dumper: 2.121
-  ExtUtils::MakeMaker: 6.31
-  File::Spec: 0.6
-  File::Temp: 0
-  Filter::Util::Call: 0
-  Inline: 0.43
-  OpenGL: 0.65
-  Pod::Parser: 0
-  Pod::Select: 0
-  Storable: 1.03
-  Text::Balanced: 1.89
+    Astro::FITS::Header:  0
+    Convert::UU:          0
+    Data::Dumper:         2.121
+    ExtUtils::MakeMaker:  6.31
+    File::Spec:           0.6
+    File::Temp:           0
+    Filter::Util::Call:   0
+    Inline:               0.43
+    OpenGL:               0.65
+    Pod::Parser:          0
+    Pod::Select:          0
+    Storable:             1.03
+    Text::Balanced:       1.89
 resources:
-  bugtracker: http://sourceforge.net/tracker/?func=browse&group_id=612&atid=100612
-  homepage: http://pdl.perl.org/
-  repository: http://pdl.git.sourceforge.net/git/gitweb.cgi?p=pdl/pdl
-version: v2.4.9_992
+    bugtracker:  http://sourceforge.net/tracker/?func=browse&group_id=612&atid=100612
+    homepage:    http://pdl.perl.org/
+    repository:  http://pdl.git.sourceforge.net/git/gitweb.cgi?p=pdl/pdl
+no_index:
+    directory:
+        - t
+        - inc
+generated_by:       ExtUtils::MakeMaker version 6.55_02
+meta-spec:
+    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
+    version:  1.4

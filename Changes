@@ -1,3 +1,221 @@
+commit f9b28e9a77a6c5cec1808c2b58deb1369bf139fd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 10 13:23:29 2012 -0500
+
+    Update Known_problems and Release_Notes for PDL-2.4.10 RC3 release
+
+ Known_problems |    5 ++
+ Release_Notes  |  199 +++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 201 insertions(+), 3 deletions(-)
+
+commit 8cceef3fbb02d326cc5ff30a8fa0d1b5101c39f9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jan 9 09:44:38 2012 -0500
+
+    Update readme-type files.
+
+ DEPENDENCIES   |    4 +++-
+ Known_problems |    1 -
+ Release_Notes  |    3 +++
+ TODO           |    2 +-
+ cygwin/README  |    8 ++++----
+ 5 files changed, 11 insertions(+), 7 deletions(-)
+
+commit 2b99ad7e924d030172d16378d94f097f1e859a5b
+Merge: d457db5 1eedf7d
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Fri Jan 6 21:02:08 2012 -0700
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit d457db596ee1664a1d2b440ce76edfc3a53db1ca
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Fri Jan 6 20:56:45 2012 -0700
+
+    fixed bug in whichND deprecation warning (oops).
+
+ Basic/Core/Core.pm.PL        |    2 +-
+ Basic/Primitive/primitive.pd |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 1eedf7df45b574e22b309d72a673a5e3ab4d202d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 6 18:48:26 2012 -0500
+
+    Add shape() to EXPORT_OK stuff in Core.pm.PL
+    
+    I think I added it in Core.pm by mistake before...
+
+ Basic/Core/Core.pm.PL |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 3388668b732149044a8644e6ce73721a864624c8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 6 18:04:25 2012 -0500
+
+    Minor POD fix for nullcreate and shape
+
+ Basic/Core/Core.pm.PL |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 8f50e528191d260f1c76277a3256f86b1b1a99db
+Merge: 8152015 8fc6714
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Jan 5 23:31:22 2012 -0700
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 8fc6714c24afe9819333a83506e31dd7d94eaa92
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jan 5 21:47:32 2012 -0500
+
+    Add shape sub/method to PDL::Core
+    
+    As a routine, it just returns pdl($pdl->dims) instead of the
+    ($pdl->dims) list.  However, I thought it would be good to
+    have an accessor for the new terminolgy.
+
+ Basic/Core/Core.pm.PL |   24 +++++++++++++++++++++++-
+ 1 files changed, 23 insertions(+), 1 deletions(-)
+
+commit 324307d65c578b5e02a5a1a36f4492741b4f7483
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jan 5 21:29:37 2012 -0500
+
+    Update MANIFEST from READMEs cleanup
+
+ IO/HDF/SD/README |    1 -
+ MANIFEST         |    5 -----
+ 2 files changed, 0 insertions(+), 6 deletions(-)
+
+commit 815201543c5566e83e779d4e50d3c2db47547ce8
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Thu Jan 5 16:01:32 2012 -0700
+
+    add documentation of the threading engine and Empty PDLs.
+
+ Basic/Core/Core.pm.PL |  138 ++++++++++++++++++++++++++++++++++++++++++++++++-
+ Basic/PDL.pm          |    7 +++
+ 2 files changed, 144 insertions(+), 1 deletions(-)
+
+commit 2a1c69e3ccb5233f39e21f00bdf03997d03084db
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Jan 5 08:59:11 2012 -0600
+
+    REVERTED previous commit.
+    
+    My last change resulted in tons of text getting printed to the
+    screen during make test, so I reverted to the original usage of
+    print instead of diag.
+
+ t/slice.t |   54 +++++++++++++++++++++++++++---------------------------
+ 1 files changed, 27 insertions(+), 27 deletions(-)
+
+commit ef252a681304a26a6bc9af6de00b9a4262c54e0e
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Jan 5 08:36:41 2012 -0600
+
+    Changed print to diag in t/slice.t
+
+ t/slice.t |   54 +++++++++++++++++++++++++++---------------------------
+ 1 files changed, 27 insertions(+), 27 deletions(-)
+
+commit db274c02e21784758b8fe3a9918255f1e1791413
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Jan 5 08:20:21 2012 -0600
+
+    Improved line number reporting from Core.pm.PL
+    
+    I had added a # line directive at one place in Core.pm.PL while I
+    was working on PDL::new_pdl_from_string, but when I encountered
+    a new error much further along in the file, I figured that the
+    line reporting was off. It was. This patch adds a number of
+    additional # line directives to Core.pm.PL so that error reporting
+    now gives the correct line of the underlying source file.
+
+ Basic/Core/Core.pm.PL |   24 ++++++++++++++++--------
+ 1 files changed, 16 insertions(+), 8 deletions(-)
+
+commit 4affbd6778bb502c75b062e11d596ab048e14cba
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Jan 5 01:04:02 2012 -0700
+
+    Modified range() to handle regularized Empty stuff
+
+ Basic/Slices/slices.pd |   14 ++++++++++----
+ t/slice.t              |   18 +++++++++++-------
+ 2 files changed, 21 insertions(+), 11 deletions(-)
+
+commit 2f9ae3f2674f7befe32555be199a3bb9ab1b769a
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Jan 5 00:36:57 2012 -0700
+
+    whichND emits regularized empties now
+
+ Basic/Primitive/primitive.pd |   65 ++++++++++++++++++++++++++---------------
+ t/primitive.t                |   27 ++++++++++++++---
+ 2 files changed, 63 insertions(+), 29 deletions(-)
+
+commit 18058b0672d164727cce739fe5c3350c810b84ba
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Jan 5 00:36:22 2012 -0700
+
+    change Empty stringification output to include dim string for the empty PDL
+
+ Basic/Core/Core.pm.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f479a164f1f9d9584d8c91d0792811514e0c04b3
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Jan 5 00:15:03 2012 -0700
+
+    Regularize Empty handling in the constructors pdl() and PDL::new_from_specification
+
+ Basic/Core/Core.pm.PL   |    2 +-
+ Basic/Core/Core.xs.PL   |    9 ++-
+ Basic/Core/pdlcore.c.PL |  234 +++++++++++++++++++++++++++++-----------------
+ t/constructor.t         |   39 +++++---
+ t/core.t                |   41 ++++++---
+ 5 files changed, 207 insertions(+), 118 deletions(-)
+
+commit f7f14cfdf79d3c1edc0418f4fc36f1c3f53e3542
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jan 4 13:32:32 2012 -0500
+
+    Clean up deprecated README files
+    
+    These files come from the early days for the various
+    PDL component modules but are confusing since they
+    either are not a true README file or are not correct
+    for the current PDL.
+
+ Basic/SourceFilter/README |  655 ---------------------------------------------
+ Graphics/TriD/README      |   22 --
+ IO/HDF/README             |    1 -
+ IO/HDF/VS/README          |    1 -
+ t/README                  |    2 -
+ 5 files changed, 0 insertions(+), 681 deletions(-)
+
+commit 48f102b5d5eb4c4359a7aa7242ac4af3587039f6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jan 2 18:44:57 2012 -0500
+
+    Add test names to t/complex.t subtests
+
+ t/complex.t |   28 +++++++++++++---------------
+ 1 files changed, 13 insertions(+), 15 deletions(-)
+
+commit b79f70cfc4d97ad4e3cc6c31c50862f3a1759cd6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Dec 28 11:13:05 2011 -0500
+
+    Update VERSION to 2.4.9_993 (a.k.a. PDL-2.4.10 RC3)
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   25 +++++++++++++++++++++++++
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+
 commit 2ab698cabc58b5ae97fa404ed4379b9ef2564d70
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Dec 28 10:12:43 2011 -0500
