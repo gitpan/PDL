@@ -1,3 +1,90 @@
+commit d92e74a5c9cabea2ade1fa6412dbd6355b61873c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jan 16 12:34:17 2012 -0500
+
+    Update VERSION to 2.4.9_994 and readmes for RC4
+
+ Basic/PDL.pm   |    2 +-
+ DEPENDENCIES   |    9 +-
+ Known_problems |    5 +-
+ Release_Notes  |   12 ++--
+ cygwin/INSTALL |   43 ++++++----
+ macosx/README  |   10 +-
+ win32/INSTALL  |  238 ++++++++++++++++++++++++++++++++-----------------------
+ 7 files changed, 184 insertions(+), 135 deletions(-)
+
+commit cbfdf44605d0a55ac86ea34dedeb2ca10c2192f6
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Fri Jan 13 12:24:39 2012 +1100
+
+    Document problem with PDL::Graphics::PLplot, MS Windows, perl-5.14
+    
+    Add to the Known_problems file:
+    On MS Windows, perl 5.14 (and perhaps later), it is reported that
+    PDL::Graphics::PLplot cannot be sucessfully built as part of the
+    PDL build. It compiles ok, but the resultant binary files are
+    unusable. Workaround is to build PDL first, then build
+    PDL::Graphics::PLplot separately.
+
+ Known_problems |   14 ++++++++++----
+ 1 files changed, 10 insertions(+), 4 deletions(-)
+
+commit 2562c678384407551ea80f157d563db6267e6576
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jan 11 13:09:09 2012 -0500
+
+    Add better diags in readchunk
+    
+    Trying to track down a 1-platform-only failure from CPAN
+    testers for the PDL-2.4.10 rc3.  Hope this helps.
+
+ IO/FlexRaw/FlexRaw.pm |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 0cf9054d1481d7b6770428c141cfe89fb03e238d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jan 11 13:03:35 2012 -0500
+
+    Fix "" isn't numeric in... warnings in t/slice.t
+
+ Basic/Core/Core.pm.PL |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
+
+commit 00377407461ffc6945370e09c6dde144c51ad3d9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 10 18:08:15 2012 -0500
+
+    Minor pod updates.
+
+ IO/FlexRaw/FlexRaw.pm |   22 ++++++++++++++++------
+ IO/Pnm/Pic.pm         |   15 ++++++++++-----
+ IO/Pnm/pnm.pd         |   16 ++++++++--------
+ 3 files changed, 34 insertions(+), 19 deletions(-)
+
+commit 649c1b3a54c2418a7afa3edd760382117c82e56e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 10 16:45:30 2012 -0500
+
+    Update Release_Notes and t/inlinepdlpp.t
+    
+    First iteration from the CPAN Developers release.
+    The t/inlinepdlpp.t problem was a warning about
+    redefining shape() since we now have PDL::shape
+    to accompany our new standard terminology.
+
+ Release_Notes   |  112 +++++++++++++++++++++++++++++-------------------------
+ t/inlinepdlpp.t |    4 +-
+ 2 files changed, 62 insertions(+), 54 deletions(-)
+
+commit 513b69f2ebdf97033af7994d4d04e4fe96e3e508
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 10 16:02:47 2012 -0500
+
+    Fix typo in Release_Notes
+
+ Release_Notes |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
 commit f9b28e9a77a6c5cec1808c2b58deb1369bf139fd
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Jan 10 13:23:29 2012 -0500
