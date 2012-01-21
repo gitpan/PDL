@@ -1,3 +1,169 @@
+commit 9fb0950c5bf4daac2be7586679d6f4c5362b6a85
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 21 14:01:09 2012 -0500
+
+    Reapply: Add imag2d_update to PDL::Graphics2D EXPORTs
+    
+    I realized that this had been omitted.  I've now
+    added imag2d_update and some documentation to
+    PDL::Graphics2D.
+
+ Graphics/Graphics2D.pm |   24 +++++++++++++++++++++++-
+ 1 files changed, 23 insertions(+), 1 deletions(-)
+
+commit 36017b8de5dfe5f47c8d2ae56f711b067579ef3b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 21 13:56:59 2012 -0500
+
+    Revert "Add imag2d_update to PDL::Graphics2D EXPORTs"
+    
+    This reverts commit 90e413cc51812c253357dacbc079e653c2968de2.
+    
+    Conflicts:
+    
+    	Basic/PDL.pm
+    	Known_problems
+    	Release_Notes
+
+ Basic/Core/Core.pm.PL  |    8 +-
+ DEPENDENCIES           |   24 +++--
+ Graphics/Graphics2D.pm |   24 +-----
+ IO/FlexRaw/FlexRaw.pm  |   27 ++++--
+ IO/Pnm/Pic.pm          |   15 ++-
+ IO/Pnm/pnm.pd          |   16 ++--
+ Known_problems         |   22 ++++-
+ Makefile.PL            |    2 +-
+ TODO                   |    2 +-
+ cygwin/INSTALL         |   43 +++++----
+ cygwin/README          |    8 +-
+ macosx/README          |   10 +-
+ t/inlinepdlpp.t        |    4 +-
+ win32/INSTALL          |  238 ++++++++++++++++++++++++++++--------------------
+ 14 files changed, 254 insertions(+), 189 deletions(-)
+
+commit c01c22ab0d809539edeba24639d1ca501e4d8967
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 21 11:46:06 2012 -0500
+
+    Update Release_Notes for PDL 2.4.9_995 release
+
+ Release_Notes |  272 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 271 insertions(+), 1 deletions(-)
+
+commit 31a1732b4d5a10e6caa7532e7b28048914ac6171
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 21 11:37:16 2012 -0500
+
+    Update VERSION for CPAN developers release
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+commit 94032f84657a7dfa71b2b1acdc646451f46cda2b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 21 11:12:28 2012 -0500
+
+    Add error reporting to system calls in t/flexraw_fortran.t
+
+ t/flexraw_fortran.t |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 5e5c180654c81eb8ede352741ef4b7f4f9cf1e2e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 21 11:00:58 2012 -0500
+
+    Add test names to t/flexraw_fortran.t
+    
+    This should help to track down test failures
+    reported by having more detail about which subtest
+    is doing the failing....
+
+ t/flexraw_fortran.t |   28 ++++++++++++++--------------
+ 1 files changed, 14 insertions(+), 14 deletions(-)
+
+commit 4d0c6cd02b89ec7432eb2d201b7f4f00d8f8330c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 20 21:28:01 2012 -0500
+
+    Fix path separators in filenames to forward slash for all
+    
+    g77 has problems with the windows backslash separators.
+    This makes the filepath names consistent across all
+    OSes.
+
+ t/flexraw_fortran.t |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 4a07b84abb3533c84b86fb2e23152b859a99332f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 20 15:32:06 2012 -0500
+
+    Add intial values for floatformat and doubleformat to PDL::Core
+    
+    Users should not have to guess or read the source code to
+    get at this setting.  TODO: add these to the pdldoc and
+    online help/apropos documentation database.
+
+ Basic/Core/Core.pm.PL |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+commit 90e413cc51812c253357dacbc079e653c2968de2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 20 13:41:24 2012 -0500
+
+    Add imag2d_update to PDL::Graphics2D EXPORTs
+    
+    I realized that this had been omitted.  I've now
+    added imag2d_update and some documentation to
+    PDL::Graphics2D.
+
+ Basic/Core/Core.pm.PL  |    8 +-
+ Basic/PDL.pm           |    2 +-
+ DEPENDENCIES           |   24 ++---
+ Graphics/Graphics2D.pm |   24 +++++-
+ IO/FlexRaw/FlexRaw.pm  |   27 ++----
+ IO/Pnm/Pic.pm          |   15 +--
+ IO/Pnm/pnm.pd          |   16 ++--
+ Known_problems         |   26 +----
+ Makefile.PL            |    2 +-
+ Release_Notes          |  218 ++------------------------------------------
+ TODO                   |    2 +-
+ cygwin/INSTALL         |   43 ++++-----
+ cygwin/README          |    8 +-
+ macosx/README          |   10 +-
+ t/inlinepdlpp.t        |    4 +-
+ win32/INSTALL          |  238 ++++++++++++++++++++----------------------------
+ 16 files changed, 199 insertions(+), 468 deletions(-)
+
+commit 019c2c9b21d4fb7f539183dfd757bfe751064fec
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 20 13:15:54 2012 -0500
+
+    Improve POGL dependency info and error messages
+    
+    perl Makefile.PL will now report the required minimum
+    version of the perl OpenGL module if it fails to
+    detect one.
+
+ DEPENDENCIES |   11 ++++++++---
+ Makefile.PL  |    2 +-
+ 2 files changed, 9 insertions(+), 4 deletions(-)
+
+commit bdaa1582e061b010a0a3ccb8e0ecfdff0458c902
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jan 18 10:03:04 2012 -0500
+
+    Add t/pic_16bit.t fail to Known_problems
+    
+    There are known problems with 16-bit PNG and
+    TIFF images for wpic/rpic.  Please add fixes
+    or other diagnostics to the trouble ticket
+    at http://sourceforge.net/tracker/?func=detail&aid=3475075&group_id=612&atid=100612
+
+ Known_problems |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
 commit d92e74a5c9cabea2ade1fa6412dbd6355b61873c
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Jan 16 12:34:17 2012 -0500
