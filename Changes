@@ -1,3 +1,61 @@
+commit 99c441103f4849792d77ff5cdcd91710be457dab
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 3 18:44:47 2012 -0500
+
+    Final update to Release_Notes for PDL-2.4.10
+
+ Release_Notes |   44 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 43 insertions(+), 1 deletions(-)
+
+commit eb2b9081b60610795aba363274a1d1fbc4d83cda
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 3 10:52:08 2012 -0500
+
+    Add OO GD bug and 'x' operator to Known_problems
+
+ Known_problems |   30 +++++++++++++++++++++++++++---
+ 1 files changed, 27 insertions(+), 3 deletions(-)
+
+commit aa79285b82197fa6787465a19aaf5249a000cfff
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 27 17:59:03 2012 -0500
+
+    Update VERSION to 2.4.10 for release
+    
+    Also begin final edits of Known_problems and the Release_Notes.
+    Still to do, verify build instructions for cygwin.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    3 ++-
+ Release_Notes  |   20 ++------------------
+ 3 files changed, 5 insertions(+), 20 deletions(-)
+
+commit 01045b69ba894a33b5e3284ba55d47b86c5eb27f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 21 16:18:57 2012 -0500
+
+    Add Changes and changes targets to Makefile postable
+    
+    Now you can 'make changes' or 'make Changes' to update
+    the Changes file with the latest from the git log.
+    The Changes file is updated for 'make dist' but via
+    PREOP which only works in the distdir being created
+    and not the original Changes file.
+
+ Makefile.PL |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+commit 9a67e753a3f3e1e62cecfb386ba8d4a9a8271ff2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jan 21 15:44:20 2012 -0500
+
+    Update VERSION to 2.4.9_996 for next RC development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   66 ++++++++++++++++++++++++++++++++++++++++---------------
+ 3 files changed, 50 insertions(+), 20 deletions(-)
+
 commit 9fb0950c5bf4daac2be7586679d6f4c5362b6a85
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Jan 21 14:01:09 2012 -0500
