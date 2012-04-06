@@ -1,3 +1,579 @@
+commit b4199cbc5ce972c469b59f26f98ad43d9059b1a8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 6 09:39:41 2012 -0400
+
+    Update MANIFEST for PDL-2.4.10_001 developers release
+
+ MANIFEST |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 61bf8a1062602871c7a1c657add93f4375c9a105
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 6 09:35:30 2012 -0400
+
+    Update docs/readme-type info for PDL-2.4.10_001 release
+
+ DEPENDENCIES  |   12 ++++++++++++
+ PDLdb.pl      |   12 ++++++++----
+ Release_Notes |   31 ++++++++++++++++---------------
+ 3 files changed, 36 insertions(+), 19 deletions(-)
+
+commit 22b8634b01aa7bb039355b235a38d1f539306bb9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Apr 5 14:41:41 2012 -0400
+
+    Update File::Map version required to 0.47
+    
+    ...and comment out the pdl_do_sys_map() routine
+    and return to the original sys_map() call for the
+    implementation of memory mapping now that the
+    bug has been fixed upstream.
+
+ Basic/Core/Core.pm.PL |   37 +++++++++++++++++++------------------
+ IO/FastRaw/FastRaw.pm |    2 +-
+ IO/FlexRaw/FlexRaw.pm |    2 +-
+ 3 files changed, 21 insertions(+), 20 deletions(-)
+
+commit b8fc63cdf4eb6092f46e0be9a1eb5f5c6b1ab767
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Apr 4 16:39:23 2012 -0500
+
+    Updated dependency to File::Map v0.47 at Leon's suggestion
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 462d80d665d90e2177dc1f4ffc2de90f18a881b7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Apr 4 17:25:49 2012 -0400
+
+    Add File::Map 0.46 as dependency for CPAN Testers
+    
+    After a checkout by PDL developers, this is planned
+    to be released as a CPAN Developers release for the
+    purpose of exercising the new File::Map implementation
+    of mapflex and mapfraw as an official dependency and
+    to determine if there are any portability or availability
+    issues that might need to be addressed.
+
+ Makefile.PL |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit a4e56e6b868850772b70e215c53b4514fb0b78c0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Apr 4 17:23:32 2012 -0400
+
+    Update Release_Notes with sys_map work-around done!
+
+ Release_Notes |   26 ++++++++------------------
+ 1 files changed, 8 insertions(+), 18 deletions(-)
+
+commit 305ef32e72249ae3496949b8f1d47c6db58e949e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Apr 4 17:00:17 2012 -0400
+
+    Implement pdl_do_sys_map() work around sys_map bug
+    
+    This is a cut and paste of the original File::Map::sys_map
+    routine with the bug fixed.  It should be possible to strip
+    down the dependencies more for this routine if desired.
+    Maybe the File::Map author would be willing to pursue.
+
+ Basic/Core/Core.pm.PL |   23 +++++++++++++----------
+ 1 files changed, 13 insertions(+), 10 deletions(-)
+
+commit 85e1f74963a11daa5738fe05f53730a46540d3f9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Apr 4 15:43:06 2012 -0400
+
+    Make use File::Map conditional on presence
+    
+    If 'use File::Map' eval-s ok, then it is used.  Otherwise,
+    stubs are added to ensure the PDL::set_data_by_file_map
+    compiles correctly.
+
+ Basic/Core/Core.pm.PL |   22 +++++++++++++++++++++-
+ 1 files changed, 21 insertions(+), 1 deletions(-)
+
+commit e525615501ce229f0ff4095417fe9cd12cc5372f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 3 07:43:17 2012 -0400
+
+    Update Release_Notes re inc/File/Map.pm
+
+ Release_Notes |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+commit 562d4e5aa67e80fac741cd0b9799a90f3e148adc
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 3 07:40:36 2012 -0400
+
+    Add fixed copy of Map.pm v0.46 to git
+    
+    You should be able to replace your existing Map.pm
+    file from File-Map-0.46 by this one and things should
+    work.
+
+ inc/File/Map.pm |  491 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 491 insertions(+), 0 deletions(-)
+
+commit baabaf2e4d29ea1bf6cf133c99a9c5a57c062f87
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Apr 3 13:50:43 2012 +1000
+
+    Basic/Gen/PP.pm - add to croak() message
+    
+    Have the croak() in relation to version mismatch
+    (in the BOOT section) output info relating to the
+    versions that were found.
+
+ Basic/Gen/PP.pm |  204 +++++++++++++++++++++++++++---------------------------
+ 1 files changed, 102 insertions(+), 102 deletions(-)
+
+commit 246689173bbe163366a07bebc93752269beaad22
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Apr 3 13:50:42 2012 +1000
+
+    Basic/Core/Dev.pm - add to croak() message
+    
+    Have the croak() message relating to version
+    mismatch (in PDL_BOOT) output some info on
+    versions that were found.
+
+ Basic/Core/Dev.pm |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+commit 98572190667fa4af90d916cf5842d574cb042238
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Apr 3 13:50:41 2012 +1000
+
+    Lib/GIS/Proj/proj.pd - make compatible with proj-4.8.0
+    
+    Inclusion of projects.h no longer permissible with proj-4.8.0.
+
+ Lib/GIS/Proj/Proj.pd |   75 ++++++++++++++++++++++++++-----------------------
+ 1 files changed, 40 insertions(+), 35 deletions(-)
+
+commit f5d7bb06153d4caabcdbcd53aa9e66c0b31690b6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Apr 2 18:17:43 2012 -0400
+
+    Update Release_Notes for mapflex/mapfraw
+
+ Release_Notes |   34 +++++++++++++++++++++++++++++++++-
+ 1 files changed, 33 insertions(+), 1 deletions(-)
+
+commit a0c2b1459b7f2dce394917bf29b5066a7d5c3f56
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Apr 2 17:26:01 2012 -0400
+
+    Use binmode for sysopen, comment out win32 croak
+
+ Basic/Core/Core.pm.PL |    2 ++
+ Basic/Core/pdlmagic.c |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 13056747af59fe3bfdfec41551a4cc82fb148d9c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Apr 2 16:58:25 2012 -0400
+
+    Implement PDL::set_data_by_file_map for mmap-ing
+
+ Basic/Core/Core.pm.PL |   48 +++++++++++++++++++++++++++++++++++++++++++++++-
+ IO/FastRaw/FastRaw.pm |   22 ++++++++++++++++------
+ IO/FlexRaw/FlexRaw.pm |    9 ++++++++-
+ 3 files changed, 71 insertions(+), 8 deletions(-)
+
+commit 3dd4cad3f378ea5d8f1780077b8262f47260b4e7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 1 22:00:22 2012 -0400
+
+    Add option to call File::Map version of mmap code
+    
+    This is another step towards implementing mapfraw
+    and mapflex via File::Map.  The remaining issue is
+    implementing the correct option handling vis a vis
+    Creat, Trunc, and ReadOnly.
+
+ IO/FastRaw/FastRaw.pm |   29 +++++++++++++++++++++--------
+ IO/FlexRaw/FlexRaw.pm |   26 +++++++++++++++++++++-----
+ t/fastraw.t           |    2 ++
+ t/flexraw.t           |    2 ++
+ 4 files changed, 46 insertions(+), 13 deletions(-)
+
+commit 9cb7286d92cf7f32aacdd6eb584aa356397b24b8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 1 12:14:36 2012 -0400
+
+    Fix t/fastraw.t and t/flexraw.t to handle missing mmap support
+    
+    This replaces a hardwired skip for win32 platforms by
+    an eval to catch the error message and then skip any
+    mmap tests.  This should change from skips to passes
+    when the File::Map implementation is complete.
+
+ t/fastraw.t |   22 +++++++++++++++-------
+ t/flexraw.t |   14 +++++++-------
+ 2 files changed, 22 insertions(+), 14 deletions(-)
+
+commit 7b368df4e9a98b5467bdc595a07256ae68737e1f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 29 17:51:10 2012 -0400
+
+    Fixed argument order bug in set_data_by_mmap()
+    
+    The shared and writable options were reversed.  This did not
+    usually cause a problem since the defaults for both were the
+    same.  After this correction, the remaining support for win32
+    mapfraw and mapflex can be done at the perl level.
+
+ Basic/Core/Core.xs.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 910a0e8e1bff41f0e30e5d22b044aac2a6af16a9
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu Mar 29 10:57:24 2012 +1100
+
+    transform.pd - remove "defined" from "defined(@names)"
+    
+    As per the advice of the warning issued when the test
+    suite is run under perl-5.15.
+    (Doesn't lead to breakage with earlier versions of
+    perl that PDL supports.)
+
+ Lib/Transform/transform.pd |  630 ++++++++++++++++++++++----------------------
+ 1 files changed, 315 insertions(+), 315 deletions(-)
+
+commit 709eebd8c22b517f81f36b4e808c2e84f82112a7
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu Mar 29 10:57:24 2012 +1100
+
+    complex.pd - fix attempts to overload '<=>=' and '=>'
+    
+    sub _gen_biop created an overload entry for '<=>=',
+    which I've removed.
+    And the 'use overload' section passed a '=>' to sub
+    _gen_cpop, which I changed to '>='.
+    (perl-5.15 issued warnings in relation to these during
+    the running of the test suite.)
+
+ Basic/Complex/complex.pd |   60 +++++++++++++++++++++++-----------------------
+ 1 files changed, 30 insertions(+), 30 deletions(-)
+
+commit 217850e71a65e40ace4944374f497a3a8c12ead3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 28 17:39:42 2012 -0400
+
+    Add set_state_and_add_deletedata_magic() to support File::Map
+    
+    Since File::Map works at the level of mapping a file into
+    a perl scalar lvalue, I've implemented a routine that does
+    the required state setting and addition of deletedata magic
+    for the pdl.
+    
+    For reference, here is a simple sequence using map_file
+    from File::Map to do the memory mapping for an existing
+    PDL::IO::FlexRaw data file:
+    
+        use 5.10.1;
+    
+        use PDL;
+        use PDL::IO::FlexRaw;
+        use PDL::Core qw(:Internal);
+    
+        use File::Map qw(map_file);
+    
+        $hdr = PDL::IO::FlexRaw::_read_flexhdr('a_ushort_3_7.dat.hdr');
+        $h = $hdr->[0];
+    
+        $amm = PDL->zeros( ushort );  # fix to use $h->{Type} instead
+        $amm->setdims($h->{Dims});
+        $ammdr = $amm->get_dataref;
+        map_file ${$ammdr}, 'a_ushort_3_7.dat', '+<';   # must enable rw
+        $amm->upd_data;
+        $amm->set_state_and_add_deletedata_magic(length(${$ammdr}));
+    
+        $amm *= 3;
+        say $amm;
+        undef $amm;  # the file should be updated now
+    
+        $acheck = readflex 'a_ushort_3_7.dat';
+        say $acheck; # should be the same as from $amm
+
+ Basic/Core/Core.xs.PL |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
+
+commit 88e6743f71076a33c168a266dd4c1090b56ae763
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Mar 28 11:54:15 2012 +1100
+
+    New file - avoid the fork() call in t/plplot.t for win32 only.
+    
+    On win32 fork() uses threads, and plplot is not thread
+    safe. Workaround by calling this separate script iff
+    OS is MS Windows
+
+ t/plplot_no_fork.win32 |   31 +++++++++++++++++++++++++++++++
+ 1 files changed, 31 insertions(+), 0 deletions(-)
+
+commit 380ed95d351bc121e100b7a4a57545c118a2d1ac
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Mar 28 11:54:15 2012 +1100
+
+    Avoid the fork() call in t/plplot.t for win32 only.
+    
+    On win32 fork() uses threads, and plplot is not thread
+    safe. Workaround by calling a separate script
+    (plplot_no_fork.win32) iff OS is MS Windows
+
+ t/plplot.t |   45 ++++++++++++++++++++++++++-------------------
+ 1 files changed, 26 insertions(+), 19 deletions(-)
+
+commit caba7a287e2471806184c663d098a894815cee9b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Mar 27 18:04:39 2012 -0400
+
+    Update PDL delete magic for 64bit perls/OSes
+    
+    Updated PDL_CORE_VERSION to 9 and replaced int declarations
+    for lengths and offsets by STRLEN, Size_t, and Off_t as
+    appropriate.  May need to change some of these a bit but
+    I believe the size of the types is now correct to support
+    memory mapping on 64-bit systems and perls.
+
+ Basic/Core/Core.xs.PL   |    4 ++--
+ Basic/Core/pdlcore.h.PL |    1 +
+ Basic/Core/pdlmagic.c   |    4 ++--
+ Basic/Core/pdlmagic.h   |    8 ++++----
+ 4 files changed, 9 insertions(+), 8 deletions(-)
+
+commit 619564c30d70154a8daa32a04f7b496259bec1c4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Mar 27 13:57:17 2012 -0400
+
+    Change set_data_by_xxx to use STRLEN and not int
+    
+    To support 64bit perls and OSes, this changes the len argument
+    type for set_data_by_mmap() and the offset argument type for
+    set_data_by_offset() to STRLEN from int.  This is moving towards
+    implementing memory mapping for PDL using the File::Map module
+    which supports both windows and posix platforms.
+
+ Basic/Core/Core.xs.PL |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 519723b8bd3bfe1ddc1cd5e7ed8e82243c0ecda5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 21 13:31:20 2012 -0400
+
+    Update Known_problems
+
+ Known_problems |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 375d3ca4f07d8da31d61b5a6fc134838b00d8c68
+Merge: bf1ef17 a482010
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Mar 6 16:55:28 2012 -0700
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit bf1ef1741ad06ef1f8d720523207c34069d50c9f
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Mar 6 16:44:55 2012 -0700
+
+    Removed some differences between 'p' and 'print' in pdl2 shell
+    
+    $| wasn't set anywhere in the pdl2 scripts, so output was being buffered when running the pdl2 shell.
+    Even more confusing, output was only buffered when using the print command, not the p alias.
+    I traced this down to the presence of a \n in the 'p' alias, and removed it.  Also added an autoflush
+    command to pdl2.  Now print and p behave the same, afaict.
+
+ Perldl2/Profile/Perldl2.pm |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit a4820101dc1122eecd124912bb05c6dec4bd83c7
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Mar 6 15:08:43 2012 -0600
+
+    Made pp_line_numbers.t a little more robust
+    
+    I noticed that the number of tests in pp_line_numbers.t was hard
+    coded, but it actually depended on the number of types the PDL
+    supports. It now explicitly specifies two types to test (float and
+    double, though it could be anything).
+    
+    It also now closes the filehandle to the generated xs file before
+    removing the file. Previously, extraneous copies of foobar.xs were
+    left around, at least on Windows machines and maybe on others.
+
+ t/pp_line_numbers.t |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
+
+commit 7a3e626d4e3d96efa3b7645c904589c37cbd593a
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Mar 5 22:26:38 2012 -0600
+
+    Fixed backslash complaints on Windows (I hope)
+
+ Basic/Gen/PP.pm |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 182a964107fefef4720b1f408c3c2d101cfd8b8d
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Feb 23 12:39:59 2012 -0600
+
+    Fixed a bug in cat's error reporting.
+    
+    I had code that called PDL::cat(@piddles), but ran into the edge
+    case that @piddles was completely empty. This particular edge case
+    was not properly identified by cat's extensive error processing,
+    so I've added something that correctly diagnoses it.
+    
+    I also added proper $arg->isa('PDL') checking. The original code
+    checked if ref($arg) =~ /PDL/, which is not the proper way to
+    check something is an object of a particular kind. The correct
+    way to do this is to say
+    
+        if (not eval{$arg->isa('PDL')}) ...
+
+ Basic/Core/Core.pm.PL |   13 ++++++++++---
+ 1 files changed, 10 insertions(+), 3 deletions(-)
+
+commit d552291826e162ce9a38eda94ac7c09b86ab5966
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Feb 23 09:15:08 2012 -0600
+
+    Added lvalue awareness to whereND
+
+ Basic/Primitive/primitive.pd |   11 ++++++++++-
+ 1 files changed, 10 insertions(+), 1 deletions(-)
+
+commit 40a0bac3badb60e9fcd66cf84800af93631947e3
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Feb 23 09:09:12 2012 -0600
+
+    Added failing tests for whereND lvalue
+
+ t/primitive.t |   17 +++++++++++++++--
+ 1 files changed, 15 insertions(+), 2 deletions(-)
+
+commit 13d6c12a5ed44674f0a26beadc4a561985aec91e
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu Feb 23 18:56:31 2012 +1100
+
+    Doc/mkhtmldoc.pl - Make compatible with perl-5.15 and later
+    
+     Changes in perl-5.15 to pod2html necessitated changes
+     to mkhtmldoc.pl
+
+ Doc/mkhtmldoc.pl |   82 +++++++++++++++++++++++++++++++++---------------------
+ 1 files changed, 50 insertions(+), 32 deletions(-)
+
+commit 1af6764aece24b065a5933bf349660b9f17c3cbb
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 21 15:51:40 2012 -0500
+
+    Add comment for enabling hex/oct input for rcols
+    
+    Not yet implemented since we need to ensure that
+    the new functionality does not break floating point
+    data type inputs.
+
+ IO/Misc/misc.pd |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 1297d7c95b4d731a22cd58085efa0f218d893793
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 21 11:13:48 2012 -0500
+
+    Fix changes/Changes target for build
+    
+    This is a convenience target to allow folks to
+    generate a new version of the Changes file with git.
+    There was a problem with the syntax and nmake.  With
+    luck this fixes it...
+
+ Makefile.PL |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 2db307b6b31758f7fd6c25fa2a67209664e736cf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 14 10:12:05 2012 -0500
+
+    Apply fix for sf.net bug #3487569 (thanks bperret!)
+
+ IO/Misc/misc.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 79b5a5d9b7b2d97c8cd92ac645a468bc325dd25c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 10 13:14:59 2012 -0500
+
+    Update PDL/IO/Dicom/Dicom.pm pod
+    
+    Fixed an error reported by podchecker and a minor
+    cleanup.  Need to see if this resolves the missing
+    Dicom docs in pdldoc.
+
+ IO/Dicom/Dicom.pm |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 233115924f0ed83c5b3e890808043a0e4ddac4c6
+Merge: 180854f f4f07b2
+Author: Judd Taylor <judd.t@orbitalsystems.com>
+Date:   Wed Feb 8 18:44:36 2012 +0000
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit f4f07b2fb00f75f0415d14a110db836fab48e4d2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 7 13:35:40 2012 -0500
+
+    Fix check for glutRunning logic for imag2d
+
+ Graphics/Graphics2D.pm |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 3db6c34b885ce52e67be1881a0a34af413b9fd9d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Feb 6 16:11:23 2012 -0500
+
+    Minor docs updates and pod fixes
+
+ Basic/Core/Core.pm.PL        |    2 +-
+ Basic/Primitive/primitive.pd |    2 +-
+ Basic/Ufunc/ufunc.pd         |    3 +++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
+
+commit b27dc165ba45d73fcf014210df0979f2ef761c9c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Feb 6 15:55:10 2012 -0500
+
+    Update VERSION to 2.4.10_001 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |   14 ++------------
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 13 deletions(-)
+
+commit 13335adf609a8c48cae9918324ea4475819af14b
+Merge: cd26a5e 99c4411
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Feb 6 15:14:41 2012 -0500
+
+    Merge commit '99c441103f4849792d77ff5cdcd91710be457dab'
+    
+    Folding the PDL-2.4.10 release branch back into the
+    git master development branch.  NOTE: do not name a
+    tag the same as a branch as you get an ambiguity in
+    checkouts that is a real pain and may lead to git
+    problems.
+    
+    Conflicts:
+    	Basic/Core/Core.pm.PL
+    	Known_problems
+
 commit 99c441103f4849792d77ff5cdcd91710be457dab
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Feb 3 18:44:47 2012 -0500
@@ -6,6 +582,16 @@ Date:   Fri Feb 3 18:44:47 2012 -0500
 
  Release_Notes |   44 +++++++++++++++++++++++++++++++++++++++++++-
  1 files changed, 43 insertions(+), 1 deletions(-)
+
+commit 180854fd871f9b687fe277fea96897b6a202832e
+Author: Judd Taylor <judd.t@orbitalsystems.com>
+Date:   Fri Feb 3 17:10:56 2012 +0000
+
+    Fixed an issue where PDL::IO::GD object are not freeing memory allocated by the C GD library.
+    This fixes bug 3483926.
+
+ IO/GD/GD.pd |   23 ++++++++++++++++++++---
+ 1 files changed, 20 insertions(+), 3 deletions(-)
 
 commit eb2b9081b60610795aba363274a1d1fbc4d83cda
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -237,6 +823,22 @@ Date:   Mon Jan 16 12:34:17 2012 -0500
  win32/INSTALL  |  238 ++++++++++++++++++++++++++++++++-----------------------
  7 files changed, 184 insertions(+), 135 deletions(-)
 
+commit cd26a5ef4a5fee0f030957fc63ff75c6074dec7d
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Fri Jan 13 12:35:05 2012 +1100
+
+    Document problem with PDL::Graphics::PLplot, MS Windows, perl-5.14
+    
+    Add to the Known_problems file:
+    On MS Windows, perl 5.14 (and perhaps later), it is reported that
+    PDL::Graphics::PLplot cannot be sucessfully built as part of the
+    PDL build. It compiles ok, but the resultant binary files are
+    unusable. Workaround is to build PDL first, then build
+    PDL::Graphics::PLplot separately.
+
+ Known_problems |   20 +++++++++++++++-----
+ 1 files changed, 15 insertions(+), 5 deletions(-)
+
 commit cbfdf44605d0a55ac86ea34dedeb2ca10c2192f6
 Author: sisyphus_ <sisyphus1@optusnet.com.au>
 Date:   Fri Jan 13 12:24:39 2012 +1100
@@ -252,6 +854,36 @@ Date:   Fri Jan 13 12:24:39 2012 +1100
 
  Known_problems |   14 ++++++++++----
  1 files changed, 10 insertions(+), 4 deletions(-)
+
+commit a83257b563acf3102017a9fa9a614deba193386a
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Jan 12 00:06:53 2012 -0700
+
+    add radians-to-degrees constant to PDL::Constants
+
+ Basic/Constants.pm |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+commit 6d8d15d87066a8d0466a65a41d7acf6cf49cee35
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Jan 12 00:06:16 2012 -0700
+
+    Fix new_or_inplace to work according to its documentation.  (also required minor tweaking of new_from_specification).
+
+ Basic/Core/Core.pm.PL |   36 ++++++++++++++++++++++++++++++++----
+ t/core.t              |   21 ++++++++++++++++++++-
+ 2 files changed, 52 insertions(+), 5 deletions(-)
+
+commit 2ee99d5ce1055efd8fd90232999ab88466e17f0c
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Wed Jan 11 23:59:19 2012 -0700
+
+    Fix PDL::Type::new to accept types by name as well as by (internal representation) integer.
+    Also, fix previously masked bug in FastRaw (ASCII lines were not being properly chomped).
+
+ Basic/Core/Types.pm.PL |   28 +++++++++++++++++++++++++++-
+ IO/FastRaw/FastRaw.pm  |    6 +++---
+ 2 files changed, 30 insertions(+), 4 deletions(-)
 
 commit 2562c678384407551ea80f157d563db6267e6576
 Author: Chris Marshall <devel.chm.01@gmail.com>

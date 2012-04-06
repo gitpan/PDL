@@ -481,6 +481,7 @@ my @podpms = map { $_.".pod", '$(INST_LIBDIR)/PDL/' . $_ .".pod"}
            'Convert::UU'         => 0,         # for PDL::IO::Dumper
            'Data::Dumper'        => 2.121,     # for PDL::IO::Dumper
            'ExtUtils::MakeMaker' => 6.31,      # for INSTALL_BASE support
+	   'File::Map'           => 0.47,      # test new mmap implementation
 	   'File::Spec'          => 0.6,
 	   'File::Temp'          => 0,
 	   'Filter::Util::Call'  => 0,         # for PDL::NiceSlice
@@ -625,9 +626,11 @@ doc_perl_install ::
 
 $text .= << "EOPS" ;
 
-changes : Changes
+Changes : GITCHANGES
 
-Changes ::
+changes : GITCHANGES
+
+GITCHANGES :
 \tgit log --stat --since='29 Apr 2009' > Changes
 
 perldl.pod : perldl subdirs

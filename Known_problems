@@ -1,5 +1,6 @@
 The following issues have been reported with this version of PDL:
 
+
 - A change in perl-5.14 on how the 'x' operator works affects
   PDL's overload of that operator for matrix multiplication.
   An example that shows the problem is code like:
@@ -16,12 +17,6 @@ The following issues have been reported with this version of PDL:
   http://mailman.jach.hawaii.edu/pipermail//pdl-porters/2012-February/004426.html
   for a more detailed discussion and additional alternative
   work-arounds.
-
-
-- The OO interface to the GD library fails to free memory.  The
-  problem has been fixed in the pdl git and will be available
-  in the first post-2.4.10 CPAN developers release to come.
-
 
 
 - On MS Windows, perl 5.14 (and perhaps later), it is reported that
@@ -121,13 +116,14 @@ The following issues have been reported with this version of PDL:
 
 
 - The following SourceForge bugs are outstanding at time of the
-  PDL-2.4.10 release:
+  PDL-2.4.10_001 release:
 
+  3509400    pp_def, pp_line_numbers,..not found by pdldoc
+  3503566    pdl2 enters infinite loop on DWIMPerl
   3479009    Slice does not like whitespace
   3476648    PDL build of HTML docs fails on recent bleed Perl
   3475075    t/pic_16bit.t subtest fails
   3465663    perldl.conf OPTIMIZE option doesn't work
-  3462924    bogus "dimension mismatch" for Nx0 index piddles
   3460886    t/flexraw_fortran.t test failures
   3363406    PDL::Minuit build can't make libminuit.a
   3316394    'help funname' fails to show multiple function names
@@ -138,7 +134,6 @@ The following issues have been reported with this version of PDL:
   3018731    NiceSlice affects code where it should not
   2995500    perl -d chokes on lvalue functions
   2153898    default PDL build output too long
-  1994584    PDL Has no signed 8-bit integer data type
   1507054    closing TriD window kills perldl shell
   1205359    PGPLOT Window does not store full state info
 

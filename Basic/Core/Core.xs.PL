@@ -598,10 +598,10 @@ sever(src)
 		RETVAL
 
 int
-set_data_by_mmap(it,fname,len,writable,shared,creat,mode,trunc)
+set_data_by_mmap(it,fname,len,shared,writable,creat,mode,trunc)
 	pdl *it
 	char *fname
-	int len
+	STRLEN len
 	int writable
 	int shared
 	int creat
@@ -655,12 +655,25 @@ set_data_by_mmap(it,fname,len,writable,shared,creat,mode,trunc)
 OUTPUT:
        RETVAL
 
+int
+set_state_and_add_deletedata_magic(it,len)
+      pdl *it
+      STRLEN len
+      CODE:
+            it->state |= PDL_DONTTOUCHDATA | PDL_ALLOCATED;
+            pdl_add_deletedata_magic(it, pdl_delete_mmapped_data, len);
+            RETVAL = 1;
+      OUTPUT:
+            RETVAL
+
+            
+
 
 int
 set_data_by_offset(it,orig,offset)
       pdl *it
       pdl *orig
-      int offset
+      STRLEN offset
       CODE:
               pdl_freedata(it);
               it->data = ((char *) orig->data) + offset;

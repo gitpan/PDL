@@ -129,7 +129,7 @@ determined by the computed shape of the expression being assigned to
 it.   Null PDLs contain no values and can only be assigned to.  When
 assigned to (e.g. via the C<.=> operator), they cease to be null PDLs.
 
-To create a null PDL, use C<PDL->null()>.
+To create a null PDL, use C<PDL-E<gt>null()>.
 
 =head2 Empty PDLs
 
@@ -2399,15 +2399,42 @@ conveniently.
 Return back either the argument pdl or a copy of it depending on whether
 it be flagged in-place or no.  Handy for building inplace-aware functions.
 
+If you specify a preferred type (must be one of the usual PDL type strings,
+a list ref containing several of them, or a string containing several of them), 
+then the copy is coerced into the first preferred type listed if it is not 
+already one of the preferred types.  
+
+Note that if the inplace flag is set, no coersion happens even if you specify
+a preferred type.
+
 =cut
 
 sub new_or_inplace {
 	my $pdl = shift;
+	my $preferred = shift;
+	my $force = shift;
 	if($pdl->is_inplace) {
-		$pdl->set_inplace(0); $pdl;
+		$pdl->set_inplace(0); 
+		return $pdl;
 	} else {
-		$pdl->copy();
+	    unless(defined($preferred)) {
+		return $pdl->copy;
+	    } else {
+		$preferred = join(",",@$preferred) if(ref($preferred) eq 'ARRAY');
+		my $s = "".$pdl->type;
+		if($preferred =~ m/(^|\,)$s(\,|$)/i) {
+		    # Got a match - the PDL is one of the preferred types.
+		    return $pdl->copy();
+		} else {
+		    # No match - promote it to the first in the list.
+		    $preferred =~ s/\,.*//;
+		    my $out = PDL::new_from_specification('PDL',new PDL::Type($preferred),$pdl->dims);
+		    $out .= $pdl;
+		    return $out;
+		}
+	    }
 	}
+	barf "PDL::Core::new_or_inplace - This can never happen!";
 }
 *PDL::new_or_inplace = \&new_or_inplace;
 
@@ -3233,11 +3260,13 @@ sub PDL::cat {
 		# non-piddles and/or dimension mismatch.  The first argument is
 		# ok unless we have the "initialize" error:
 		if ($@ =~ /"initialize"/) {
-			while ($i < @_ and ref($_[$i]) !~ /PDL/) {
+			# Handle the special case that there are *no* args passed:
+			barf("Called PDL::cat without any arguments") unless @_;
+			
+			while ($i < @_ and not eval{ $_[$i]->isa('PDL')}) {
 				push (@not_a_piddle, $i);
 				$i++;
 			}
-				
 		}
 
 		# Get the dimensions of the first actual piddle in the argument
@@ -3249,7 +3278,7 @@ sub PDL::cat {
 		while ($i < @_) {
 			my $arg = $_[$i];
 			# Check if not a piddle
-			if (ref($arg) !~ /PDL/) {
+			if (not eval{$arg->isa('PDL')}) {
 				push @not_a_piddle, $i;
 			}
 			# Check if different number of dimensions
@@ -3292,6 +3321,11 @@ sub PDL::cat {
 			$message .= "Argument $not_a_piddle[0] is not a piddle.\n";
 		}
 		
+		# Handle the edge case that something else happened:
+		if (@not_a_piddle == 0 and @mismatched_dims == 0) {
+			barf("cat: unknown error from the internals:\n$@");
+		}
+               
 		$message .= "(Argument counting starts from zero.)";
 		barf($message);
 	}
@@ -3974,7 +4008,79 @@ sub PDL::fhdr {
     return \%hdr;
 }
     
-	
+use Fcntl;
+
+BEGIN {
+   eval 'use File::Map 0.47 qw(:all)';
+   if ($@) {
+      carp "No File::Map found, using legacy mmap (if available)\n" if $PDL::verbose;
+      sub sys_map;
+      sub PROT_READ();
+      sub PROT_WRITE();
+      sub MAP_SHARED();
+      sub MAP_PRIVATE();
+   }
+}
+
+# Implement File::Map::sys_map bug fix.  Also, might be possible
+# to implement without so many external (non-Core perl) modules.
+#
+# sub pdl_do_sys_map {
+#         my (undef, $length, $protection, $flags, $fh, $offset) = @_;
+#         my $utf8 = File::Map::_check_layers($fh); 
+#         my $fd = ($flags & MAP_ANONYMOUS) ? (-1) : fileno($fh);
+#         $offset ||= 0;
+#         File::Map::_mmap_impl($_[0], $length, $protection, $flags, $fd, $offset, $utf8);
+#         return;
+# }
+
+sub PDL::set_data_by_file_map {
+   my ($pdl,$name,$len,$shared,$writable,$creat,$mode,$trunc) = @_;
+   my $pdl_dataref = $pdl->get_dataref();
+
+   # Assume we have no data to free for now
+   # pdl_freedata($pdl);
+
+   sysopen(my $fh, $name, ($writable && $shared ? O_RDWR : O_RDONLY) | ($creat ? O_CREAT : 0), $mode)
+      or die "Error opening file '$name'\n";
+
+   binmode $fh;
+
+   if ($trunc) {
+      truncate($fh,0) or die "set_data_by_mmap: truncate('$name',0) failed, $!";
+      truncate($fh,$len) or die "set_data_by_mmap: truncate('$name',$len) failed, $!";
+   }
+
+   if ($len) {
+
+      #eval {
+      # pdl_do_sys_map(  # will croak if the mapping fails
+      sys_map(  # will croak if the mapping fails
+         ${$pdl_dataref},
+         $len,
+         PROT_READ | ($writable ?  PROT_WRITE : 0),
+         ($shared ? MAP_SHARED : MAP_PRIVATE),
+         $fh,
+         0
+      );
+      #};
+
+         #if ($@) {
+         #die("Error mmapping!, '$@'\n");
+         #}
+
+      $pdl->upd_data;
+      $pdl->set_state_and_add_deletedata_magic( length ${$pdl_dataref} );
+
+   } else {
+
+      #  Special case: zero-length file
+      $_[0] = undef;
+   }
+
+   # PDLDEBUG_f(printf("PDL::MMap: mapped to %p\n",$pdl->data));
+   close $fh ;
+}
 
 1;# Exit with OK status
 
