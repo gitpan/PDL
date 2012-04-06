@@ -1,3 +1,42 @@
+commit 32f23a8bf9cc2760152bedf7d63706720f6582e4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 6 13:38:09 2012 -0400
+
+    update Release_Notes and remove File/Map.pm from inc/
+    
+    This is for a quick re-release of PDL fixing a broken
+    commit.  I hope this allows the desired build and test
+    to work now.
+
+ Release_Notes   |    6 +-
+ inc/File/Map.pm |  491 -------------------------------------------------------
+ 2 files changed, 4 insertions(+), 493 deletions(-)
+
+commit b5b9b1d6da16744ecbcfba191c49f5ecf5c3744f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 6 13:23:19 2012 -0400
+
+    Revert "Lib/GIS/Proj/proj.pd - make compatible with proj-4.8.0"
+    
+    This reverts commit 98572190667fa4af90d916cf5842d574cb042238.
+    This fix is not working.  Reverting for now to release another
+    CPAN Developers release so testing with new File::Map mmap can
+    occur.
+
+ Lib/GIS/Proj/Proj.pd |   75 +++++++++++++++++++++++--------------------------
+ 1 files changed, 35 insertions(+), 40 deletions(-)
+
+commit e232164f924711b1f1bc40b4ae42aa32e3090c3b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 6 10:59:51 2012 -0400
+
+    Update version to 2.4.10_002 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit b4199cbc5ce972c469b59f26f98ad43d9059b1a8
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Apr 6 09:39:41 2012 -0400
