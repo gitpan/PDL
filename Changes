@@ -1,3 +1,44 @@
+commit a8b720d9719b3a2af2ef22cb210e3a88d96ecb6b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 7 17:09:58 2012 -0400
+
+    Update Known_problems and Release_Notes for CPAN
+
+ Known_problems |    5 +++++
+ Release_Notes  |    8 +++++++-
+ 2 files changed, 12 insertions(+), 1 deletions(-)
+
+commit 007ce76aef0a6494f2b19f681a36fa5758d44808
+Merge: e0c00d2 046f246
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 7 10:45:45 2012 -0400
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit e0c00d27c464a002360354363fa7e6f0e1e19928
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 7 09:33:30 2012 -0400
+
+    Corrected a prototype for add_deletedata_magic()
+    
+    It looks like I missed one from the earlier rework
+    and I believe that is the origin of the failures in
+    execution (at all) or the "Could not unmap:..."
+
+ Basic/Core/pdlcore.h.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 046f2461456645f656d9f5fd06c6fb9492a4d2c5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Apr 6 13:43:54 2012 -0400
+
+    Update VERSION to 2.4.10_003 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit 32f23a8bf9cc2760152bedf7d63706720f6582e4
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Apr 6 13:38:09 2012 -0400
