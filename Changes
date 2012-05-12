@@ -1,3 +1,218 @@
+commit 37bd0e04a4a4c82d10b43e3168829d9921f02e0e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 12 08:38:36 2012 -0400
+
+    Update Known_problems and Release_Notes
+
+ Known_problems |   16 ++++++++++------
+ Release_Notes  |    6 ++++++
+ 2 files changed, 16 insertions(+), 6 deletions(-)
+
+commit ef70276bfcba38c205d3d6d2f3673e92e2e17283
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 12 08:37:32 2012 -0400
+
+    skip t/gd_oo_tests.t on BSD OS to avoid sf.net #3518190
+
+ t/gd_oo_tests.t |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 7685fa73c53ab2135ed856c3da79dacdb3ff23c8
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri May 11 15:04:36 2012 -0500
+
+    Paired down some barfing/croaking text in PDL::Core
+    
+    Dima's updates a couple of years ago switched PDL's barf to use a stack trace,
+    at least in PDL::Core. This becomes a problem for some functions that re-barf.
+    This minor patch to Core.pm.PL udpates the barfing behavior to use croak where
+    appropriate.
+    
+    It also changes the definition of PDL::Core::barf to goto() Carp::confess
+    instead of simply calling it. The latter behavior resulted in an erroneous line
+    at the top of the stack trace pointing (uselessly) to the definition of
+    PDL::Core::barf.
+
+ Basic/Core/Core.pm.PL |   25 +++++++------------------
+ 1 files changed, 7 insertions(+), 18 deletions(-)
+
+commit 8de38c3f09814ec93da1cd8d0eefd051b20e6573
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon May 7 12:04:12 2012 -0500
+
+    Marked comment wart test as TODO (bug #3524081)
+
+ t/inline-comment-test.t |   13 +++++++++----
+ 1 files changed, 9 insertions(+), 4 deletions(-)
+
+commit 0c11c4576ceadcaf449ee210455131fa95061792
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon May 7 09:40:25 2012 -0500
+
+    Applied sprout's fix for rt #76577, sf.net bug 3518253
+
+ Basic/Core/Core.pm.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 757691190bb503aea6e35a98106601974fca11af
+Merge: 4002248 1f32e53
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Apr 16 11:49:27 2012 -0500
+
+    Merge branch 'master' into fix-PP-commentary
+
+commit 40022485a21ed1088de19c3ee795718f99e96eb1
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Apr 16 10:33:29 2012 -0500
+
+    Added a test for now-functional multiline commenting in PP code
+
+ t/inline-comment-test.t |   98 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 98 insertions(+), 0 deletions(-)
+
+commit 13291d98f614ab534ea2c40367973d0c9a9d3f31
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Apr 16 10:09:55 2012 -0500
+
+    Fixed PP commentary
+    
+    PP generates lots of code. Some of that code is confusing at first
+    blush, so PP added C-style multiline comments to help anybody
+    examining the generated XS. Unfortunately, if a user had a bug in
+    their code's logic and attempted to debug by commenting out large
+    swaths of their PP code, the non-nesting of C-style comments would
+    invariably lead to weird compile failures.
+    
+    My proposed solution is to #define the symbol PDL_COMMENT(comment),
+    thus allowing any commentary such as this:
+    
+      _internal_var->value  /* get some internal thing */
+    
+    to be replaced with something like this:
+    
+      _internal_var->value  PDL_COMMENT("get some internal thing")
+    
+    It's a bit more verbose, but it enables users to use multiline
+    comments in the way described above.
+
+ Basic/Gen/PP.pm           |   94 +++++++++++++++++++++++++++------------------
+ Basic/Gen/PP/PDLCode.pm   |   29 ++++++++------
+ Basic/Gen/PP/PdlParObj.pm |    6 ++-
+ 3 files changed, 77 insertions(+), 52 deletions(-)
+
+commit 1f32e53304e3c1f30383f0daf35495112bef0b6b
+Merge: 53d74fa 8dd65dc
+Author: olpc user <olpc@xo-4a-9c-81.localdomain>
+Date:   Mon Apr 16 02:22:04 2012 -0400
+
+    Merge branch 'master' of ssh://marshallch@pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 53d74faea0707523008fa9cbe26a1403b5764693
+Author: olpc user <olpc@xo-4a-9c-81.localdomain>
+Date:   Mon Apr 16 01:03:42 2012 -0400
+
+    Cleanup odds and ends in PDL/Example dir
+    
+    Removed Core/new_from_string.pl since it is in Core now.
+    Renamed some examples so the name will be more descriptive
+    as far as the example program.
+
+ Example/Core/new_from_string.pl       |  117 ---------------------------------
+ Example/InlinePdlpp/inlpp.pl          |    2 +-
+ Example/Simplex/tsimp.pl              |   50 --------------
+ Example/Simplex/tsimp_needs_pgplot.pl |   50 ++++++++++++++
+ Example/TriD/clip.pl                  |  111 -------------------------------
+ Example/TriD/old_trid_clip.pl         |  111 +++++++++++++++++++++++++++++++
+ 6 files changed, 162 insertions(+), 279 deletions(-)
+
+commit 8dd65dc63862db5cd60aef372f1e7536625dca9f
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sun Apr 15 13:17:31 2012 -0500
+
+    Updated tests for pdl-from-string
+
+ t/pdl_from_string.t |   79 ++++++++++++++++++++++++++++++++++++++-------------
+ 1 files changed, 59 insertions(+), 20 deletions(-)
+
+commit 32592bcbab481003cb39f204eb84b71f1ca7ed04
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sat Apr 14 14:04:36 2012 -0500
+
+    Fixed (hopefully) pdl-from-string handling of inf/nan
+
+ Basic/Core/Core.pm.PL |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 416804854108d5604c2046a145af57d253fc2fb3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 10 16:29:48 2012 -0400
+
+    Forgot the Core.pm.PL changes for previous commit
+    
+    This adds some extra diagnostic output if $PDL::debug is set.
+
+ Basic/Core/Core.pm.PL |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
+
+commit 45005bee0c216c41e0029cc9cfe0f1a430b0c98b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 10 12:02:06 2012 -0400
+
+    Add some debug info for t/flexraw.t to display
+    
+    It is hoped this will help identify the problem with the
+    cleanup reported for 64bit OpenBSDs.
+
+ t/flexraw.t |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 25f464f0af13c38e6fc041790c47f16e691e2d2a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 10 11:38:24 2012 -0400
+
+    Clean up some devel code for whereND tests in t/primitive.t
+
+ t/primitive.t |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
+
+commit 7dde9c25fc76535df8feaa552bafb001b916c875
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Apr 10 09:11:35 2012 -0400
+
+    Revert "Revert "Revert "Lib/GIS/Proj/proj.pd - make compatible with proj-4.8.0"""
+    
+    This reverts commit 1eec38574b7306328ad158a78b1094bbed3c584a.
+    Per Rob's request, taking the partial Proj.pd code out until
+    the issues with the PROJ4 development strategy can be worked
+    out.
+
+ Lib/GIS/Proj/Proj.pd |   75 +++++++++++++++++++++++--------------------------
+ 1 files changed, 35 insertions(+), 40 deletions(-)
+
+commit 1eec38574b7306328ad158a78b1094bbed3c584a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Apr 8 22:17:37 2012 -0400
+
+    Revert "Revert "Lib/GIS/Proj/proj.pd - make compatible with proj-4.8.0""
+    
+    This reverts commit b5b9b1d6da16744ecbcfba191c49f5ecf5c3744f.
+    Re-applying the compatibility fix for proj-4.8.0.  It is not
+    clear what the CPAN Testers fails were from before...
+
+ Lib/GIS/Proj/Proj.pd |   75 ++++++++++++++++++++++++++-----------------------
+ 1 files changed, 40 insertions(+), 35 deletions(-)
+
+commit f6726570c65feb80fa19b92fdd8aeb248f10b84c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Apr 7 17:22:19 2012 -0400
+
+    Update VERSION to 2.4.10_004 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit a8b720d9719b3a2af2ef22cb210e3a88d96ecb6b
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Apr 7 17:09:58 2012 -0400
