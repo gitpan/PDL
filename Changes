@@ -1,3 +1,130 @@
+commit f02a4eff321e4f2f9d3f27a6fab4584f6699b0bf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 15 09:42:35 2012 -0400
+
+    Update Known_problems and Release_Notes for PDL-2.4.10_005
+    
+    This is PDL-2.4.11 rc2.
+
+ Known_problems |   19 +++++-----------
+ Release_Notes  |   62 +++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 65 insertions(+), 16 deletions(-)
+
+commit 008c94e72fe7e673d497222e5ce8834d451c1152
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue May 15 23:37:26 2012 +1000
+
+    Graphics/Limits.pm - Fix cross-platform inconsistency
+    
+    The round_pow was in need of a minor tweak. On some
+    platforms round_pow was returning a value that was
+    *equal* to the given value. I'm assuming that such a
+    value is not allowed. (Certainly none of the tests
+    expect such a value to be returned.)
+
+ Graphics/Limits/Limits.pm |   58 +++++++++++++++++++++++---------------------
+ 1 files changed, 30 insertions(+), 28 deletions(-)
+
+commit c1d747f8309567efc4b4367a2d5c0f36ee902402
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue May 15 07:19:52 2012 -0400
+
+    Force $eps for approx() in t/limits_round.t
+    
+    I think the reason some platforms are failing is that
+    the epsilon for approx() is too small.  Since approx
+    remembers the last value used, if this is within a single
+    perl session, that could explain the problem.  I've
+    added logic to force a reasonable value, 1.0e-6 or so.
+
+ t/limits_round.t |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 1e147070b8ea7de10f3a44bac714818b35a6709f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 14 17:18:38 2012 -0400
+
+    Update DEPENDENCIES and Known_problems for PDL-2.4.11
+
+ DEPENDENCIES   |    4 ++--
+ Known_problems |    3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+commit d90cc142360c32dbd33bdfb39a74b63061fc5841
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 14 15:37:22 2012 -0400
+
+    skip t/inline-comment-test.t on BSD to avoid sf.net #3518190
+    
+    TODO skips only work if the test can't cause a SEGFAULT.
+    When building Inline code, that is always possible.
+
+ t/inline-comment-test.t |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit d863355d1c30cc0744a4c4e28b5b59f0fca4e802
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 14 15:26:15 2012 -0400
+
+    skip t/gd_oo_tests.t on Dragonfly BSD to avoid sf.net #3518190
+    
+    The previous skip pattern failed because $^O for Dragonfly BSD
+    is dragonfly (and not something ending with BSD).
+
+ t/gd_oo_tests.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 8fca2d94182d8977cb2065955433c26dd5f872f4
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sun May 13 17:00:22 2012 +1000
+
+    IO/FlexRaw.pm - Remove the "No SIGBUS" warning on Windows
+    
+    Simply changed:
+    local $SIG{BUS} = \&myhandler;
+    to
+    local $SIG{BUS} = \&myhandler unless $^O =~ /MSWin32/i;
+    (Doesn't seem to alter the scope of the 'local' call.)
+
+ IO/FlexRaw/FlexRaw.pm |   38 +++++++++++++++++++-------------------
+ 1 files changed, 19 insertions(+), 19 deletions(-)
+
+commit 5beaca70ee002a69f1c0839a3fefe90e14ab7382
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sun May 13 15:45:41 2012 +1000
+
+    Remove deprecation warning in PGPLOT/Window/Window.pm
+    
+    With perl-5.16 a deprecation warning was being emitted in
+    relation to a "defined(@array)".
+    At line 4416, changed:
+    if (defined(@{$self->{_env_options}})) {
+    to
+    if (@{$self->{_env_options}}) {
+
+ Graphics/PGPLOT/Window/Window.pm |  650 +++++++++++++++++++-------------------
+ 1 files changed, 325 insertions(+), 325 deletions(-)
+
+commit 19fd7c2db9107e59cb2143fa49d76b3df8a23511
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 12 09:18:28 2012 -0400
+
+    Update version to 2.4.10_005
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit b4355398e1d2ac97e69a772ea04a1fb169ca2445
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat May 12 09:15:14 2012 -0400
+
+    Update MANIFEST for 2.4.10_004 CPAN devel release
+
+ MANIFEST |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
 commit 37bd0e04a4a4c82d10b43e3168829d9921f02e0e
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat May 12 08:38:36 2012 -0400
