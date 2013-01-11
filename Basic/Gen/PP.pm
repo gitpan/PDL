@@ -930,7 +930,7 @@ sub pp_line_numbers ($$) {
 		push @to_return, $_;
 
 		# If we need to add a # line directive, do so before incrementing
-		push (@to_return, "\n#line $line \"$filename\"") if (/%{/ or /%}/);
+		push (@to_return, "\n#line $line \"$filename\"") if (/%\{/ or /%}/);
 
 		$line++ if /\n/;
 	}
@@ -1548,7 +1548,7 @@ sub wrap_vfn {
     # Put p2child in simple boolean context rather than strict numerical equality
     if ( $p2child ) {
 	$p2decl =
-	    "pdl *__it = __tr->pdls[1]; pdl *__parent = __tr->pdls[0];";
+	    "pdl *__it = ((pdl_trans_affine *)(__tr))->pdls[1]; pdl *__parent = __tr->pdls[0];";
 	if ( $name eq "redodims" ) {
 	    $p2decl .= '
 	     if (__parent->hdrsv && (__parent->state & PDL_HDRCPY)) {
@@ -1570,7 +1570,7 @@ sub wrap_vfn {
                     SV *tmp = (SV *) POPs ;
 		    __it->hdrsv = (void*) tmp;
                     if(tmp != &PL_sv_undef )
-                       SvREFCNT_inc(tmp);
+                       (void)SvREFCNT_inc(tmp);
                   }
 
                   __it->state |= PDL_HDRCPY;
@@ -1893,7 +1893,7 @@ $pars
   PDL_COMMENT("Check if you can get a package name for this input value.  ")
   PDL_COMMENT("It can be either a PDL (SVt_PVMG) or a hash which is a     ")
   PDL_COMMENT("derived PDL subclass (SVt_PVHV)                            ")
-  
+
   if (SvROK(ST(0)) && ((SvTYPE(SvRV(ST(0))) == SVt_PVMG) || (SvTYPE(SvRV(ST(0))) == SVt_PVHV))) {
     parent = ST(0);
     if (sv_isobject(parent))
@@ -2626,8 +2626,9 @@ if (hdrp) {
 
     hdr_copy = (SV *)POPs;
 
-    if(hdr_copy && hdr_copy != &PL_sv_undef)
-       SvREFCNT_inc(hdr_copy); PDL_COMMENT("Keep hdr_copy from vanishing during FREETMPS")
+    if(hdr_copy && hdr_copy != &PL_sv_undef) {
+       (void)SvREFCNT_inc(hdr_copy); PDL_COMMENT("Keep hdr_copy from vanishing during FREETMPS")
+    }
 
     FREETMPS ;
     LEAVE ;
@@ -2644,9 +2645,9 @@ DeePcOPY
      $str .= <<"HdRCHECK2"
        if ( $names[$_]\->hdrsv != hdrp ){
 	 if( $names[$_]\->hdrsv && $names[$_]\->hdrsv != &PL_sv_undef)
-             SvREFCNT_dec( $names[$_]\->hdrsv );
+             (void)SvREFCNT_dec( $names[$_]\->hdrsv );
 	 if( hdr_copy != &PL_sv_undef )
-             SvREFCNT_inc(hdr_copy);
+             (void)SvREFCNT_inc(hdr_copy);
 	 $names[$_]\->hdrsv = hdr_copy;
        }
      if(propagate_hdrcpy)

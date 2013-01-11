@@ -40,7 +40,7 @@ print OUT <<'!NO!SUBS!';
 
 use vars qw($VERSION $HOME $Modules);
 
-$VERSION = '1.354_001';
+$VERSION = '1.356';
 
 print "perlDL shell v$VERSION
  PDL comes with ABSOLUTELY NO WARRANTY. For details, see the file
@@ -252,17 +252,49 @@ push @enabled,"MultiLines" if $multi_ok;
 print join(', ',@enabled)," enabled\n" if @enabled > 0;
 
 if ( $readlines ){
-    $PERLDL::TERM = new Term::ReadLine 'perlDL', \*STDIN, \*STDOUT ;
-    if(defined &OpenGL::done_glutInit ) {
-    	# Attempt to use with FreeGLUT
-        if(${$PERLDL::TERM->Features}{glutRunning}) {
-		print "Using FreeGLUT event loop\n";
-		$PERLDL::TERM->glutRunning(1);
-	} else {
-		warn("Sorry, cannot use FreeGLUT with this version of ReadLine\n");
-	}
+
+   $PERLDL::TERM = Term::ReadLine->new('perlDL', \*STDIN, \*STDOUT);
+
+    if (defined &OpenGL::done_glutInit ) {
+       # Attempt to use with FreeGLUT
+       if ($PERLDL::TERM->can('event_loop')) {
+          print "Using FreeGLUT event loop\n";
+          # Presumably, if you're using this loop, you're also selecting on other
+          # fileno's.  It is up to you to add that in to the wait callback (first
+          # one passed to event_loop) and deal with those file handles.
+    
+          $PERLDL::TERM->event_loop(
+             sub {
+                # This callback is called every time T::RL wants to
+                # read something from its input.  The parameter is
+                # the return from the other callback.
+                my $fileno = shift;
+                my $rvec = '';
+                vec($rvec, $fileno, 1) = 1;
+                while(1) {
+                   select my $rout = $rvec, undef, undef, 0;
+                   last if vec($rout, $fileno, 1);
+                   OpenGL::glutMainLoopEvent();
+                }
+             },
+             sub {
+                # This callback is called as the T::RL is starting up
+                # readline the first time.  The parameter is the file
+                # handle that we need to monitor.  The return value
+                # is used as input to the previous callback.
+    
+                # We return the fileno that we will use later.
+    
+                # cygwin/TRL::Gnu seems to use some other object here
+                # that doesn't respond to a fileno method call (rt#81344)
+                fileno($_[0]);
+             }
+          ) unless $Term::ReadLine::toloop;
+       } else {
+          warn("Sorry, cannot use FreeGLUT with this version of ReadLine\n");
+       }
     }
-    if(defined &Tk::DoOneEvent) {
+    if(defined &Tk::DoOneEvent and not ref $Term::ReadLine::toloop) {
     	# Attempt to use with Tk
         if(${$PERLDL::TERM->Features}{tkRunning}) {
 		print "Using Tk event loop\n";
@@ -693,9 +725,11 @@ sub eval_and_report {
 EOD
 ;
 
-  %@ = (); # Workaround to prevent spurious loss of $@
-  PDL::Core::myeval( $__coderef )  # Do command with $@ keeping
-    unless($@);  # Check that sub compiled (avoids null coderef bug in myeval).
+  %@ = (); # Workaround to prevent spurious loss of $@ in early (pre-5.14 anyway) versions of perl
+
+  if( (!$@) and (ref $__coderef eq 'CODE')) { 
+      eval { &$__coderef(); die $@ if($@); };
+  }
 
   if ($@) {
       my $mess = $@;

@@ -373,9 +373,7 @@ DESTROY(sv)
   PREINIT:
     pdl *self;
   CODE:
-    if (SvROK(sv) && SvTYPE(SvRV(sv)) == SVt_PVHV)
-       1; /* Do nothing */
-    else {
+    if (  !(  (SvROK(sv) && SvTYPE(SvRV(sv)) == SVt_PVHV) )  ) {
        self = SvPDLV(sv);
        PDLDEBUG_f(printf("DESTROYING %p\n",(void*)self);)
        if (self != NULL)
@@ -621,7 +619,7 @@ set_data_by_mmap(it,fname,len,shared,writable,creat,mode,trunc)
                
                if(error)
                {
-					fprintf(stderr,"Failed to set length of '%s' to %d. errno=%d",fname,len,error);
+					fprintf(stderr,"Failed to set length of '%s' to %d. errno=%d",fname,(int)len,(int)error);
 					croak("set_data_by_mmap: first ftruncate failed");
                }
                
@@ -629,7 +627,7 @@ set_data_by_mmap(it,fname,len,shared,writable,creat,mode,trunc)
                
                if(error)
                {
-					fprintf(stderr,"Failed to set length of '%s' to %d. errno=%d",fname,len,error);
+					fprintf(stderr,"Failed to set length of '%s' to %d. errno=%d",fname,(int)len,(int)error);
 					croak("set_data_by_mmap: second ftruncate failed");
                }
        }
@@ -678,7 +676,7 @@ set_data_by_offset(it,orig,offset)
               pdl_freedata(it);
               it->data = ((char *) orig->data) + offset;
 	      it->datasv = orig->sv;
-              SvREFCNT_inc(it->datasv);
+              (void)SvREFCNT_inc(it->datasv);
               it->state |= PDL_DONTTOUCHDATA | PDL_ALLOCATED;
               RETVAL = 1;
       OUTPUT:
@@ -1197,22 +1195,6 @@ print OUT <<'!NO!SUBS!';
 
    sv_setiv(get_sv("PDL::SHARE",TRUE|GV_ADDMULTI), PTR2IV(&PDL));
 
-# version of eval() which propogates errors encountered in
-# any internal eval(). Must be passed a code reference - could
-# be use perl_eval_sv() but that is still buggy. This subroutine is
-# primarily for the perlDL shell to use.
-#
-# Thanks to Sarathy (gsar@engin.umich.edu) for suggesting this, though
-# it needs to be wrapped up in the stack stuff to avoid certain SEGVs!
-
-void
-myeval(code)
-  SV *	code;
-  PROTOTYPE: $
-  CODE:
-   PUSHMARK(sp) ;
-   perl_call_sv(code, G_EVAL|G_KEEPERR|GIMME_V);
-
 
 # make piddle belonging to 'class' and of type 'type'
 # from avref 'array_ref' which is checked for being
@@ -1612,7 +1594,7 @@ threadover_n(...)
 		}
 	    	PUTBACK;
 		perl_call_sv(code,G_DISCARD);
-	    } while(sd = pdl_iterthreadloop(&pdl_thr,0));
+	    } while( (sd = pdl_iterthreadloop(&pdl_thr,0)) );
 	    pdl_freethreadloop(&pdl_thr);
 	    free(pdls);
 	    free(realdims);

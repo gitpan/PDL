@@ -3,7 +3,7 @@ PDL::Core::Dev->import();
 
 # do we build PDL::IO::Browser ?
 #
-my @dirs = qw( FastRaw Misc FlexRaw Pnm NDF Storable FITS HDF GD Dicom );
+my @dirs = qw( FastRaw Misc FlexRaw Pnm Storable FITS HDF GD Dicom );
 my $build_browser = $PDL::Config{WITH_IO_BROWSER} || 0;
 if ( $build_browser and ($^O !~ /win32/i) ) {
    push @dirs, 'Browser';
@@ -24,4 +24,5 @@ WriteMakefile(
                     'IO.pod' => '$(INST_LIB)/PDL/IO.pod',
                    },
      'DIR'      => [ @dirs ],
+    (eval ($ExtUtils::MakeMaker::VERSION) >= 6.57_02 ? ('NO_MYMETA' => 1) : ()),
 );

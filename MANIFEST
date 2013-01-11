@@ -356,8 +356,6 @@ IO/IO.pod
 IO/Makefile.PL
 IO/Misc/Makefile.PL
 IO/Misc/misc.pd
-IO/NDF/Makefile.PL
-IO/NDF/NDF.pm.PL
 IO/Pnm/Makefile.PL
 IO/Pnm/Pic.pm
 IO/Pnm/pnm.pd
@@ -647,21 +645,23 @@ cygwin/README
 cygwin/drivers.list
 cygwin/g77_gcc.conf
 debian/README.Debian
-debian/README.source
 debian/changelog
 debian/compat
 debian/control
 debian/copyright
+debian/dh_pdl
 debian/f77conf.pl
 debian/fix_man_encoding.sed
 debian/fix_man_name.sed
 debian/patches/00list
+debian/patches/series
 debian/pdl.dirs
 debian/pdl.doc-base
 debian/pdl.docs
 debian/pdl.install
 debian/pdl.links
 debian/pdl.lintian-overrides
+debian/pdl.manpages
 debian/pdl.menu
 debian/pdl.postinst
 debian/pdl.prerm
@@ -669,6 +669,8 @@ debian/pdl.remove
 debian/pdl.triggers
 debian/perldl.conf
 debian/rules
+debian/source/format
+debian/write_config_debian.pl
 inc/Devel/CheckLib.pm
 m51.fits
 macosx/README
@@ -728,12 +730,13 @@ t/ica.t
 t/image2d.t
 t/imagend.t
 t/imagergb.t
-# t/inline-comment-test.t
+t/inline-comment-test.t
 t/inlinepdlpp.t
 t/interp.t
 t/interp_slatec.t
 t/interpol.t
 t/iotypes.t
+t/lgamma.t
 t/limits_00.t
 t/limits_errb.t
 t/limits_keyspecs.t
@@ -752,7 +755,6 @@ t/matrix.t
 t/matrixops.t
 t/minuit.t
 t/misc.t
-t/ndf.t
 t/niceslice.t
 t/nsdatahandle.t
 t/ones.t
@@ -782,6 +784,7 @@ t/pthreadBarf.t
 t/pthread_auto.t
 t/reduce.t
 t/refs.t
+t/rim.t
 t/requiredmods.t
 t/round.t
 t/scope.t
@@ -799,6 +802,7 @@ t/thread_def.t
 t/transform.t
 t/trig.t
 t/ufunc.t
+t/unpdl.t
 t/vaffine.t
 t/xvals.t
 utils/perldlpp.pl

@@ -1,3 +1,1332 @@
+commit 1e61f9b08dc9ce4288c3a50c545d89aec952d5ab
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 11 14:21:36 2013 -0500
+
+    Update MANIFEST for PDL-2.4.11_001 developers release
+
+ MANIFEST |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+commit 222fc653fb3e362945ca11f03258e31d3141fe59
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 11 13:59:48 2013 -0500
+
+    Update Known_problems and Release_Notes
+
+ Known_problems |   17 ++++++++---------
+ Release_Notes  |   28 +++++++++++++++++++++++++++-
+ 2 files changed, 35 insertions(+), 10 deletions(-)
+
+commit 77531a2d6b381531e790ef0ac6ecad97cc725e16
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 11 13:58:26 2013 -0500
+
+    Bump $VERSION to 1.356 for -glut fix to perldl
+
+ perldl.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit beb9d53014f6ed5be68859382c8192822ee5e998
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jan 7 21:27:29 2013 -0500
+
+    Make timeout 0 for select call
+    
+    This makes the new event_loop support more
+    real time.
+
+ perldl.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 39aec99d81b1113f5ac8e4449dd249be88e46c39
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jan 7 13:33:42 2013 -0500
+
+    Add event_loop support for perldl -glut option
+    
+    Now it is possible to have the AppleGLUT or FreeGLUT
+    event loop run while using the command line interface.
+    The new functionality requires Term::ReadLine 1.09 or
+    higher but is transparently enabled if $term->can('event_loop').
+
+ Graphics/Graphics2D.pm |    4 +--
+ perldl.PL              |   52 ++++++++++++++++++++++++++++++++++++++---------
+ 2 files changed, 43 insertions(+), 13 deletions(-)
+
+commit 54af56edcca8e915232515a5cfc7d58106a01a0d
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sat Jan 5 11:44:31 2013 +1100
+
+    Basic/Core/Core.pm.PL - Alteration to pdl('nan') generation.
+    
+    In Core.pm.PL, I changed the line:
+     ${$nan->get_dataref}     = pack( "d*", "nan" );
+    to:
+     ${$nan->get_dataref}     = pack( "d*", (-1.0) ** 0.5 );
+    
+    as the former works only if perl numifies the string "nan"
+    to a NaN - which doesn't happen on all perls.
+
+ Basic/Core/Core.pm.PL |  304 +++++++++++++++++++++++++------------------------
+ 1 files changed, 155 insertions(+), 149 deletions(-)
+
+commit 7a6cac66fefd6fb6670490645cd8a1d194a8e2ac
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sat Jan 5 11:44:31 2013 +1100
+
+    t/pdl_from_string.t - Move some tests out of TODO
+    
+    Also change the way that pdl_from_string.t generates
+    a pdl('nan') on Windows.
+
+ t/pdl_from_string.t |   11 +++++------
+ 1 files changed, 5 insertions(+), 6 deletions(-)
+
+commit 9899ed00e3302d8eb489461ef3ec8c76766e8d77
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 4 17:40:36 2013 -0500
+
+    Fix twiddle control for imag2d
+    
+    Clicking the close widget of the last imag2d window
+    failed to close the last window and you couldn't "twiddle"
+    to make it finish.  Now the window should close cleanly.
+
+ Graphics/Graphics2D.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 964a5141060094f8dd6948f187349fb36830312c
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Jan 4 10:46:23 2013 -0600
+
+    Minor doc tweaks to Complex.pm and Core.pm
+
+ Basic/Complex/complex.pd |    2 +-
+ Basic/Core/Core.pm.PL    |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 5df755cfeeee4eac723e831ae78c2edec99457fe
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 1 17:10:23 2013 -0500
+
+    Fix sf.net bug #3585811 "conv1d bad value broken"
+    
+    Now a warning is generated if conv1d() is used on data
+    with the badflag set.  An explicit caution is also added
+    to the documentation.
+
+ Basic/Primitive/primitive.pd |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+commit fe5e29221378a1b54aa2614c0a043d6942fa6a12
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 1 16:34:41 2013 -0500
+
+    Fix hist() handling of fractional $step
+    
+    This fixes sf.net bug #3588182 by making the $xvals
+    returns in list context alway be double and updates
+    the documentation to reflect this.  Also fixes a
+    logic error in the calculation of the value for $step
+    if not provided.
+
+ Basic/Core/Basic.pm |   20 +++++++++++---------
+ 1 files changed, 11 insertions(+), 9 deletions(-)
+
+commit 14a56ef4b59e0e4114707d0a4f457da976aea0fd
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu Dec 27 21:40:28 2012 +1100
+
+    Basic/Gen/PP/PDLCode.pm - quiet perl-5.18 deprecation warning
+    
+    Escape left brace in regexes - '%{' becomes '%\{'
+
+ Basic/Gen/PP/PDLCode.pm |  126 +++++++++++++++++++++++-----------------------
+ 1 files changed, 63 insertions(+), 63 deletions(-)
+
+commit a5705ed9a66785684a3f1375868eb30ec03e163e
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu Dec 27 21:40:28 2012 +1100
+
+    Basic/Gen/PP.pm - quiet perl-5.18 deprecation warning
+    
+    Escape left brace in regex - '%{' becomes '%\{'
+
+ Basic/Gen/PP.pm |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 1f0ce8672536bf17efddc4a037e7fdd939373f74
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu Dec 27 21:40:28 2012 +1100
+
+    t/pp_croaking.t - quiet perl-5.18 deprecation warning
+    
+    Escape left brace in regex - '%{' becomes '%\{'
+
+ t/pp_croaking.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit a6fdb8e7028ea3915cae8e2658d99c26cc24364b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Dec 9 12:12:16 2012 -0500
+
+    add whereND to PDL::Lvalue->subs() @funcs
+    
+    And alphabetized the list of functions so it will be
+    easier to inspect.  Ideally, we should generate this
+    list from the sources.
+
+ Basic/Lvalue.pm |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+commit 94fa430141771e5a218d233077e609d4015c0316
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Nov 20 15:48:02 2012 -0700
+
+    Fixed image2d.pd POD error that prevented some funcs from showing up in the docs db
+    
+    '=head1 polyfill' changed to '=head2 polyfill'.  Also prettified some ccXcompt links.
+
+ Lib/Image2D/image2d.pd |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit e3fca65768a51a5ba57629a7fff5fe10b38686bf
+Author: sisyphus <sisyphus@Owner-PC311012.(none)>
+Date:   Wed Nov 14 22:56:01 2012 +1100
+
+    Top level Makefile.PL - nmake-specific fix
+    
+    Craig's recent change wrt pdl.PL/pdl.c has
+    necessitated a small tweak for nmake.
+
+ Makefile.PL |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 0e927a40e636e557ab7b072c08bb53f4e2d91a56
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Tue Nov 13 12:46:25 2012 -0700
+
+    more warning elimination
+
+ Basic/Gen/PP.pm        |    4 ++--
+ Basic/Slices/slices.pd |    5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+commit c678279da7a94b4b870567b69d2c72a62fa05012
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Tue Nov 13 11:39:25 2012 -0700
+
+    more warning suppression
+
+ Basic/Core/pdlmagic.c |   14 ++++++++------
+ 1 files changed, 8 insertions(+), 6 deletions(-)
+
+commit 049f8baa3456cee342e0517ddf08d70920c7c424
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Tue Nov 13 11:15:05 2012 -0700
+
+    more clang warning fixes - no functional changes
+
+ Basic/Core/Core.xs.PL   |    8 ++++----
+ Basic/Core/pdl.h.PL     |    4 ++--
+ Basic/Core/pdlapi.c     |   10 +++++-----
+ Basic/Core/pdlcore.c.PL |    7 ++++---
+ Basic/Core/pdlhash.c    |    2 +-
+ Basic/Core/pdlthread.c  |    1 -
+ 6 files changed, 16 insertions(+), 16 deletions(-)
+
+commit bfdd480243929cea914839335218dbbc865053c2
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Tue Nov 13 10:38:30 2012 -0700
+
+    Basic cleanup of some warnings in the core with newer versions of clang.  No functional changes (I hope).
+    A couple more pushes of this type to come.
+
+ Basic/Core/Core.xs.PL   |    4 +---
+ Basic/Core/pdl.h.PL     |    7 +++----
+ Basic/Core/pdlcore.c.PL |    2 +-
+ Basic/Gen/PP.pm         |    9 +++++----
+ Basic/Gen/PP/PDLCode.pm |    2 +-
+ 5 files changed, 11 insertions(+), 13 deletions(-)
+
+commit 168c037d6298e2eecdda6c468586919bc52e44ef
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Nov 13 08:46:50 2012 -0500
+
+    Bump version in perldl for Craig's fix
+    
+    Otherwise, you have no easy way to see if
+    you are running the "new/fixed" code.
+
+ perldl.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 16b17c86a976dc0fe34d80eb063bba92b53975a8
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Tue Nov 13 02:03:29 2012 -0700
+
+    Fix non-reported callback bug in perldl.  This boneheaded calling scheme
+    (simply appending a "die $@ if($@)" to the end of the eval) seems to work
+    in 5.10,5.12, and 5.14 -- I'm not sure why we didn't do it to start with.
+    
+    Since perldl is the only place PDL::Core::myeval() was called, I deleted it
+    from Core.xs.PL as well -- it appears to be cruft at this point, since
+    it no longer works as intended and is also no longer used.
+
+ Basic/Core/Core.xs.PL |   16 ----------------
+ perldl.PL             |    8 +++++---
+ 2 files changed, 5 insertions(+), 19 deletions(-)
+
+commit abcf992877ff0bd319d52166cf716ea086d1702e
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Mon Nov 12 17:32:26 2012 -0700
+
+    Fixed warnings in pdl.PL.  Fixed up Makefile.PL to actually compile pdl.c into pdl after it is made.  (MacOS 10.8 seems to need that).
+
+ Makefile.PL |   23 +++++++++++++++++------
+ pdl.PL      |    6 +++---
+ 2 files changed, 20 insertions(+), 9 deletions(-)
+
+commit e8734eb1b303942f3f4dfe683c6cf0c32b209257
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Mon Nov 12 17:00:40 2012 -0700
+
+    fix longstanding problem with three-argument form of rim
+
+ IO/Pnm/Pic.pm |   31 ++++++++++++++++++-------------
+ 1 files changed, 18 insertions(+), 13 deletions(-)
+
+commit f17e251db783f5d45b5e6dae45adb9bc4be6bf16
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Mon Nov 12 16:24:39 2012 -0700
+
+    fix syntax error in transform.pd
+
+ Lib/Transform/transform.pd |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+commit fbca747a30442e2954d207db1805270304e4dcbd
+Merge: f2e42e3 dd92350
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Nov 12 15:12:33 2012 -0700
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit f2e42e38f9d2f1e1f4666adf468b220a8e896682
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Nov 12 15:09:39 2012 -0700
+
+    Make Ufunc's POD usage docs agree with function signatures.
+    
+    In ufunc.pd, functions had a signature like (a(n); [o]b()), but then
+    had usage lines like $a = func($b). So I just changed the usage lines
+    to $b = func($a), to reduce confusion.
+
+ Basic/Ufunc/ufunc.pd |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+commit dd923502135b714f4f566da359c1e2c3779078f6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 12 10:43:19 2012 -0500
+
+    Fix win32 bsd.dll pattern to only match bsd.dll
+    
+    On cygwin 1.7.17, the GD library file is /usr/lib/libgd.dll.a
+    so the string 'bgd.dll' was being found even though the
+    searched for DLL was not.
+
+ IO/GD/Makefile.PL |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 0fecb6c762256565c3553153009d1cadd229d475
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Nov 9 16:43:27 2012 -0700
+
+    Add NOMYMETA tags to most of the rest of the Makefile.PLs.
+    
+    This finishes what I started with commit 96700c4, adding the
+    eval'd check on the EU::MM version and adding the NOMYMETA=>1
+    line if appropriate.  Now there are only 4 pairs of MYMETA.[yml,json]
+    files created with 'perl Makefile.PL'.
+
+ Basic/Core/Makefile.PL                |    1 +
+ Basic/Gen/Makefile.PL                 |    1 +
+ Basic/Makefile.PL                     |    1 +
+ Basic/Pod/Makefile.PL                 |    1 +
+ Demos/Makefile.PL                     |    3 ++-
+ Doc/Makefile.PL                       |    1 +
+ Doc/Pod/Makefile.PL                   |    1 +
+ Graphics/LUT/Makefile.PL              |    1 +
+ Graphics/LUT/ramps/Makefile.PL        |    3 ++-
+ Graphics/LUT/tables/Makefile.PL       |    3 ++-
+ Graphics/Limits/Makefile.PL           |    1 +
+ Graphics/Makefile.PL                  |    1 +
+ Graphics/PGPLOT/Makefile.PL           |    3 ++-
+ Graphics/PGPLOT/Window/Makefile.PL    |    3 ++-
+ Graphics/TriD/Makefile.PL             |    1 +
+ Graphics/TriD/VRML/Makefile.PL        |    1 +
+ IO/Dicom/Makefile.PL                  |    1 +
+ IO/FITS/Makefile.PL                   |    1 +
+ IO/FastRaw/Makefile.PL                |    1 +
+ IO/FlexRaw/Makefile.PL                |    1 +
+ IO/HDF/Makefile.PL                    |    1 +
+ IO/HDF/SD/Makefile.PL                 |    1 +
+ IO/HDF/VS/Makefile.PL                 |    3 ++-
+ IO/Makefile.PL                        |    1 +
+ Lib/CallExt/Makefile.PL               |    2 +-
+ Lib/Filter/Makefile.PL                |    3 ++-
+ Lib/Fit/Makefile.PL                   |    1 +
+ Lib/GIS/Makefile.PL                   |    1 +
+ Lib/GSL/Makefile.PL                   |    1 +
+ Lib/GSL/SF/Makefile.PL                |    1 +
+ Lib/Makefile.PL                       |    1 +
+ Lib/Opt/Makefile.PL                   |    1 +
+ Lib/Opt/Simplex/Makefile.PL           |    3 ++-
+ Lib/Transform/Cartography/Makefile.PL |    3 ++-
+ Perldl2/Makefile.PL                   |    2 ++
+ Perldl2/Plugin/Makefile.PL            |    1 +
+ Perldl2/Profile/Makefile.PL           |    1 +
+ 37 files changed, 47 insertions(+), 10 deletions(-)
+
+commit 8f09bf389b97b28fa10e599b4b94f1bb6a55a7a9
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Nov 9 14:34:48 2012 -0700
+
+    Update the old link to the GSL docs from redhat.com to gnu.org.
+
+ Lib/GSL/DIFF/gsl_diff.pd     |    2 +-
+ Lib/GSL/INTEG/gsl_integ.pd   |    2 +-
+ Lib/GSL/INTERP/gsl_interp.pd |    2 +-
+ Lib/GSL/MROOT/gsl_mroot.pd   |    2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 44902ed9a73f07c54947d8e64afc8d282b796911
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Nov 9 13:59:25 2012 -0700
+
+    Small POD update for PDL::Func
+    
+    The description "useful functions" for this module wasn't that useful,
+    so I added more detail.  Fixed a syntax error in the docs for
+    PDL::Func::set.  Also removed the section "The Future" because
+    obviously that isn't going to happen.
+
+ Lib/Func.pm |   11 +++--------
+ 1 files changed, 3 insertions(+), 8 deletions(-)
+
+commit f914a2554f8621c5ebde8a02f536ff4d00d7d567
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Nov 8 09:46:46 2012 -0500
+
+    Update Known_problems for PDL-2.4.11 status
+
+ Known_problems |   18 +++++-------------
+ 1 files changed, 5 insertions(+), 13 deletions(-)
+
+commit 3bfd7247ae290b8f7319a9df53c0b327aab3770a
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Nov 6 14:50:46 2012 -0700
+
+    Quiet "isn't numeric" warning in a trid Makefile.PL.
+    
+    Put an eval around $ExtUtils::MakeMaker::VERSION so that numeric
+    comparisons (>=, etc) don't complain for version strings
+    like '6.57_02'.
+
+ Graphics/TriD/POGL/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 96700c442b1e1782ff182eaac375f43e62a9acfd
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Nov 6 14:45:40 2012 -0700
+
+    Suppress some of the "Writing MYMETA" messages during 'perl Makefile.PL'.
+    
+    This should suppress some of the "Writing MYMETA.yml and MYMETA.json" lines
+    that crop up during the first part of the PDL build.  It will not take care
+    of all of them, to do that I'll have to hand edit some Makefile.PL's.  Putting
+    this in now to see if it messes up older versions of EU::MM, and if it's OK
+    I'll do the rest by hand later.  See pdl-porters thread from 2011-Dec-21.
+
+ Basic/Core/Dev.pm |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit eafe04154fc23edc717d54304c03fc8df16b58c9
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Nov 5 22:01:23 2012 -0700
+
+    Change the example for the "in" function to be less ambiguous.
+
+ Basic/Primitive/primitive.pd |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit a1ab4d78b10e6a2fb52e42b2767cb641c652460f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 26 14:01:19 2012 -0400
+
+    Update Release_Notes and Known_problems
+    
+    I would like to see a CPAN developers release in the
+    next month as we move towards a 2.4.12 release.
+
+ Known_problems |    9 ---------
+ Release_Notes  |   38 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+), 9 deletions(-)
+
+commit 7b684e98999a9ffb3bc637244801d09b416996a2
+Author: olpc user <olpc@xo-4a-9c-81.localdomain>
+Date:   Sat Oct 6 17:03:05 2012 +0000
+
+    Fix p command in pdl2 shell
+    
+    Added back a newline to the p command for
+    the pdl2 shell which fixes the breakage on
+    windows platforms.  NOTE: p is a shorthand
+    to display output in the interactive shell.
+    It has never been an alias for print.
+
+ Perldl2/Profile/Perldl2.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 4eeddb3e6304717ba317b81972c2ab826c0ca1a5
+Author: olpc user <olpc@xo-4a-9c-81.localdomain>
+Date:   Sat Oct 6 15:22:41 2012 +0000
+
+    Update DEPENDENCIES and Known_problems
+
+ DEPENDENCIES   |   16 ++++------------
+ Known_problems |   22 ++--------------------
+ 2 files changed, 6 insertions(+), 32 deletions(-)
+
+commit c8501f9d20b9109d12b75d2cd0ff1bf07bbddd6c
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Fri Sep 21 19:36:25 2012 +1000
+
+    t/rim.t - Some basic testing of PDL::IO::Pic::rim()
+    
+    The rim() function was (is still ?) broken. See:
+    http://mailman.jach.hawaii.edu/pipermail/pdl-porters/2012-July/004916.html
+    This script provides some basic testing of the function.
+
+ t/rim.t |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 44 insertions(+), 0 deletions(-)
+
+commit 4b51e276e9baf20db7b3ffe03b0cb4bcb8d88516
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Fri Sep 21 19:36:24 2012 +1000
+
+    MANIFEST - add new test script t/rim.t
+
+ MANIFEST |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit fc2fe6d14967e1e6cfc422d4f734f1ecbc08efe8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Sep 12 12:56:31 2012 -0400
+
+    Update inc/Devel/CheckLib.pm to version 0.98
+
+ inc/Devel/CheckLib.pm |   48 ++++++++++++++++++++++++++++++++----------------
+ 1 files changed, 32 insertions(+), 16 deletions(-)
+
+commit 033b59c2ee9292885058a3941fbfd1dc525ae7af
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Sep 12 12:55:38 2012 -0400
+
+    Clean up test for PDLDOC_IGNORE_AUTOLOADER
+
+ pdldoc.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit df61526d565973bc1f0ade8629919c3940094247
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 6 18:54:51 2012 -0400
+
+    Minor edits to PDL::MATLAB pod
+
+ Basic/Pod/MATLAB.pod |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+commit 6a700587296d975221f87a6612f07e836691086e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 6 17:12:46 2012 -0400
+
+    Add Boundary=>'Replicate' option to conv2d/med2d
+
+ Lib/Image2D/image2d.pd |   42 +++++++++++++++++++++++++++---------------
+ t/image2d.t            |   10 +++++++---
+ 2 files changed, 34 insertions(+), 18 deletions(-)
+
+commit 513b4a82aee5cb03816481c6ae14abe2c705f87a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Sep 2 17:40:30 2012 -0400
+
+    fix 16-bit PNM raw format handling (sf.net bug #3475075)
+    
+    This commit fixes wpnm and rpnm so that they output
+    raw format PNM data in network byte order (i.e., big
+    endian order).  This fixes the 16bit pixel issues and
+    is believed to close this bug.  Feedback welcome.
+
+ IO/Pnm/pnm.pd  |   28 +++++++++++++++++++++++++++-
+ Known_problems |   12 +++++++++++-
+ 2 files changed, 38 insertions(+), 2 deletions(-)
+
+commit 94c463312d90c62fdb3be84ecf170c16c9cf0269
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Sep 2 15:00:57 2012 -0400
+
+    Re-add PNG checks to picrgb.t
+    
+    And removed default '-quiet' option from wpic() since
+    the various NetPBM converters don't appear to support
+    that flag any more.
+    
+    NOTE: SGI file format is still commented out because
+    of a problem with the converters (at least on cygwin)
+    where the files are not generated/converted correctly.
+
+ IO/Pnm/Pic.pm |    2 +-
+ t/picrgb.t    |    4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 892c5c9e3a524c483e73d3cb7552e5b43ef2ad02
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Sep 2 13:34:06 2012 -0400
+
+    Update unpdl docs a bit, hope it is clearer
+
+ Basic/Core/Core.pm.PL |   14 ++++++++++----
+ 1 files changed, 10 insertions(+), 4 deletions(-)
+
+commit cc634713f56a6428f3ee2a4298471896fc3b51e1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Sep 2 13:11:07 2012 -0400
+
+    Fix dummy() to generate correct slice() call
+    
+    Sf.net feature request/bug report #3479009 had a hard to find
+    problem with dummy() because it was generating an underlying
+    call to slice() with an invalid string contruct, e.g. '* 128'
+    rather than '*128'.  This fixes dummy() to coerce the ' 128'
+    to a number, i.e. '128' so that the slice string is correct as
+    far as syntax.
+    
+    Also made one more failing NaN sign test a TODO one since it
+    was failing on cygwin.
+
+ Basic/Core/Core.pm.PL |    2 +-
+ t/pdl_from_string.t   |   94 ++++++++++++++++++++++++------------------------
+ 2 files changed, 48 insertions(+), 48 deletions(-)
+
+commit eb96334c3e8df113638688ddcd8741872812cbc6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Sep 2 11:51:55 2012 -0400
+
+    Add missing binmode for win32 (see sf bug #3563903
+    
+    This prevents text mode CR-LF translation on win32
+    platforms from breaking things.  There may be an
+    un-binmoded handle in IO/FITS/FITS.pm as well but the
+    maintainers of that module will need to apply the
+    fix if needed.
+
+ IO/Dicom/Dicom.pm     |    1 +
+ IO/FlexRaw/FlexRaw.pm |    1 +
+ IO/Pnm/Pic.pm         |    1 +
+ 3 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 2da876d38650ac0f342ec2123a7dbee0a5560bc5
+Author: unknown <chm@BELVNB0361NV126.nae.ds.army.mil>
+Date:   Thu Aug 23 20:01:31 2012 -0400
+
+    Fit deprecation of "naked" { in regex for perl 5.17.x
+
+ Perldl2/Plugin/CleanErrors.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 2d0410fd2eb54eb4f2342723688d84ff6d22919e
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Mon Aug 13 22:36:44 2012 +1000
+
+    Basic/Complex/complex.pd - Fix handling of complex 0.
+    
+    0+0i, when raised to a real power was giving incorrect
+    results. This fix just applies some "special case"
+    handling for x+0i (where x can be either zero or non-
+    zero) when raised to a real power (including 0).
+
+ Basic/Complex/complex.pd |   26 ++++++++++++++++++++------
+ 1 files changed, 20 insertions(+), 6 deletions(-)
+
+commit 55091589dde743b006a4e139c807246d3e274111
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Mon Aug 13 22:36:43 2012 +1000
+
+    t/complex.t Test changes to Basic/Complex/complex.pd
+    
+    Test that today's changes Basic/Complex/complex.pd
+    give desired results.
+
+ t/complex.t |   22 +++++++++++++++++++++-
+ 1 files changed, 21 insertions(+), 1 deletions(-)
+
+commit 7bcf2ddc565a4516ad9219499f2179de4cee54a0
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Aug 9 08:40:09 2012 -0500
+
+    Added documentation for isnull()
+
+ Basic/Core/Core.pm.PL |   22 +++++++++++++++++++---
+ 1 files changed, 19 insertions(+), 3 deletions(-)
+
+commit 17019f6fd2df8c542b5529fa74a1f6d2c8235528
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Jul 26 14:35:22 2012 -0600
+
+    Fix some print statments in pdlcore.c.PL.
+    
+    When DEBUG_SETAV_TYPE or DEBUG_KLUDGE_COPY is #define'd there are
+    numerous compiler errors for print statments.  This takes care of
+    some of them.  Many more are generated because the loop over PDL
+    types does not also take care of different formatting codes (%f vs
+    %d vs %ld etc), so there is still some room for improvement.
+
+ Basic/Core/pdlcore.c.PL |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 52da4d16f1e90ed83c53a26ec4f4bffe18ff2cb4
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Jul 26 13:24:40 2012 -0600
+
+    Deal with an intermittent segfault in pdl_setav_$type.
+    
+    Just before pdl_kludge_copy, the index of the pdims array (the
+    dimension list) could sometimes be negative. This caused an intermittent,
+    non-reproducible segfault on my machine. The fix (thanks Craig!)
+    doesn't break any existing tests, and seemed to solve the problem.
+
+ Basic/Core/pdlcore.c.PL |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 0106d6e82a9f31fb39cc92cadcf4f4ce267c9ac4
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Jul 25 13:37:20 2012 +1000
+
+    Lib/Image2D/image2d.pd Reposition the 'polyfill' definition.
+    
+    Microsoft compilers might insist that the 'polyfill' defintion
+    be positioned before the call to that function in the
+    polyfill_pp() function. (At least one of my MS compilers
+    insists on this.)
+    Fixing that also should have eradicated a "conflicting types
+    for 'polyfill'" warning that gcc was emitting.
+
+ Lib/Image2D/image2d.pd |  375 ++++++++++++++++++++++++------------------------
+ 1 files changed, 188 insertions(+), 187 deletions(-)
+
+commit 8fb45960c251edeeb3c4379aae230d97f5d85e25
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Jul 25 13:37:20 2012 +1000
+
+    t/callext.t Unlink callext.pdb.
+    
+    With one MS compiler (that I know of) the callext.t
+    tests fail if there exists a 'callext.pdb' from an
+    earlier build of PDL (that was done using a
+    different MS Compiler)
+
+ t/callext.t |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+commit 0f57385f0dafef3140b37dd971168e322bd08a89
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Jul 25 13:37:19 2012 +1000
+
+    t/pdl_from_string.t "TODO" some tests with ActivePerl/MS Compilers
+    
+    Allows PDL to build on ActivePerl without any test failures.
+    (Some of these "TODO" tests already pass with some versions of
+    ActivePerl and some Microsoft compilers.)
+
+ t/pdl_from_string.t |  164 +++++++++++++++++++++++++++++++++++----------------
+ 1 files changed, 112 insertions(+), 52 deletions(-)
+
+commit 335023d70aaa4b82930186e86ee35d16652deb66
+Author: Tim Haines <communist.goatboy@gmail.com>
+Date:   Sun Jul 22 19:36:01 2012 -0400
+
+    merge in pnpoly algorithm into PDL::Image2D
+    
+    This commit represents the work by Tim Haines to
+    implement a PP version of the pnpoly algorithm and
+    to add that as an optional engine for the polyfill
+    and polyfillv routines.
+
+ Basic/Pod/PP.pod       |   24 +++++
+ Lib/Image2D/image2d.pd |  230 ++++++++++++++++++++++++++++++++++++++---------
+ t/image2d.t            |   20 ++++-
+ 3 files changed, 229 insertions(+), 45 deletions(-)
+
+commit 3cff6f134cff8e38570822b18d4a02d93b540e39
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 17 19:32:28 2012 -0400
+
+    Add ENVI file format bailout for PDL::IO::FlexRaw
+    
+    Since the filename + header file convention is the
+    same for PDL::IO::FlexRaw files and for ENVI format
+    files, I've added a check for ENVI and a bailout if
+    this is not a PDL::IO::FlexRaw format file.
+    
+    I expect to replace this by a call to readenvi at
+    some point to smooth things out.
+
+ IO/FlexRaw/FlexRaw.pm |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 903377a96846adfb946df659a0cdaef3d4452945
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 17 19:23:28 2012 -0400
+
+    Fix confusing wrap in FlexRaw.pm
+
+ IO/FlexRaw/FlexRaw.pm |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
+
+commit 966f826a1a88055f1cc88a5b6e03f08fa95f438f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 16 13:46:52 2012 -0400
+
+    Update Known_problems
+    
+    Added new sf.net bugs including one re the failure of barf
+    to generate traceback output in perldl.  This was due to a
+    change in perl exception handling starting with perl 5.14.0.
+    The work around is to install Devel::REPL so that you can
+    use the new pdl2 shell (NOTE: if you don't have Devel::REPL
+    installed, then pdl2 will run perldl for you instead---with
+    the problem mentioned here).
+
+ Known_problems |   15 ++++++++++++---
+ 1 files changed, 12 insertions(+), 3 deletions(-)
+
+commit 83543cc85c07ae19c6188f3ba3e80306c479e6b6
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sat Jul 14 17:54:01 2012 +1000
+
+    t/pdl_from_string.t Fix some nan tests for Windows
+    
+    That is, fix as best I can.
+
+ t/pdl_from_string.t |   36 ++++++++++++++++++++++++++++++------
+ 1 files changed, 30 insertions(+), 6 deletions(-)
+
+commit 7c0ec563f1238fd8172571dae81b592eff850542
+Author: Tim Jenness <t.jenness@jach.hawaii.edu>
+Date:   Tue Jul 10 15:11:16 2012 -0700
+
+    Remove PDL::IO::NDF from main distribution
+    
+    Now available on CPAN as a separate download. A separate git
+    repository is also available.
+
+ Basic/Pod/BadValues.pod |    2 -
+ Basic/Pod/Modules.pod   |    3 +-
+ IO/IO.pod               |    3 +-
+ IO/Makefile.PL          |    2 +-
+ IO/NDF/Makefile.PL      |   21 -
+ IO/NDF/NDF.pm.PL        | 1634 -----------------------------------------------
+ MANIFEST                |    3 -
+ t/ndf.t                 |   84 ---
+ 8 files changed, 5 insertions(+), 1747 deletions(-)
+
+commit 05c24fb8b0fde8629bccc6109dbfba59caa6ee13
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 9 10:44:19 2012 -0400
+
+    Add t/unpdl.t to MANIFEST
+
+ MANIFEST |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 5ea80223ba548c87d0c9e6c916c59b9df4b340d0
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Sun Jul 8 15:01:30 2012 -0600
+
+    Add note to OPTIMIZE advising the addition of -O0 to -g.
+    
+    This addresses SF bug #3465663. When I set OPTIMIZE to
+    '-O0 -g', built and installed PDL, and examined a
+    segfault-produced core dump in gdb, I get full information
+    for the PDL functions (including line numbers for pdlcore.c),
+    but of course not for the Perl functions because my Perl was
+    not compiled with -g.
+
+ perldl.conf |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
+
+commit 4e4e096799509f0b406adbc266bd3fdf84b27d9e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 7 12:53:34 2012 -0400
+
+    Re-enable t/gd_oo_tests.t for AMD/BSD
+    
+    This will allow development versions of PDL to
+    show the symptom with the hopes of providing
+    enough info to debug the problem for the developer.
+    Also, replaced print by diag in test output.
+
+ t/gd_oo_tests.t |   24 ++++++++++++------------
+ 1 files changed, 12 insertions(+), 12 deletions(-)
+
+commit 537a00d7b34b332b5b69d3a31d3dcc02255a4b4c
+Merge: cbda0ce 23212d2
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Jul 6 17:00:51 2012 -0500
+
+    Merged Joel's work on the new unpdl method.
+
+commit cbda0cec6ad350f2aa750ea7543f132537990d1e
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Jul 6 17:00:18 2012 -0500
+
+    Merge branch 'master', remote-tracking branch 'origin/master'
+
+commit bdec3fa4b6f4a4e43f71447f362e528dfcda0863
+Merge: 92844b4 a3e4397
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Jul 6 11:56:40 2012 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 92844b4f87362996f5e9f526c3a158f45aa149e3
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Jul 6 11:55:15 2012 -0600
+
+    fix a minor POD formatting issue.
+
+ Basic/Core/Core.pm.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit a3e4397a49c5a16847c228eaacdc8d727e65ab47
+Author: Tim Haines <communist.goatboy@gmail.com>
+Date:   Tue Jul 3 14:20:13 2012 -0400
+
+    make qsort[vec] inplace aware
+    
+    Applying the patch by Tim Haines.  Thanks.
+
+ Basic/Ufunc/ufunc.pd |    2 ++
+ t/ufunc.t            |   26 +++++++++++++++++++++++++-
+ 2 files changed, 27 insertions(+), 1 deletions(-)
+
+commit 88a9fff40ad7731d97b499e1e0e13af083f39246
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Jul 3 20:12:37 2012 +1000
+
+    MANIFEST - add t/lgamma.t
+
+ MANIFEST |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit b67e2e9536ddecbb4e5392700ee115824dd22993
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Jul 3 18:57:44 2012 +1000
+
+    Add lgamma() implementation for MinGW-built perls.
+    
+    The MinGW ports of gcc provide an lgamma() function.
+    Let's make use of it - as has already been done for
+    *nix systems.
+
+ Basic/Math/math.pd |   77 ++++++++++++++++++++++++++++++++-------------------
+ 1 files changed, 48 insertions(+), 29 deletions(-)
+
+commit 3f9928fe4c638aa9d84b89e0087455125134a493
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Jul 3 18:57:43 2012 +1000
+
+    Provide (basic) testing for lgamma function.
+    
+    Previously untested.
+
+ t/lgamma.t |   49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 49 insertions(+), 0 deletions(-)
+
+commit 000212d92e2acbf24fb6d744be027bed20a636ed
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Jul 2 23:50:24 2012 -0500
+
+    Fixed nan sign issue, as reported by Matthew McGillis
+    
+    I had noticed that pdl-from-string always said that 'nan' had a
+    minus sign, but I didn't bother much about it. Matthew McGillis
+    not only knew better, but wrote a patch to fix the situation,
+    which is applied here.
+    
+    The only remaining issue is now the sign of -0, which Matthew
+    included in his tentative test suite but which does not appear to
+    work on my machine. Further investigations are needed...
+
+ Basic/Core/Core.pm.PL |   24 ++++++++++++++++++------
+ t/pdl_from_string.t   |   12 +++++++++---
+ 2 files changed, 27 insertions(+), 9 deletions(-)
+
+commit 19979b1ca8784cb3c43469cc49e50b30b8710624
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Jul 2 23:19:30 2012 -0500
+
+    Minor cleanups to pdl_from_string.t, inline-comment-test.t
+    
+    While working on a few other files in the test suite, I came across
+    the code in inline-comment-test.t that is supposed to ensure that
+    the tests are only run on machines that are configured properly to
+    execute the tests. The code was a bit confusing, so I cleaned it up
+    in a way that I hope makes it easier for others to follow in the
+    future.
+    
+    I also expanded the explanation of the test that is given at the
+    top of pdl_from_string, since support for inf and nan values is
+    now one of the goals of the pdl-from-string behavior.
+
+ t/inline-comment-test.t |   45 +++++++++++++++++++++++++--------------------
+ t/pdl_from_string.t     |    8 ++++----
+ 2 files changed, 29 insertions(+), 24 deletions(-)
+
+commit 23212d2a48fcab0c9b9efb7fa6e0920017839bda
+Author: Joel Berger <joel.a.berger@gmail.com>
+Date:   Sat Jun 30 17:51:54 2012 -0500
+
+    Added unpdl method
+    
+    The unpdl method is roughly an inverse of the pdl constructor.
+    It takes a piddle and returns a reference to a Perl array containing
+    a dimensionally equivalent structure of nested arrays. This complements
+    the list method, which returns a flattened list
+    of Perl scalars.
+
+ Basic/Core/Core.pm.PL |   68 ++++++++++++++++++++++++++++++++++++++++++++++--
+ t/unpdl.t             |   18 +++++++++++++
+ 2 files changed, 83 insertions(+), 3 deletions(-)
+
+commit 8aabc20852f292f6ca9183c070655708203e50b3
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Jun 28 23:50:52 2012 -0500
+
+    Fixed and CPANified POD in Basic/Core/Core.pm
+    
+    The file Basic/Core/Core.pm.PL generates the text of the Core.pm
+    file. If any errors arose in Core.pm, they were reported from the
+    line number of Core.pm, not Core.pm.PL. Commit db274c02 was
+    supposed to fix that. Unfortunately, it also introduced a few
+    messed up lines in the resulting documentation due to lack of
+    proper pod directives. This commit not only fixes those pod
+    directives, but it also CPANifies Core.pm.PL so that readers on
+    CPAN can read the documentation and get a good facsimile of what
+    they'll read from their own machine.
+
+ Basic/Core/Core.pm.PL |  140 +++++++++++++++++++++++++++++++++++++++++++------
+ 1 files changed, 123 insertions(+), 17 deletions(-)
+
+commit 6210b499241c41510d1961f9a882b5ebba51685b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jun 14 09:14:08 2012 -0400
+
+    Add :lvalue to polyfillv declaration
+
+ Lib/Image2D/image2d.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 646394c9b46c2458e13f1a64a2d8304c86f500de
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jun 4 16:46:17 2012 -0400
+
+    Apply patch adding more RNG's to PDL::GSL
+    
+    Thanks to John Lapeyre.
+
+ Lib/GSL/RNG/gsl_random.pd |   55 +++++++++++++++++++++++++++++++-------------
+ 1 files changed, 39 insertions(+), 16 deletions(-)
+
+commit 5fa882961988b3a7e4933bf0da6cb03ced178999
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu May 31 09:26:10 2012 +0200
+
+    [deb 2.4.11] update changelog up to 2.4.11-4
+
+ debian/changelog |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
+
+commit cbca21383acb3e2769da7f886f2aec44d3613675
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu May 31 09:24:18 2012 +0200
+
+    [deb 2.4.11] explicitely set -fPIC when compiling fortran code
+
+ debian/f77conf.pl |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit ddc5507ba2f032cbc1ab29882b019c54cb5a362b
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Thu May 31 09:23:41 2012 +0200
+
+    [deb 2.4.11] fix dh_pdl
+
+ debian/dh_pdl |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit aa5f78a1e4db03b404d18836a7a7220e8f08fc2f
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon May 28 16:20:54 2012 +0200
+
+    update debian/changelog from 2.4.11-2 upload
+
+ debian/changelog |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+commit 2b5065921f6429f13e390694b729dd03576940d2
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon May 28 16:20:30 2012 +0200
+
+    override lintian warnings about images in /usr/lib
+
+ debian/pdl.lintian-overrides |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit ecee50031c591854b9ca3678d9a81afb1f46a59c
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Mon May 28 16:17:46 2012 +0200
+
+    install dh_pdl manpage
+
+ debian/pdl.manpages |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 6913ca40d16702a7653475b1525c37e0521fe317
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Mon May 28 13:26:57 2012 +1000
+
+    win32/INSTALL Update info/instructions
+
+ win32/INSTALL |  109 ++++++++++-----------------------------------------------
+ 1 files changed, 19 insertions(+), 90 deletions(-)
+
+commit 7361148972b6eafdd2e3128dff1499a3df474671
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun May 27 18:09:44 2012 +0200
+
+    call croak always with string literal to silence gcc format-security wanrings
+    
+    fix calls to croak in Lib/GIS/Proj/Proj.pd and IO/GD/GD.pd (croak
+    was not called with a format string literal, causing
+    -Werror=format-security to abort the compilation)
+
+ IO/GD/GD.pd          |   66 ++++++++++++++++---------------------------------
+ Lib/GIS/Proj/Proj.pd |   42 ++++++++++---------------------
+ 2 files changed, 36 insertions(+), 72 deletions(-)
+
+commit 59b23d51199463df029db5d3173d84a9ac7b008f
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat May 26 13:08:48 2012 +0200
+
+    [deb 2.4.11] update debian/changelog
+
+ debian/changelog |   17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
+
+commit a9b89de98b9378ac17b7097469ded34348507eeb
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat May 26 13:02:26 2012 +0200
+
+    [deb 2.4.11] avoid double installation of upstream changelogs
+    
+    dh_installchangelogs installs Changes now, unlike at the time I
+    introduced it
+
+ debian/pdl.docs |    2 --
+ debian/rules    |    2 +-
+ 2 files changed, 1 insertions(+), 3 deletions(-)
+
+commit c362b006bc71f0857190a93b7697098816117b24
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat May 26 13:00:04 2012 +0200
+
+    [deb 2.4.11] honor FFLAGS and LDFLAGS env vars in f77 setup
+
+ debian/f77conf.pl |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
+
+commit 99b9e7d6804e57e5a4cac36e2474779dd70ae438
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat May 26 12:53:57 2012 +0200
+
+    [deb 2.4.11] add dh_pdl debhelper script
+    
+    packages depending on pdl should use dh_pdl to get the right
+    dependencies on pdl and, in case of XS/PDL::PP packages, on
+    pdlapi-$PDL_CORE_VERSION
+
+ debian/dh_pdl      |  127 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ debian/pdl.install |    1 +
+ debian/rules       |    3 +-
+ 3 files changed, 130 insertions(+), 1 deletions(-)
+
+commit 0178db29ef5ebc0510df255b3f71ff5182b2ff43
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat May 26 11:57:44 2012 +0200
+
+    [deb 2.4.11] introduce virtual package pdlapi-$PDL_CORE_VERSION
+    
+    Core version is saved to $PDL::Config::Debian::pdl_core_version by
+    an ugly hack using Inline::pdlpp on the pdl instance in 'blib'.
+
+ debian/control                |    2 ++
+ debian/rules                  |    6 +++++-
+ debian/write_config_debian.pl |   23 +++++++++++++++++++++++
+ 3 files changed, 30 insertions(+), 1 deletions(-)
+
+commit a777c5c8c652fec300d0c0644d33aa7709f87ae3
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat May 26 11:47:33 2012 +0200
+
+    [deb 2.4.11] use dh_auto_configure to call Makefile.PL
+    
+    Makefiles are written with the correct flags set, as dh_auto_configure
+    maps CFLAGS/LDFLAGS to the correct EU::MM vars.
+
+ debian/rules |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 81bd76595dff0753a94e58432e681ab49faf8c7b
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat May 26 11:47:00 2012 +0200
+
+    [deb 2.4.11] switch to dpkg-buildflags to obtain build flags
+
+ debian/control |    1 +
+ debian/rules   |   10 +++++++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+commit 801fa40457e3a949eba7fe13713ff1ffa35856f3
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat May 26 11:25:44 2012 +0200
+
+    [deb 2.4.11] use 'folded' format for package relations fields
+    
+    folded format is a lot easier to diff...
+
+ debian/control |   46 ++++++++++++++++++++++++++++++++++++++++++----
+ 1 files changed, 42 insertions(+), 4 deletions(-)
+
+commit c2683384cf486b892639b43b697b3f015c9c673a
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sat May 26 11:20:16 2012 +0200
+
+    [deb 2.4.10] import changes by Jari Aalto <jari.aalto@cante.net>
+    
+      * Remove deprecated dpatch and upgrade to packaging format "3.0 quilt".
+      * Update to Standards-Version to 3.9.3 and debhelper to 9.
+      * Add build-arch and build-indep targets; use dh_prep in rules file.
+      * Fix copyright-refers-to-symlink-license (Lintian).
+      * Fix duplicate-in-relation-field libastro-fits-header-perl (Lintian).
+      * Fix unused-override (Lintian).
+
+ debian/README.source            |   14 --------------
+ debian/changelog                |   14 +++++++++++++-
+ debian/compat                   |    2 +-
+ debian/control                  |    8 ++++----
+ debian/copyright                |    2 +-
+ debian/patches/00list           |    1 -
+ debian/patches/series           |    1 +
+ debian/rules                    |   16 ++++++++--------
+ debian/source.lintian-overrides |    4 ----
+ debian/source/format            |    1 +
+ 10 files changed, 29 insertions(+), 34 deletions(-)
+
+commit fd8126a01ca782f6da2c3906e855b749b03829e0
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri May 25 09:25:28 2012 +0200
+
+    [deb 2.4.10] update debian changelog from 2.4.10+dfsg-1 upload
+
+ debian/changelog |   24 +++++++++++++++++++++++-
+ 1 files changed, 23 insertions(+), 1 deletions(-)
+
+commit 2ec47d788cf35b5f588158a186bd7670fe74c0f5
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri May 25 09:22:10 2012 +0200
+
+    [deb 2.4.10] update debian/perldl.conf from upstream perldl.conf
+
+ debian/perldl.conf |   66 +++++++++++++++++++--------------------------------
+ 1 files changed, 25 insertions(+), 41 deletions(-)
+
+commit 4daf0bd369f101214acdd8cb80d15798dd6c988f
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri May 25 09:19:41 2012 +0200
+
+    [deb 2.4.10] silence lintian warning about empty dpatch list
+
+ debian/source.lintian-overrides |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit c82890c79bcdcd1318c2cd653ca12f22b996221e
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri May 25 09:16:54 2012 +0200
+
+    [deb 2.4.10] ignore lintian warning about too long line in FFT manpage
+
+ debian/pdl.lintian-overrides |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 554d277b2de7b54e2037fd78ebd410a15ada20e9
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri May 25 09:15:28 2012 +0200
+
+    [deb 2.4.10] include release notes and upstream changes in docs
+
+ debian/pdl.docs |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 6eed699a000c3fa792ed73a80e460f94e62cce15
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri May 25 09:13:59 2012 +0200
+
+    [deb 2.4.10] comment purpose of patch list
+
+ debian/patches/00list |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 88fce7e87d709d40baf99afbfac246c74c9b7883
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Fri May 25 09:11:40 2012 +0200
+
+    [deb 2.4.10] update minimum libopengl-perl requirement
+
+ debian/control |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 26021f0c628e4095ea1385bf7409b6d5c865eb70
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon May 21 14:24:57 2012 -0400
+
+    Add ASCII table load <-> rcols equivalence to MATLAB.pod
+
+ Basic/Pod/MATLAB.pod |   11 ++++++++++-
+ 1 files changed, 10 insertions(+), 1 deletions(-)
+
+commit 4e8cb0e051c956ac79050d4c5617cdb7518d35cd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 20 14:20:45 2012 -0400
+
+    Update $PDL::VERSION to 2.4.11_001 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit 4773c96763f3f9450382fe97d951f653eb2ae94c
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun May 20 13:32:17 2012 -0400
@@ -5309,8 +6638,8 @@ Date:   Sat Aug 13 13:17:57 2011 -0400
     Update Release_Notes for CPAN devel release
 
  MANIFEST.SKIP |    1 +
- Release_Notes |   24 +++++++++++++++++++++---
- 2 files changed, 22 insertions(+), 3 deletions(-)
+ Release_Notes |   22 ++++++++++++++++++++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
 commit 5097f70403e8439cbe28a9cec8c041ec27bfc94c
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -7150,7 +8479,7 @@ Date:   Sun Mar 27 16:10:19 2011 -0400
 
     More updates for PDL-2.4.8 pre-release 1
 
- Release_Notes                   |    5 ++---
+ Release_Notes |    5 ++---
  1 files changed, 2 insertions(+), 3 deletions(-)
 
 commit 302975c1f6c1ded3bad25b4f79667ae85483c673
@@ -9954,8 +11283,8 @@ Date:   Wed Aug 18 20:55:52 2010 -0400
  Basic/PDL.pm   |    2 +-
  Release_Notes  |   48 ++++++++++++++++++++++++--
  TODO           |  106 ++++++++++++++++++++++++++-----------------------------
- cygwin/INSTALL |   23 +++++++-----
- 4 files changed, 109 insertions(+), 70 deletions(-)
+ cygwin/INSTALL |   27 ++++++++------
+ 4 files changed, 111 insertions(+), 72 deletions(-)
 
 commit 6155d20969a9307ae234e71efa87377d58d400b8
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -11691,8 +13020,8 @@ Date:   Sun Jul 11 18:30:57 2010 -0400
     Update Release_Notes and Known_problems for CPAN
 
  Known_problems |    2 +-
- Release_Notes  |   54 ++++++++++++++++++++++++++++++++++++++----------------
- 2 files changed, 39 insertions(+), 17 deletions(-)
+ Release_Notes  |   50 ++++++++++++++++++++++++++++++++++++--------------
+ 2 files changed, 37 insertions(+), 15 deletions(-)
 
 commit f4a51927326c9d21b5ed1ee779c83d8083cea316
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -12436,8 +13765,8 @@ Date:   Wed Jun 16 14:55:18 2010 -0400
      All non-NaN vectors with BAD values next.
      All NaN containing vectors last.
 
- Basic/Primitive/primitive.pd |  142 +++++++++++++++++++++++++++--------------
- 1 files changed, 93 insertions(+), 49 deletions(-)
+ Basic/Primitive/primitive.pd |  140 +++++++++++++++++++++++++++--------------
+ 1 files changed, 92 insertions(+), 48 deletions(-)
 
 commit fc225489f967568f642a0b1efb5b20d8181a38f8
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -14243,11 +15572,11 @@ Date:   Sun May 9 10:20:23 2010 +0200
 
     update debian packaging to uploaded 2.4.6
 
- debian/changelog    |   16 ++++++++++++++--
+ debian/changelog    |   18 +++++++++++++++---
  debian/control      |   10 +++++-----
  debian/pdl.postinst |    1 -
  debian/rules        |    2 +-
- 4 files changed, 20 insertions(+), 9 deletions(-)
+ 4 files changed, 21 insertions(+), 10 deletions(-)
 
 commit ae8d79b8076a3b434067162aa6be9f9f0501748d
 Author: Henning Glawe <glaweh@debian.org>
@@ -14294,8 +15623,8 @@ Date:   Sat May 8 01:21:50 2010 -0600
     Replaced simple threading expression with a PP tiling loop; yields 2x speedup
     for large matrices due to better cache hits. -- CED
 
- Basic/Primitive/primitive.pd |  100 ++++++++++++++++++++++++++++-------------
- 1 files changed, 68 insertions(+), 32 deletions(-)
+ Basic/Primitive/primitive.pd |   98 ++++++++++++++++++++++++++++-------------
+ 1 files changed, 67 insertions(+), 31 deletions(-)
 
 commit 5402c258d081efadd8cad0f152947f98405ceb8d
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -15599,9 +16928,9 @@ Date:   Thu Feb 11 21:47:25 2010 -0600
     was an error, I go on a big parsing spree to figure out what all the
     user may have screwed up.
 
- Basic/Core/Core.pm.PL |  114 ++++++++++++++++++++++++++++++++++++++++---------
+ Basic/Core/Core.pm.PL |  112 ++++++++++++++++++++++++++++++++++++++++--------
  t/core.t              |   33 ++++++++++++--
- 2 files changed, 122 insertions(+), 25 deletions(-)
+ 2 files changed, 121 insertions(+), 24 deletions(-)
 
 commit 5011f4d63e91d6857b6132e74e9c16afcb07b432
 Merge: 54532da ff8da8b
@@ -17902,9 +19231,9 @@ Date:   Mon Oct 12 18:17:44 2009 -0400
     systems.
 
  Basic/PDL.pm                 |    2 +-
- Graphics/TriD/POGL/OpenGL.pm |  127 ++++++++++++++++++++++--------------------
+ Graphics/TriD/POGL/OpenGL.pm |  125 ++++++++++++++++++++++--------------------
  Graphics/TriD/TriD/GL.pm     |    5 ++
- 3 files changed, 73 insertions(+), 61 deletions(-)
+ 3 files changed, 72 insertions(+), 60 deletions(-)
 
 commit b601580cfb768c9c28aa7d3a55d2f1068d1adf8b
 Author: Chris Marshall <marshallch@users.sourceforge.net>
@@ -18349,9 +19678,9 @@ Date:   Fri Oct 2 15:20:08 2009 -0400
  Graphics/TriD/TriD/Surface.pm     |    2 +-
  Graphics/TriD/TriD/Tk.pm          |    2 +-
  Makefile.PL                       |    2 +-
- Release_Notes                     |   29 +++++++++++++++++++++++------
+ Release_Notes                     |   31 ++++++++++++++++++++++++-------
  t/opengl.t                        |    4 ++--
- 14 files changed, 40 insertions(+), 23 deletions(-)
+ 14 files changed, 41 insertions(+), 24 deletions(-)
 
 commit 96eaffbc596fc0764e4fdce913c4caae1ce7ffd9
 Author: Chris Marshall <devel.chm.01@gmail.com>
