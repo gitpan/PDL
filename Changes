@@ -1,3 +1,74 @@
+commit 96c317fe6b36f1a973817e081cf2d09ed7a698d2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jan 13 11:38:26 2013 -0500
+
+    Update Release_Notes for PDL-2.4.11_002 release
+
+ Release_Notes |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+commit f2fc6aed72ce3ddb60211fc8d4c9cd4f8bb0369e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jan 13 11:32:29 2013 -0500
+
+    Add test names to t/gd_oo_tests.t
+    
+    Maybe this will help figure out what the problem is on
+    some platforms.
+
+ t/gd_oo_tests.t |   64 +++++++++++++++++++++++++++---------------------------
+ 1 files changed, 32 insertions(+), 32 deletions(-)
+
+commit a9fcf18c1de3ee3378ef7d6b205d016d1d4fc4c4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jan 13 11:10:49 2013 -0500
+
+    Add back some TODO block around failing NaN representation tests
+    
+    These are platform specific and we don't want PDL failing its
+    build tests just because we haven't debugged the problem on
+    all possible platform combinations...
+
+ t/pdl_from_string.t |   48 ++++++++++++++++++++++++++----------------------
+ 1 files changed, 26 insertions(+), 22 deletions(-)
+
+commit 360ce69e1f9a96c4367e90bc88cf5508971128c1
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sun Jan 13 21:17:58 2013 +1100
+
+    t/pdl_from_string.t - remove some outdated comments
+    
+    There were some comments (specific to MS Windows)
+    that should have been removed earlier.
+
+ t/pdl_from_string.t |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
+
+commit 0f1f5f2aaa89d76e4a3c46e716567c9ed8dfd562
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 11 15:37:14 2013 -0500
+
+    Bump VERSION to 2.4.11_002 for more PDL development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   34 ++++++++++++++++++++++++++++++++--
+ 3 files changed, 34 insertions(+), 4 deletions(-)
+
+commit 951d5fed7eac3b577f303c409bf2cfa14fda1867
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Jan 11 15:16:40 2013 -0500
+
+    Fix tempfile race condition in wpnm()
+    
+    Resolved by using tempfile() from File::Temp rather
+    than the hand-rolled version.  It is tricky to get
+    temporary files right so standardizing on File::Temp
+    is probably the right thing to do.
+
+ IO/Pnm/pnm.pd |   16 +++-------------
+ 1 files changed, 3 insertions(+), 13 deletions(-)
+
 commit 1e61f9b08dc9ce4288c3a50c545d89aec952d5ab
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Jan 11 14:21:36 2013 -0500
