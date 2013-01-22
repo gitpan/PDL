@@ -1,3 +1,93 @@
+commit 7adf218e451da41efce84a1591c84a75fdcee5c6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 22 16:24:58 2013 -0500
+
+    Update MANIFEST to remove PDL/Doc/Pod stuff
+
+ MANIFEST |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
+
+commit fccf1151909980067f0f33879451300beaa003e0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 22 16:21:45 2013 -0500
+
+    Update Known_problems and Release_Notes for CPAN devel release
+
+ Known_problems |    6 +++++-
+ Release_Notes  |   13 +++++++++++++
+ 2 files changed, 18 insertions(+), 1 deletions(-)
+
+commit 56fe5e9fdbefe5ceed24f878601803138da807cd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 22 16:01:38 2013 -0500
+
+    Fix problem with multiple imag2d windows active
+    
+    Added glutSetWindow() call to ensure that imag2d_update
+    adds a glutPostRedisplay for the updated image data pdl.
+
+ Graphics/Graphics2D.pm |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 2937ef2501f7bec6b59c8d60859f46af146df239
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 22 15:58:43 2013 -0500
+
+    Skip t/gd_oo_tests.t for OpenBSD systems under AUTOMATED_TESTING
+    
+    Since the failing GD tests apparently crash/kill the perl
+    process, TODO doesn't work to quiet them for CPAN Testers.
+    Uncommented code to skip_all for the case of $^O =~ /openbsd/i
+    and the environment AUTOMATED_TESTING is true.  The tests
+    will still fail for hand installs but, presumably the user
+    can see that only a small fraction of subtests actually fail.
+
+ t/gd_oo_tests.t |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit ce06b35ac340c3893474171c114b7a11063624bb
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Jan 21 00:35:00 2013 -0600
+
+    New FullDoc PDL::PP key and fixed a few minor doc niggles
+
+ Basic/Bad/bad.pd                 |  102 +++++++------
+ Basic/Gen/PP.pm                  |  292 +++++++++++++++++++++++++++++++-------
+ Basic/Gen/PP/PdlParObj.pm        |   71 +++-------
+ Graphics/PGPLOT/Window/Window.pm |    2 +-
+ Release_Notes                    |    3 +-
+ 5 files changed, 317 insertions(+), 153 deletions(-)
+
+commit 8a1c920c53812dabd31225d8917359035bb00921
+Merge: c5abfc9 75d71ff
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sun Jan 20 23:00:15 2013 -0600
+
+    Merge branch 'master', remote-tracking branch 'sf/master'
+
+commit 75d71ff441225a7fc5302300f24c0c34bef2160f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jan 20 14:10:22 2013 -0500
+
+    Make perldl skip and warn that -glut/-tk options not supported
+    
+    Yet...until I can figure out how to get the event loops
+    to interoperate correctly.
+
+ perldl.PL |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+commit 7f357d181b59a52522dd02731c176d1412cf7650
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jan 20 11:10:32 2013 -0500
+
+    Update VERSION to 2.4.11_004 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   33 ++++++++++++++++++++++++++++++++-
+ 3 files changed, 34 insertions(+), 3 deletions(-)
+
 commit a0dfcc0df392461aca778f986ede6e535d7540b4
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sun Jan 20 10:46:02 2013 -0500
@@ -38,6 +128,13 @@ Date:   Thu Jan 17 17:16:14 2013 -0500
 
  Basic/Core/Core.pm.PL |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit c5abfc96ac490bc1ed7177a73c71a6ca144f0785
+Merge: 3d9b989 99d747b
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Jan 14 09:27:37 2013 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
 
 commit 99d747b3301a1b247b6bcc06fa304b19c2f698f5
 Author: sisyphus_ <sisyphus1@optusnet.com.au>
@@ -109,6 +206,13 @@ Date:   Sun Jan 13 21:17:58 2013 +1100
  t/pdl_from_string.t |    6 ------
  1 files changed, 0 insertions(+), 6 deletions(-)
 
+commit 3d9b9892625c0f767eccb217089712808b9993dd
+Merge: 2fa430e 0f1f5f2
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Jan 11 14:39:59 2013 -0600
+
+    Merged Release_Notes on PDL::Pod notes
+
 commit 0f1f5f2aaa89d76e4a3c46e716567c9ed8dfd562
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Jan 11 15:37:14 2013 -0500
@@ -162,6 +266,55 @@ Date:   Fri Jan 11 13:58:26 2013 -0500
  perldl.PL |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
+commit 2fa430e7bce297ccad22470cc3886f14980bf9af
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Jan 7 23:39:08 2013 -0600
+
+    Removed =for ref Internal pod directives
+    
+    The pod directive =for ref Internal shows up in many places in
+    Graphics/PGPLOT/Window/Window.pm, but it does not serve much of a
+    purpose. It probably served a useful purpose at some point, but
+    that purpose has been lost. Removing for now, with the expectation
+    of revisiting after devising a better pdldoc keyword system.
+
+ Doc/Doc.pm                       |    1 +
+ Graphics/PGPLOT/Window/Window.pm |   13 -------------
+ 2 files changed, 1 insertions(+), 13 deletions(-)
+
+commit 97e1f6f8b88fd901cea30c096574538430b85dc4
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Jan 7 23:22:20 2013 -0600
+
+    Updated Release_Notes with Joel's work.
+
+ Release_Notes |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+commit 0325a95376be1d45f0a85226d134137eaf2e208c
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Jan 7 23:13:01 2013 -0600
+
+    Fixed misspellings of PERL in intro docs
+
+ Basic/Pod/MATLAB.pod |    4 ++--
+ Basic/Pod/Scilab.pod |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+commit a1617d12c63d68bf959fbf97ce36e7e746bfa125
+Merge: bf934bd bdf875c
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Jan 7 23:01:56 2013 -0600
+
+    Merge branch 'master' of github.com:PDLPorters/pdl
+
+commit bf934bd69db2d4ae3fbaac10b8f226d44501a15e
+Merge: ae28aff beb9d53
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Jan 7 23:00:39 2013 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
 commit beb9d53014f6ed5be68859382c8192822ee5e998
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Jan 7 21:27:29 2013 -0500
@@ -188,6 +341,29 @@ Date:   Mon Jan 7 13:33:42 2013 -0500
  Graphics/Graphics2D.pm |    4 +--
  perldl.PL              |   52 ++++++++++++++++++++++++++++++++++++++---------
  2 files changed, 43 insertions(+), 13 deletions(-)
+
+commit bdf875c9c2e43242a11bcbd94450aea56b3a4b2c
+Merge: 964a514 c4117fd
+Author: run4flat <dcmertens.perl@gmail.com>
+Date:   Mon Jan 7 08:28:19 2013 -0800
+
+    Merge pull request #3 from PDLPorters/pod
+    
+    Remove PDL::Pod:: classes in favor of Perl core modules Pod::
+
+commit ae28affc9af7b95256c07064ffa672c0f3ed91e2
+Merge: eeba80e 54af56e
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sat Jan 5 08:46:45 2013 -0600
+
+    Merge branch 'master', remote-tracking branch 'origin/master'
+
+commit eeba80ebf8c3370e84ebc26181e27b5eab27b42c
+Merge: efb6500 964a514
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sat Jan 5 08:45:07 2013 -0600
+
+    Merge branch 'master' of github.com:PDLPorters/pdl
 
 commit 54af56edcca8e915232515a5cfc7d58106a01a0d
 Author: sisyphus_ <sisyphus1@optusnet.com.au>
@@ -240,6 +416,42 @@ Date:   Fri Jan 4 10:46:23 2013 -0600
  Basic/Complex/complex.pd |    2 +-
  Basic/Core/Core.pm.PL    |    4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit c4117fd5bfdaaaf55f3fed565be1cb6f89bb4569
+Author: Joel Berger <joel.a.berger@gmail.com>
+Date:   Thu Jan 3 12:34:38 2013 -0600
+
+    removed warning about Pod::Parser incompatibility
+
+ Doc/Doc.pm |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
+
+commit 69260d2b87e77f53379f0b413d4ec5e32bf86267
+Author: Joel Berger <joel.a.berger@gmail.com>
+Date:   Thu Jan 3 11:55:45 2013 -0600
+
+    removed problematic "last" directive
+
+ Doc/Doc.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 624595479647ca09e8901fe656ebb3b0b816852a
+Author: Joel Berger <joel.a.berger@gmail.com>
+Date:   Thu Jan 3 11:44:14 2013 -0600
+
+    removed PDL::Pod:: classes in favor of core modules Pod::
+    
+    Further changed calling implementation of overriden functions "command", "textblock" and "verbatim" and a few internal methods
+    Also removed StrHandle and NullHandle classes in favor of opening handles to strings
+
+ Doc/Doc.pm          |   71 +---
+ Doc/Doc/Perldl.pm   |    5 +-
+ Doc/Pod/Makefile.PL |   18 -
+ Doc/Pod/Parser.pm   | 1112 ---------------------------------------------------
+ Doc/Pod/README      |  206 ----------
+ Doc/Pod/Select.pm   |  128 ------
+ Doc/Pod/Usage.pm    |  244 -----------
+ 7 files changed, 25 insertions(+), 1759 deletions(-)
 
 commit 5df755cfeeee4eac723e831ae78c2edec99457fe
 Author: Chris Marshall <devel.chm.01@gmail.com>
@@ -300,6 +512,22 @@ Date:   Thu Dec 27 21:40:28 2012 +1100
     Escape left brace in regex - '%{' becomes '%\{'
 
  t/pp_croaking.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit efb650035909cd98dfdefe4d893ee86741b939c1
+Merge: a76f87b a6fdb8e
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Dec 26 05:08:09 2012 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit a76f87b5b75a2238785736b072a03d0c7f6fb3d8
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Dec 26 05:06:06 2012 -0600
+
+    Fixed minor pod formatting issue in PDL::Transform
+
+ Lib/Transform/transform.pd |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 commit a6fdb8e7028ea3915cae8e2658d99c26cc24364b

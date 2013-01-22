@@ -1,3 +1,49 @@
+Release Notes for PDL 2.4.11_004 --------------------------
+
+General Notes:
+
+ * Another quick CPAN developers release
+ 
+   - It is a snapshot of the current git development tree
+     and everything may not work correctly or have complete
+     documentation.
+
+   - These release notes may not be fully complete.  Please
+     see Changes (from the git log) for full details.
+
+   - All tests may not pass, especially ones corresponding
+     to issues in Known_problems.
+   
+   - Manual build/install is recommended although the
+     cpan shell may be used by specifying the distribution
+     path rather than just the module name, e.g.:
+
+       cpan> get  CHM/PDL-2.4.11_004.tar.gz
+       cpan> make CHM/PDL-2.4.11_004.tar.gz
+       cpan> test CHM/PDL-2.4.11_004.tar.gz
+       cpan> look CHM/PDL-2.4.11_004.tar.gz
+
+
+Highlights:
+
+ * Added new FullDoc key to PDL::PP to make writing CPAN
+   friendly .pd files much, much easier.
+
+ * Newly refactored docs engine using core perl modules
+   rather than local PDL ones.
+ 
+ * Enhanced doc support for PDL::PP and some doc cleanup
+
+ * Fixed a problem with multiple windows and imag2d and
+   imag2d_update.
+
+ * t/gd_oo_tests.t now skips tests for OpenBSD platforms
+   to avoid many failures on CPAN Testers smokers.  If
+   you can reproduce this problem (sf.net bug #3518190),
+   help to debug would be greatly appreciated!
+
+
+
 Release Notes for PDL 2.4.11_003 --------------------------
 
 General Notes:
@@ -32,7 +78,6 @@ Highlights:
 
  * Minor doc fix to PDL::howbig so pdldoc apropos command
    will show that routine when given the string 'sizeof'.
-
 
 
 
@@ -162,6 +207,9 @@ Highlights:
    thanks to John Lapeyre.
 
  * Many debian distribution fixes.
+ 
+ * Update docs database system to use Pod parsing modules
+   distributed with Perl instead of the old PDL::Pod modules.
 
 
 
