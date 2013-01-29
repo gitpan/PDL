@@ -1,3 +1,28 @@
+commit 9cca4f8eb31f8fc19c0ef2b773bc174f746e5a06
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jan 24 10:14:06 2013 -0500
+
+    Make t/gd_oo_tests.t skip testing for all BSD OSes
+    
+    I plan to leave this skip in until the problem is actually
+    fixed.  In the meantime, for automated testing, the tests
+    will be skippped.  Otherwise a message about the known
+    problem will be printed.
+
+ t/gd_oo_tests.t |   11 +++++++++--
+ 1 files changed, 9 insertions(+), 2 deletions(-)
+
+commit 9d9faa0c712be8ede40ac8a846f0e6065bf054e4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 22 16:58:38 2013 -0500
+
+    Update VERSION to 2.4.11_005 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit 7adf218e451da41efce84a1591c84a75fdcee5c6
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Jan 22 16:24:58 2013 -0500
