@@ -39,6 +39,7 @@
             "File::Map" : "0.47",
             "File::Spec" : "0.6",
             "File::Temp" : "0",
+            "Filter::Simple" : "0",
             "Filter::Util::Call" : "0",
             "Inline" : "0.43",
             "OpenGL" : "0.65",
@@ -59,5 +60,5 @@
          "url" : "http://pdl.git.sourceforge.net/git/gitweb.cgi?p=pdl/pdl"
       }
    },
-   "version" : "v2.4.11_005"
+   "version" : "v2.4.11_006"
 }

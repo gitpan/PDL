@@ -1,3 +1,48 @@
+commit 108dec957f33466bf22110046f9a2ddd3a20dce4
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jan 30 09:03:55 2013 -0500
+
+    Update Release_Notes for a new CPAN devel release
+
+ Release_Notes |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 7218ac2e8c453ff3113379b3d89ae8d996d1bf6c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jan 30 09:01:51 2013 -0500
+
+    Make Filter::Simple a dependency for PDL
+    
+    The new PDL::NiceSlice filter is the basis for the
+    new and improved NiceSlice.  Forgot to add it to the
+    Makefile.PL as a dependency.
+
+ Makefile.PL |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 648757414a1977db9675f0c3c809f7d076da3d7c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 29 12:31:31 2013 -0500
+
+    Update version to 2.4.11_006 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
+commit 2117e3bf08c72e668c1768772659500e47783487
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jan 29 12:25:57 2013 -0500
+
+    Make FilterSimple the default engine for PDL::NiceSlice
+    
+    ...and update Release_Notes for a new CPAN developers release.
+
+ Basic/SourceFilter/NiceSlice.pm |    3 ++-
+ Release_Notes                   |    7 ++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
 commit 9cca4f8eb31f8fc19c0ef2b773bc174f746e5a06
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu Jan 24 10:14:06 2013 -0500

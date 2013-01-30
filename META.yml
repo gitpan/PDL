@@ -25,6 +25,7 @@ requires:
   File::Map: 0.47
   File::Spec: 0.6
   File::Temp: 0
+  Filter::Simple: 0
   Filter::Util::Call: 0
   Inline: 0.43
   OpenGL: 0.65
@@ -36,4 +37,4 @@ resources:
   bugtracker: http://sourceforge.net/tracker/?func=browse&group_id=612&atid=100612
   homepage: http://pdl.perl.org/
   repository: http://pdl.git.sourceforge.net/git/gitweb.cgi?p=pdl/pdl
-version: v2.4.11_005
+version: v2.4.11_006
