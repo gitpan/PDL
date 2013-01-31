@@ -1,3 +1,28 @@
+commit 157cbd7704487941cc12e2be49e5b9fe9f05ed7c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jan 31 10:20:11 2013 -0500
+
+    Bump minimum version of Filter::Simple to 0.86
+    
+    And add warning in Release_Notes on how to use
+    the old engine with the new releases while this
+    test process is underway.
+
+ Makefile.PL   |    2 +-
+ Release_Notes |   12 ++++++++++++
+ 2 files changed, 13 insertions(+), 1 deletions(-)
+
+commit 8d59a002807e7dfc2f9e100e75fd42c7e71f806b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jan 30 09:10:14 2013 -0500
+
+    Update VERSION to 2.4.11_007 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+
 commit 108dec957f33466bf22110046f9a2ddd3a20dce4
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Jan 30 09:03:55 2013 -0500
