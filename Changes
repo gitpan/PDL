@@ -1,3 +1,62 @@
+commit 4a69721d818293e92f0330e05c9b4b9774e00daa
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 5 09:34:32 2013 -0500
+
+    Update Release_Notes for CPAN devel release.
+
+ Release_Notes |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
+
+commit c9e4029d95d0a83346bdd19759fea9116e95478c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 5 09:28:07 2013 -0500
+
+    Fix new PDL::NiceSlice bug on early perls
+    
+    The problem was the difference between text and
+    binary mode on loading a file.  Recent perls use
+    text mode.  Older perls do not---this leaves extra
+    \r in the file that need to be skipped.  The fix
+    was a prefilter for MSWin32 and perls older than
+    v5.14.0.
+
+ Basic/SourceFilter/FilterSimple.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit d801ccf2caf509eceba137e16fa1a28a54d0558c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Feb 4 08:56:39 2013 -0500
+
+    Add dragonfly to list of OSes to skip t/gd_oo_test.t
+    
+    They are a BSD OS but don't have the letters bsd in the
+    value of $^O.
+
+ t/gd_oo_tests.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 2fd48fa961686d1ebe37a044f0e0309732bb725a
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Mon Feb 4 05:13:31 2013 -0700
+
+    fix bug #3603249 (AutoLoader leaks $_ into local context)
+    
+    Problem was that $_ was not being localized in NiceSlice.
+
+ Basic/SourceFilter/NiceSlice.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 6cf50449f32e2003e3ff67f025031f79b5e4966e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Jan 31 12:39:52 2013 -0500
+
+    Update VERSION to 2.4.11_008 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 2 deletions(-)
+
 commit 157cbd7704487941cc12e2be49e5b9fe9f05ed7c
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu Jan 31 10:20:11 2013 -0500
