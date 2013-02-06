@@ -1,3 +1,167 @@
+commit 06ba255d23002c2a8f22de5520f1514e6f6b42d0
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 6 15:46:52 2013 -0500
+
+    Add $PDL::NiceSlice::debug_filter option
+    
+    This allows one to output the PDL::NiceSlice
+    filtered sources to help debug any problems
+    with the new source filter engine.  Just put
+    
+      BEGIN { $PDL::NiceSlice::debug_filter = 1; }
+    
+    at the top of your source file, say, source.pm.
+    Then you can run
+    
+      perl -c source.pm >source.pmc
+    
+    to collect the filtered output into source.pmc.
+
+ Basic/SourceFilter/FilterSimple.pm |    3 ++-
+ Basic/SourceFilter/NiceSlice.pm    |    2 +-
+ Release_Notes                      |   12 ++++++++++++
+ 3 files changed, 15 insertions(+), 2 deletions(-)
+
+commit 8be911e115bfe196fb564d988c12814f82f1b472
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 6 12:24:20 2013 -0500
+
+    Must use latest Filter::Simple
+    
+    This has a fix for detecting and filtering out Pod
+    lines.
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit c82a5ad3b4d6e51a5988b352daab2a0e1bd5e7c5
+Merge: c27aa9e ae9382f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 6 10:59:23 2013 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit c27aa9ebe145a29b97605b086862620072642341
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 6 10:57:01 2013 -0500
+
+    Fix PDL::Graphics::PGPLOT::Window POD
+    
+    The docs for the lines() method were incorrect
+    which triggered a bug with PDL::NiceSlice.  Correcting
+    the docs is a workaround for the bug which will be
+    fixed separately.  This should allow tests to pass
+    for all win32 platforms.
+
+ Graphics/PGPLOT/Window/Window.pm |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit ae9382f9a9e82abe37e371ec2e359572a85e8871
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Feb 5 17:45:02 2013 -0600
+
+    bad.pd tweaks and corrections
+
+ Basic/Bad/bad.pd |   46 +++++++++++++++-------------------------------
+ 1 files changed, 15 insertions(+), 31 deletions(-)
+
+commit e9bce84a34b52548db6095ceac47a6acce91faf8
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Feb 5 17:44:27 2013 -0600
+
+    Added auto-head1-FUNCTIONS for FullDoc
+
+ Basic/Gen/PP.pm |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 13c43638fc59c10ba2a3aaca21e7c837e8a77bb6
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Feb 5 16:58:39 2013 -0600
+
+    Updated Release_Notes with bad.pd work
+
+ Release_Notes |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+commit 6559c06b3577573bb4713ee569bd51c5131c5886
+Merge: ef0f648 4adc2be
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Feb 5 16:56:13 2013 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit ef0f6488ef47ca9b52beffd2c826e9b3900a1e4e
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Feb 5 16:55:54 2013 -0600
+
+    Finished transitioning bad.pd to use FullDoc
+
+ Basic/Bad/bad.pd |  282 ++++++++++++++++++++++++++++--------------------------
+ 1 files changed, 146 insertions(+), 136 deletions(-)
+
+commit ea01410e6c98720c85add8c02d63d3a5f04274c9
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Feb 5 16:55:16 2013 -0600
+
+    Changed FullDoc croak to confess: full stack trace is more helpful here
+
+ Basic/Gen/PP.pm |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 4adc2bee5ef1fa8566a0b92214b696541462e7ff
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 5 13:00:35 2013 -0500
+
+    Update Known_problems with Pending fix to PDL::NiceSlice bug
+
+ Known_problems |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit 0bb97b973f98c41f297091cd542ec41c29062bbd
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Feb 5 11:24:13 2013 -0600
+
+    CPANification and doc cleanup for bad.pd
+
+ Basic/Bad/bad.pd |  274 ++++++++++++++++++++++++++++++------------------------
+ 1 files changed, 153 insertions(+), 121 deletions(-)
+
+commit 7554314d0a97df9fd985e90c55b22113c4b1c0f1
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Feb 5 09:35:33 2013 -0600
+
+    Expanded explanation of =for bad in PDL::Doc
+
+ Doc/Doc.pm |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+commit c57d835aed96ddfb9d3e84d262236a86304bb84d
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Feb 5 09:21:16 2013 -0600
+
+    Removed quasi-internal pod about old PDLs from bad.pd
+
+ Basic/Bad/bad.pd |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
+
+commit 06fc12980fba5f12da9abac343fae0e691931398
+Merge: 2a6ea82 cbe55f6
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Tue Feb 5 09:18:59 2013 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit cbe55f6d31e2fc4fec351f933a8064e52ba16572
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 5 10:03:06 2013 -0500
+
+    Update VERSION to 2.4.11_009 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 2 deletions(-)
+
 commit 4a69721d818293e92f0330e05c9b4b9774e00daa
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Feb 5 09:34:32 2013 -0500
@@ -560,6 +724,13 @@ Date:   Fri Jan 4 17:40:36 2013 -0500
 
  Graphics/Graphics2D.pm |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 2a6ea82cd421e2deffa66a522125e472414f3324
+Merge: c4117fd 964a514
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Fri Jan 4 11:20:39 2013 -0600
+
+    Merge branch 'master' into HEAD
 
 commit 964a5141060094f8dd6948f187349fb36830312c
 Author: David Mertens <dcmertens.perl@gmail.com>
