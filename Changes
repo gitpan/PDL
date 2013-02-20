@@ -1,3 +1,106 @@
+commit 5e66221c5e64c714347a195e63346ae251f8a4f1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 19 23:46:46 2013 -0500
+
+    Add IDL and work around proj-4.8.0 build problem
+
+ IO/IDL/Makefile.PL              |   14 +
+ IO/IDL/README                   |    4 +
+ Lib/GIS/Proj/Makefile.PL        |   34 ++-
+ Lib/GIS/Proj/include/projects.h |  476 ++++++++++++++++++++++++++++++++
+ Lib/Transform/Proj4/Makefile.PL |   22 ++-
+ MANIFEST                        |    7 +-
+ Release_Notes                   |    9 +-
+ inc/Carp.pm                     |  578 +++++++++++++++++++++++++++++++++++++++
+ inc/Carp/Heavy.pm               |   10 +
+ 9 files changed, 1142 insertions(+), 12 deletions(-)
+
+commit 826bbeca4bb4034f8f867ae14266a0899d25d140
+Merge: 6cbdb42 0626ce7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Feb 19 09:52:08 2013 -0500
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 0626ce7927fce0ae29a78891ecdfd06966903dfa
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Mon Feb 18 21:47:16 2013 -0700
+
+    Added POD description of add_module
+
+ Doc/Doc.pm |   51 +++++++++++++++++++++++++++++++++++----------------
+ 1 files changed, 35 insertions(+), 16 deletions(-)
+
+commit 6cbdb42e3baee1eba9bff01e939436d17eeb8821
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Feb 18 11:02:27 2013 -0500
+
+    Add IDL.pm to build
+
+ IO/IDL/README  |   13 -------------
+ IO/Makefile.PL |    2 +-
+ 2 files changed, 1 insertions(+), 14 deletions(-)
+
+commit f8b1f65eb5fc36d903e02c90a20a718fc3798ad8
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Fri Feb 15 14:46:15 2013 -0700
+
+    be less chatty in PDL::Doc::add_module
+
+ Doc/Doc.pm |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit c1532ad1790d7d0bab8fa1591eb0f42dc504f819
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Fri Feb 15 14:12:58 2013 -0700
+
+    add PDL::Doc::add_module for conveneience.  Now you can "use PDL::Doc; PDL::Doc::add_module('My::Module').
+    (Thanks to Maggie X, whose install script I cribbed)
+
+ Doc/Doc.pm |   55 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 55 insertions(+), 0 deletions(-)
+
+commit 14db014ce0802ac6cd7910ecd0f2c041fa03788f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Feb 11 16:20:06 2013 -0500
+
+    Fix doc error in PDL::NiceSlice
+
+ Basic/SourceFilter/NiceSlice.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit c3a70d009af415e1fe54c48774484b2bc6251a69
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 7 12:15:16 2013 -0500
+
+    Add PDL::IO::IDL support file
+    
+    Still need to add the distribution stuff
+    around it: tests, makefile, etc.
+
+ IO/IDL/IDL.pm |  869 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 869 insertions(+), 0 deletions(-)
+
+commit 704053ee2e7f4cd5d5ee71da349ad48b22cf80ab
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 6 18:28:50 2013 -0500
+
+    Add missing test plan to t/gd_oo.tests.t for BSD systems
+
+ t/gd_oo_tests.t |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 305dda3a2eaafa84c58978dd398b3e56913ceead
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 6 16:34:23 2013 -0500
+
+    Update VERSION to 2.4.11_010 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |   13 ++++++++-----
+ Release_Notes  |   55 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 64 insertions(+), 6 deletions(-)
+
 commit 06ba255d23002c2a8f22de5520f1514e6f6b42d0
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Feb 6 15:46:52 2013 -0500
@@ -22055,26 +22158,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
-
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
