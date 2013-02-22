@@ -1,3 +1,140 @@
+commit cf3703dda271e5ac5c47ad8abc460db64f99c4f2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 22 12:24:45 2013 -0500
+
+    Forgot our in Version.pm generated file
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 80ef00ed337f5f72f21b2cabad1328accab00969
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 22 12:22:34 2013 -0500
+
+    More VERSION related fixes.
+    
+    Make $PDL::VERSION in Basic/PDL.pm be the new, preferred
+    string format.  Put the '$VERSION = eval $VARSION' in
+    top level Makefile.PL when it generates Version.pm.
+
+ Basic/PDL.pm  |    1 -
+ Makefile.PL   |    1 +
+ Release_Notes |    8 ++++----
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+commit 355aff6a9460f63d47ea309958dacedaad0e6f41
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 22 11:02:06 2013 -0500
+
+    Fix instructions for intall with new VERSION numbers
+    
+    The filename of development releases don't have the
+    underscore in them.
+
+ Release_Notes |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit d90c6835ff884e4715ea3f4d1f0aa8593a05b3b1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 22 10:50:30 2013 -0500
+
+    Update $VERSION to 2.004011_011 for CPAN developers release
+    
+    First attempt with new version string standard
+
+ Basic/PDL.pm   |    4 +++-
+ Known_problems |    2 +-
+ Release_Notes  |   16 ++++++++++------
+ 3 files changed, 14 insertions(+), 8 deletions(-)
+
+commit 394af852aadbf205ff73d918a850c1d0ccce16f3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 22 10:36:47 2013 -0500
+
+    Update PDL $VERSION to decimal strings
+    
+    Per discussion on pdl-porters list, we're moving to standardize
+    version numbers to the single decimal point string representation
+    as discussed here:
+    
+    http://www.dagolden.com/index.php/369/version-numbers-should-be-boring/
+
+ Basic/Constants.pm                       |    3 ++-
+ Basic/Gen/PP.pm                          |    4 +++-
+ Basic/Matrix.pm                          |    3 ++-
+ Basic/Options.pm                         |    3 ++-
+ Graphics/Limits/Limits.pm                |    1 +
+ Graphics/TriD/POGL/OpenGL.pm             |    1 +
+ IO/FastRaw/FastRaw.pm                    |    4 +++-
+ IO/HDF/HDF.pm                            |    3 ++-
+ IO/IDL/IDL.pm                            |    3 ++-
+ Lib/Transform/Cartography/Cartography.pm |    3 ++-
+ inc/Carp.pm                              |    1 +
+ inc/Devel/CheckLib.pm                    |    1 +
+ 12 files changed, 22 insertions(+), 8 deletions(-)
+
+commit 199a460ebe63d731084052e403e0c7ea1a75bced
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu Feb 21 18:03:59 2013 +1100
+
+    inc/Carp.pm Make compatible with perl-5.8.x
+    
+    Replace "//" operator with "defined() ? :" ternary
+    construct.
+
+ inc/Carp.pm |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 54f824b98228b05a085f839da2b546049c5c166b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 20 15:06:02 2013 -0500
+
+    Avoid spurious output from missing gunzip/gzip
+    
+    Now redirect to appropriate NULL device and use diag to
+    report the error.
+
+ t/flexraw_fortran.t |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit a2143fdccaaedbe13e66d42fe234455f87ab8f84
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 20 13:36:59 2013 -0500
+
+    Update Known_problems with sf.net bugs fixed
+
+ Known_problems |   13 +++++++++++--
+ 1 files changed, 11 insertions(+), 2 deletions(-)
+
+commit 5dd653c428d41d320a9a67760bebb0338bb58174
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 20 10:57:24 2013 -0500
+
+    Remove IDL from release notes
+
+ Release_Notes |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
+
+commit 8c28a14eea7447346f02622a57b339a731bd7c60
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 20 00:17:21 2013 -0500
+
+    Update VERSION to 2.4.11_011 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    6 +++++-
+ Release_Notes  |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 50 insertions(+), 2 deletions(-)
+
+commit d6cdb612decf8210e365f5cc6b65ec1a3ecd1ce1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 20 00:14:03 2013 -0500
+
+    Add fallback Carp.pm to work around perl bug
+
+ inc/Carp.pm |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
 commit 5e66221c5e64c714347a195e63346ae251f8a4f1
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Tue Feb 19 23:46:46 2013 -0500
@@ -22158,3 +22295,26 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:51:04 2009 -0400
+
+    Added the Changes for the t/pic_16bit.t commit.
+
+ Changes |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:44:35 2009 -0400
+
+    Fix sf.net bug 2784016
+    
+    This fixes sourceforge.net bug number 2784016 originally reported
+    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
+    with a very english specific test.  The test has been modified to
+    be less english specific.  This is still far from full i8n of PDL.
+
+ t/pic_16bit.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)

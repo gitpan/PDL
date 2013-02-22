@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 our $VERSION = '1.20';
+$VERSION = eval $VERSION;
 
 our $MaxEvalLen = 0;
 our $Verbose    = 0;
@@ -115,7 +116,8 @@ sub caller_info {
                 # returning CORE::GLOBAL::caller isn't useful for tracing the cause:
                 return if $package eq 'CORE::GLOBAL' && $subname eq 'caller';
                 " in &${package}::$subname";
-            } // '';
+            };
+            $where = defined($where) ? $where : '';
             @args
                 = "** Incomplete caller override detected$where; \@DB::args were not set **";
         }
