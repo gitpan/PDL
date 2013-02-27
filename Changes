@@ -1,3 +1,94 @@
+commit c9894671f48f3b9810f4b2cd60214424ac87a764
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 27 09:31:48 2013 -0500
+
+    Switch to legacy PDL::NiceSlice engine for PDL-2.006
+    
+    Also update Release_Notes and Known_problems for the
+    PDL-2.004_012 CPAN developers release.
+
+ Basic/SourceFilter/NiceSlice.pm |    5 +++--
+ Known_problems                  |   16 +++++-----------
+ Release_Notes                   |   18 +++++-------------
+ 3 files changed, 13 insertions(+), 26 deletions(-)
+
+commit 4dc269ed971e989a0901a7a8210bf55e28bb5efe
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Tue Feb 26 20:56:15 2013 -0700
+
+    Remove NiceSlicing from FITS and Transform
+
+ IO/FITS/FITS.pm            |   22 ++++----
+ Lib/Transform/transform.pd |  117 +++++++++++++++++++++----------------------
+ 2 files changed, 68 insertions(+), 71 deletions(-)
+
+commit ee0e9ef42d79017e618b48f9da16530b1c4bfead
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Tue Feb 26 14:30:41 2013 -0700
+
+    clean up pdl executable on "make clean"
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 379b3e63615bdfcd0e319af1fd7bdc0cbf008243
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Feb 25 13:12:40 2013 -0500
+
+    Update TODO file for consistency
+
+ TODO |   42 +++++++++++++++++++++++++++++++++---------
+ 1 files changed, 33 insertions(+), 9 deletions(-)
+
+commit 155eb1519ca1e71b0ade8cc86f7b311b05abddd2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Feb 24 20:54:16 2013 -0500
+
+    Add Module::Compile engine option to PDL::NiceSlice
+    
+    Still looking for the best way to implement the improved
+    PDL::NiceSlice sourcefiltering.  Unfortunately, all the
+    options so far all have a gotcha of some sore to them...
+
+ Basic/Core/Makefile.PL              |    2 +-
+ Basic/SourceFilter/Makefile.PL      |    1 +
+ Basic/SourceFilter/ModuleCompile.pm |   11 +++++++++++
+ Basic/SourceFilter/NiceSlice.pm     |    1 +
+ Lib/GIS/Proj/Makefile.PL            |    2 +-
+ Makefile.PL                         |    3 +++
+ 6 files changed, 18 insertions(+), 2 deletions(-)
+
+commit 2a0a46fd450c9a254636fd79b1d2016df1233659
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Feb 23 18:15:58 2013 -0500
+
+    Update PDL::NiceSlice to new standard for $VERSION
+
+ Basic/SourceFilter/NiceSlice.pm |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit bf5ddd1701fb7c69e344cc6505b46bf4c1412ac8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 22 14:02:54 2013 -0500
+
+    Update PDL/IO/IDL/README with license change info
+
+ IO/IDL/README |   60 +++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 files changed, 56 insertions(+), 4 deletions(-)
+
+commit f793b59310d9d8dbfb4987a8dfa3b111d0a5982e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Feb 22 13:06:38 2013 -0500
+
+    Update VERSION to 2.004_012 for more development
+    
+    Note the new standard version scheme.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   47 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+), 2 deletions(-)
+
 commit cf3703dda271e5ac5c47ad8abc460db64f99c4f2
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Fri Feb 22 12:24:45 2013 -0500

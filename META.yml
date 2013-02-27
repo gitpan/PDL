@@ -28,6 +28,7 @@ requires:
   Filter::Simple: 0.88
   Filter::Util::Call: 0
   Inline: 0.43
+  Module::Compile: 0.23
   OpenGL: 0.65
   Pod::Parser: 0
   Pod::Select: 0
@@ -37,4 +38,4 @@ resources:
   bugtracker: http://sourceforge.net/tracker/?func=browse&group_id=612&atid=100612
   homepage: http://pdl.perl.org/
   repository: http://pdl.git.sourceforge.net/git/gitweb.cgi?p=pdl/pdl
-version: 2.004011_011
+version: 2.004_012
