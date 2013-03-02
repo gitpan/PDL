@@ -1,3 +1,88 @@
+commit a9d9dffe9f169d62d0070a56aa76082650e8f035
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 2 10:08:15 2013 -0500
+
+    Update readme type files for CPAN developers release
+
+ DEPENDENCIES   |   16 +++++++---------
+ Known_problems |   24 +++++++++++-------------
+ Release_Notes  |    9 ++++++++-
+ 3 files changed, 26 insertions(+), 23 deletions(-)
+
+commit 7bbab7d7a2a5d05207dd9abb02da11060079f38e
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Fri Mar 1 13:00:24 2013 -0700
+
+    Potential fix for crashing gd_oo_tests (SF.net #3518190).
+    
+    The IMG_PTR needed to be a longlong, but was a long.  At that made all the difference.
+    I do not have BSD AMD64, but was getting a segfault after "ok 19" when the DESTROY
+    was called.  I have not removed the TODO from the gd_oo_tests.t, we should do that
+    after it is certain that this does not break anything for anybody else.
+
+ IO/GD/GD.pd     |   15 +++++++++------
+ t/gd_oo_tests.t |    2 +-
+ 2 files changed, 10 insertions(+), 7 deletions(-)
+
+commit e3d159110c14776aac179e687718fad0ba72f363
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Feb 28 23:24:59 2013 -0700
+
+    Add pdl executable to .gitignore
+
+ .gitignore |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 7f8c26570999383c49ebc4dfc309ca8e10ef49b1
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Feb 28 23:22:10 2013 -0700
+
+    Update Known_problems with RAST to PNM conversion error in Netpbm.
+    
+    No workaround in the test suite, it seems to be a rare problem.
+
+ Known_problems |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 726bacdafde2832b10931b5ce2ddfdd526213429
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Feb 28 23:16:41 2013 -0700
+
+    Small tweaks to PLplot Makefile.PL and test file
+    
+    In the t/plplot.t, added some logic to skip the final test on darwin.
+    The SVG file PLplot generates is large but valid. Also zero-padded the
+    names of the output files (test2.svg --> test02.svg) so they would be
+    in numerical and lexical order in directory listings, for debugging purposes.
+    In the Makefile.PL, I added some logic to remove the 'temp' executable so
+    that the build directory would stay clean.
+
+ Graphics/PLplot/Makefile.PL |    7 +++++--
+ t/plplot.t                  |   41 ++++++++++++++++++++---------------------
+ 2 files changed, 25 insertions(+), 23 deletions(-)
+
+commit dd1d3f8a2e01d5266374313cb7ce4e3d8e3d4ab9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 27 10:16:17 2013 -0500
+
+    Update VERSION to 2.004_995 for release candidate 1
+    
+    This is the start of code freeze for PDL-2.006.
+
+ Basic/PDL.pm   |    3 +--
+ Known_problems |    2 +-
+ Release_Notes  |   34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 3 deletions(-)
+
+commit 51a344147a4b2934412369e6529c1feacf3518ab
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Feb 27 09:53:39 2013 -0500
+
+    Update MANIFEST for PDL-2.004_012 release
+
+ MANIFEST |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
 commit c9894671f48f3b9810f4b2cd60214424ac87a764
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Wed Feb 27 09:31:48 2013 -0500
