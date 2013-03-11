@@ -1,3 +1,105 @@
+commit f4204a6de77a61081561671efdd7396f76c96c9a
+Merge: d9e59d0 1709994
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Sat Mar 9 00:36:42 2013 -0700
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit d9e59d005600b5e871b01f660a6b95ed0d32afab
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Sat Mar 9 00:34:31 2013 -0700
+
+    Fix problem with cat not threading properly.  Add appropriate tests.
+
+ Basic/Core/Core.pm.PL |   18 ++++++++++++++----
+ t/core.t              |    8 +++++++-
+ 2 files changed, 21 insertions(+), 5 deletions(-)
+
+commit 17099949b61baa4f5af0093f74cf0b28dd22cc5c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Mar 7 10:02:01 2013 -0500
+
+    Fix pod for Datatype_conversions so 'apropos types' finds it
+    
+    This wouldn't be necessary if we had keywords in the PDL
+    docs database and tools.
+
+ Basic/Core/Core.pm.PL |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit c6004152021f74425508933ffbb30eab3485ab35
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Mar 6 17:52:59 2013 -0600
+
+    Fixed pdl-from-string doc error in QuickStart
+
+ Basic/Pod/QuickStart.pod |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 690b49167db04b659b34c7cc23d506b5c0edfc89
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Mar 6 18:00:04 2013 -0500
+
+    Add $PDL::PREFIX_RE to perldl and pdl2
+    
+    This automatically strips prefixes matching the PDL shell
+    prompts so that cutting and pasting from the example output
+    in the PDL Book will just work.  In addition to adding that
+    to perldl (already was in pdl2), we now strip out the
+    leading prefix if found from the entries in the history
+    list.
+
+ Perldl2/Plugin/PDLCommands.pm |   11 ++++++++---
+ Perldl2/Profile/Perldl2.pm    |    7 ++++---
+ perldl.PL                     |   12 ++++++++++--
+ 3 files changed, 22 insertions(+), 8 deletions(-)
+
+commit c18dcc1d43de663bab634632d8f26d659099ed5f
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Sun Mar 3 21:36:55 2013 -0700
+
+    Insert friendly warning in case gnuplot isn't present.
+
+ Demos/Gnuplot_demo.pm |   16 +++++++++++++++-
+ 1 files changed, 15 insertions(+), 1 deletions(-)
+
+commit 3794b04e18ee27eed8d2d088a3d5bfefe7935b86
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Sun Mar 3 21:30:04 2013 -0700
+
+    Add Gnuplot demo support - move Gnuplot_demo.pm from PDL::Graphics::Gnuplot to the demos tree; group gnuplot with the other packages.
+
+ Demos/Gnuplot_demo.pm |  313 +++++++++++++++++++++++++++++++++++++++++++++++++
+ Demos/Makefile.PL     |    1 +
+ perldl.PL             |    4 +-
+ 3 files changed, 316 insertions(+), 2 deletions(-)
+
+commit b513b04f145cbe20e214037c271ef211804ceb20
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 3 11:51:55 2013 -0500
+
+    Add Gnuplot_demo.pm support to perldl and pdl2
+    
+    NOTE: the demo loading needs to be made more robust
+    against missing dependencies.  PDL::Graphics::Gnuplot
+    needs to install the demo file into the correct install
+    location.
+
+ Perldl2/Profile/Perldl2.pm |    5 ++++-
+ perldl.PL                  |    5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+commit 4de9846dac1df48a66f66f79a5fd31900e8d980e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 2 18:32:27 2013 -0500
+
+    Update version to 2.004_996 for final fixes and docs updates
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 2 deletions(-)
+
 commit a9d9dffe9f169d62d0070a56aa76082650e8f035
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Mar 2 10:08:15 2013 -0500
@@ -22471,26 +22573,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
-
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
