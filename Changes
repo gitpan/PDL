@@ -1,3 +1,291 @@
+commit 0fd0d37b2bd8b83cbdbbe2119a3c5bedf2cc2e30
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 23 10:02:31 2013 -0400
+
+    Remove read only Index.pod so scantree.pl works
+
+ Doc/scantree.pl |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 36aa7f2fce87c07899e07413132241d5357851ae
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Mar 23 09:27:57 2013 -0400
+
+    Make sure placeholder Index.pod does not get installed
+    
+    Since it was being installed first, the scantree.pl script
+    failed because it couldn't open the destination location.
+
+ Basic/Pod/Makefile.PL |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit bd0abf38431284dfdb4475fe34f8775a19c76c3d
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Fri Mar 22 22:44:29 2013 -0600
+
+    Add a more informative message to Gnuplot demo if PDL:Graphics::Gnuplot is missing.
+
+ Demos/Gnuplot_demo.pm |   20 ++++++++++++++++++--
+ 1 files changed, 18 insertions(+), 2 deletions(-)
+
+commit b6fd1d5a78a9bd5f1c3e43659d2653a94cb8db3c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 22 19:40:22 2013 -0400
+
+    Remove unix-only double check for gnuplot
+    
+    The Gnuplot_demo.pm was failing due to a unix-only
+    test for the gnuplot executable.  Removed that code
+    and added a bit more downsampling for the last set
+    of 3d images for speed.
+
+ Demos/Gnuplot_demo.pm |   21 +++++----------------
+ 1 files changed, 5 insertions(+), 16 deletions(-)
+
+commit 7078eeacf44cfcf4efe2e09a820dcf95308ad8e2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 22 18:30:35 2013 -0400
+
+    Update permissions on new Index.pod
+
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+
+commit dcbd3f580adc4de86934e86659dc43da263cc961
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 22 18:28:04 2013 -0400
+
+    Add a default Index.pod for online browsing
+
+ Basic/Pod/Index.pod |  615 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ MANIFEST            |    1 +
+ 2 files changed, 616 insertions(+), 0 deletions(-)
+
+commit f5db95b64fa6ea6a916679641a6069e04980e294
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 22 18:23:17 2013 -0400
+
+    Finished Release_Notes for PDL-2.006
+
+ Release_Notes |  155 +++++++++++++++++++++++++++++++++++++++++++++++++--------
+ 1 files changed, 133 insertions(+), 22 deletions(-)
+
+commit 3daaafa42a688c3e1dade51a29414710b6fe9aff
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 22 15:46:51 2013 -0400
+
+    Minor tweaks to some INSTALL/READMEs
+
+ cygwin/INSTALL |    2 +-
+ cygwin/README  |   17 +++++++++++++++++
+ win32/INSTALL  |    2 +-
+ 3 files changed, 19 insertions(+), 2 deletions(-)
+
+commit 7ac83fa02429ad3c7086e14316b0fcfb28f5fbdd
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 22 15:46:30 2013 -0400
+
+    Make gnuplot and prima demos in list match perldl ones
+
+ Perldl2/Profile/Perldl2.pm |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
+
+commit ec7ed388e8a11c15090bc2a0c6086e9bf185ba26
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 22 15:36:06 2013 -0400
+
+    Update VERSION to 2.006 for release in readme's
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |   11 +----------
+ Release_Notes  |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 11 deletions(-)
+
+commit 870f5406de6381a5d821edd52e4e12c947d355fc
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Mar 21 22:51:55 2013 -0700
+
+    Fix bug 3608123 -- Diab's topdl bug
+
+ Basic/Core/Core.pm.PL                    |    1 +
+ Lib/Transform/Cartography/Cartography.pm |   10 +++++-----
+ t/core.t                                 |    6 +++++-
+ 3 files changed, 11 insertions(+), 6 deletions(-)
+
+commit d564d3b43998ea91e8728943a70647271312db79
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Mar 18 09:50:22 2013 -0500
+
+    Prima demo font size tweaks
+
+ Demos/Prima.pm |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 902c589fefead688effc391c7ff334842086fd3f
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Mon Mar 18 08:40:02 2013 -0500
+
+    Prima demo tweaks
+
+ Demos/Prima.pm |   63 +++++++++++++++++++++++++++++++++++++++++++++++++------
+ 1 files changed, 56 insertions(+), 7 deletions(-)
+
+commit a316441ebe1937d0b7e566e3d41c3b3521ae53c5
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sun Mar 17 12:58:13 2013 -0500
+
+    Minor updates and corrections to Prima demo
+
+ Demos/Prima.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit a23c7a65c968aad948cb75270f868958b1c71e21
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sun Mar 17 12:46:09 2013 -0500
+
+    A few random notes added to PP.pod
+
+ Basic/Gen/PP.pm |   10 +++++++++-
+ 1 files changed, 9 insertions(+), 1 deletions(-)
+
+commit 5be7d5be961c588a9321b9ce78b293a8d69843f5
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Sun Mar 17 12:43:52 2013 -0500
+
+    Merged forked work on Prima demo
+
+ Demos/Prima.pm |   22 ++++++++--------------
+ 1 files changed, 8 insertions(+), 14 deletions(-)
+
+commit 5ecfc9c0f443559587d7a9ee30b9419e3c3d7902
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Mar 15 10:15:33 2013 -0400
+
+    Update Known_problems, Release_Notes, and MANIFEST
+
+ Known_problems |    9 +++++++++
+ MANIFEST       |    1 +
+ Release_Notes  |    8 ++++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
+
+commit 066fa91be01b9400e21ed1e835596ce392031816
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Mar 14 23:41:40 2013 -0600
+
+    update gnuplot demo to not specify a particular font
+
+ Demos/Gnuplot_demo.pm |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 7f4057fcbc161083881ee67613dd61cea71fce3d
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Wed Mar 13 17:14:47 2013 -0600
+
+    Fix inplace-with-duplicate-argument bug in PP; trim some dust bunnies in Ops.
+
+ Basic/Gen/PP.pm  |    2 +-
+ Basic/Ops/ops.pd |    2 --
+ 2 files changed, 1 insertions(+), 3 deletions(-)
+
+commit 6b193fc1c16fd3b06e2728110647bb1552c1904a
+Merge: 3260b26 202688b
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Wed Mar 13 16:47:47 2013 -0600
+
+    fix inplace related bug in transform (work around core bug)
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+
+commit 3260b26de273f5b868cc022bea8299513677496f
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Wed Mar 13 16:43:43 2013 -0600
+
+    Transform explicitly clears inplace flag (works around core bug that causes crashes)
+
+ Lib/Transform/transform.pd |   12 +++++++++---
+ t/transform.t              |   15 +++++++++++++--
+ 2 files changed, 22 insertions(+), 5 deletions(-)
+
+commit 202688b48d5ba4795da59877f236d838d9d9079e
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Mar 13 11:52:39 2013 -0500
+
+    Stricter Prima detection and more informative fail message for Prima demo
+
+ Demos/Prima.pm |   17 +++++++++++++----
+ 1 files changed, 13 insertions(+), 4 deletions(-)
+
+commit 13dc7e6ec1923ff77c3ec90390e454da1b924e71
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Mar 13 10:47:00 2013 -0500
+
+    Fixed window-not-really-closed issue with the Prima demo
+
+ Demos/Prima.pm             |    5 ++++-
+ Perldl2/Profile/Perldl2.pm |    2 ++
+ Release_Notes              |    2 +-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
+
+commit 42a6027655b7fa3c807febf112f01ff2e044a639
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Wed Mar 13 02:46:02 2013 -0500
+
+    Added demo for PDL::Graphics::Prima to perldl
+
+ Demos/Makefile.PL |    1 +
+ Demos/Prima.pm    |  562 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ perldl.PL         |    2 +
+ 3 files changed, 565 insertions(+), 0 deletions(-)
+
+commit 5883818f07eba34b5922d00bd8bdedd6dce60be4
+Merge: 726ccc0 5b1a4f4
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Mon Mar 11 22:53:19 2013 -0600
+
+    Merge branch 'master' of ssh://pdl.git.sourceforge.net/gitroot/pdl/pdl
+    got a couple of commits behind...  (update pic converters so wpic/rpic
+    at least preserves image dimensions for ps images)
+
+commit 726ccc07335004b6578cdd333d23e959ae21de72
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Mon Mar 11 22:50:24 2013 -0600
+
+    Fix ps to/from conversion to at least preserve image dimensions (and use pnmtops instead of gs).
+
+ IO/Pnm/Pic.pm |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
+
+commit 5b1a4f4b1291482170dc5369b6c9d2c715aeeb09
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Mar 11 15:09:17 2013 -0400
+
+    Fix overwrite problem in imag2d/imag2d_update
+
+ Graphics/Graphics2D.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ba9baed6c86937902ebca11cd7037aa45a4082d9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 10 21:48:30 2013 -0400
+
+    Update version to PDL-2.004_997 for final development
+    
+    This is a.k.a. PDL-2.006 rc3
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 2 deletions(-)
+
+commit a17fb16f1203902e7ae789e8a35a9939154841b2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Mar 10 21:44:32 2013 -0400
+
+    Update readme files and MANIFEST for CPAN
+
+ Known_problems |    6 +-----
+ MANIFEST       |    1 +
+ Release_Notes  |   17 ++++++++++++++++-
+ 3 files changed, 18 insertions(+), 6 deletions(-)
+
 commit f4204a6de77a61081561671efdd7396f76c96c9a
 Merge: d9e59d0 1709994
 Author: Craig DeForest <zowie@Clio-4.local>
@@ -22573,3 +22861,26 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:51:04 2009 -0400
+
+    Added the Changes for the t/pic_16bit.t commit.
+
+ Changes |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:44:35 2009 -0400
+
+    Fix sf.net bug 2784016
+    
+    This fixes sourceforge.net bug number 2784016 originally reported
+    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
+    with a very english specific test.  The test has been modified to
+    be less english specific.  This is still far from full i8n of PDL.
+
+ t/pic_16bit.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)

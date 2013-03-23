@@ -127,14 +127,14 @@ sub apply_profile {
       demo pgplot      # PGPLOT graphics output (Req.: PGPLOT)
       demo OOplot      # PGPLOT OO interface    (Req.: PGPLOT)
 
+      demo gnuplot     # Gnuplot graphics (requires PDL::Graphics::Gnuplot)
+      demo prima       # Prima graphics (requires PDL::Graphics::Prima)
+
       demo transform   # Coordinate transformations (Req.: PGPLOT)
       demo cartography # Cartographic projections (Req.: PGPLOT)
 
       demo bad         # Bad-value demo (Req.: bad value support)
       demo bad2        # Bad-values, part 2 (Req.: bad value support and PGPLOT)
-
-      demo gnuplot     # Gnuplot graphics (requires PDL::Graphics::Gnuplot)
-
 EOD
       return;
       } # if: /^$/
@@ -151,6 +151,7 @@ EOD
          'transform' => 'PDL::Demos::Transform_demo',
          'cartography' => 'PDL::Demos::Cartography_demo',
          'gnuplot' => 'PDL::Demos::Gnuplot_demo',
+         'prima' => 'PDL::Demos::Prima',
       );
 
       if ( exists $demos{$_} ) {

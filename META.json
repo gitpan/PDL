@@ -51,7 +51,7 @@
          }
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "web" : "http://sourceforge.net/tracker/?func=browse&group_id=612&atid=100612"
@@ -61,5 +61,5 @@
          "url" : "http://pdl.git.sourceforge.net/git/gitweb.cgi?p=pdl/pdl"
       }
    },
-   "version" : "2.004_996"
+   "version" : "2.006"
 }
