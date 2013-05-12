@@ -416,9 +416,9 @@ for (keys %PDL::Types::typehash) {
 
     pp_addhdr(<<"FOO"
 
-      void pdl_qsort_$ppsym($ctype* xx, int a, int b) {
+      void pdl_qsort_$ppsym($ctype* xx, PDL_Index a, PDL_Index b) {
 
-         int i,j;
+         PDL_Index i,j;
 
          $ctype t, median;
 
@@ -442,11 +442,11 @@ for (keys %PDL::Types::typehash) {
 
       }
 
-      void pdl_qsort_ind_$ppsym($ctype* xx,  int* ix, int a, int b) {
+      void pdl_qsort_ind_$ppsym($ctype* xx,  PDL_Index* ix, PDL_Index a, PDL_Index b) {
 
-         int i,j;
+         PDL_Index i,j;
 
-         int t;
+         PDL_Index t;
         $ctype median;
 
          i = a; j = b;
@@ -479,8 +479,8 @@ for (keys %PDL::Types::typehash) {
 	/* Compare a vector in lexicographic order, returning the
 	 *  equivalent of "<=>". 
  	 */
-      signed char pdl_cmpvec_$ppsym($ctype *a, $ctype *b, int n) {
-	int i;
+      signed char pdl_cmpvec_$ppsym($ctype *a, $ctype *b, PDL_Index n) {
+	PDL_Index i;
 	for(i=0; i<n; a++,b++,i++) {
 	 if( *a < *b ) return -1;
 	 if( *a > *b ) return 1;
@@ -488,9 +488,9 @@ for (keys %PDL::Types::typehash) {
 	return 0;
      }	
 	
-      void pdl_qsortvec_$ppsym($ctype *xx, int n, int a, int b) {
+      void pdl_qsortvec_$ppsym($ctype *xx, PDL_Index n, PDL_Index a, PDL_Index b) {
 		
-	int i,j, median_ind;
+	PDL_Index i,j, median_ind;
 
 	$ctype t;
 	i = a; 
@@ -531,9 +531,9 @@ for (keys %PDL::Types::typehash) {
 	
       }
 
-      void pdl_qsortvec_ind_$ppsym($ctype *xx, int *ix, int n, int a, int b) {
+      void pdl_qsortvec_ind_$ppsym($ctype *xx, PDL_Index *ix, PDL_Index n, PDL_Index a, PDL_Index b) {
 		
-	int i,j, median_ind;
+	PDL_Index i,j, median_ind;
 
 	$ctype t;
 	i = a; 
@@ -1084,16 +1084,16 @@ sub generic_qsort_ind {
 pp_def(
        'qsorti',
        HandleBad => 1,
-       Pars => 'a(n); int [o]indx(n);',
+       Pars => 'a(n); longlong [o]indx(n);',
        Code => 
-       'int nn = $COMP(__n_size)-1;
+       'long long nn = $COMP(__n_size)-1;
         if ($SIZE(n) == 0) return;
         loop(n) %{ 
            $indx() = n; 
         %}
        ' . generic_qsort_ind(),
        BadCode =>
-       'register int nn = 0, nb = $SIZE(n) - 1;
+       'register long long nn = 0, nb = $SIZE(n) - 1;
         if ($SIZE(n) == 0) return;
         loop(n) %{ 
            if ( $ISGOOD(a()) ) { $indx(n=>nn) = n; nn++; } /* play safe since nn used more than once */ 
@@ -1181,10 +1181,10 @@ sub generic_qsortvec_ind {
 pp_def(
     'qsortveci',
     HandleBad => 1,
-    Pars => 'a(n,m); int [o]indx(m);',
+    Pars => 'a(n,m); longlong [o]indx(m);',
     Code => 
-    'int nd;
-     int nn=$COMP(__m_size)-1;
+    'long long nd;
+     long long nn=$COMP(__m_size)-1;
      loop(m) %{
         $indx()=m;
      %}

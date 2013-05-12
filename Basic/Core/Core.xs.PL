@@ -95,29 +95,29 @@ int pdl_autopthread_size   = 1;
 
 #define CHECKP(p)    if ((p) == NULL) croak("Out of memory")
 
-static int* pdl_packint( SV* sv, int *ndims ) {
+static PDL_Index* pdl_packint( SV* sv, int *ndims ) {
 
    SV*  bar;
    AV*  array;
    int i;
-   int *dims;
+   PDL_Index *dims;
 
    if (!(SvROK(sv) && SvTYPE(SvRV(sv))==SVt_PVAV))  /* Test */
        return NULL;
    array = (AV *) SvRV(sv);   /* dereference */
      *ndims = (int) av_len(array) + 1;  /* Number of dimensions */
    /* Array space */
-   dims = (int *) pdl_malloc( (*ndims) * sizeof(*dims) );
+   dims = (PDL_Index *) pdl_malloc( (*ndims) * sizeof(*dims) );
    CHECKP(dims);
 
    for(i=0; i<(*ndims); i++) {
       bar = *(av_fetch( array, i, 0 )); /* Fetch */
-      dims[i] = (int) SvIV(bar);
+      dims[i] = (PDL_Index) SvIV(bar);
    }
    return dims;
 }
 
-static SV* pdl_unpackint ( PDL_Long *dims, int ndims ) {
+static SV* pdl_unpackint ( PDL_Index *dims, int ndims ) {
 
    AV*  array;
    int i;
@@ -422,7 +422,8 @@ iscontig(x)
       RETVAL = 1;
       pdl_make_physvaffine( x );
 	if PDL_VAFFOK(x) {
-	   int i, inc=1;
+	   int i;
+           PDL_Index inc=1;
 	   printf("vaff check...\n");
   	   for (i=0;i<x->ndims;i++) {
      	      if (PDL_REPRINC(x,i) != inc) {
@@ -682,7 +683,7 @@ set_data_by_offset(it,orig,offset)
       OUTPUT:
               RETVAL
 
-int
+PDL_Index
 nelem(x)
 	pdl *x
 	CODE:
@@ -791,9 +792,9 @@ SV *
 sclr_c(it)
    pdl* it
    PREINIT:
-	PDL_Long nullp = 0;
-	PDL_Long dummyd = 1;
-	PDL_Long dummyi = 1;
+	PDL_Index nullp = 0;
+	PDL_Index dummyd = 1;
+	PDL_Index dummyi = 1;
 	double result;
    CODE:
         /* get the first element of a piddle and return as
@@ -817,7 +818,7 @@ at_c(x,position)
    pdl*	x
    SV*	position
    PREINIT:
-    PDL_Long * pos;
+    PDL_Index * pos;
     int npos;
     int ipos;
     double result;
@@ -852,7 +853,7 @@ at_bad_c(x,position)
    pdl*	x
    SV *	position
    PREINIT:
-    PDL_Long * pos;
+    PDL_Index * pos;
     int npos;
     int ipos;
     int badflag;
@@ -922,15 +923,15 @@ void
 list_c(x)
 	pdl *x
       PREINIT:
-	PDL_Long *inds;
-      PDL_Long *incs;
-      PDL_Long offs;
+	PDL_Index *inds;
+      PDL_Index *incs;
+      PDL_Index offs;
 	void *data;
 	int ind;
 	int stop = 0;
 	PPCODE:
       pdl_make_physvaffine( x );
-	inds = pdl_malloc(sizeof(PDL_Long) * x->ndims); /* GCC -> on stack :( */
+	inds = pdl_malloc(sizeof(PDL_Index) * x->ndims); /* GCC -> on stack :( */
 
 	data = PDL_REPRP(x);
 	incs = (PDL_VAFFOK(x) ? x->vafftrans->incs : x->dimincs);
@@ -955,9 +956,9 @@ SV *
 listref_c(x)
    pdl *x
   PREINIT:
-   PDL_Long * inds;
-   PDL_Long * incs;
-   PDL_Long offs;
+   PDL_Index * inds;
+   PDL_Index * incs;
+   PDL_Index offs;
    void *data;
    int ind;
    int lind;
@@ -1002,7 +1003,7 @@ if ( $bvalflag ) {
 print OUT <<'!NO!SUBS!';
 
    pdl_make_physvaffine( x );
-   inds = pdl_malloc(sizeof(PDL_Long) * x->ndims); /* GCC -> on stack :( */
+   inds = pdl_malloc(sizeof(PDL_Index) * x->ndims); /* GCC -> on stack :( */
    data = PDL_REPRP(x);
    incs = (PDL_VAFFOK(x) ? x->vafftrans->incs : x->dimincs);
    offs = PDL_REPROFFS(x);
@@ -1017,7 +1018,7 @@ print OUT <<'!NO!SUBS!';
     if ( $bvalflag ) {
 
 	my $condition;
-	if ( $usenan ) {
+	if ( $usenan ) {  # NOTE: dangerous use of hardwired datatype value 4!
 	    $condition = '( (x->datatype < 4 && pdl_val == pdl_badval) ||
 			(x->datatype >= 4 && finite(pdl_val) == 0) )';
 	} else {
@@ -1067,7 +1068,7 @@ set_c(x,position,value)
     SV*	position
     double	value
    PREINIT:
-    PDL_Long * pos;
+    PDL_Index * pos;
     int npos;
     int ipos;
    CODE:
@@ -1404,7 +1405,7 @@ getndims(x)
 	OUTPUT:
 		RETVAL
 
-int
+PDL_Index
 getdim(x,y)
 	pdl *x
 	int y
@@ -1444,7 +1445,7 @@ setdims(x,dims_arg)
 	pdl *x
       SV * dims_arg
       PREINIT:
-	 PDL_Long * dims;
+	 PDL_Index * dims;
 	 int ndims;
        int i;
 	CODE:
@@ -1570,7 +1571,7 @@ threadover_n(...)
     {
 	    int i,sd;
 	    pdl **pdls = malloc(sizeof(pdl *) * npdls);
-	    int *realdims = malloc(sizeof(int) * npdls);
+	    PDL_Index *realdims = malloc(sizeof(PDL_Index) * npdls);
 	    pdl_thread pdl_thr;
 	    SV *code = ST(items-1);
 	    for(i=0; i<npdls; i++) {
@@ -1615,7 +1616,8 @@ threadover(...)
     	croak("Usage: threadover(nothers,pdl[,pdl...][,otherpars..],realdims,creating,sub)");
     npdls = targs-nothers;
     {
-	    int i,j,nd1,nd2,dtype=0,nc=npdls;
+	    int i,nd1,nd2,dtype=0;
+	    PDL_Index j,nc=npdls;
 	    SV* rdimslist = ST(items-3);
 	    SV* cdimslist = ST(items-2);
 	    SV *code = ST(items-1);
@@ -1626,8 +1628,8 @@ threadover(...)
 	    SV **dims = malloc(sizeof(SV *) * npdls);
 	    SV **incs = malloc(sizeof(SV *) * npdls);
 	    SV **others = malloc(sizeof(SV *) * nothers);
-	    int *creating = pdl_packint(cdimslist,&nd2);
-	    int *realdims = pdl_packint(rdimslist,&nd1);
+	    PDL_Index *creating = pdl_packint(cdimslist,&nd2);
+	    PDL_Index *realdims = pdl_packint(rdimslist,&nd1);
 	    CHECKP(pdls); CHECKP(child); CHECKP(dims);
 	    CHECKP(incs); CHECKP(csv);
 
@@ -1663,7 +1665,7 @@ threadover(...)
 				NULL,&pdl_thr,NULL, 1);
 	    for(i=0, nc=npdls; i<npdls; i++)  /* create as necessary */
               if (creating[i]) {
-		int *cp = creating+nc;
+		PDL_Index *cp = creating+nc;
 		pdls[i]->datatype = dtype;
 		pdl_thread_create_parameter(&pdl_thr,i,cp,0);
 		nc += realdims[i];
