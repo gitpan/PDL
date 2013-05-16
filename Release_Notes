@@ -1,3 +1,40 @@
+Release Notes for PDL 2.006_02 --------------------------
+
+General Notes:
+
+ * Another quick CPAN developers release
+
+   - This is another release for users and developers
+     to have early evaluation and testing with the new
+     64bit-index-support branch.  The current plan is
+     to merge into PDL git master this weekend.
+
+   - It is a snapshot of the current git development tree
+     and everything may not work correctly or have complete
+     documentation.
+
+   - These release notes may not be fully complete.  Please
+     see Changes (from the git log) for full details.
+
+   - All tests may not pass, especially ones corresponding
+     to issues in Known_problems.
+   
+   - Manual build/install is recommended although the
+     cpan shell may be used by specifying the distribution
+     path rather than just the module name, e.g.:
+
+       cpan> get  CHM/PDL-2.006_02.tar.gz
+       cpan> make CHM/PDL-2.006_02.tar.gz
+       cpan> test CHM/PDL-2.006_02.tar.gz
+       cpan> look CHM/PDL-2.006_02.tar.gz
+
+Highlights:
+
+ * Make PDL_Index a new type (PDL_N or PDL_IND) and various
+   fixes to get things to work.
+
+
+
 Release Notes for PDL 2.006_01 --------------------------
 
 General Notes:
@@ -25,7 +62,6 @@ General Notes:
        cpan> make CHM/PDL-2.006_01.tar.gz
        cpan> test CHM/PDL-2.006_01.tar.gz
        cpan> look CHM/PDL-2.006_01.tar.gz
-
 
 Highlights:
 
