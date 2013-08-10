@@ -485,7 +485,7 @@ my @podpms = map { $_.".pod", '$(INST_LIBDIR)/PDL/' . $_ .".pod"}
            'Convert::UU'         => 0,         # for PDL::IO::Dumper
            'Data::Dumper'        => 2.121,     # for PDL::IO::Dumper
            'ExtUtils::MakeMaker' => 6.31,      # for INSTALL_BASE support
-	   'File::Map'           => 0.47,      # test new mmap implementation
+	   'File::Map'           => 0.57,      # test new mmap implementation
 	   'File::Spec'          => 0.6,
 	   'File::Temp'          => 0,
 	   'Filter::Util::Call'  => 0,         # for PDL::NiceSlice
@@ -496,6 +496,7 @@ my @podpms = map { $_.".pod", '$(INST_LIBDIR)/PDL/' . $_ .".pod"}
 	   'Pod::Select'         => 0,         # version TBD for PDL::Doc
            'Storable'            => 1.03,      # for PDL::IO::Storable
 	   'Text::Balanced'      => 1.89,      # for PDL::NiceSlice
+           'Test::Warn'          => 0,         # for t/pptest.t
 	  );
 
 # add OpenGL version dependency for CPAN to follow
@@ -528,10 +529,15 @@ if($Config{archname}=~m/x86_64/) {
 	      'EXE_FILES' => \@exe_files,
 	      'PM' => { @podpms }, #so that the script docs are picked up
               'META_MERGE' => {
+                 no_index => { directory => [ 'Lib/FFTW' ], },
                  resources => {
                     homepage => 'http://pdl.perl.org/',
-                    bugtracker  => 'http://sourceforge.net/tracker/?func=browse&group_id=612&atid=100612',
-                    repository  => 'http://pdl.git.sourceforge.net/git/gitweb.cgi?p=pdl/pdl',
+                    bugtracker  => 'http://sourceforge.net/p/pdl/bugs/',
+                    repository  => {
+                       url => 'git://git.code.sf.net/p/pdl/code',
+                       type => 'git',
+                       web => 'http://sourceforge.net/p/pdl/code/ci/master/tree/',
+                    },
                  },
               },
               'MAN1PODS' => { 'perldl' => '$(INST_MAN1DIR)/perldl.$(MAN1EXT)',

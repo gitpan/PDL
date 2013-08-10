@@ -1,3 +1,56 @@
+Release Notes for PDL 2.006_04 --------------------------
+
+ +---------------------------------------------------------------+
+ | BE WARNED:  This release includes an update to the internal,  |
+ | C-level PDL API for PDL versions 2.006 and earlier.  This     |
+ | will require that you re-build any PP or XS modules.  Do not  |
+ | upgrade or install over an existing PDL installation unless   |
+ | you are prepared to do so!!!                                  |
+ +---------------------------------------------------------------+
+
+General Notes:
+
+ * Another quick CPAN developers release
+
+   - It is a snapshot of the current git development tree
+     and everything may not work correctly or have complete
+     documentation.
+
+   - These release notes may not be fully complete.  Please
+     see Changes (from the git log) for full details.
+
+   - All tests may not pass, especially ones corresponding
+     to issues in Known_problems.
+   
+   - Manual build/install is recommended although the
+     cpan shell may be used by specifying the distribution
+     path rather than just the module name, e.g.:
+
+       cpan> get  CHM/PDL-2.006_04.tar.gz
+       cpan> make CHM/PDL-2.006_04.tar.gz
+       cpan> test CHM/PDL-2.006_04.tar.gz
+       cpan> look CHM/PDL-2.006_04.tar.gz
+
+Highlights:
+
+ * PDL::FFTW in core distribution is deprecated and not
+   indexed on CPAN.  To install, please use the stand-alone
+   PDL::FFTW on CPAN.
+
+ * More 64bit index support fixes and bugs resolved.
+ 
+ * Update debian/perldl.conf to track top level perldl.conf.
+
+ * Fix sf.net bug #331 "uniq does not always return proper object"
+
+ * Fix polyfit() handling of BAD values and various edge cases.
+
+ * Tests, docs, code cleanup...
+
+ * Added pp_deprecate_module() to PDL::PP
+
+
+
 Release Notes for PDL 2.006_03 --------------------------
 
  +---------------------------------------------------------------+
@@ -1239,7 +1292,7 @@ General Notes:
   If you are new to PDL, we recommend joining the perldl
   mailing list for discussion and questions.  See
 
-    http://pdl.sourceforge.net/maillists/
+    http://pdl.perl.org/?page=mailing-lists
 
   for how to sign up and links and searches of the list
   archive discussions.

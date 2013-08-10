@@ -4,7 +4,7 @@
       "PerlDL Developers (perldl@jach.hawaii.edu)"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112150",
+   "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.132140",
    "license" : [
       "unknown"
    ],
@@ -16,37 +16,39 @@
    "no_index" : {
       "directory" : [
          "t",
-         "inc"
+         "inc",
+         "Lib/FFTW"
       ]
    },
    "prereqs" : {
       "build" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "runtime" : {
          "requires" : {
-            "Astro::FITS::Header" : 0,
-            "Convert::UU" : 0,
+            "Astro::FITS::Header" : "0",
+            "Convert::UU" : "0",
             "Data::Dumper" : "2.121",
             "ExtUtils::MakeMaker" : "6.31",
-            "File::Map" : "0.47",
+            "File::Map" : "0.57",
             "File::Spec" : "0.6",
-            "File::Temp" : 0,
+            "File::Temp" : "0",
             "Filter::Simple" : "0.88",
-            "Filter::Util::Call" : 0,
+            "Filter::Util::Call" : "0",
             "Inline" : "0.43",
             "Module::Compile" : "0.23",
             "OpenGL" : "0.65",
-            "Pod::Parser" : 0,
-            "Pod::Select" : 0,
+            "Pod::Parser" : "0",
+            "Pod::Select" : "0",
             "Storable" : "1.03",
+            "Test::Warn" : "0",
             "Text::Balanced" : "1.89"
          }
       }
@@ -54,12 +56,9 @@
    "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
-         "web" : "http://sourceforge.net/tracker/?func=browse&group_id=612&atid=100612"
+         "web" : "http://sourceforge.net/p/pdl/bugs/"
       },
-      "homepage" : "http://pdl.perl.org/",
-      "repository" : {
-         "url" : "http://pdl.git.sourceforge.net/git/gitweb.cgi?p=pdl/pdl"
-      }
+      "homepage" : "http://pdl.perl.org/"
    },
-   "version" : "2.006_03"
+   "version" : "2.006_04"
 }

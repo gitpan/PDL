@@ -7,7 +7,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 0
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112150'
+generated_by: 'ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.132140'
 license: unknown
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -17,12 +17,13 @@ no_index:
   directory:
     - t
     - inc
+    - Lib/FFTW
 requires:
   Astro::FITS::Header: 0
   Convert::UU: 0
   Data::Dumper: 2.121
   ExtUtils::MakeMaker: 6.31
-  File::Map: 0.47
+  File::Map: 0.57
   File::Spec: 0.6
   File::Temp: 0
   Filter::Simple: 0.88
@@ -33,9 +34,9 @@ requires:
   Pod::Parser: 0
   Pod::Select: 0
   Storable: 1.03
+  Test::Warn: 0
   Text::Balanced: 1.89
 resources:
-  bugtracker: http://sourceforge.net/tracker/?func=browse&group_id=612&atid=100612
+  bugtracker: http://sourceforge.net/p/pdl/bugs/
   homepage: http://pdl.perl.org/
-  repository: http://pdl.git.sourceforge.net/git/gitweb.cgi?p=pdl/pdl
-version: 2.006_03
+version: 2.006_04

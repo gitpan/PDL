@@ -1,3 +1,367 @@
+commit 378da964582a1975cdaa36f84b248b27237a9bb8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 10 09:41:17 2013 -0400
+
+    Update Known_problems and Release_Notes for 2.006_04 relase
+
+ Known_problems |   12 ++++++------
+ Release_Notes  |    6 ++++++
+ 2 files changed, 12 insertions(+), 6 deletions(-)
+
+commit 35d719c6deeeeba8574b5c0939fc7a4c34b55842
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 6 17:52:37 2013 -0400
+
+    Partial fix for tempfile problems in t/flexraw_fortran.t
+    
+    This is some bullet-proofing that shouldn't be needed but
+    some OSes apparently have trouble cleaning things up in
+    a timely fashion. Work around is to use separate tempfiles
+    to reduce impact of the hangs.
+
+ t/flexraw_fortran.t |   13 +++++++------
+ 1 files changed, 7 insertions(+), 6 deletions(-)
+
+commit 8ccb4d2bced306eb73fee05b3cd39974a5834234
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 6 17:25:12 2013 -0400
+
+    Fix verbose output from mn_init()
+    
+    Now it goes to STDERR by default and is prepended by a #
+    which means it won't affect the standard test harness for perl.
+
+ Lib/Minuit/minuit.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 2c0dda61eb18507436cc5c0f819ca536461b215d
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 6 17:15:08 2013 -0400
+
+    Change PDL_Long usage to PDL_Index to handle 64bit index support
+
+ Lib/Minuit/FCN.c |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+commit f63f3450d99610b696b8bdae584db11af6c91b83
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 6 17:14:36 2013 -0400
+
+    Add File::Temp for tempfile generation
+
+ t/minuit.t |    4 ++-
+ t/misc.t   |   86 ++++++++++++++++++++++++++++-------------------------------
+ 2 files changed, 44 insertions(+), 46 deletions(-)
+
+commit 530cebf7e43503758ce61d815ffee727a25ef7b8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Aug 6 14:35:09 2013 -0400
+
+    Deprecate PDL::FFTW and prepare for removal
+
+ Lib/FFTW/Readme |    6 ++++++
+ Makefile.PL     |    1 +
+ perldl.conf     |   13 ++++---------
+ 3 files changed, 11 insertions(+), 9 deletions(-)
+
+commit 4e4618a974cf449f58b842672583178c753fff99
+Merge: 6a9ff91 6549191
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 2 13:57:43 2013 -0400
+
+    Merge branch 'master' of ssh://git.code.sf.net/p/pdl/code
+
+commit 6a9ff91087432ba7d73ae3ae6095a3274ef4ca4b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Aug 2 13:56:43 2013 -0400
+
+    Fix PDL_Long usages to PDL_Index
+    
+    Still have to deal with all the int usages as well.
+
+ Basic/Primitive/primitive.pd |   12 +++++-----
+ Lib/ImageND/imagend.pd       |   47 +++++++++++++++++++++--------------------
+ 2 files changed, 30 insertions(+), 29 deletions(-)
+
+commit 65491919c2e8e35e9f5d108183e3de3d94332803
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jul 29 17:49:57 2013 -0400
+
+    Update CPAN metadata for git repo on sf.net
+    
+    This should make the link from the http://search.cpan.org PDL
+    release page point to the correct location.  Thanks to Christian
+    Walde for reporting the problem.
+
+ Makefile.PL |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+commit 147b9a44f9f295a174d6bc585f050f9ecdd63555
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Jul 28 10:53:02 2013 -0400
+
+    Fix long usage in PP code to PDL_Index type
+    
+    This usage was found in the following routines
+    in primitive.pd: interpolate, matmult, vsearch
+
+ Basic/Primitive/primitive.pd |   18 +++++++++---------
+ 1 files changed, 9 insertions(+), 9 deletions(-)
+
+commit 1b8b2bf222b1ecb3f465d5cfe1672350cb723786
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Jul 25 22:08:43 2013 -0600
+
+    Remove the TODOs from gd_oo_tests.t
+    
+    It seems that this test failure has been resolved.  Commenting out
+    all the TODO lines for BSD, dragonfly, etc and we'll see if anything
+    breaks on next developer release.
+
+ t/gd_oo_tests.t |   32 ++++++++++++++++----------------
+ 1 files changed, 16 insertions(+), 16 deletions(-)
+
+commit be6021d46553e8f20941532086991227eb7ada83
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Jul 25 22:04:59 2013 -0600
+
+    Fix modulo operator to work on PDL_Index piddles.
+    
+    Since we handle signed and unsigned datatypes separately, and since
+    there was no N type in the typeloop, modulo was just picking up
+    garbage values. Do we need to also add longlong ('Q') types or longdouble?
+    
+    Also added a simple test to ops.t for PDL_Index types.
+
+ Basic/Ops/ops.pd |    2 +-
+ t/ops.t          |    8 ++++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+commit 9b3dc036bd3a1411438815c96928046f297682e4
+Merge: c7edeb2 28092fb
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Sat Jul 13 22:31:10 2013 -0600
+
+    Merge branch 'master' of ssh://git.code.sf.net/p/pdl/code
+
+commit 28092fbc0863a505d324a82c0d7e1d76bd082a40
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 9 09:34:47 2013 -0400
+
+    Update/Clean-up some readme-type files
+
+ Known_problems |   13 +--------
+ Perldl2/README |   20 ++++++++-----
+ Perldl2/TODO   |   26 +++++++++---------
+ Release_Notes  |   10 ++++++-
+ TODO           |   80 ++++++++++++++++++++++++-------------------------------
+ 5 files changed, 70 insertions(+), 79 deletions(-)
+
+commit 4d7725723eb5cffc04a08f535acad492d732b0ba
+Author: Henning Glawe <glaweh@debian.org>
+Date:   Sun Jul 7 11:56:02 2013 +0200
+
+    update debian/perldl.conf from perldl.conf
+
+ debian/perldl.conf |   12 +++++++-----
+ 1 files changed, 7 insertions(+), 5 deletions(-)
+
+commit c7edeb27fcf27b6b00bb4fe1c918e39079d61914
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Sat Jul 6 22:06:56 2013 -0600
+
+    Update some links in FAQ.pod.
+    
+    Some changes from the SF.net project platform change.
+
+ Basic/Pod/FAQ.pod |   15 +++++++--------
+ 1 files changed, 7 insertions(+), 8 deletions(-)
+
+commit e4de37f8ff4a5aa7b03d5d91db2fe1d4e4884357
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Jul 6 15:41:36 2013 -0400
+
+    Fix sf.net bug #331 "uniq does not always return proper object"
+    
+    The problem was that for some combinations of input, the output
+    was generated by calling pdl() directly which uses class PDL by
+    default.  I changed the call from pdl([$stuff]) to
+    PDL::pdl(ref($stuff),[$stuff]) and now the appropriate class
+    is obtained.  We probably should scrub the PDL sources for any
+    other raw uses of the pdl() constructor that should be made
+    object type safe.
+
+ Basic/Primitive/primitive.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit f4fb0672f92fe42c6ad49e5c14952564fa2129c4
+Author: Craig DeForest <zowie@z5.boulder.swri.edu>
+Date:   Fri Jul 5 22:54:22 2013 -0600
+
+    Fix fencepost error in coeffs array (apologies if dup - problems with git configuration)
+
+ Lib/Slatec/slatec.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 3e7d2227ff085774327c527089135c0190fb3853
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Tue Jul 2 13:29:57 2013 -0600
+
+    more updates to slatec.pd - handle nonbad cases the same as bad ones.
+
+ Lib/Slatec/slatec.pd |  134 +++++++++++++++++++++++++++++++++-----------------
+ 1 files changed, 88 insertions(+), 46 deletions(-)
+
+commit fdb24f6149fa0105d6eef4bf61573a0095283862
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Wed Jun 26 17:11:04 2013 -0400
+
+    Fix fencepost error for edge case with polyfit() in slatec.pd
+
+ Lib/Slatec/slatec.pd |   29 +++++++++++++++++++++--------
+ 1 files changed, 21 insertions(+), 8 deletions(-)
+
+commit fe0a4857460ef2fcaf03756ec846af80e780fd93
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Mon Jun 24 01:10:56 2013 -0600
+
+    Fix BAD bug in polyfit -- BAD values in Y should not make the correspondin
+    values in R (the fitted output) go BAD.
+
+ Lib/Slatec/slatec.pd |   37 ++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 36 insertions(+), 1 deletions(-)
+
+commit 63263141bac37c85d548281084c7bacc56d1a800
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Jun 12 16:03:09 2013 -0400
+
+    Refactor subclass*.t to use Test::More
+
+ t/subclass.t  |   26 +++++++++-----------------
+ t/subclass2.t |   42 +++++++++++++++++-------------------------
+ t/subclass3.t |   37 ++++++++++++-------------------------
+ t/subclass4.t |   20 ++++----------------
+ 4 files changed, 42 insertions(+), 83 deletions(-)
+
+commit 5a142c42fb6b44137798e866a582c13fa7337e3f
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Jun 4 14:06:50 2013 -0600
+
+    Update some old links in the documentation.
+    
+    Some of these links went bad with the website rewrite a few years ago,
+    some went bad (or can now be improved/shortened) with the sf.net
+    project system upgrade from earlier this year.
+
+ BUGS           |   14 +++++++-------
+ DEVELOPMENT    |    4 ++--
+ Known_problems |    2 +-
+ Makefile.PL    |    4 ++--
+ README         |    4 ++--
+ Release_Notes  |    2 +-
+ 6 files changed, 15 insertions(+), 15 deletions(-)
+
+commit ba6b3abc0a07281314358a3e2b40d09916f3788d
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Jun 3 22:29:27 2013 -0600
+
+    small grammar correction in bad.pd docs
+
+ Basic/Bad/bad.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit c3eaca6210eec0cb4155fc27664134643d2f2a87
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue May 28 20:44:15 2013 +1000
+
+    t/callext.t - include the pdlsimple.h that's in blib.
+    
+    Previously Basic/Core/pdlsimple.h was being included.
+    It should be the same as blib/lib/PDL/Core/pdlsimple.h,
+    but it's the *latter* that we really should be testing.
+    I think this is a portable solution. If I'm wrong about
+    that, I'm sure we'll soon find out. (We would then
+    probably have to revert to including the former.)
+
+ t/callext.t |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit a9402af6e8f89708728397f1fbd3119aadcd8597
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue May 28 20:44:15 2013 +1000
+
+    Lib/CallExt/CallExt.pm - In callext_cc(), place $ccflags before installesitelib/PDL/Core
+    
+    Otherwise the pdlsimple.h that gets included during the t/callext.t 'make test' stage
+    is one that has been previously intalled - not the one that's about to be installed.
+
+ Lib/CallExt/CallExt.pm |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 514520e2d3d09ec21eb3d4d88d99d9d3348f9ec8
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Fri May 3 02:32:36 2013 -0700
+
+    added unit test for the pp_deprecate_module() warning
+
+ Basic/Test/tests.pd |    3 +++
+ Makefile.PL         |    1 +
+ debian/control      |    3 ++-
+ t/pptest.t          |   12 ++++++++++--
+ 4 files changed, 16 insertions(+), 3 deletions(-)
+
+commit c1b8b40b55a033b733e18f8387f06d34e2408e75
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Fri May 3 01:37:03 2013 -0700
+
+    added pp_deprecate_module() to PDL::PP
+
+ Basic/Gen/PP.pm  |   52 +++++++++++++++++++++++++++++++++++++++++++++++++++-
+ Basic/Pod/PP.pod |   11 +++++++++++
+ 2 files changed, 62 insertions(+), 1 deletions(-)
+
+commit 5bd7ce43ec7ddff8ca5092ddb9a5951833150f4c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 26 10:39:58 2013 -0400
+
+    Prepare to deprecate unix only direct mmap code support
+    
+    Adding a warning for now that will be seen if you for some
+    reason are not using the portable File::Map based implementation.
+    The current duplication is confusing and the direct mmap support
+    has not been actively maintained.  This is a final nudge in case
+    anyone still uses the legacy/non-portable implementation.
+
+ IO/FastRaw/FastRaw.pm |    3 ++-
+ IO/FlexRaw/FlexRaw.pm |    3 ++-
+ t/fastraw.t           |    2 --
+ t/flexraw.t           |    2 --
+ 4 files changed, 4 insertions(+), 6 deletions(-)
+
+commit 0d0e8076e00728fef12f19b492519dfac99d4fb2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 26 10:27:42 2013 -0400
+
+    Update File::Map required version to 0.57
+    
+    This fixes map_anonymous() support for >2**32 sizes and
+    is needed for true 64bit support.
+
+ Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 9e26c515f32e0b77a12b03773ae29ca261e257ce
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun May 19 17:44:06 2013 -0400
+
+    Update VERSION to 2.006_04 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |   51 +++++++++++++++++++++++++----------------------
+ MANIFEST.SKIP  |    2 +
+ Release_Notes  |   60 +++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 4 files changed, 89 insertions(+), 26 deletions(-)
+
 commit f61c938f9c14fb51bf6b735ce0b6188faf4fd972
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat May 18 15:21:18 2013 -0400
