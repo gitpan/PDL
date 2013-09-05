@@ -39,4 +39,4 @@ requires:
 resources:
   bugtracker: http://sourceforge.net/p/pdl/bugs/
   homepage: http://pdl.perl.org/
-version: 2.006_05
+version: 2.006_06
