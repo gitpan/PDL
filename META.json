@@ -4,7 +4,7 @@
       "PerlDL Developers (perldl@jach.hawaii.edu)"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.130880",
+   "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.132140",
    "license" : [
       "unknown"
    ],
@@ -60,5 +60,5 @@
       },
       "homepage" : "http://pdl.perl.org/"
    },
-   "version" : "2.006_06"
+   "version" : "2.006_07"
 }

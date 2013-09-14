@@ -1,3 +1,238 @@
+commit 09a6ab3c7b75d5132e9e1a06f673ad5619fbe4c3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 14 11:55:01 2013 -0400
+
+    Update Known_problems and Release_Notes for CPAN devel release
+
+ Known_problems |   11 ++++++++---
+ Release_Notes  |    6 ++++++
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+commit e48c63190f113150c7df6d7622e16a401093c8c3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 14 11:28:37 2013 -0400
+
+    Fix OpenBSD pthread build problem for non-threaded perls
+    
+    There is an open Feature Request ticket to improve the
+    pthreads detection and build for PDL.  For OpenBSD 5.3
+    and non-threaded perls, the current build fails.  For
+    that case, I now disable the pthreads building.  This
+    can be re-enabled when the pthreads detection is revisited,
+    perhaps during the PDL-2.008 clean-up release.
+
+ Basic/Core/Makefile.PL |   19 ++++++++++++-------
+ 1 files changed, 12 insertions(+), 7 deletions(-)
+
+commit eb26375c3907bfe4bf900f2ad09df2f61c56cd4a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 14 11:27:18 2013 -0400
+
+    Add pp_add_exported for new PDL::slice wrapper
+
+ Basic/Slices/slices.pd |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 8eb34aa174f3fa7a9434532205b3ba32ecd4874b
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Fri Sep 13 23:34:22 2013 -0600
+
+    multiple-extension writing for FITS; clean up multiple-extension reading in list context.
+
+ IO/FITS/FITS.pm |  723 ++++++++++++++++++++++++++++++-------------------------
+ t/fits.t        |   25 ++-
+ 2 files changed, 415 insertions(+), 333 deletions(-)
+
+commit 5512e36f690a5d57c51dd7fe7a41efdf72850ece
+Merge: 7294fae f2a00d8
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Fri Sep 13 16:18:24 2013 -0600
+
+    Merge branch 'master' of ssh://git.code.sf.net/p/pdl/code
+    fell behind due to internet outage (Boulder, CO flooding!)
+
+commit f2a00d87b478b4daa935c282e538cbeb741efa95
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Sep 13 09:15:04 2013 -0400
+
+    Update Release_Notes and Known_problems
+
+ Known_problems |    8 +++++---
+ Release_Notes  |   13 ++++++++++++-
+ 2 files changed, 17 insertions(+), 4 deletions(-)
+
+commit 7294fae6fc451f68c31dfebd021ce65f585ed96e
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Sep 12 23:48:40 2013 -0600
+
+    clean slice docs some.
+
+ Basic/Slices/slices.pd |   55 ------------------------------------------------
+ 1 files changed, 0 insertions(+), 55 deletions(-)
+
+commit 47ec8f062578e262f2959b946c7a88da02f1d404
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Sep 12 23:46:09 2013 -0600
+
+    migrate nnslice to replace nslice and slice.  move slice to oslice.
+    New documentation, some new tests to handle slightly different error
+    messages and regularized behavior in some odd corner cases.
+
+ Basic/Core/Core.pm.PL           |   92 +-
+ Basic/Slices/slices.pd          | 3310 +++++++++++++++++++++------------------
+ Basic/SourceFilter/NiceSlice.pm |    2 +-
+ t/croak.t                       |    2 +-
+ t/niceslice.t                   |    1 +
+ t/slice.t                       |  369 +----
+ 6 files changed, 1813 insertions(+), 1963 deletions(-)
+
+commit b3960c3897b6c29f1cbbbe0c06c40e56d953987a
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 12 10:42:19 2013 -0400
+
+    Replace PDL_Index by PDL_Indx to fix Types.pm.PL
+    
+    NOTE: The choice of the typename is a result of the current hack
+    for generating the various type conversion routines from some of
+    the fields in Types.pm.PL structures.  I hope we can clean this
+    up for PDL3 to avoid the confusing mess.  Another goal for PDL3
+    might be to collect all the type generation and use code into a
+    real PDL core.  Right now it is spread amongst PDL/Basic/Core,
+    PDL/Basic/Gen and PDL/Basic/Slices (at least!).
+
+ Basic/Core/Core.xs.PL        |   56 ++++++------
+ Basic/Core/Types.pm.PL       |   35 +++++---
+ Basic/Core/pdl.h.PL          |   16 ++--
+ Basic/Core/pdl_hfiles.p      |    4 +-
+ Basic/Core/pdlapi.c          |   26 +++---
+ Basic/Core/pdlconv.c.PL      |    2 +-
+ Basic/Core/pdlcore.c.PL      |   70 ++++++++--------
+ Basic/Core/pdlcore.h.PL      |   80 +++++++++---------
+ Basic/Core/pdlhash.c         |    4 +-
+ Basic/Core/pdlsections.g     |   40 +++++-----
+ Basic/Core/pdlsimple.h.PL    |    4 +-
+ Basic/Core/pdlthread.c       |   40 +++++-----
+ Basic/Core/pdlthread.h       |   10 +-
+ Basic/Core/typemap           |    2 +-
+ Basic/Gen/PP.pm              |    8 +-
+ Basic/Gen/PP/Dims.pm         |    2 +-
+ Basic/Gen/PP/PDLCode.pm      |   18 ++--
+ Basic/Gen/PP/PdlParObj.pm    |    6 +-
+ Basic/Primitive/primitive.pd |   38 ++++----
+ Basic/Slices/slices.pd       |  190 +++++++++++++++++++++---------------------
+ Basic/Ufunc/ufunc.pd         |   88 ++++++++++----------
+ IO/Storable/storable.pd      |    2 +-
+ Lib/ImageND/imagend.pd       |   46 +++++-----
+ Lib/Minuit/FCN.c             |    6 +-
+ 24 files changed, 402 insertions(+), 391 deletions(-)
+
+commit 0e438f0c40e3ca209ecb4d6bc41a520cd0cfa3a4
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Mon Sep 9 10:08:31 2013 -0600
+
+    fix nnslice indexing
+
+ Basic/Slices/slices.pd |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+commit ef5728b56ed998658c774f3abe8c7598d471f2dd
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Fri Sep 6 17:00:15 2013 -0600
+
+    add index1d; change dice_axis engine and nnslice dicing engine to index1d
+    (greatly speeds up dicing)
+
+ Basic/Slices/slices.pd |  145 ++++++++++++++++++++++++++++++++++++++---------
+ 1 files changed, 117 insertions(+), 28 deletions(-)
+
+commit 18f3a4c71e21994abbda7cefeaa487abfe1d4eb7
+Merge: f1ec747 dfa7a0e
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Fri Sep 6 16:53:48 2013 -0600
+
+    Merge branch 'master' of ssh://git.code.sf.net/p/pdl/code
+    out of sync again...
+
+commit f1ec7474b35a68c2d914e68a426d0f48ab708415
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Fri Sep 6 16:51:43 2013 -0600
+
+    add more permissive parsing to SvPDLV - autopromote array refs to PDLs
+    (so you can say, e.g., "$a->index([2,3])" instead of "$a->index(pdl(2,3))").
+
+ Basic/Core/pdlcore.c.PL |  169 ++++++++++++++++++++--------------------------
+ t/argtest.t             |   15 +++--
+ 2 files changed, 84 insertions(+), 100 deletions(-)
+
+commit dfa7a0eb5047aa7bb9df7a0fcc7e49e4497e1944
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Thu Sep 5 23:21:27 2013 -0600
+
+    Convert basic.t to Test::More. Add tests for (x|y|z)(lin|log) vals and axisvals.
+    
+    Devel::Cover showed that xlinvals etc were never tested at all.  While I was in there, I converted it to Test::More (I think I got all the pieces!).
+
+ t/basic.t |   52 +++++++++++++++++++++++++++++++++++++++-------------
+ 1 files changed, 39 insertions(+), 13 deletions(-)
+
+commit 0845f0f22a08b547253a2f098b486efe859becb8
+Merge: 19f6ed8 449f9a1
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Sep 5 22:29:03 2013 -0600
+
+    Got a little out of sync updating Transform.
+    Merge branch 'master' of ssh://git.code.sf.net/p/pdl/code
+
+commit 19f6ed8d1523ea7fa834509efad9103cf66fe2f9
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Thu Sep 5 22:28:03 2013 -0600
+
+    minor bugfix to new map code
+
+ Lib/Transform/transform.pd |   11 ++++-------
+ t/transform.t              |    2 +-
+ 2 files changed, 5 insertions(+), 8 deletions(-)
+
+commit ddc1a46b3a5e9f6b45a530fc11a031ccc9e0cd15
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Thu Sep 5 17:51:25 2013 -0600
+
+    Two bug fixes to transform.pd, and an augmentation:
+    
+        - t_fits now parses CDi_j header fields correctly for modern WCS.
+        - apply() and invert() check for undefined fields before trying to execute them.
+            (this works around a perl bug that causes "&$a" to hang if $a is undefined)
+        - map() now has a "rectify" flag that affects whether autoscaling attempts
+            to rectify the coordinate system when autoscaling, or no.  This is useful
+    	because sometimes you want that (the former default behavior) and sometimes
+    	you want to preserve the original skew or rotation of the scientific coordinate
+    	system while rescaling an image. (e.g. $a->match([100,100]) formerly rectified $a;
+    	now by default it simply rescales $a.  map itself keeps the old behavior by default.)
+
+ Lib/Transform/transform.pd |  302 ++++++++++++++++++++++++++++++--------------
+ 1 files changed, 207 insertions(+), 95 deletions(-)
+
+commit 449f9a1afd7dfa51d09646de87cc581556b35834
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 5 09:37:12 2013 -0400
+
+    Update VERSION to 2.006_07 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   39 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 2 deletions(-)
+
+commit 201ffef8ecff7db02561bd0a12eeb6f73b8bc9e8
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 5 09:34:45 2013 -0400
+
+    Update Release_Notes and Known_problems for CPAN release
+
+ Known_problems |   14 +++++++++-----
+ Release_Notes  |    9 ++++++---
+ 2 files changed, 15 insertions(+), 8 deletions(-)
+
 commit 84d21012b371821c0df0d98192c9ec8065f7b30a
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Thu Sep 5 09:07:24 2013 -0400
