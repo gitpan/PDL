@@ -115,18 +115,13 @@ The following issues have been reported with this version of PDL:
 
 
 - The following SourceForge bugs are outstanding at time of the
-  PDL-2.006_07 release:
+  PDL-2.006_90 release:
 
   340    orover of byte data returns long type
   339    PDL::Complex support is inconsistent and incomplete
   338    PDL::FFT uses backwards sign convention from FFTW
 
            Fixed in this release.
-
-  337    rangeb() broken for 64bit index support on 32bit perl
-
-           Fixed in PDL-2.006_06 and up.  Need to verify
-	   before we can close ticket.
 
   334    Test coverage is incomplete
   332    "isn't numeric in null operation" warning could be more helpful

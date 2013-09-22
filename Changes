@@ -1,3 +1,153 @@
+commit ad25b02188eb877a8ccf6bacc4560205daf9aaf2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 21 21:17:19 2013 -0400
+
+    Update Known_problems for CPAN Developers release 2.006_90
+
+ Known_problems |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
+
+commit 13936b313be1571a401b7dedc07b8ac9f4deae6b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 21 21:17:00 2013 -0400
+
+    Fix a few missed modover->modeover changes
+
+ Basic/Ufunc/ufunc.pd |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 40ba95910e61ab74aa59010a2d714572e890ea63
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 21 20:44:38 2013 -0400
+
+    Change modover to modeover in t/ufunc.t
+
+ t/ufunc.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 00d436d11f93ae87a8530c4ee81879b69e046b3e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 21 17:45:41 2013 -0400
+
+    Update Release_Notes
+
+ Release_Notes |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
+
+commit f32707688ec90d8eac96f2884b81768037177645
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 21 17:44:34 2013 -0400
+
+    Use mode/modeover rather than mode/modover
+    
+    To avoid confusion---even if it looks a bit odd, rpic() doesn't
+    read like a real word either.
+
+ Basic/Ufunc/ufunc.pd |   12 +++++++-----
+ 1 files changed, 7 insertions(+), 5 deletions(-)
+
+commit ed84ab3d297cf9803d9af0ae3eed35ad53e741e5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 21 10:37:10 2013 -0400
+
+    Minor update to PDL FAQ
+
+ Basic/Pod/FAQ.pod |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit acee3e1925772addf3f66afded29ff48de9419d5
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 21 10:26:57 2013 -0400
+
+    More explanation for PDL_Indx type use and meaning
+
+ Basic/Pod/API.pod        |    7 ++++---
+ Basic/Pod/QuickStart.pod |   10 +++++++---
+ 2 files changed, 11 insertions(+), 6 deletions(-)
+
+commit f50b4051105fe7bbbdd89cac6a3224cf486a6627
+Merge: 2d1c198 571f925
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Wed Sep 18 18:12:14 2013 -0600
+
+    Merge branch 'master' of ssh://git.code.sf.net/p/pdl/code
+
+commit 2d1c198fc25a49d8f718daa81c71abe1fb03ced8
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Wed Sep 18 18:11:08 2013 -0600
+
+    add mode/modover and appropriate tests; clarify generic ufunc docs slightly.
+
+ Basic/Ufunc/ufunc.pd |   56 ++++++++++++++++++++++++++++++++++++++++++-------
+ t/ufunc.t            |    7 +++++-
+ 2 files changed, 54 insertions(+), 9 deletions(-)
+
+commit 571f925226abeb29b0bbb754673a603988fa19c8
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Sep 18 09:32:00 2013 +1000
+
+    Basic/Slices/slices.pd - Fix for MSVC++ 6.0
+    
+    VC6 doesn't have either strtoll or _strtoi64. Thankfully,
+    neither is needed for a PDL build using VC6 compiler
+
+ Basic/Slices/slices.pd |  488 ++++++++++++++++++++++++------------------------
+ 1 files changed, 246 insertions(+), 242 deletions(-)
+
+commit 07b3012f36a5b3df228f688e42173baa9f8d11bf
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Sep 16 14:23:26 2013 -0400
+
+    Update *.pod files to cover new PDL_Indx and slice support
+
+ Basic/Pod/API.pod        |   24 ++++++++++++++----------
+ Basic/Pod/FAQ.pod        |   18 +++++++++---------
+ Basic/Pod/Internals.pod  |   31 ++++++++++++++++---------------
+ Basic/Pod/QuickStart.pod |   11 ++++-------
+ Basic/Pod/Scilab.pod     |    2 +-
+ 5 files changed, 44 insertions(+), 42 deletions(-)
+
+commit 48c5ae54f5214e89a033ba05a4882c1c6c371c9c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Sep 16 13:07:12 2013 -0400
+
+    Replace nslice and mslice refs by new, improved slice()
+
+ Basic/SourceFilter/NiceSlice.pm |   32 +++++++++++++-------------------
+ 1 files changed, 13 insertions(+), 19 deletions(-)
+
+commit bf76feeaaf29a09436121abbcad89bcf060bcb08
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Sep 16 08:51:23 2013 -0400
+
+    Update some items in PDL/TODO
+
+ TODO |   20 +++++++++++++++++---
+ 1 files changed, 17 insertions(+), 3 deletions(-)
+
+commit 88f6b7c9ab77af2b1c5b77d2523b2c35f8e4e7ec
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Sun Sep 15 23:28:13 2013 -0600
+
+    clean up slice tests; add test for ignoring whitespace; add docs about whitespace to slices.pd
+
+ Basic/Slices/slices.pd |    7 +++--
+ t/slice.t              |   59 ++++++++++++++++++------------------------------
+ 2 files changed, 26 insertions(+), 40 deletions(-)
+
+commit 956b68bd63dbbfa84315ecf38905da4769c3b941
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 14 12:39:42 2013 -0400
+
+    Update VERSION to 2.006_90 for final PDL-2.007 development
+    
+    This release will be PDL-2.007 pre1.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   41 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 2 deletions(-)
+
 commit 09a6ab3c7b75d5132e9e1a06f673ad5619fbe4c3
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Sep 14 11:55:01 2013 -0400
@@ -24667,26 +24817,3 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
-
-commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:51:04 2009 -0400
-
-    Added the Changes for the t/pic_16bit.t commit.
-
- Changes |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
-Author: Chris Marshall <marshallch@users.sourceforge.net>
-Date:   Wed Apr 29 18:44:35 2009 -0400
-
-    Fix sf.net bug 2784016
-    
-    This fixes sourceforge.net bug number 2784016 originally reported
-    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
-    with a very english specific test.  The test has been modified to
-    be less english specific.  This is still far from full i8n of PDL.
-
- t/pic_16bit.t |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
