@@ -28,7 +28,7 @@
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "0"
+            "Devel::CheckLib" : "1.01"
          }
       },
       "runtime" : {
@@ -36,7 +36,7 @@
             "Astro::FITS::Header" : "0",
             "Convert::UU" : "0",
             "Data::Dumper" : "2.121",
-            "ExtUtils::MakeMaker" : "6.31",
+            "ExtUtils::MakeMaker" : "6.56",
             "File::Map" : "0.57",
             "File::Spec" : "0.6",
             "File::Temp" : "0",
@@ -60,5 +60,5 @@
       },
       "homepage" : "http://pdl.perl.org/"
    },
-   "version" : "2.006_90"
+   "version" : "2.006_91"
 }

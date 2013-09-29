@@ -1,3 +1,85 @@
+commit f86080a9f8b3083790da09fb025f4827f8d8d5de
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 28 18:28:42 2013 -0400
+
+    Update Known_problems and Release_Notes.
+
+ Known_problems |   10 ----------
+ Release_Notes  |   16 +++++++++++++++-
+ 2 files changed, 15 insertions(+), 11 deletions(-)
+
+commit 4409c513f722eac54de1ff601b004e7752fbe9d3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Sep 28 17:48:21 2013 -0400
+
+    Update ExtUtils::MakeMaker required to 6.56
+    
+    To enable support for CONFIGURE_REQUIRES option.  This allows
+    us to stop having a local copy of Devel::CheckLib in inc/
+
+ MANIFEST.SKIP |    1 +
+ Makefile.PL   |    3 ++-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 5214b23d6ecdb690077fcbd59c71c6561d1c40de
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Sep 26 09:01:08 2013 -0400
+
+    Fix some missing int->indx/PDL_Indx conversions in primitive.pd
+    
+    vsearch, which, and which_both.  Thanks to Edward Baudrez for
+    reporting the problem.
+
+ Basic/Primitive/primitive.pd |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+commit cccb2f201dc7417e478ddf3165ded290ca9f8586
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Wed Sep 25 13:28:42 2013 -0400
+
+    Add some tapprox() to floating point equality tests.
+
+ t/ufunc.t |   20 ++++++++++----------
+ 1 files changed, 10 insertions(+), 10 deletions(-)
+
+commit 6c60172f3ae7e40f1f0f65432dbb3e2135abcf27
+Merge: 0fe3d13 9b6954b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Sep 24 07:02:54 2013 -0400
+
+    Merge branch 'master' of ssh://git.code.sf.net/p/pdl/code
+
+commit 0fe3d138f1def45e5e524ec105caa65eecd0761e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Sep 24 07:02:06 2013 -0400
+
+    Remove ref to previous indx conversion routines: ind and index
+
+ Basic/Gen/PP/PDLCode.pm |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
+
+commit 9b6954b494f488090ce18f59886aa3278e2b3769
+Author: Craig DeForest <zowie@Clio-4.local>
+Date:   Tue Sep 24 11:19:14 2013 +0200
+
+    add "afh" option to rfits to allow explicit use of legacy hash
+    parser for performance reasons.  (This was possible before but
+    only by localizing the undocumented global variable $PDL::Astro_Fits_Header).
+
+ IO/FITS/FITS.pm |   17 ++++++++++++++---
+ 1 files changed, 14 insertions(+), 3 deletions(-)
+
+commit 83001b7445fe893c7035e14434645bb040c4bb9e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Sep 22 07:18:13 2013 -0400
+
+    Update VERSION to 2.006_91 for finishing PDL-2.007 development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   41 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 2 deletions(-)
+
 commit ad25b02188eb877a8ccf6bacc4560205daf9aaf2
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Sep 21 21:17:19 2013 -0400
@@ -24817,3 +24899,26 @@ Date:   Tue May 5 22:20:49 2009 -0400
 
  Basic/Core/Basic.pm |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
+
+commit 4a4059f3813c5e2128dd57e3a7e23f5faf33c280
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:51:04 2009 -0400
+
+    Added the Changes for the t/pic_16bit.t commit.
+
+ Changes |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 9e239ffb1eb0e52cc67ab2a1c6aff677b3dcb17d
+Author: Chris Marshall <marshallch@users.sourceforge.net>
+Date:   Wed Apr 29 18:44:35 2009 -0400
+
+    Fix sf.net bug 2784016
+    
+    This fixes sourceforge.net bug number 2784016 originally reported
+    via rt.cpan.org where the t/pic_16bit.t test checked for pnmtopng
+    with a very english specific test.  The test has been modified to
+    be less english specific.  This is still far from full i8n of PDL.
+
+ t/pic_16bit.t |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
