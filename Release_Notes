@@ -1,3 +1,56 @@
+Release Notes for PDL 2.006_92 --------------------------
+
+ +---------------------------------------------------------------+
+ | BE WARNED:  This release includes an update to the internal,  |
+ | C-level PDL API for PDL versions 2.006 and earlier.  This     |
+ | will require that you re-build any PP or XS modules.  Do not  |
+ | upgrade or install over an existing PDL installation unless   |
+ | you are prepared to do so!!!                                  |
+ +---------------------------------------------------------------+
+
+General Notes:
+
+ * A.k.a PDL-2.007 pre-release 3
+
+ * Another quick CPAN developers release
+
+   - It is a snapshot of the current git development tree
+     and everything may not work correctly or have complete
+     documentation.
+
+   - These release notes may not be fully complete.  Please
+     see Changes (from the git log) for full details.
+
+   - All tests may not pass, especially ones corresponding
+     to issues in Known_problems.
+   
+   - Manual build/install is recommended although the
+     cpan shell may be used by specifying the distribution
+     path rather than just the module name, e.g.:
+
+       cpan> get  CHM/PDL-2.006_92.tar.gz
+       cpan> make CHM/PDL-2.006_92.tar.gz
+       cpan> test CHM/PDL-2.006_92.tar.gz
+       cpan> look CHM/PDL-2.006_92.tar.gz
+
+Highlights:
+
+ * PP.pm no longer generates false POD due to detection
+   of the documentation generation templates by perldoc.
+
+ * PDL::PP routines now documented in a pdldoc index-able
+   format: "apropos pp_" should work now in the PDL shells.
+
+ * BUGS has moved to PDL::Bugs with POD and is indexed in
+   the pdldoc database.
+ 
+ * PDL::NiceSlice no longer strips out newlines and now
+   preserves line numbering in error messages.
+ 
+ * PDL::CLONE_SKIP added for better ithread support.
+
+
+
 Release Notes for PDL 2.006_91 --------------------------
 
  +---------------------------------------------------------------+
