@@ -1,3 +1,107 @@
+commit b1d2c53432d954e3ae4a1889b6a0d1dbf7039731
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Oct 12 12:20:54 2013 -0400
+
+    Final updates and Release_Notes for PDL-2.007 release
+
+ DEPENDENCIES   |   10 +-
+ Known_problems |   17 +--
+ Makefile.PL    |    2 +-
+ README         |    2 +-
+ Release_Notes  |  553 +++++++-------------------------------------------------
+ 5 files changed, 75 insertions(+), 509 deletions(-)
+
+commit bc864bc43e1d04169d742c5c3c9015d04b75b374
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Fri Oct 11 16:53:33 2013 -0700
+
+    pdl_trans is now properly defined as a flexible array
+    
+    pdl_trans was intended to have a variable number of pdl objects in it, but the
+    code defined this number as 1. This causes issues with gcc4.8, which is more
+    aggressive at optimizing the code based on what the programmer tells it. In this
+    case, the pdl[1] that the code had was taken literally. The new flexible array
+    implementation tells the compiler exactly what is happening, and all is well.
+    
+    See this thread:
+    
+    http://mailman.jach.hawaii.edu/pipermail/perldl/2013-October/008191.html
+
+ Basic/Core/pdl.h.PL |   56 +++++++++++++++++++++++++++++++-------------------
+ 1 files changed, 35 insertions(+), 21 deletions(-)
+
+commit a36eb5dc841ea50f60bad4cab5e8560b6b128820
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Fri Oct 11 15:52:14 2013 -0700
+
+    clarified how _MSC_VER affects PDL_TRANS_START()
+
+ Basic/Core/pdl.h.PL |   20 +++++---------------
+ 1 files changed, 5 insertions(+), 15 deletions(-)
+
+commit 028a725c9ef8b174d645f503a7af2fe254547374
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Fri Oct 11 15:40:29 2013 -0700
+
+    removed needless cast from pointer to (wrong-sized) int
+
+ Basic/Core/pdlapi.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 56d6cc355d7585114e4f76ed4bf0d5fb3f6f28bd
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Fri Oct 11 15:39:32 2013 -0700
+
+    PDL_CHKMAGIC...() now uses a pointer-specific printf() format
+
+ Basic/Core/pdl.h.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit cd1a4334d906b3d733973b5b553fc5f189747a87
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Fri Oct 11 15:33:44 2013 -0700
+
+    consolidated the two PDL_CHKMAGIC macros into one
+
+ Basic/Core/pdl.h.PL |   18 ++++++++----------
+ 1 files changed, 8 insertions(+), 10 deletions(-)
+
+commit ed50f5c07faefc5fc9eeda020f91b3ed4d2a3cc9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Fri Oct 11 01:58:37 2013 -0400
+
+    Update DEPENDENCIES and Known_problems
+
+ DEPENDENCIES   |    5 +++++
+ Known_problems |   12 ++++++++++++
+ 2 files changed, 17 insertions(+), 0 deletions(-)
+
+commit 5dcbdf268739fd26fa7a009bd2d1620c1d22067c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 10 09:48:54 2013 -0400
+
+    Update VERISON to 2.006_93 for PDL-2.007 release candidate
+    
+    Assuming PDL-2.006_92 tests well, the PDL-2.006_93 release
+    will be the release candidate for PDL-2.007.  We're in code
+    freeze so work from now to PDL-2.007 should be only documentation
+    and the ilk.
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    6 +++++-
+ Release_Notes  |   48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 54 insertions(+), 2 deletions(-)
+
+commit 880a98229711e9e36b6f92c3b74194bbdb09a6c2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Oct 10 09:42:48 2013 -0400
+
+    Update Known_problems and Release_Notes for PDL-2.006_92 release
+
+ Known_problems |    8 --------
+ Release_Notes  |   14 +++++++++++++-
+ 2 files changed, 13 insertions(+), 9 deletions(-)
+
 commit b2c4c726cff6f458ed945626c1f99b1832e9b378
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Oct 7 17:01:26 2013 -0400
