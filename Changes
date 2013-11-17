@@ -1,3 +1,323 @@
+commit 79c9f69ae8e8440c04ca4f9ed92d89e80fccb7ee
+Merge: 6788900 bbf1361
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 17 16:31:17 2013 -0500
+
+    Merge branch 'master' of ssh://git.code.sf.net/p/pdl/code
+
+commit bbf13617a832f114d2e88f0ff54014d218578d90
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Sun Nov 17 11:20:43 2013 -0800
+
+    PDL::IO::Storable no longer gets confused on 32-bit-only platforms
+
+ IO/Storable/storable.pd |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+commit 67889009ab2788a2c0d751b7426eb854b752b303
+Merge: ece0d94 0a977e1
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 16 18:34:25 2013 -0500
+
+    Merge branch 'master' of ssh://git.code.sf.net/p/pdl/code
+
+commit 0a977e11696bcd7f87b144da4c692eaa49bfdea3
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Sat Nov 16 14:56:58 2013 -0800
+
+    PDL::IO::Storable now works even if pack('q') isn't supported
+
+ IO/Storable/storable.pd |   48 ++++++++++++++++++++++++++++++++++++----------
+ 1 files changed, 37 insertions(+), 11 deletions(-)
+
+commit ece0d945b25ef09d9134bfbdec4ba7e200ef1d03
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 16 15:25:18 2013 -0500
+
+    Update MANIFEST info for PDL-2.007_01 release
+
+ MANIFEST      |    4 +++-
+ MANIFEST.SKIP |    1 +
+ 2 files changed, 4 insertions(+), 1 deletions(-)
+
+commit 034068accf4f821dcf4294551511aaaccf03e470
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 16 15:22:25 2013 -0500
+
+    Update readmes for a 2.007_01 CPAN release
+
+ Known_problems |    4 ++++
+ Release_Notes  |   14 +++++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletions(-)
+
+commit cba6ef57bc0e4b9b01d934088d3d5412a865aeb3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 16 15:10:00 2013 -0500
+
+    Add info on PDL version number change to FAQ
+
+ Basic/Pod/FAQ.pod |   33 +++++++++++++++++++++++----------
+ 1 files changed, 23 insertions(+), 10 deletions(-)
+
+commit cff13314edbc3d92376f13b2726d983a4bb52030
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 16 15:08:12 2013 -0500
+
+    Correct WITH_PLPLOT description in perldl.conf
+    
+    Closes sf.net feature request #345 documentation
+    of WITH_PLPLOT in perldl.conf incorrect.
+
+ perldl.conf |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 5cf9dd2da456087be7b3346d53480794058da12e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 16 14:18:22 2013 -0500
+
+    Revert "fix abuse of gzip in FlexRaw (some versions of gzip don't find .Z files automagically);"
+    
+    This reverts commit 08a349c5af238f27c850c089bc64f6171a89ce27.
+    which gives a partial cleanup to FlexRaw support for compressed
+    files but breaks the build for win32 SPP.
+    
+    TODO: implement with a non-unix-only code and update t/flexraw_fortran.t
+    (at least) to gracefully handle the new code.  E.g., things should
+    still pass whether or not a platform has the needed compress/gzip.
+
+ IO/FlexRaw/FlexRaw.pm |   39 +++++++++++++++------------------------
+ t/flexraw_fortran.t   |    6 ------
+ 2 files changed, 15 insertions(+), 30 deletions(-)
+
+commit 84aa8bcae08a55d2f7b9b1e713549f166eb8e963
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 16 13:31:40 2013 -0500
+
+    Skip croaking tests for upstream Storable bug
+    
+    It appears that Storable doesn't handle a longlong integer
+    although the perl does (since ivtype is 'long long').  Need to
+    generate a problem report for upstream.
+
+ t/storable.t |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 04ad9b67925e693a5452b32bce1f11f73433422c
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 16 13:28:38 2013 -0500
+
+    Don't include <sys/time.h> as it breaks SPP 64bit
+    
+    I'm not sure why it is even being used.  Commenting it out
+    caused no problems for cygwin.  Need to see how other platforms
+    test out...
+
+ Lib/Transform/transform.pd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit ab33ea4fa8dfeced6c420484003105db3030cc05
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Fri Nov 15 00:41:23 2013 -0800
+
+    added tests for storable data reading
+
+ t/storable.t             |   55 ++++++++++++++++++++++++++++++++++++++++++++-
+ t/storable_new_amd64.dat |  Bin 0 -> 212 bytes
+ t/storable_old_amd64.dat |  Bin 0 -> 136 bytes
+ 3 files changed, 53 insertions(+), 2 deletions(-)
+
+commit 3420b1aead8120951679940c8a1ccc03f734ef28
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Fri Nov 15 00:09:39 2013 -0800
+
+    PDL::IO::Storable: minor pod update, add dima's copyright
+
+ IO/Storable/storable.pd |    9 ++++-----
+ 1 files changed, 4 insertions(+), 5 deletions(-)
+
+commit 97dae79e43292b6d07d1fd6741a3aab78aeda9f8
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Thu Nov 14 23:02:03 2013 -0800
+
+    PDL::IO::Storable is now robust to type, version, endianness
+    
+    Previously PDL::IO::Storable produces extremely unportable data. Files could
+    become unreadable on a different architecture or PDL version. We are now more
+    robust. Old-style data files are as supported as they were previously (i.e. not
+    robustly). However newly-saved data should be readable on any recent PDL, on any
+    machine from now on
+
+ IO/Storable/storable.pd |  209 ++++++++++++++++++++++++++++++++++++++++-------
+ 1 files changed, 180 insertions(+), 29 deletions(-)
+
+commit 3e181901970b735df9f146bea495a38cc69aa097
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Wed Nov 13 15:14:01 2013 -0700
+
+    transform dims are too loosey-goosey for strict checking.
+
+ Lib/Transform/transform.pd |    9 ---------
+ t/transform.t              |    8 +-------
+ 2 files changed, 1 insertions(+), 16 deletions(-)
+
+commit 08a349c5af238f27c850c089bc64f6171a89ce27
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Wed Nov 13 15:10:14 2013 -0700
+
+    fix abuse of gzip in FlexRaw (some versions of gzip don't find .Z files automagically);
+    fail more informatively if gzip isn't present on the system.
+
+ IO/FlexRaw/FlexRaw.pm |   39 ++++++++++++++++++++++++---------------
+ t/flexraw_fortran.t   |    6 ++++++
+ 2 files changed, 30 insertions(+), 15 deletions(-)
+
+commit 27e2c4e38c8b23aa19cca1c8abe8edc5b79330c6
+Author: Craig DeForest <zowie@Clio-5.local>
+Date:   Tue Nov 12 01:20:12 2013 -0700
+
+    updates to ufunc to further improve empty and nan handling
+
+ Basic/Ufunc/ufunc.pd |   36 ++++++++++++++++++++++++++----------
+ 1 files changed, 26 insertions(+), 10 deletions(-)
+
+commit 4f4185007ee72c53e689fd8d00645d46264ce066
+Author: Craig DeForest <zowie@Clio-5.local>
+Date:   Tue Nov 12 00:57:10 2013 -0700
+
+    fix ufunc max/min issues with Nan order and also with empty sets.
+
+ Basic/Ufunc/ufunc.pd |   26 +++++++++++++-------------
+ t/ufunc.t            |   47 +++++++++++++++++++++++++++++------------------
+ 2 files changed, 42 insertions(+), 31 deletions(-)
+
+commit ef705939989a4cd23370c7e18880a43ed2fd63e9
+Merge: 1b48e23 4ae314c
+Author: Craig DeForest <zowie@dhcp-10-72.boulder.swri.edu>
+Date:   Mon Nov 11 09:28:27 2013 -0700
+
+    Bring latest master updates down; preparing to push improvements to Transform
+    Merge branch 'master' of ssh://git.code.sf.net/p/pdl/code
+
+commit 4ae314cc7e4323b7de6ea4b63c27d7a8879c67e3
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Mon Nov 11 22:20:09 2013 +1100
+
+    Graphics/PLplot/plplot.pd - porting requirement for PDL-2.007
+    
+    Have mapform_callback() function accommodate the PDL_Indx
+    type when needed.
+
+ Graphics/PLplot/plplot.pd |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 6d269bdf6b53d8b7422f0489f50db422941d9495
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Mon Nov 11 11:22:50 2013 +1100
+
+    win32/INSTALL - documentation amendment
+    
+    PDL::FFTW is no longer part of core PDL.
+
+ win32/INSTALL |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit 02897addac14a85efeb0157346a3db0837d09119
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Sat Nov 9 17:06:31 2013 -0700
+
+    In PDL::Modules, changed PDL::GSL links to PDL::GSLSF where necessary.
+    
+    Problem reported on the perldl email list.
+
+ Basic/Pod/Modules.pod |   56 ++++++++++++++++++++++++------------------------
+ 1 files changed, 28 insertions(+), 28 deletions(-)
+
+commit 1b48e23b44b4192aab7972fd326f82cdaf2e0a5d
+Author: Craig DeForest <zowie@Clio-5.local>
+Date:   Fri Nov 8 19:01:42 2013 -0500
+
+    add apply tests; add dimensionality checks to transform.pd
+
+ Lib/Transform/transform.pd |    9 +++++++++
+ t/transform.t              |   33 ++++++++++++++++++++++++++++++++-
+ 2 files changed, 41 insertions(+), 1 deletions(-)
+
+commit cce246b355b47d19b7e35734fa4a0fd272a44c41
+Author: Craig DeForest <zowie@Clio-5.local>
+Date:   Thu Nov 7 15:41:19 2013 +0100
+
+    update Gaussian with 'g'/'G' split like Hanning windows.
+
+ Lib/Transform/transform.pd |   66 ++++++++++++++++++++++++++++++++++++++-----
+ t/transform.t              |    7 ++--
+ 2 files changed, 62 insertions(+), 11 deletions(-)
+
+commit 175b0330fb59bb64db2b76aa89132f1a978a3ae3
+Author: Craig DeForest <zowie@Clio-5.local>
+Date:   Wed Nov 6 15:32:11 2013 +0100
+
+    add some more documentation of the blur parameter.
+
+ Lib/Transform/transform.pd |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
+
+commit a6823f17bb61d6c9e89fe2451f32fe50a022f522
+Author: Craig DeForest <zowie@Clio-5.local>
+Date:   Wed Nov 6 12:17:56 2013 +0100
+
+    some further streamlining of the map code; add several tests.
+
+ Lib/Transform/transform.pd |  246 ++++++++++++++++++++++++--------------------
+ t/transform.t              |   76 +++++++++++++-
+ 2 files changed, 204 insertions(+), 118 deletions(-)
+
+commit bf3f494695a203e381a9aebdc0890ff64bd34f4b
+Author: Craig DeForest <zowie@Clio-5.local>
+Date:   Wed Nov 6 08:26:25 2013 +0100
+
+    faster optimized resampling in PDL::Transform
+
+ Lib/Transform/transform.pd | 1537 ++++++++++++++++++++++++--------------------
+ 1 files changed, 857 insertions(+), 680 deletions(-)
+
+commit 573271165cf0681ec84694a25d34c87d925eba91
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Mon Oct 14 23:55:54 2013 -0600
+
+    Some POD changes to slices.pd to make html rendering look nicer.
+
+ Basic/Slices/slices.pd |   22 +++++++++++++++-------
+ 1 files changed, 15 insertions(+), 7 deletions(-)
+
+commit c0fed26f1ff8560e0e190bfd73e8d84258470b1e
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Oct 12 15:48:04 2013 -0400
+
+    Add *.m to list of files in .gitignore
+
+ .gitignore |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+commit 02770bfd7aa75ca82499b34942cd014e932a1d09
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Oct 12 13:54:49 2013 -0400
+
+    Update VERSION to 2.007_01 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   39 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 2 deletions(-)
+
+commit c58b3cf1797346d890284e867cf0305178b84ffa
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Oct 12 12:56:52 2013 -0400
+
+    Update VERSION to 2.007 for CPAN distribution
+
+ Basic/PDL.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
 commit b1d2c53432d954e3ae4a1889b6a0d1dbf7039731
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Sat Oct 12 12:20:54 2013 -0400

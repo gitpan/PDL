@@ -53,12 +53,12 @@
          }
       }
    },
-   "release_status" : "stable",
+   "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
          "web" : "http://sourceforge.net/p/pdl/bugs/"
       },
       "homepage" : "http://pdl.perl.org/"
    },
-   "version" : "2.007"
+   "version" : "2.007_01"
 }
