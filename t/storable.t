@@ -4,13 +4,18 @@ use strict;
 use Test::More;
 
 BEGIN { 
-  eval 'use Storable 1.03';
-  unless ($@) {
-    plan tests => 23;
-  } else {
-    plan skip_all => "Storable >= 1.03 not installed\n";
-  }
-  use Storable qw/freeze thaw retrieve/;
+   eval 'use Storable 1.03';
+   unless ($@) {
+      eval 'require 5.010';
+      unless ($@) {
+         plan tests => 23;
+      } else {
+         plan skip_all => "PDL::IO::Storable requires perl 5.10 or greater\n";
+      }
+   } else {
+      plan skip_all => "Storable >= 1.03 not installed\n";
+   }
+   use Storable qw/freeze thaw retrieve/;
 }
 
 BEGIN { 
@@ -91,10 +96,10 @@ testLoad($_) foreach( qw(t/storable_new_amd64.dat t/storable_old_amd64.dat) );
 #
 #   use PDL;
 #   use PDL::IO::Storable;
-#   use Storable qw(store);
+#   use Storable qw(nstore);
 #   my $x = sequence(3,3)->byte * sequence(3)->byte;
 #   my $y = 50 + sequence(7)->double;
-#   store [$x, 'abcd', $y], "/tmp/tst.dat";
+#   nstore [$x, 'abcd', $y], "/tmp/tst.dat";
 #
 # I make sure these all were read correctly
 sub testLoad
@@ -114,9 +119,7 @@ SKIP:
       }
     }
 
-    my $x = eval { retrieve $filename };
-    skip "LongLong only as IV bug in Storable", 7 if $@;
-
+    my $x = retrieve $filename;
     ok( defined $x, "Reading from file '$filename'" );
     ok( @$x == 3, "Reading an array-ref of size 3 from file '$filename'" );
     ok( $x->[1] eq 'abcd', "Reading a correct string from file '$filename'" );

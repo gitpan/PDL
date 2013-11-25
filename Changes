@@ -1,3 +1,113 @@
+commit cfdd4c1721693bc1a8eefdd87634f17923d174a3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 25 14:10:22 2013 -0500
+
+    Update Release_Notes for PDL-2.007_02 release
+    
+    This should be working PDL::IO::Storable for 64bit index support.
+
+ Release_Notes |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
+
+commit c276e5682c89a5947e05b6d606beffac48b65789
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 25 09:51:24 2013 -0500
+
+    Update DEPENDENCIES and Known_problems for PDL::IO::Storable
+    
+    Make explicit that PDL::IO::Storable requires at least
+    perl version 5.10.0 to operate---even though it will be
+    built and installed.
+
+ DEPENDENCIES   |    2 ++
+ Known_problems |    6 +++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+commit 700d2e298e7a9b105d3e8502f2c6ce32664f2ff9
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 25 09:46:28 2013 -0500
+
+    Skip PDL::IO::Storable tests unless perl 5.10.x or greater
+
+ t/storable.t |   19 ++++++++++++-------
+ 1 files changed, 12 insertions(+), 7 deletions(-)
+
+commit 5f8c6053b7f8490c3495c073617446ba7865fe57
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Nov 23 13:28:55 2013 -0500
+
+    Revert "Cleared up Core exports. squeeze is now exported with :Func"
+    
+    This should have been applied to the branch for core cleanup.
+    As is it breaks the build for cygwin with *many* test failures.
+
+ Basic/Core/Core.pm.PL |   19 +++++++++++++------
+ 1 files changed, 13 insertions(+), 6 deletions(-)
+
+commit 46cb0c3aba2e38f2cd2829dea7a0d218376422b9
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Fri Nov 22 00:13:04 2013 -0800
+
+    Cleared up Core exports. squeeze is now exported with :Func
+
+ Basic/Core/Core.pm.PL |   19 ++++++-------------
+ 1 files changed, 6 insertions(+), 13 deletions(-)
+
+commit c63d34a5090c1f66363e03d44faa0bcbc75bf35b
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Tue Nov 19 15:00:01 2013 -0800
+
+    PDL::Transform no longer contains incorrect indexing code that wasn't used anyway
+
+ Lib/Transform/transform.pd |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit 3fb48d3480063f33c204c71570712c6cd0a2c18c
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Tue Nov 19 14:56:36 2013 -0800
+
+    PDL::IO::GD no longer crashes if given an undef filename
+
+ IO/GD/GD.pd |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
+
+commit ae3f22cbc3ba0f8af2a7740a8a387b8d75ca8eb0
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Mon Nov 18 01:36:52 2013 -0800
+
+    Revert "Skip croaking tests for upstream Storable bug"
+    
+    This reverts commit 84aa8bcae08a55d2f7b9b1e713549f166eb8e963.
+    
+    This wasn't required since Storable::nstore exists for writing portable files
+
+ t/storable.t |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
+
+commit 05e401bb34a2f17e65335b45bfd4a085dd48d914
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Mon Nov 18 01:35:27 2013 -0800
+
+    PDL::IO::Storable teste now read data written with 'nstore'
+    
+    This is required by Storable to generate portable data
+
+ t/storable.t             |    4 ++--
+ t/storable_new_amd64.dat |  Bin 212 -> 199 bytes
+ t/storable_old_amd64.dat |  Bin 136 -> 123 bytes
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+
+commit a2cf9497141eab3689a6e5bdeb23281ca4bfc3f7
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sun Nov 17 17:03:30 2013 -0500
+
+    Update VERSION to 2.007_02 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   39 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 2 deletions(-)
+
 commit 79c9f69ae8e8440c04ca4f9ed92d89e80fccb7ee
 Merge: 6788900 bbf1361
 Author: Chris Marshall <devel.chm.01@gmail.com>
