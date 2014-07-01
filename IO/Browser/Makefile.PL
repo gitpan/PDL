@@ -21,7 +21,8 @@ use lib $libdir;
 
 use Devel::CheckLib;
 
-require PDL::Core::Dev;
+#require PDL::Core::Dev;
+require Basic::Core::Dev;
 PDL::Core::Dev->import();
 
 @pack = (["browser.pd",Browser,PDL::IO::Browser]);
@@ -41,7 +42,7 @@ $hash{'clean'}{FILES} .= ' browse$(OBJ_EXT) browse$(EXE_EXT) Browser.c Browser.p
 # (5) write Makefile or dummy as appropriate
 
 my $incstring;
-foreach my $incl ( qw( curses.h ncurses/curses.h ncurses.h ncurses/ncurses.h ) ) {
+foreach my $incl ( qw( curses.h ncurses/curses.h ncurses.h ncurses/ncurses.h ncursesw/ncurses.h ) ) {
     if (check_lib(header=>$incl)) {
        print STDERR "IO/Browser: have '$incl'\n";
        $incstring = $incl;
@@ -51,7 +52,7 @@ foreach my $incl ( qw( curses.h ncurses/curses.h ncurses.h ncurses/ncurses.h ) )
 $hash{DEFINE} .= ' -DCURSES=' . '\\"' . $incstring . '\\"' if defined $incstring;
 
 my $libstring;
-foreach my $libr ( qw( curses ncurses ) ) {
+foreach my $libr ( qw( curses ncurses ncursesw ) ) {
    if (check_lib(lib=>$libr)) {
       print STDERR "IO/Browser: have -l$libr\n";
       $libstring = '-l' . $libr;

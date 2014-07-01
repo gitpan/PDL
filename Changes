@@ -1,3 +1,254 @@
+commit d6afe709041fc9cdf9827cfdc8f6bfe2450118df
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Fri Jun 6 10:35:21 2014 +1000
+
+    Makefile.PL - Fix doc creation fro "vendor" installs.
+    
+    scantree.pl and mkhtmldoc.pl were not being run for installs into vendor.
+    Thanks kmx.
+
+ Makefile.PL |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit 7db7d018a9cb3d8137619dfa75a8ed5d3f58df7d
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Thu May 1 10:20:19 2014 +1000
+
+    IO/Browser/Makefile.PL - additional fix to library detection (Thanks kmx)
+
+ IO/Browser/Makefile.PL |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 6c843492d6560aa0a2513d6bba40dfe5fad7617f
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Apr 16 16:27:52 2014 +1000
+
+    Lib/Transform/transform.pd - Don't include sys/time.h (MS Windows only)
+    
+    Including sys/time.h (line 1 of transform.pd) on MS Windows causes
+    compilation errors.
+
+ Lib/Transform/transform.pd |  112 ++++++++++++++++++++++----------------------
+ 1 files changed, 56 insertions(+), 56 deletions(-)
+
+commit 61fc23fb61917cb8e6f7d83f7ca71fe4a5676a86
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Apr 16 12:15:34 2014 +1000
+
+    IO/Makefile.PL - fix library detection (Thanks kmx)
+
+ IO/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 7b341e124198e98a9c1d8954aa417c45148fb705
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Apr 16 12:15:34 2014 +1000
+
+    IO/HDF/Makefile.PL - fix library detection
+
+ IO/HDF/Makefile.PL |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
+
+commit c1720679a1a4ca1efa89339ae37fc32fc1994299
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Apr 16 12:15:34 2014 +1000
+
+    IO/Browser/Makefile.PL - fix library detection (Thanks kmx)
+
+ IO/Browser/Makefile.PL |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+commit 0a0ebd0fe09c63692f07ba9a5c545cc2eafad4d2
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Wed Apr 16 12:15:34 2014 +1000
+
+    Graphics/PLplot/Makefile.PL - fix library detection (Thanks kmx)
+
+ Graphics/PLplot/Makefile.PL |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+commit 2c981944d299d8215563b2b794a162de6019a10f
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Apr 15 10:37:01 2014 +1000
+
+    Lib/Transform/Proj4/Makefile.PL - Provide "datum" arg for pj_init_plus()
+    
+    Absence of the "datum" arg can lead to error. (Thanks kmx)
+
+ Lib/Transform/Proj4/Makefile.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit bb9de7e727b295306be6af149e3122069968dae9
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Apr 15 10:37:01 2014 +1000
+
+    t/Lib/GIS/Proj/Makefile.PL - Provide "datum" arg for pj_init_plus()
+    
+    Absence of the "datum" arg can lead to error. (Thanks kmx)
+
+ Lib/GIS/Proj/Makefile.PL |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit cd9fd973fc5e7eb371e45c4d67c346a3a982c387
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Apr 15 10:37:00 2014 +1000
+
+    t/proj_transform2.t - Provide "datum" arg for pj_init_plus()
+    
+    Absence of the "datum" arg can lead to error.
+
+ t/proj_transform2.t |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
+
+commit 71b030dd492cfd41dda63f1696be81ce4626ef6c
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Apr 15 10:37:00 2014 +1000
+
+    t/proj_transform.t - Provide "datum" arg for pj_init_plus()
+    
+    Absence of the "datum" arg can lead to error.
+
+ t/proj_transform.t |   22 +++++++++++-----------
+ 1 files changed, 11 insertions(+), 11 deletions(-)
+
+commit 4ad2f2cc4e08e8cf794c2e2cf65671008b4b0c67
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Tue Apr 15 10:37:00 2014 +1000
+
+    t/gis_proj.t - Provide "datum" arg for pj_init_plus()
+    
+    Absence of the "datum" arg can lead to error.
+
+ t/gis_proj.t |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 59a0426b21fc1ef61f3c95d7f04e394c39b465a1
+Author: sisyphus_ <sisyphus1@optusnet.com.au>
+Date:   Sun Apr 13 21:56:58 2014 +1000
+
+    IO/HDF/Makefile.PL - Add additional library detection case.
+    
+       if (-e "$libdir/libhdf.a" && !$found_df)
+       {
+           $found_df = 1;
+           $hdf_lib_path = $libdir;
+           $hdf_libs = '-lmfhdf -lhdf';
+           print "Found libhdf.a at $libdir/libhdf.a\n";
+       }
+    
+    Thanks kmx.
+
+ IO/HDF/Makefile.PL |   70 +++++++++++++++++++++++++++++-----------------------
+ 1 files changed, 39 insertions(+), 31 deletions(-)
+
+commit 66e06b19caf308b6c43750a01ebe0c9a4c3a6e45
+Author: Craig DeForest <zowie@Clio-7.local>
+Date:   Thu Feb 6 22:00:12 2014 -0700
+
+    fix lookup-table Jacobian/Gaussian method.
+
+ Lib/Transform/transform.pd |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+commit b0e2351aef4b9fb14993186962ee02cfcb5f6e19
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Thu Feb 6 12:46:36 2014 -0500
+
+    Mark a couple of realloc bugs with FIXME to remind (from cppcheck)
+
+ Basic/Core/pdlmagic.c |   17 +++++++++--------
+ 1 files changed, 9 insertions(+), 8 deletions(-)
+
+commit d9e345ea9fd11344fa88c853b21623d62fa9b540
+Author: Craig DeForest <zowie@Clio-7.local>
+Date:   Sat Jan 11 00:09:23 2014 -0700
+
+    fix Diab's slice gripe (bug #348)
+
+ Basic/Slices/slices.pd |  178 ++++++++++++++++++++++++++----------------------
+ t/slice.t              |   12 +++-
+ 2 files changed, 107 insertions(+), 83 deletions(-)
+
+commit 24af29ca9fb4624056843c61136d336b75a28b7b
+Author: Craig DeForest <zowie@Clio-7.local>
+Date:   Sun Jan 5 13:44:19 2014 -0700
+
+    fix sf.net bug 313 (clip)
+
+ Basic/Primitive/primitive.pd |   57 ++++++++++++++++++++++++++++++++---------
+ 1 files changed, 44 insertions(+), 13 deletions(-)
+
+commit d3f23a69d7ac602329e33628c6c488ef32bee5e9
+Author: Craig DeForest <zowie@Clio-7.local>
+Date:   Mon Dec 16 23:19:06 2013 -0700
+
+    remove "'" from a comment to make prettyprinters work better
+
+ Basic/Core/pdl.h.PL |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 7680f829d64a1be1471e4ac2739c71853e1cdf81
+Author: David Mertens <dcmertens.perl@gmail.com>
+Date:   Thu Dec 5 14:38:47 2013 -0500
+
+    Fixed erroneous mention of PDLSTATEISBAD, etc in PP.pod
+
+ Basic/Pod/PP.pod |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
+
+commit 38d61cca249cb6d4b3bd112da9a5deb7458ae830
+Author: Craig DeForest <zowie@Clio-5.local>
+Date:   Wed Nov 27 11:37:46 2013 -0700
+
+    flexraw_fortran fix works around Apple's fucking stupid changes to gzip
+
+ IO/FlexRaw/FlexRaw.pm |   57 ++++++++++++++++++++++++++++++++++++-------------
+ 1 files changed, 42 insertions(+), 15 deletions(-)
+
+commit 3031429bd06f79cfcf78c170481bbf5245782922
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Mon Nov 25 23:58:54 2013 -0800
+
+    Again: cleared up Core exports. squeeze is now exported with :Func
+    
+    There was a bug the last time. I fixed this bug.
+
+ Basic/Core/Core.pm.PL |   32 +++++++++++++-------------------
+ 1 files changed, 13 insertions(+), 19 deletions(-)
+
+commit c4c1dc46498be7902e9422486bde811bc1b7f27e
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Mon Nov 25 22:41:45 2013 -0800
+
+    Revert "Skip PDL::IO::Storable tests unless perl 5.10.x or greater"
+    
+    This reverts commit 700d2e298e7a9b105d3e8502f2c6ce32664f2ff9.
+    
+    The perl 5.8 incompatibility has been resolved.
+
+ t/storable.t |   19 +++++++------------
+ 1 files changed, 7 insertions(+), 12 deletions(-)
+
+commit 922f624d2219738729bd4dd6eedaead5ae20edb5
+Author: Dima Kogan <dima@secretsauce.net>
+Date:   Mon Nov 25 22:39:51 2013 -0800
+
+    PDL::IO::Storable now uses pack() constants compatible with perl 5.8
+
+ IO/Storable/storable.pd |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
+
+commit 5d1b4bb4da065ed80c3ed7414b4e746d2bb2b76f
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Nov 25 15:07:49 2013 -0500
+
+    Update VERSION to 2.007_03 for more development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   39 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 2 deletions(-)
+
 commit cfdd4c1721693bc1a8eefdd87634f17923d174a3
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Nov 25 14:10:22 2013 -0500
