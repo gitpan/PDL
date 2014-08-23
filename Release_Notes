@@ -1,3 +1,60 @@
+Release Notes for PDL 2.007_04 --------------------------
+
+ +---------------------------------------------------------------+
+ | BE WARNED:  This release includes an update to the internal,  |
+ | C-level PDL API for PDL versions 2.006 and earlier.  This     |
+ | will require that you re-build any PP or XS modules.  Do not  |
+ | upgrade or install over an existing PDL installation unless   |
+ | you are prepared to do so!!!                                  |
+ +---------------------------------------------------------------+
+
+General Notes:
+
+ * This CPAN developers release for PDL is based on
+   work by mohawk to update the Inline support for
+   PDL and to add support for ExtUtils::Depends and
+   is available from his github mirror in the inline-eud
+   branch at
+   
+     https://github.com/mohawk2/pdl-code.git
+
+   If you make use of the new functionality, please
+   let us know via the perldl mailing list:
+
+     http://mailman.jach.hawaii.edu/mailman/listinfo/perldl
+   
+   Your feedback will help steer what features are
+   included in our next stable PDL release.  Thanks.
+
+ * Another quick CPAN developers release
+
+   - It is a snapshot of the current git development tree
+     and everything may not work correctly or have complete
+     documentation.
+
+   - These release notes may not be fully complete.  Please
+     see Changes (from the git log) for full details.
+
+   - All tests may not pass, especially ones corresponding
+     to issues in Known_problems.
+   
+   - Manual build/install is recommended although the
+     cpan shell may be used by specifying the distribution
+     path rather than just the module name, e.g.:
+
+       cpan> get  CHM/PDL-2.007_04.tar.gz
+       cpan> make CHM/PDL-2.007_04.tar.gz
+       cpan> test CHM/PDL-2.007_04.tar.gz
+       cpan> look CHM/PDL-2.007_04.tar.gz
+
+Highlights:
+
+ * You can now: "use Inline with => 'PDL';" - see PDL::API
+
+ * You can, in your module's Makefile.PL: "$p = new ExtUtils::Depends
+   'MyMod', 'PDL'"
+
+
 Release Notes for PDL 2.007_03 --------------------------
 
  +---------------------------------------------------------------+

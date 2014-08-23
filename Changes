@@ -1,3 +1,166 @@
+commit a70246d9e929e002d7e3cf2cc442cf462ee86e87
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 23 15:52:08 2014 -0400
+
+    Add IFiles.h and t/inline-with.t to MANIFEST
+
+ MANIFEST |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+commit 044d9efb84d712e9c833fcfac574a4c3b3525cd6
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 23 15:46:45 2014 -0400
+
+    Add info on mohawk git mirror for reference
+
+ Release_Notes |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+commit 2de8e4dd87589679f2a67f85de880349f8414146
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 23 15:25:30 2014 -0400
+
+    Make t/inline-with.t check version of Inline is ok
+
+ t/inline-with.t |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
+
+commit 4dbf99ad22e2dcc39fe5c84eba4801e77ec0edb3
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 23 14:52:31 2014 -0400
+
+    Update Known_problems and Release_Notes for CPAN release
+
+ Known_problems |   12 +++++++-----
+ Release_Notes  |   12 ++++++++++++
+ 2 files changed, 19 insertions(+), 5 deletions(-)
+
+commit 030e5d6976c1d407340e79908061d8276aaeb7dc
+Author: Ed J <mohawk2@users.noreply.github.com>
+Date:   Fri Aug 22 20:02:32 2014 +0100
+
+    Update docs for release.
+
+ DEPENDENCIES  |    6 +++---
+ Release_Notes |    4 +++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+commit 6b406d3fc8446851dbd400a9e5e3ac882fbfba7b
+Author: Ed J <mohawk2@users.noreply.github.com>
+Date:   Fri Aug 22 17:51:04 2014 +0100
+
+    Doc better Inline interface.
+
+ Basic/Pod/API.pod |   41 +++++++++++++----------------------------
+ 1 files changed, 13 insertions(+), 28 deletions(-)
+
+commit e2a58453b60905d4fba2ce8db8706741dac5663a
+Author: Ed J <mohawk2@users.noreply.github.com>
+Date:   Fri Aug 22 17:38:41 2014 +0100
+
+    Test, implement support for "use Inline with=>q(PDL)".
+
+ Basic/Core/Dev.pm    |    5 ++-
+ Basic/Core/IFiles.pm |   13 +++++++++
+ Basic/PDL.pm         |    6 ++++
+ Makefile.PL          |    3 +-
+ t/inline-with.t      |   68 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 92 insertions(+), 3 deletions(-)
+
+commit de999b46e830acd1b92097c48bc1d508f018739c
+Author: Ed J <m8r-35s8eo@mailinator.com>
+Date:   Sat Apr 12 09:57:49 2014 +0100
+
+    Support ExtUtil::Depends by making PDL::Install::Files.
+
+ Basic/Core/IFiles.pm   |   20 ++++++++++++++++++++
+ Basic/Core/Makefile.PL |    1 +
+ 2 files changed, 21 insertions(+), 0 deletions(-)
+
+commit af3b46dbf413ef59151f0bcb3e7eb58b6b559e1b
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Sat Aug 9 13:05:11 2014 -0400
+
+    Fix CallExt for android build, sf.net bug #357
+    
+    This fix was proposed by Brian Fraser.  Thanks.
+    Maybe we can add Android as an official PDL
+    supported platform.
+
+ Lib/CallExt/CallExt.pm |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+commit bb577499c77b857b6ed52928244b1726f8601f0e
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Jul 1 17:01:03 2014 -0600
+
+    one2nd returns piddles of indx datatype now.
+    
+    Previously the first piddle returned would have the same datatype
+    as the input data (e.g., double) and the remainder would be of type
+    long. Now we cast the index piddle to indx first.
+    
+    Added some POD to document this.
+
+ Basic/Primitive/primitive.pd |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+commit 3e658c3603402e2e1f9e98cb21def2b80e882968
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Jul 1 16:57:40 2014 -0600
+
+    Upgrade t/primitive2.t to use Test::More
+    
+    Also add some tests for one2nd. Not complete, but it is something!
+    Also fix a bug in this tapprox that gave the wrong return value.
+    Bug never triggered because all uses of tapprox here passed in scalars, not piddles.
+
+ t/primitive2.t |   91 +++++++++++++++++++++++++++++---------------------------
+ 1 files changed, 47 insertions(+), 44 deletions(-)
+
+commit 8ef21ab6fa29ac066dc1125c110b36215469e2ab
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Jul 1 16:43:47 2014 -0600
+
+    Some POD changes for datatypes.
+    
+    Add a link from byte, ushort, etc to Datatype_conversions.
+    Add indx to the hard-coded CPAN-only datatype docs.
+
+ Basic/Core/Core.pm.PL |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+commit 16428332f54dc42c7a0c053befe8874594a4aa97
+Author: Derek Lamb <lambd@users.sourceforge.net>
+Date:   Tue Jul 1 16:40:58 2014 -0600
+
+    Add convenience blocks to silence 'use strict' warnings during 'make test'.
+
+ t/basic.t |    5 ++++-
+ t/ufunc.t |    4 ++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+commit 085025ace8f352c6013d45248a7c75cb981313ba
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 1 16:59:47 2014 -0400
+
+    Update VERSION to 2.007_04 for development
+
+ Basic/PDL.pm   |    2 +-
+ Known_problems |    2 +-
+ Release_Notes  |   39 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 2 deletions(-)
+
+commit 1aa0d2d6f5a95d91632722ada546582379f3e7e2
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Tue Jul 1 16:54:59 2014 -0400
+
+    Update Known_problems and Release_Notes for 2.007_03
+
+ Known_problems |   14 +++++++-------
+ Release_Notes  |    6 +++++-
+ 2 files changed, 12 insertions(+), 8 deletions(-)
+
 commit d6afe709041fc9cdf9827cfdc8f6bfe2450118df
 Author: sisyphus_ <sisyphus1@optusnet.com.au>
 Date:   Fri Jun 6 10:35:21 2014 +1000

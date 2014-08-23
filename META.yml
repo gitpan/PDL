@@ -3,15 +3,15 @@ abstract: 'Perl Data Language'
 author:
   - 'PerlDL Developers (perldl@jach.hawaii.edu)'
 build_requires:
-  ExtUtils::MakeMaker: 0
+  ExtUtils::MakeMaker: '0'
 configure_requires:
-  Devel::CheckLib: 1.01
+  Devel::CheckLib: '1.01'
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.86, CPAN::Meta::Converter version 2.133380'
+generated_by: 'ExtUtils::MakeMaker version 6.98, CPAN::Meta::Converter version 2.141520'
 license: unknown
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  version: '1.4'
 name: PDL
 no_index:
   directory:
@@ -19,24 +19,25 @@ no_index:
     - inc
     - Lib/FFTW
 requires:
-  Astro::FITS::Header: 0
-  Convert::UU: 0
-  Data::Dumper: 2.121
-  ExtUtils::MakeMaker: 6.56
-  File::Map: 0.57
-  File::Spec: 0.6
-  File::Temp: 0
-  Filter::Simple: 0.88
-  Filter::Util::Call: 0
-  Inline: 0.43
-  Module::Compile: 0.23
-  OpenGL: 0.6702
-  Pod::Parser: 0
-  Pod::Select: 0
-  Storable: 1.03
-  Test::Warn: 0
-  Text::Balanced: 1.89
+  Astro::FITS::Header: '0'
+  Convert::UU: '0'
+  Data::Dumper: '2.121'
+  ExtUtils::MakeMaker: '6.56'
+  File::Map: '0.57'
+  File::Spec: '0.6'
+  File::Temp: '0'
+  Filter::Simple: '0.88'
+  Filter::Util::Call: '0'
+  Inline: '0.68'
+  Inline::C: '0.62'
+  Module::Compile: '0.23'
+  OpenGL: '0.6702'
+  Pod::Parser: '0'
+  Pod::Select: '0'
+  Storable: '1.03'
+  Test::Warn: '0'
+  Text::Balanced: '1.89'
 resources:
   bugtracker: http://sourceforge.net/p/pdl/bugs/
   homepage: http://pdl.perl.org/
-version: 2.007_03
+version: 2.007_04

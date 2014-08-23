@@ -146,7 +146,7 @@ start-up modules.
 
 
 # set the version:
-$PDL::VERSION = '2.007_03';     # Go to sub numbering per git push
+$PDL::VERSION = '2.007_04';     # Go to sub numbering per git push
 
 # Main loader of standard PDL package
 
@@ -190,6 +190,12 @@ die $@ if $@;
 # Dummy Package PDL Statement. This is only needed so CPAN
 # properly recognizes the PDL package.
 package PDL;
+
+# support: use Inline with => 'PDL';
+sub Inline {
+    require PDL::Install::Files;
+    goto &PDL::Install::Files::Inline;
+}
 
 ##################################################
 # Rudimentary handling for multiple Perl threads #
