@@ -29,7 +29,7 @@ $| = 1;
 
 use PDL::Config;
 if ( $PDL::Config{WITH_BADVAL} ) {
-    plan tests => 79;
+    plan tests => 82;
 } else {
     # reduced testing
     plan tests => 10;
@@ -300,6 +300,16 @@ $b = $a->assgn;
 is( $b->badflag, 1, "assgn propogated badflag");
 $a->badflag(0);
 is( $b->badflag, 1, "assgn is not a deep copy for the badflag");
+
+# check that at and sclr return the correct values
+TODO: {
+   $a = pdl q[BAD];
+   local $TODO = 'check that at and sclr return correct values and the same';
+
+   is( PDL::Core::string($a), 'BAD', 'can convert PDL to string' );
+   is( $a->at, 'BAD', 'at() returns BAD for a bad value' );
+   is( $a->sclr, 'BAD', 'sclr() returns BAD for a bad value' );
+}
 
 # quick look at math.pd
 use PDL::Math;

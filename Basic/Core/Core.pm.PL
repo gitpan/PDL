@@ -345,15 +345,17 @@ print OUT "$typealiases\n";
 print OUT '# line ' . (__LINE__ + 2) . <<'!NO!SUBS!';
  "Basic/Core/Core.pm.PL (i.e. PDL::Core.pm)"
 
-*thread_define = \&PDL::thread_define;
-*convert      = \&PDL::convert;   *over 	 = \&PDL::over;
-*dog          = \&PDL::dog;       *cat 	         = \&PDL::cat;
-*type         = \&PDL::type;      *approx        = \&PDL::approx;
-*diagonal     = \&PDL::diagonal;
-*dummy        = \&PDL::dummy;
-*mslice       = \&PDL::mslice;
-*isempty      = \&PDL::isempty;
-*string       = \&PDL::string;
+BEGIN {
+    *thread_define = \&PDL::thread_define;
+    *convert      = \&PDL::convert;   *over 	 = \&PDL::over;
+    *dog          = \&PDL::dog;       *cat 	         = \&PDL::cat;
+    *type         = \&PDL::type;      *approx        = \&PDL::approx;
+    *diagonal     = \&PDL::diagonal;
+    *dummy        = \&PDL::dummy;
+    *mslice       = \&PDL::mslice;
+    *isempty      = \&PDL::isempty;
+    *string       = \&PDL::string;
+}
 
 
 =head2 barf
@@ -1131,7 +1133,7 @@ sub PDL::Core::new_pdl_from_string {
    $value =~ s/\bEe\b/inf/g;
    my $nnan = $inf - $inf;
    my $nan= $this->initialize();
-   $nan->set_datatype(6);
+   $nan->set_datatype($nnan->get_datatype);
    $nan->setdims([]);
 
    # pack("d*", "nan") will work here only on perls that numify the string "nan" to a NaN.

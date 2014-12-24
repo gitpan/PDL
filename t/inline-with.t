@@ -16,21 +16,25 @@ BEGIN {
 
    # See if Inline loads without trouble, or bail out
    eval {
-      no strict 'subs';
-      if ( require (Inline) and $Inline::VERSION < 0.68 ) {
-         plan skip_all => "Skipped: Inline not installed or correct VERSION < 0.68";
-      }
-   };
-   eval {
+      require Inline;
       Inline->import (Config => DIRECTORY => $inline_test_dir , FORCE_BUILD => 1);
 #      Inline->import ('NOCLEAN');
       1;
    } or do {
-      plan skip_all => "Skipped: Inline->import(...) failed";
+      plan skip_all => "Skipped: Inline not installed";
    };
 }
 use File::Path;
-END { rmtree $inline_test_dir if -d $inline_test_dir }
+END {
+  if ($^O =~ /MSWin32/i) {
+    for (my $i = 0; $i < @DynaLoader::dl_modules; $i++) {
+      if ($DynaLoader::dl_modules[$i] =~ /inline_with_t/) {
+        DynaLoader::dl_unload_file($DynaLoader::dl_librefs[$i]);
+      }
+    }
+  }
+  rmtree $inline_test_dir if -d $inline_test_dir;
+}
 
 # use Inline 'INFO'; # use to generate lots of info
 use Inline with => 'PDL';
