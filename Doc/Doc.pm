@@ -4,6 +4,8 @@
 package PDL::PodParser;
 use PDL::Core '';
 use Pod::Select;
+use File::Spec;
+use File::Basename;
 
 @ISA = qw(Pod::Select);
 
@@ -470,6 +472,7 @@ sub ensuredb {
       my ($len) = unpack "S", $plen;
       read IN, $txt, $len;
       my ($sym, %hash) = split chr(0), $txt;
+      $hash{Dbfile} = $fi; # keep the origin pdldoc.db path
       $this->{SYMS}->{$sym} = {%hash};
     }
     close IN;
@@ -492,6 +495,12 @@ sub savedb {
   binmode OUT;
   while (my ($key,$val) = each %$hash) {
     next if 0 == scalar(%$val);
+    my $fi = $val->{File};
+    if (File::Spec->file_name_is_absolute($fi) && -f $fi) {
+      #store paths to *.pm files relative to pdldoc.db
+      $val->{File} = File::Spec->abs2rel($fi, dirname($this->{Outfile})) ;
+    }
+    delete $val->{Dbfile}; # no need to store Dbfile
     my $txt = "$key".chr(0).join(chr(0),%$val);
     print OUT pack("S",length($txt)).$txt;
   }
@@ -660,7 +669,9 @@ sub scan {
 
   my $parser = new PDL::PodParser;
   $parser->{verbose} = $verbose;
-  $parser->parse_from_filehandle($infile,$outfile);
+  eval { $parser->parse_from_filehandle($infile,$outfile) };
+  warn "cannot parse '$file'" if $@;
+
   $this->{SYMS} = {} unless defined $this->{SYMS};
   my $hash = $this->{SYMS};
   my @stats = stat $file;
@@ -684,7 +695,9 @@ sub scan {
   $outfile_text = '';
   $parser = new PDL::PodParser;
   $parser->select('NAME');
-  $parser->parse_from_filehandle($infile,$outfile);
+  eval { $parser->parse_from_filehandle($infile,$outfile) };
+  warn "cannot parse '$file'" if $@;
+
   my @namelines = split("\n",$outfile_text);
   my ($name,$does);
   for (@namelines) {
@@ -747,7 +760,12 @@ sub funcdocs {
   my ($this,$func,$fout) = @_;
   my $hash = $this->ensuredb;
   barf "unknown function '$func'" unless defined($hash->{$func});
-  funcdocs_fromfile($func,$hash->{$func}->{File},$fout);
+  my $file = $hash->{$func}->{File};
+  my $dbf = $hash->{$func}->{Dbfile};
+  if (!File::Spec->file_name_is_absolute($file) && $dbf) {
+    $file = File::Spec->rel2abs($file, dirname($dbf)); 
+  }
+  funcdocs_fromfile($func,$file,$fout);
 }
 
 =head1 FUNCTIONS

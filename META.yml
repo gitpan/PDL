@@ -40,4 +40,4 @@ requires:
 resources:
   bugtracker: http://sourceforge.net/p/pdl/bugs/
   homepage: http://pdl.perl.org/
-version: 2.007_05
+version: 2.007_06

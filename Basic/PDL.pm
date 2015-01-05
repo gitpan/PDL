@@ -92,7 +92,7 @@ Some notes:
 
 =over 5
 
-=item SYNOPSIS
+=item Modules loaded by default
 
 See the SYNOPSIS section at the end of this document for a list of
 modules loaded by default.
@@ -146,7 +146,7 @@ start-up modules.
 
 
 # set the version:
-$PDL::VERSION = '2.007_05';     # Go to sub numbering per git push
+$PDL::VERSION = '2.007_06';     # Go to sub numbering per git push
 
 # Main loader of standard PDL package
 
