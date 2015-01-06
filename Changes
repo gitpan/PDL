@@ -1,3 +1,25 @@
+commit f479008a498f9c6f19ba1d2a5c0911bcb6510a4f
+Author: sisyphus <sisyphus1@optusnet.com.au>
+Date:   Tue Jan 6 17:44:08 2015 +1100
+
+    t/vsearch.t - port to perl-5.12 and earlier
+    
+    5.12 and earlier require that the first arg handed to splice is an array
+
+ t/vsearch.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 1095c3b9e2d8f9ef0c483a4b7942e65c12f29030
+Author: Chris Marshall <devel.chm.01@gmail.com>
+Date:   Mon Jan 5 14:07:26 2015 -0500
+
+    Update version to 2.007_07 for more devel
+
+ Basic/PDL.pm   |  2 +-
+ Known_problems |  2 +-
+ Release_Notes  | 41 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 2 deletions(-)
+
 commit 5d5335f8ccd3b1541e1f2625ad8fcc51fade4e94
 Author: Chris Marshall <devel.chm.01@gmail.com>
 Date:   Mon Jan 5 13:31:13 2015 -0500
